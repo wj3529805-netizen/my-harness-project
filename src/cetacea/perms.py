@@ -13,4 +13,4 @@ class Principal:
         if self.actor_type not in {'human', 'ai'} or (scope == 'approve' and self.actor_type != 'human') or scope not in self.scopes:
             raise PermissionDenied(scope)
 
-HUMAN = Principal('human', 'cli', frozenset({'read','plan','execute','approve','cancel','admin'}))
+HUMAN = Principal('human', 'cli', frozenset({'read','plan','execute','approve','cancel','admin','lightroom'}))

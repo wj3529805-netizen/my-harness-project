@@ -17,9 +17,14 @@ from .ingest.manifest import write
 def digest(value): return hashlib.sha256(json.dumps(value,sort_keys=True,separators=(',',':')).encode()).hexdigest()
 
 class Workbench:
-    def __init__(self, home, principal=HUMAN, fault_hook=None, disk_usage=None):
+    def __init__(self, home, principal=HUMAN, fault_hook=None, disk_usage=None, adapter=None):
         self.home=Path(home); self.principal=principal; self.engine=CopyEngine(fault_hook); self.disk_usage=disk_usage or shutil.disk_usage
         self.config=config.load(self.home); db.initialize(self.home)
+        from .lightroom import MockLightroomAdapter, RealLightroomMcpAdapter
+        settings = self.config.get('lightroom', {})
+        choice = settings.get('adapter', 'mock')
+        if choice not in {'mock', 'real_mcp'}: raise ValueError('Unknown Lightroom adapter')
+        self.adapter = adapter or (MockLightroomAdapter() if choice=='mock' else RealLightroomMcpAdapter(command=settings.get('command'), test_command=settings.get('test_command')))
     @classmethod
     def init(cls, home, library, preview):
         config.initialize(home,library,preview); return cls(home)
@@ -146,9 +151,28 @@ class Workbench:
                 started=now()
                 if stage!='ingest':
                     with db.connect(self.home) as c:
-                        c.execute('INSERT INTO task_steps VALUES(?,?,?,?,?,?,?,?,?,?)',(task_id,run,stage,'FAILED',0,0,0,json.dumps({'error':'NotImplementedError','stage':stage}),started,now()))
-                    unsupported=NotImplementedError(stage)
-                    raise unsupported
+                        completed = c.execute('SELECT 1 FROM task_steps WHERE task_id=? AND stage=? AND state="COMPLETED"',(task_id,stage)).fetchone()
+                    if completed: continue
+                    try:
+                        counts, detail = self._lightroom_stage(t, stage)
+                    except UnverifiedLightroomInput as exc:
+                        unsupported=exc
+                        counts, detail = (0,1,0), {'error':str(exc)}
+                    except Exception as exc:
+                        counts, detail = (0,1,0), {'error':str(exc)}
+                    with db.connect(self.home) as c:
+                        c.execute('INSERT INTO task_steps VALUES(?,?,?,?,?,?,?,?,?,?)',(task_id,run,stage,'FAILED' if counts[1] else 'COMPLETED',*counts,json.dumps(detail),started,now()))
+                    if counts[1]:
+                        task_error = f'{stage}: {counts[1]} failed'
+                        break
+                    continue
+                with db.connect(self.home) as c:
+                    completed = c.execute('SELECT 1 FROM task_steps WHERE task_id=? AND stage="ingest" AND state="COMPLETED"',(task_id,)).fetchone()
+                if completed and all(a['status']=='VERIFIED' for a in self.list_assets(task_id=task_id)):
+                    from .ingest.pathsafe import read_hash
+                    for item in plan['files']:
+                        if read_hash(safe(library,item['dest_rel_path'])) != item['sha256']: raise ValueError('Library hash mismatch')
+                    continue
                 if self.disk_usage(library).free < plan['total_bytes']*1.01: task_error='INSUFFICIENT_SPACE'
                 else:
                     for n,item in enumerate(plan['files']):
@@ -174,3 +198,88 @@ class Workbench:
             c.execute('UPDATE tasks SET error=?,lease_until=NULL WHERE task_id=?',(task_error,task_id))
         if unsupported: raise unsupported
         return self.get_task(task_id)
+
+    def lightroom_status(self):
+        self._call('read','lightroom_status')
+        return {'status':self.adapter.status(),'mock':bool(self.adapter.mock)}
+    def verify_preview(self, task_id):
+        self._call('read','verify_preview',task_id)
+        from .preview import verify
+        return verify(self, task_id)
+    def report(self, task_id):
+        self._call('read','report',task_id)
+        from .report import build
+        return build(self, task_id)
+    def _lightroom_stage(self, t, stage):
+        from dataclasses import asdict
+        from .lightroom import VerifiedFile
+        from .ingest.pathsafe import read_hash
+        from . import preview
+        self._call('lightroom' if stage!='preview_verify' else 'read',stage,t['task_id'])
+        if stage=='preview_verify':
+            detail=self.verify_preview(t['task_id'])
+            return (detail['expected_count'] if detail['status']=='OK' else 0, int(detail['status']!='OK'), 0), detail
+        assets = self.list_assets(task_id=t['task_id'])
+        planned_ids = {f['asset_id'] for f in t['plan']['files']}
+        assets = [a for a in assets if a['asset_id'] in planned_ids]
+        if any(a['status']!='VERIFIED' for a in assets): raise UnverifiedLightroomInput('Lightroom requires ingested VERIFIED files')
+        assets, pairs = preview.expected(assets)
+        preset_id=t['plan']['preset_id']
+        directory=None; export_run=None
+        if stage=='lr_export': export_run,directory=preview.new_run(self,t)
+        succeeded=failed=skipped=0; detail=[]
+        for a in assets:
+            with db.connect(self.home) as c:
+                state=c.execute('SELECT state FROM tasks WHERE task_id=?',(t['task_id'],)).fetchone()[0]
+                c.execute('UPDATE tasks SET lease_until=? WHERE task_id=?',(time.time()+300,t['task_id']))
+            if state=='CANCELLED': break
+            if (stage=='lr_register' and a['lr_photo_id']) or (stage=='lr_preset' and preset_id and a['preset_applied']==preset_id):
+                skipped+=1; continue
+            try:
+                if stage=='lr_export':
+                    with db.connect(self.home) as c:
+                        previous=c.execute('SELECT * FROM previews WHERE task_id=? AND asset_id=? ORDER BY run DESC LIMIT 1',(t['task_id'],a['asset_id'])).fetchone()
+                        failed_export=c.execute('SELECT 1 FROM task_steps WHERE task_id=? AND stage="lr_export" AND state="FAILED"',(t['task_id'],)).fetchone()
+                    if previous and failed_export:
+                        old_path=safe(self.config['preview_root'],str(Path(previous['path']).relative_to(self.config['preview_root'])))
+                        if read_hash(old_path)==previous['sha256']:
+                            from .lightroom import ExportResult
+                            new_path=directory/(a['asset_id']+'.jpg')
+                            os.link(old_path,new_path)
+                            preview.persist(self,t,export_run,ExportResult(a['asset_id'],new_path,mock=bool(previous['mock'])))
+                            skipped+=1
+                            continue
+                path=safe(self.config['library_root'],a['dest_rel_path'])
+                if read_hash(path)!=a['sha256']: raise ValueError('Library hash mismatch')
+                f=VerifiedFile(a['asset_id'],path,a['sha256'],a['size'],a['rel_path'],a['order_id'],a['photographer_id'])
+                if stage=='lr_register': results=self.adapter.register([f])
+                elif stage=='lr_preset':
+                    if not a['lr_photo_id']: raise ValueError('photo not registered')
+                    if not preset_id: raise ValueError('preset_id required')
+                    results=self.adapter.apply_preset([f],self.config['presets'][preset_id])
+                else:
+                    if not a['lr_photo_id']: raise ValueError('photo not registered')
+                    cfg=self.config.get('preview',{})
+                    results=self.adapter.export_jpeg([f],directory,cfg.get('max_edge',1600),cfg.get('quality',85))
+                if len(results)!=1 or results[0].asset_id!=a['asset_id']: raise ValueError('adapter result mapping mismatch')
+                r=results[0]
+                if r.error: raise ValueError(r.error)
+                if stage=='lr_export':
+                    output=Path(r.output_path)
+                    if not output.is_relative_to(directory): raise ValueError('export outside fresh run')
+                    safe(self.config['preview_root'],str(output.relative_to(self.config['preview_root'])))
+                    preview.persist(self,t,export_run,r)
+                with db.connect(self.home) as c:
+                    if stage=='lr_register':
+                        if not r.photo_id: raise ValueError('missing photo_id')
+                        c.execute('UPDATE assets SET lr_photo_id=?,lr_status=?,mock=? WHERE asset_id=?',(r.photo_id,'REGISTERED',int(self.adapter.mock),a['asset_id']))
+                    elif stage=='lr_preset': c.execute('UPDATE assets SET preset_applied=?,lr_status=?,mock=? WHERE asset_id=?',(preset_id,'PRESET_APPLIED',int(self.adapter.mock),a['asset_id']))
+                    else: c.execute('UPDATE assets SET lr_status=?,mock=? WHERE asset_id=?',('EXPORTED',int(self.adapter.mock),a['asset_id']))
+                succeeded+=1; detail.append({'asset_id':a['asset_id'],'mock':bool(self.adapter.mock),'status':self.adapter.status()})
+            except Exception as exc:
+                failed+=1; detail.append({'asset_id':a['asset_id'],'error':str(exc),'mock':bool(self.adapter.mock)})
+        if directory: preview.manifest(self,t,export_run,directory,pairs)
+        return (succeeded,failed,skipped), detail
+
+class UnverifiedLightroomInput(NotImplementedError):
+    """Legacy Stage A error for an LR stage requested before verified ingest."""

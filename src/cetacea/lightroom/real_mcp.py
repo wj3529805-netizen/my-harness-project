@@ -22,11 +22,11 @@ class RealLightroomMcpAdapter(LightroomAdapter):
         async def invoke():
             params = StdioServerParameters(command=self.command[0], args=self.command[1:], env={'LIGHTROOM_MCP_TOOLSETS':'develop'})
             async with stdio_client(params) as streams:
-                async with ClientSession(*streams) as session:
+                async with ClientSession(*streams, read_timeout_seconds=10) as session:
                     await session.initialize()
                     result = await session.call_tool(name, arguments)
-                    if result.isError: raise RuntimeError(str(result.content))
-                    if result.structuredContent is not None: return result.structuredContent
+                    if result.is_error: raise RuntimeError(str(result.content))
+                    if result.structured_content is not None: return result.structured_content
                     return [json.loads(c.text) for c in result.content if c.type == 'text']
         return asyncio.run(invoke())
     def register(self, files):

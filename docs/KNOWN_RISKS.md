@@ -9,3 +9,5 @@
 
 Final Gate 1 validation: `.venv/bin/python -m pytest -q` — 59 passed. No project test remains failing. All earlier failures above are retained as validation history.
 - Commit attempt (`git add -A && git commit -m "feat(stage A): implement verified ingest workbench and Gate 1 acceptance tests"`) was blocked by the environment: `.git/index.lock` cannot be created because `.git` is read-only. Code remains uncommitted on phase1; no push attempted.
+
+Stage B validation history: first full run was 57 passed, 2 failed. The failures exposed a missing human Lightroom scope and an ingest completion check that treated cooperative cancellation as full ingest completion. Fixed the scope and require all assets VERIFIED before skipping a completed ingest step; original assertions retained.
