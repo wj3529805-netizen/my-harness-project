@@ -32,3 +32,4 @@ Stage C validation history:
 10. 无 Windows 支持；POSIX 专用调用（O_NOFOLLOW、os.link）。
 11. 代码风格偏紧凑（Codex 生成），后续可重构；测试覆盖了行为但未做覆盖率统计。
 12. 开发流程说明：Codex 因 `.git` 沙箱只读无法提交；提交由编排者完成。Codex 在 Stage B/C 两次卡在调试 mcp 2.x stdio 细节时被中止，编排者**直接修改了**：tests/fake_lightroom_mcp.py（改用 `server.run()`）、real_mcp.py（客户端结果字段为 snake_case：`is_error`、`structured_content`）、tests/test_mcp.py（audit_log 列名 actor）、report.py（丰富 Markdown 报告）。
+13. CLI: 未批准就 execute 会输出 Python 堆栈（NotApproved）而不是友好提示；已被拒绝，功能正确，仅体验问题。
