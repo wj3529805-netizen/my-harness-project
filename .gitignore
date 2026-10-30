@@ -1,9 +1,11 @@
 .venv/
 __pycache__/
-*.pyc
+*.py[cod]
+*.egg-info/
 .pytest_cache/
+build/
+dist/
 third_party-review/*/
 !third_party-review/README.md
 .cetacea-home/
 /tmp/
-*.egg-info/
