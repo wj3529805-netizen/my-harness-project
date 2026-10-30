@@ -14,3 +14,21 @@ Stage B validation history: first full run was 57 passed, 2 failed. The failures
 
 Stage C validation history:
 - First full run: 65 passed, 1 failed (`test_real_mcp_interface_only`): fake stdio server initialization timed out in the existing real adapter. Investigating with the installed MCP 2.3.0 source; no assertions removed or weakened.
+
+---
+# 已知风险与未完成事项（Phase 1 收尾）
+
+测试：全量 `pytest` 71 passed（Linux，Python 3.13，2026-10-30）。没有保留的失败测试。开发过程中的失败与修复历史见上文。
+
+1. **未在 macOS / 真实 Lightroom 上验证**任何东西。`RealLightroomMcpAdapter` 只对假 MCP 服务器做过接口测试；lightroom-mcp 实际返回格式（import_photos 无 photo id、export_photos 无文件名）按源码阅读做的假设，须在 Mac 上验收清单 A13 确认。
+2. 真实适配器每次调用都启动一个 MCP 子进程（简单、隔离，但慢）；大批量时需改为长连接会话。
+3. Mock 适配器的“已登记”状态在进程内存里；跨进程时以数据库 assets.lr_photo_id 为准。
+4. 硬链接不可用时的回退（`.cetacea-lock` + rename）只对遵守锁的 CETACEA 写入者安全；外部写入者可能竞争。APFS 支持硬链接；exFAT/SMB 待验证。
+5. 性能：扫描一次完整哈希，复制时再读源、读回临时文件、最终读回，共约 4 次读取；大卡（数百 GB）耗时较长，未做基准测试。
+6. `photo_list_sources` 会向 AI 返回已登记来源的绝对路径（只读信息，AI 不能据此读写任意路径）。
+7. 磁盘满/权限错误通过故障注入和 monkeypatch 测试，并非真实磁盘满。
+8. 没有真实 AI 客户端（Codex/Claude/Harness）联调；MCP 测试使用 SDK 的 stdio 客户端。Harness 需要 Node ≥ 24.9。
+9. 私有 GitHub 仓库未能核查（需 GitHub App 授权）。
+10. 无 Windows 支持；POSIX 专用调用（O_NOFOLLOW、os.link）。
+11. 代码风格偏紧凑（Codex 生成），后续可重构；测试覆盖了行为但未做覆盖率统计。
+12. 开发流程说明：Codex 因 `.git` 沙箱只读无法提交；提交由编排者完成。Codex 在 Stage B/C 两次卡在调试 mcp 2.x stdio 细节时被中止，编排者**直接修改了**：tests/fake_lightroom_mcp.py（改用 `server.run()`）、real_mcp.py（客户端结果字段为 snake_case：`is_error`、`structured_content`）、tests/test_mcp.py（audit_log 列名 actor）、report.py（丰富 Markdown 报告）。

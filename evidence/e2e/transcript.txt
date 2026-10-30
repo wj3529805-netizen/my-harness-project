@@ -1,0 +1,7 @@
+MOCK — Linux simulation, not real Lightroom, not macOS
+scan: 12 files
+plan: tsk_b09452fbed4c4e7a9be4a51811e969f5
+approve: human
+execute: COMPLETED
+repeat execute: idempotent=True
+verified: True
