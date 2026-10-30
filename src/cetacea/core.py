@@ -128,11 +128,14 @@ class Workbench:
             for r in c.execute('SELECT task_id FROM tasks WHERE state="RUNNING" AND lease_until<?',(time.time(),)).fetchall():
                 transition(c,self.principal,r['task_id'],'PAUSED'); recovered.append(r['task_id'])
         return recovered
-    def execute(self,task_id,plan_digest=None,stop_on_error=None):
+    def execute(self,task_id,plan_digest=None,stop_on_error=None,*,_stages=None):
         self._call('execute','execute',task_id)
         error=None
         with db.connect(self.home) as c:
-            c.execute('BEGIN IMMEDIATE'); t=dict(c.execute('SELECT * FROM tasks WHERE task_id=?',(task_id,)).fetchone())
+            c.execute('BEGIN IMMEDIATE')
+            row=c.execute('SELECT * FROM tasks WHERE task_id=?',(task_id,)).fetchone()
+            if row is None: raise KeyError(task_id)
+            t=dict(row)
             if plan_digest is not None and plan_digest!=t['plan_digest']: raise PermissionDenied('stale plan_digest')
             if t['state']=='COMPLETED': return t
             if not c.execute('SELECT 1 FROM approvals WHERE task_id=? AND plan_digest=? AND revoked_at IS NULL',(task_id,t['plan_digest'])).fetchone(): raise NotApproved(task_id)
@@ -147,7 +150,7 @@ class Workbench:
                 if part.name.endswith('.part') and not part.is_dir(): part.unlink()
         results=[]; task_error=None; unsupported=None
         try:
-            for stage in plan['stages']:
+            for stage in (plan['stages'] if _stages is None else _stages):
                 started=now()
                 if stage!='ingest':
                     with db.connect(self.home) as c:
@@ -194,10 +197,30 @@ class Workbench:
                 if task_error: break
         except Exception as exc: task_error=str(exc)
         with db.connect(self.home) as c:
-            if c.execute('SELECT state FROM tasks WHERE task_id=?',(task_id,)).fetchone()['state']=='RUNNING': transition(c,self.principal,task_id,'FAILED' if task_error else 'COMPLETED')
+            finished={r[0] for r in c.execute('SELECT stage FROM task_steps WHERE task_id=? AND state="COMPLETED"',(task_id,))}
+            target='COMPLETED' if set(plan['stages']) <= finished else 'PAUSED'
+            if c.execute('SELECT state FROM tasks WHERE task_id=?',(task_id,)).fetchone()['state']=='RUNNING': transition(c,self.principal,task_id,'FAILED' if task_error else target)
             c.execute('UPDATE tasks SET error=?,lease_until=NULL WHERE task_id=?',(task_error,task_id))
         if unsupported: raise unsupported
         return self.get_task(task_id)
+
+    def execute_lightroom(self, task_id, stages, preset_id=None):
+        """Run only approved, planned stages through the normal leased runner."""
+        self._call('lightroom', 'execute_lightroom', task_id)
+        t = self.get_task(task_id)
+        with db.connect(self.home) as c:
+            if not c.execute('SELECT 1 FROM approvals WHERE task_id=? AND plan_digest=? AND revoked_at IS NULL', (task_id, t['plan_digest'])).fetchone():
+                raise NotApproved(task_id)
+        if preset_id is not None:
+            identifier(preset_id)
+            if preset_id not in self.config['presets']: raise KeyError(preset_id)
+            if preset_id != t['plan']['preset_id']: raise PermissionDenied('preset differs from approved plan')
+        if any(s not in t['plan']['stages'] for s in stages):
+            raise PermissionDenied('stage absent from approved plan')
+        with db.connect(self.home) as c:
+            completed={r[0] for r in c.execute('SELECT stage FROM task_steps WHERE task_id=? AND state="COMPLETED"', (task_id,))}
+        if set(stages) <= completed: return t
+        return self.execute(task_id, _stages=stages)
 
     def lightroom_status(self):
         self._call('read','lightroom_status')

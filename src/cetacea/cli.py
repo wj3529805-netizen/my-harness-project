@@ -21,12 +21,17 @@ def main(argv=None):
     command('approve',['task_id','plan_digest'])
     for name in ['execute','cancel','retry']: command(name,['task_id'])
     q=command('assets'); q.add_argument('--task-id'); q.add_argument('--batch-id')
+    q=command('mcp-serve'); q.add_argument('--actor',default='ai:mcp'); q.add_argument('--scopes',default='read,plan,execute,cancel,lightroom')
     command('recover')
     command('lr-status')
     command('verify-preview',['task_id'])
     command('report',['task_id'])
     a=p.parse_args(argv); v=vars(a); home=v.pop('home'); output_json=v.pop('json'); cmd=v.pop('command'); action=v.pop('action',None)
     if not home: p.error('--home or CETACEA_HOME required')
+    if cmd=='mcp-serve':
+        from .mcp_server import main as serve
+        serve(home, actor=v['actor'], scopes=v['scopes'].split(','))
+        return
     if cmd=='init': Workbench.init(home,**v); result={'initialized':True}
     else:
         w=Workbench(home)

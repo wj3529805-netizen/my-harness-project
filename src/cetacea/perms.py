@@ -14,3 +14,12 @@ class Principal:
             raise PermissionDenied(scope)
 
 HUMAN = Principal('human', 'cli', frozenset({'read','plan','execute','approve','cancel','admin','lightroom'}))
+
+AI_SCOPES = frozenset({'read', 'plan', 'execute', 'cancel', 'lightroom'})
+
+def ai_principal(actor_id='ai:mcp', scopes=None):
+    """Construct a least-privilege AI identity; elevated scopes are forbidden."""
+    selected = AI_SCOPES if scopes is None else frozenset(scopes)
+    if not selected <= AI_SCOPES:
+        raise PermissionDenied('AI scopes must be read, plan, execute, cancel, lightroom')
+    return Principal('ai', actor_id, selected)
