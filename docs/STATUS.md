@@ -23,3 +23,5 @@
 1 test_01_normal；2 test_02_subdirs；3 test_03_photographers；4 test_04_identity；5 test_05_existing_correct；6 test_06_existing_conflict；7 test_07_interrupt；8 test_08_space / test_08_mid_write；9 test_09_read_error；10 test_10_paths；11 test_11_idempotency_and_concurrency；12 test_12_cancel_retry；13 test_13_partial_failure；14 test_14_preview_mismatch_and_new_run；15 test_15_shared_state_idempotent_mcp；16 test_16_permissions + test_16_mcp_denials。
 
 MCP stdio 测试在 Codex 沙箱外通过；此前未验证的记录仅反映 Codex 沙箱限制。合并前记录：当时 `mac-validation` 分支尚未合并，本阶段源文件仅涉及 `core.py` 和 `mcp_server.py`，合并时需核对。合并后的完整计划仍待 Mac 重新验证。
+
+[Mac 实机路线图](ROADMAP.md)。
