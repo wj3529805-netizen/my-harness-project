@@ -1,0 +1,49 @@
+# TEST overlay over the shipped `headless` profile: keyless scripted model + CETACEA MCP server.
+# Used only by harness/run_headless.sh and tests/test_harness_integration.py. No API key, no paid model.
+- id: headless-startup
+  disabled: true
+- id: headless-runner
+  disabled: true
+- id: llm-deepseek
+  disabled: true
+- id: agent-loop
+  config:
+    agents:
+      - id: main
+        provider: cetacea-mock
+        model: cetacea-mock
+        cwd: !!js process.cwd()
+- id: shell-env
+  config:
+    dshHome: './.dsh-home'
+- id: agent-instructions
+  disabled: true
+- id: skill-filesystem
+  config:
+    dshHome: './.dsh-home'
+    agentsHome: './.agents-home'
+- id: session-persistence-jsonl
+  config:
+    root: './.sessions'
+- id: sandbox-policy
+  inject: []
+  config:
+    mode: !!js process.env.DSH_PERMISSION_MODE ?? 'workspace-write'
+    workspaceRoot: !!js process.cwd()
+- id: web-search-deepseek
+  config:
+    apiKeyEnv: DSH_KEYLESS_SMOKE_SEARCH_KEY
+- insert:
+    - id: cetacea-mock-llm
+      name: './cetacea-mock-llm.ts'
+    - id: mcp-cetacea
+      name: '@deepseek-ai/dsh-mcp-client'
+      config:
+        serverName: cetacea
+        transport: stdio
+        command: !!js process.env.CETACEA_PYTHON
+        args: !!js "['-m', 'cetacea.cli', '--home', process.env.CETACEA_HOME, 'mcp-serve']"
+        env:
+          CETACEA_HOME: !!js process.env.CETACEA_HOME
+        toolCallTimeoutMs: 60000
+        failOnStartupError: true

@@ -1,0 +1,16 @@
+# CETACEA MCP server entry for deepseek-harness (dsh-mcp-client).
+# Add this entry to a dsh profile patch (e.g. $DSH_HOME/profiles/<name>/cordis.patch.yml, under `insert:`).
+# Tools appear to the model as mcp__cetacea__photo_* / mcp__cetacea__lightroom_*.
+# MUST be combined with harness/cetacea-restricted.patch.yml (disables Harness bash/fs/web/subagent tools); this entry alone is NOT safe.
+# No secrets here. Required env vars: CETACEA_PYTHON (path to .venv/bin/python), CETACEA_HOME (state dir).
+- id: mcp-cetacea
+  name: '@deepseek-ai/dsh-mcp-client'
+  config:
+    serverName: cetacea
+    transport: stdio
+    command: !!js process.env.CETACEA_PYTHON
+    args: !!js "['-m', 'cetacea.cli', '--home', process.env.CETACEA_HOME, 'mcp-serve']"
+    env:
+      CETACEA_HOME: !!js process.env.CETACEA_HOME
+    toolCallTimeoutMs: 60000
+    failOnStartupError: true

@@ -18,7 +18,7 @@ Stage C validation history:
 ---
 # 已知风险与未完成事项（Phase 1 收尾）
 
-测试：全量 `pytest` 71 passed（Linux，Python 3.13，2026-10-30）。没有保留的失败测试。开发过程中的失败与修复历史见上文。
+测试：Phase 1 收尾时 71 passed；Phase 2 后全量 75 passed（Linux，Python 3.13）。没有保留的失败测试。开发过程中的失败与修复历史见上文。
 
 1. **未在 macOS / 真实 Lightroom 上验证**任何东西。`RealLightroomMcpAdapter` 只对假 MCP 服务器做过接口测试；lightroom-mcp 实际返回格式（import_photos 无 photo id、export_photos 无文件名）按源码阅读做的假设，须在 Mac 上验收清单 A13 确认。
 2. 真实适配器每次调用都启动一个 MCP 子进程（简单、隔离，但慢）；大批量时需改为长连接会话。
@@ -27,9 +27,26 @@ Stage C validation history:
 5. 性能：扫描一次完整哈希，复制时再读源、读回临时文件、最终读回，共约 4 次读取；大卡（数百 GB）耗时较长，未做基准测试。
 6. `photo_list_sources` 会向 AI 返回已登记来源的绝对路径（只读信息，AI 不能据此读写任意路径）。
 7. 磁盘满/权限错误通过故障注入和 monkeypatch 测试，并非真实磁盘满。
-8. 没有真实 AI 客户端（Codex/Claude/Harness）联调；MCP 测试使用 SDK 的 stdio 客户端。Harness 需要 Node ≥ 24.9。
+8. （Phase 1 原文，已被 Phase 2 部分取代）没有真实 AI 客户端联调。Phase 2 之后：Harness 的真实 MCP 客户端已联调，但仅配 MOCK 模型；Codex/Claude/真实 LLM 仍未联调。
 9. 私有 GitHub 仓库未能核查（需 GitHub App 授权）。
 10. 无 Windows 支持；POSIX 专用调用（O_NOFOLLOW、os.link）。
 11. 代码风格偏紧凑（Codex 生成），后续可重构；测试覆盖了行为但未做覆盖率统计。
 12. 开发流程说明：Codex 因 `.git` 沙箱只读无法提交；提交由编排者完成。Codex 在 Stage B/C 两次卡在调试 mcp 2.x stdio 细节时被中止，编排者**直接修改了**：tests/fake_lightroom_mcp.py（改用 `server.run()`）、real_mcp.py（客户端结果字段为 snake_case：`is_error`、`structured_content`）、tests/test_mcp.py（audit_log 列名 actor）、report.py（丰富 Markdown 报告）。
 13. CLI: 未批准就 execute 会输出 Python 堆栈（NotApproved）而不是友好提示；已被拒绝，功能正确，仅体验问题。
+
+---
+# Phase 2：deepseek-harness 接入的已知风险与未验证项
+
+标签沿用：已验证（Linux，MOCK 模型）/ 未验证。
+
+1. **未用真实 LLM 测试（未验证）**：全部测试的“模型”是 harness/overlay/cetacea-mock-llm.ts 的脚本化 MOCK。真实模型能否正确选择/填写 14 个工具的参数、遇到 `NOT_APPROVED` 后的行为、提示词/工具描述质量，均未知。需要模型密钥（付费）才能测，未执行，待用户授权。
+2. **Harness 实验性/未审计**：其 SAFETY.md 自述。固定提交，但我们未做安全审计；仅审阅了安装脚本、MCP 客户端、测试驱动和 flock.c。
+3. **Harness 默认给模型 bash/文件读写/web/子代理等工具**（已验证：不加限制时 headless profile 暴露约 40 个工具）。这会绕过 CETACEA “AI 无 shell/路径/删除”的契约。已提供 `harness/cetacea-restricted.patch.yml` 关闭这些工具，测试用“允许清单”断言模型只能看到 14 个 `mcp__cetacea__*` + 目标/待办/MCP 资源列表工具（并经变异验证：去掉限制则测试失败）。**任何真实模型部署必须带上这个限制文件**；它不是 Harness 的默认行为，使用者漏配就不安全。
+4. **“模型不支持工具调用”警告：Harness 没有该能力**（源码里只有 `inputModalities` 之类的图片输入能力标记，没有 tool-calling 能力声明或警告路径）。无法测试一个不存在的警告；用“纯文本模型：不发任何工具调用，CETACEA 状态不变”测试作为替代，不等价于警告。
+5. **从源码运行，没有构建全部产物**：`typert-loader` 条目因缺少未构建的 `lib/typert.host.js` 而不激活（日志里 “1 entry did not activate”，非致命，仅影响 Harness 的 RPC 类型层，不影响 MCP/工具/agent 循环）。其余未构建的桌面/Web 部件未使用。
+6. **`--ignore-scripts`**：没跑 Harness 的 postinstall（lefthook、node-pty）；若以后用到终端/pty 功能需另行评估。flock 原生插件由本机 gcc 编译，非官方预编译。
+7. **检出不入库**：`third_party-review/deepseek-harness` 被 git 忽略，不 vendoring；换机器需按 harness/README.md 复现；测试在缺依赖或 Node < 24.9 时**跳过**（带原因），因此 CI/新机器上这 4 个测试所在模块会整体显示为 1 skipped 而非 passed。
+8. 运行器把覆盖文件临时复制进 Harness 检出（每次运行独立目录，退出时清理），因此检出必须可写；并发运行互不干扰但未做压力测试。
+9. 审计日志里 AI 的 actor 字符串为 `ai:ai:mcp`（Phase 1 遗留命名：actor_id 默认值已带 `ai:` 前缀），人工为 `human:cli`；仅外观问题，既有测试按前缀判断，未改动。
+10. 仍未验证：macOS、真实 Lightroom Classic、APFS/exFAT/SMB、真实相机卡、真实客户数据。Linux 上的 MOCK 结果不代表 Mac 实机结果。
+11. 开发流程说明：Codex 本阶段仅用于只读代码审阅（`gpt-6.1-terra`，reasoning high），其意见已采纳并修复（见 git 历史）；其余代码、测试、文档由编排者直接编写。

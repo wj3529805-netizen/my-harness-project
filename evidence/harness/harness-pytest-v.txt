@@ -1,0 +1,8 @@
+collecting ... collected 4 items
+
+tests/test_harness_integration.py::test_harness_lists_cetacea_tools_and_hides_shell_fs_tools PASSED [ 25%]
+tests/test_harness_integration.py::test_ai_plans_via_harness_human_approves_via_cli_ai_executes_via_harness PASSED [ 50%]
+tests/test_harness_integration.py::test_harness_cannot_reach_forbidden_tools_or_arguments PASSED [ 75%]
+tests/test_harness_integration.py::test_text_only_model_makes_no_tool_call_and_leaves_state_unchanged PASSED [100%]
+
+============================== 4 passed in 23.97s ==============================

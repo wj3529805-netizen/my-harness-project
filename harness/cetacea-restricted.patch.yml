@@ -1,0 +1,30 @@
+# Restricted Harness tool surface for CETACEA (SECURITY, not optional for any real-model deployment).
+# deepseek-harness' default profiles offer the model bash/pwsh, file read/write/edit, web_fetch, subagents, etc.
+# CETACEA's contract is "AI gets ID-only photo tools, no shell, no arbitrary path, no delete". Disable every
+# Harness tool plugin that would let the model bypass that. Used as the first layer of harness/run_headless.sh.
+- id: tool-bash
+  disabled: true
+- id: tool-pwsh
+  disabled: true
+- id: tool-jobs
+  disabled: true
+- id: tool-fs
+  disabled: true
+- id: tool-fs-search
+  disabled: true
+- id: tool-web
+  disabled: true
+- id: tool-subagent
+  disabled: true
+- id: tool-subagent-fork
+  disabled: true
+- id: tool-subagent-control
+  disabled: true
+- id: tool-workflow
+  disabled: true
+- id: tool-skill
+  disabled: true
+- id: tool-plugin-manager
+  disabled: true
+- id: tool-working-directory
+  disabled: true
