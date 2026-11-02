@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+  "calls": 15,
+  "file_count": 5,
+  "counts": {
+    "task_steps": 5,
+    "assets": 1,
+    "previews": 1
+  },
+  "evidence": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/evidence/mac-acceptance/A10-repeat-mcp-result.json"
+}

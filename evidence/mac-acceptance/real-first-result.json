@@ -1,0 +1,38 @@
+{
+  "task_id": "tsk_c33a126a386d4d86a9a5882eb5334a0d",
+  "idempotency_key": "3bd689947684dc0352b00e2be5fc5932dcd97b456e6055dafaa68fe3107365de",
+  "type": "import",
+  "state": "FAILED",
+  "order_id": "test",
+  "photographer_id": "tester",
+  "batch_id": "single",
+  "source_id": "testsolo",
+  "plan_json": "{\"files\": [{\"rel_path\": \"CETACEA_TEST_01.dng\", \"size\": 786960, \"sha256\": \"3f4e7733ba305ce06cffd7de522913a94dca8dc1178ab72653090be0de1203fc\", \"kind\": \"raw\", \"dest_rel_path\": \"test/tester/single/CETACEA_TEST_01.dng\", \"asset_id\": \"ast_a88a4f8244bc96b262235536\"}], \"total_bytes\": 786960, \"destination\": \"test/tester/single\", \"stages\": [\"ingest\", \"lr_register\"], \"preset_id\": null, \"scan_digest\": \"4d4bc011e1b4f20636b518a266714d6e05b3e4532d7b9cbef578677e3dceecef\"}",
+  "plan_digest": "21ca58c0614f70690c372057484e267b14422b062b186dac8c12baf79bb1a102",
+  "stages_json": "[\"ingest\", \"lr_register\"]",
+  "run_count": 1,
+  "error": "lr_register: 1 failed",
+  "created_at": "2026-11-02T13:17:59.316548+00:00",
+  "updated_at": "2026-11-02T13:18:03.897141+00:00",
+  "lease_until": null,
+  "plan": {
+    "files": [
+      {
+        "rel_path": "CETACEA_TEST_01.dng",
+        "size": 786960,
+        "sha256": "3f4e7733ba305ce06cffd7de522913a94dca8dc1178ab72653090be0de1203fc",
+        "kind": "raw",
+        "dest_rel_path": "test/tester/single/CETACEA_TEST_01.dng",
+        "asset_id": "ast_a88a4f8244bc96b262235536"
+      }
+    ],
+    "total_bytes": 786960,
+    "destination": "test/tester/single",
+    "stages": [
+      "ingest",
+      "lr_register"
+    ],
+    "preset_id": null,
+    "scan_digest": "4d4bc011e1b4f20636b518a266714d6e05b3e4532d7b9cbef578677e3dceecef"
+  }
+}

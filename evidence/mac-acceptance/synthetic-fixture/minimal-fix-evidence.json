@@ -1,0 +1,8 @@
+{
+  "original": "../card/CETACEA_TEST_01.dng",
+  "minimal_change": "Add TIFF NewSubfileType (254), LONG(1), value=0; same image data and original DNG tags.",
+  "native_evidence": "sips reports768x512 and successfully renders JPEG. Adobe acceptance pending.",
+  "file": "MIN_Subfile.dng",
+  "sha256": "4ca1cf2cb81a96a011fae3e192f77ba74f505c44969d0545158bca2ae1354bce",
+  "other_single_tag_candidates": "DNGVersion1.1, ColorMatrix1, Orientation, BlackLevelRepeatDim, WhiteLevel, ActiveArea, DefaultScale and crop tags alone did not restore native dimension readback."
+}

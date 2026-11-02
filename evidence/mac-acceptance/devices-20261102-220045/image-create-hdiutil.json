@@ -1,0 +1,6 @@
+{
+  "returncode": 1,
+  "stdout": "",
+  "stderr": "hdiutil: WARNING: 'hdiutil create -size -volname ...' is deprecated. Please use 'diskutil image create from/blank -size --volumeName ...' instead.\nhdiutil: create failed - \u64cd\u4f5c\u4e0d\u88ab\u5141\u8bb8\n",
+  "image": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/test-exfat.dmg"
+}

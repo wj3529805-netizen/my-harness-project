@@ -1,17 +1,17 @@
 # macOS（Apple Silicon / M4 Max）交接：安装、配置、验收、回滚
 
-> **重要**：本文件描述的所有 macOS / 真实 Lightroom 步骤，**均未在本项目开发环境（Linux 云盒）中执行，也未被任何自动化测试覆盖**。Linux 上的 Mock 结果不等于 macOS 或真实 Lightroom 结果。所有 Mac 条目状态为 **待 Mac 实机验证**。
+> **验证记录**：开发期 Linux Mock 结果不等于真实 Lightroom 验证。2026-11-02 已在 Apple Silicon Mac 上开展独立测试 catalog 验收；逐项结果、失败历史和硬件限制见 [MACOS_VALIDATION.md](MACOS_VALIDATION.md) 和 [MACOS_DEVICE_VALIDATION.md](MACOS_DEVICE_VALIDATION.md)。合并后的完整计划及 Harness/DeepSeek 尚未在 Mac 上结合真实 Lightroom 重新验证。下面未勾选清单保留为操作模板，不代表最新结果。
 
 ## 0. 先决条件
-- macOS，Apple Silicon（arm64），Python ≥ 3.12（推荐 3.13），Node ≥ 20（lightroom-mcp）；若要跑 deepseek-harness 需 Node ≥ 24.9。
+- macOS，Apple Silicon（arm64），Python ≥ 3.13（与 pyproject.toml 一致），Node ≥ 20（lightroom-mcp）；若要跑 deepseek-harness 需 Node ≥ 24.9。
 - Lightroom Classic 已安装（本项目不碰 .lrcat，也不要求关闭，但**验收请使用一个独立的测试目录和测试 catalog，不要用生产 catalog**）。
 - 只读环境检查：`bash scripts/mac/check_env.sh`（不安装、不修改任何东西）。
 
 ## 1. 安装 CETACEA 工作台（项目内 venv，不做系统级安装）
 ```bash
 cd cetacea-workbench
-python3 -m venv .venv
-.venv/bin/pip install -e .            # 依赖：mcp、pillow（宽松许可证）；pytest 用于验收
+python3.13 -m venv .venv              # 系统 python3 可能仍为 3.9
+.venv/bin/pip install -e '.[dev]'     # 依赖：mcp、pillow；dev 包含 pytest
 .venv/bin/python -m pytest -q         # 在 Mac 上先复跑全部自动化测试
 .venv/bin/cetacea init --home ~/cetacea-test/home --library ~/cetacea-test/library --preview ~/cetacea-test/preview
 ```
@@ -33,7 +33,7 @@ library / preview 目录请放在**测试路径**，不是生产照片目录、�
 5. CETACEA 的真实适配器只允许调用：`import_photos`、`get_photo_metadata`、`apply_develop_preset`、`export_photos`、`list_develop_presets`、`search_photos`；不会调用删除/重置/覆盖导出类工具；不使用模拟鼠标键盘；不直接读写 .lrcat。
 6. 在 Lightroom 中预先手工准备一个**测试预设**，用 `cetacea preset add` 登记。
 
-## 4. 验收清单（全部由用户在 Mac 上实机勾选；当前全部为“待 Mac 实机验证”）
+## 4. 验收清单模板（实际结果见 MACOS_VALIDATION.md）
 - [ ] A1 `pytest` 在 Mac 上全绿。
 - [ ] A2 Mock 端到端在 Mac 上通过。
 - [ ] A3 读卡器/真实 SD 卡（**只读**，建议先拷一份测试 RAW 到 ~/cetacea-test/card）：扫描、计划、人工批准、导入，目标文件 SHA-256 与源一致；源目录字节与 mtime 不变。

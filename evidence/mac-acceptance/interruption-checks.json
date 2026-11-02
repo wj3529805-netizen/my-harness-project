@@ -1,0 +1,120 @@
+{
+  "state": "COMPLETED",
+  "assets": [
+    {
+      "asset_id": "ast_42286fd069bc6895fe6ab84e",
+      "order_id": "test",
+      "photographer_id": "tester",
+      "batch_id": "interrupted",
+      "rel_path": "CETACEA_INTERRUPT_01.NEF",
+      "size": 25994889,
+      "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "error": null,
+      "dest_rel_path": "test/tester/interrupted/CETACEA_INTERRUPT_01.NEF",
+      "lr_photo_id": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/library/test/tester/interrupted/CETACEA_INTERRUPT_01.NEF",
+      "lr_status": "REGISTERED",
+      "preset_applied": null,
+      "mock": 0,
+      "verified_at": "2026-11-02T13:42:26.566058+00:00"
+    },
+    {
+      "asset_id": "ast_9b8dba49434577f44afbc9a1",
+      "order_id": "test",
+      "photographer_id": "tester",
+      "batch_id": "interrupted",
+      "rel_path": "CETACEA_INTERRUPT_02.NEF",
+      "size": 25994889,
+      "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "error": null,
+      "dest_rel_path": "test/tester/interrupted/CETACEA_INTERRUPT_02.NEF",
+      "lr_photo_id": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/library/test/tester/interrupted/CETACEA_INTERRUPT_02.NEF",
+      "lr_status": "REGISTERED",
+      "preset_applied": null,
+      "mock": 0,
+      "verified_at": "2026-11-02T13:42:26.604142+00:00"
+    },
+    {
+      "asset_id": "ast_57d2cf2aa9e4f919d86b04a5",
+      "order_id": "test",
+      "photographer_id": "tester",
+      "batch_id": "interrupted",
+      "rel_path": "CETACEA_INTERRUPT_03.NEF",
+      "size": 25994889,
+      "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "error": null,
+      "dest_rel_path": "test/tester/interrupted/CETACEA_INTERRUPT_03.NEF",
+      "lr_photo_id": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/library/test/tester/interrupted/CETACEA_INTERRUPT_03.NEF",
+      "lr_status": "REGISTERED",
+      "preset_applied": null,
+      "mock": 0,
+      "verified_at": "2026-11-02T13:42:26.642766+00:00"
+    }
+  ],
+  "steps": [
+    {
+      "task_id": "tsk_5a16a07874374173a9275cd0f38b7209",
+      "run": 1,
+      "stage": "ingest",
+      "state": "COMPLETED",
+      "succeeded": 3,
+      "failed": 0,
+      "skipped": 0,
+      "detail_json": "[{\"rel_path\": \"CETACEA_INTERRUPT_01.NEF\", \"size\": 25994889, \"sha256\": \"8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02\", \"kind\": \"raw\", \"dest_rel_path\": \"test/tester/interrupted/CETACEA_INTERRUPT_01.NEF\", \"asset_id\": \"ast_42286fd069bc6895fe6ab84e\", \"status\": \"VERIFIED\", \"skipped_verified\": false, \"error\": null, \"verified_at\": \"2026-11-02T13:42:26.566058+00:00\", \"order\": \"test\", \"photographer\": \"tester\", \"batch\": \"interrupted\", \"source_id\": \"interrupt\", \"run\": 1}, {\"rel_path\": \"CETACEA_INTERRUPT_02.NEF\", \"size\": 25994889, \"sha256\": \"8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02\", \"kind\": \"raw\", \"dest_rel_path\": \"test/tester/interrupted/CETACEA_INTERRUPT_02.NEF\", \"asset_id\": \"ast_9b8dba49434577f44afbc9a1\", \"status\": \"VERIFIED\", \"skipped_verified\": false, \"error\": null, \"verified_at\": \"2026-11-02T13:42:26.604142+00:00\", \"order\": \"test\", \"photographer\": \"tester\", \"batch\": \"interrupted\", \"source_id\": \"interrupt\", \"run\": 1}, {\"rel_path\": \"CETACEA_INTERRUPT_03.NEF\", \"size\": 25994889, \"sha256\": \"8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02\", \"kind\": \"raw\", \"dest_rel_path\": \"test/tester/interrupted/CETACEA_INTERRUPT_03.NEF\", \"asset_id\": \"ast_57d2cf2aa9e4f919d86b04a5\", \"status\": \"VERIFIED\", \"skipped_verified\": false, \"error\": null, \"verified_at\": \"2026-11-02T13:42:26.642766+00:00\", \"order\": \"test\", \"photographer\": \"tester\", \"batch\": \"interrupted\", \"source_id\": \"interrupt\", \"run\": 1}]",
+      "started_at": "2026-11-02T13:42:26.531543+00:00",
+      "ended_at": "2026-11-02T13:42:26.644417+00:00"
+    },
+    {
+      "task_id": "tsk_5a16a07874374173a9275cd0f38b7209",
+      "run": 1,
+      "stage": "lr_register",
+      "state": "FAILED",
+      "succeeded": 1,
+      "failed": 2,
+      "skipped": 0,
+      "detail_json": "[{\"asset_id\": \"ast_42286fd069bc6895fe6ab84e\", \"mock\": false, \"status\": \"Lightroom MCP connected (real read-only preset probe; catalog identity unverified)\"}, {\"asset_id\": \"ast_9b8dba49434577f44afbc9a1\", \"error\": \"Lightroom plugin not connected. Bring Lightroom to the front or click 'Start Server' in Plug-in Manager.\", \"mock\": false}, {\"asset_id\": \"ast_57d2cf2aa9e4f919d86b04a5\", \"error\": \"Lightroom plugin not connected. Bring Lightroom to the front or click 'Start Server' in Plug-in Manager.\", \"mock\": false}]",
+      "started_at": "2026-11-02T13:42:26.645672+00:00",
+      "ended_at": "2026-11-02T13:43:46.138412+00:00"
+    },
+    {
+      "task_id": "tsk_5a16a07874374173a9275cd0f38b7209",
+      "run": 2,
+      "stage": "lr_register",
+      "state": "COMPLETED",
+      "succeeded": 2,
+      "failed": 0,
+      "skipped": 1,
+      "detail_json": "[{\"asset_id\": \"ast_9b8dba49434577f44afbc9a1\", \"mock\": false, \"status\": \"Lightroom MCP connected (real read-only preset probe; catalog identity unverified)\"}, {\"asset_id\": \"ast_57d2cf2aa9e4f919d86b04a5\", \"mock\": false, \"status\": \"Lightroom MCP connected (real read-only preset probe; catalog identity unverified)\"}]",
+      "started_at": "2026-11-02T13:50:54.821322+00:00",
+      "ended_at": "2026-11-02T13:51:29.415538+00:00"
+    }
+  ],
+  "catalog_search": {
+    "photos": [
+      {
+        "id": 609,
+        "filename": "CETACEA_INTERRUPT_03.NEF",
+        "dateTimeOriginal": "2019/11/29 17:14:04.680"
+      },
+      {
+        "id": 439,
+        "filename": "CETACEA_INTERRUPT_02.NEF",
+        "dateTimeOriginal": "2019/11/29 17:14:04.680"
+      },
+      {
+        "id": 265,
+        "filename": "CETACEA_INTERRUPT_01.NEF",
+        "dateTimeOriginal": "2019/11/29 17:14:04.680"
+      }
+    ],
+    "count": 3,
+    "has_more": false
+  },
+  "source_unchanged": true,
+  "library_unchanged": true
+}

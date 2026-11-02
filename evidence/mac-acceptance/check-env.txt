@@ -1,0 +1,7 @@
+== CETACEA macOS 环境检查（只读）==
+  [OK]   macOS 27.0.1
+  [OK]   Apple Silicon (arm64)
+  [OK]   python3 3.13
+  [OK]   node v26.12.1（lightroom-mcp 需要 >= 20）
+  [OK]   找到 Adobe Lightroom Classic
+  [INFO] 尚未安装 Lightroom MCP 插件（见 docs/MACOS_HANDOFF.md 第 3 节）

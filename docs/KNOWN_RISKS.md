@@ -20,12 +20,12 @@ Stage C validation history:
 
 测试：Phase 1 收尾时 71 passed；Phase 2 Mock 阶段 75 passed；真实模型阶段无密钥/开关全量 90 passed、1 skipped，真实模型 opt-in 5 passed；本阶段无密钥/开关 103 passed、2 skipped（分别为 `tests/test_realmodel_optin.py`、`tests/test_realmodel_fullplan_optin.py`；Linux，Python 3.13）。开发过程中的失败与修复历史见上文。
 
-1. **未在 macOS / 真实 Lightroom 上验证**任何东西。`RealLightroomMcpAdapter` 只对假 MCP 服务器做过接口测试；lightroom-mcp 实际返回格式（import_photos 无 photo id、export_photos 无文件名）按源码阅读做的假设，须在 Mac 上验收清单 A13 确认。
+1. **Phase 1 收尾时的历史状态：未在 macOS / 真实 Lightroom 上验证**任何东西。`RealLightroomMcpAdapter` 只对假 MCP 服务器做过接口测试；lightroom-mcp 实际返回格式（import_photos 无 photo id、export_photos 无文件名）按源码阅读做的假设，当时须在 Mac 上验收清单 A13 确认；后续验收见下方 macOS 记录。
 2. 真实适配器每次调用都启动一个 MCP 子进程（简单、隔离，但慢）；大批量时需改为长连接会话。
 3. Mock 适配器的“已登记”状态在进程内存里；跨进程时以数据库 assets.lr_photo_id 为准。
 4. 硬链接不可用时的回退（`.cetacea-lock` + rename）只对遵守锁的 CETACEA 写入者安全；外部写入者可能竞争。APFS 支持硬链接；exFAT/SMB 待验证。
 5. 性能：扫描一次完整哈希，复制时再读源、读回临时文件、最终读回，共约 4 次读取；大卡（数百 GB）耗时较长，未做基准测试。
-6. **开放风险，待用户决定**：`photo_list_sources` 会向 AI 返回已登记来源的绝对路径（会经 Harness 发送给 DeepSeek，可能暴露用户名、目录结构或卷名；AI 不能据此读写任意路径）。此路径不在 2026-11-02 用户决定范围内；建议后续只返回来源 ID/标签，见 [数据流](DATA_FLOW.md)。
+6. **已接受的决定（2026-11-02）**：用户表示“可以，没问题”，接受 `photo_list_sources` 向模型返回已登记来源的绝对路径，并经 Harness 发送给 DeepSeek；路径可能暴露用户名、目录结构或卷名，AI 不能据此读写任意路径。此项决定仅覆盖该工具的来源路径；未来若工具返回文件内容或缩略图，或 DeepSeek 保留条款变化，须重新决定。见 [数据流](DATA_FLOW.md)。
 7. 磁盘满/权限错误通过故障注入和 monkeypatch 测试，并非真实磁盘满。
 8. （Phase 1 原文，已被 Phase 2 部分取代）没有真实 AI 客户端联调。Phase 2 之后：Harness 的真实 MCP 客户端及 DeepSeek 已小规模联调；Codex/Claude 客户端未联调。
 9. 私有 GitHub 仓库未能核查（需 GitHub App 授权）。
@@ -48,13 +48,32 @@ Stage C validation history:
 7. **检出不入库**：`third_party-review/deepseek-harness` 被 git 忽略，不 vendoring；换机器需按 harness/README.md 复现；测试在缺依赖或 Node < 24.9 时**跳过**（带原因），因此 CI/新机器上这 4 个测试所在模块会整体显示为 1 skipped 而非 passed。
 8. 运行器把覆盖文件临时复制进 Harness 检出（每次运行独立目录，退出时清理），因此检出必须可写；并发运行互不干扰但未做压力测试。
 9. 审计日志里 AI 的 actor 字符串为 `ai:ai:mcp`（Phase 1 遗留命名：actor_id 默认值已带 `ai:` 前缀），人工为 `human:cli`；仅外观问题，既有测试按前缀判断，未改动。
-10. 仍未验证：macOS、真实 Lightroom Classic、APFS/exFAT/SMB、真实相机卡、真实客户数据。Linux 上的 MOCK 结果不代表 Mac 实机结果。
+10. 本阶段原记录：当时尚未验证 macOS、真实 Lightroom Classic、APFS/exFAT/SMB、真实相机卡和真实客户数据。后续 Mac 样本验收见下方记录；合并后的完整计划仍须重新验收。Linux 上只能运行 Mock Lightroom 测试，MOCK 结果不代表 Mac 实机结果。
 11. 开发流程说明：Codex 本阶段仅用于只读代码审阅（`gpt-6.1-terra`，reasoning high），其意见已采纳并修复（见 git 历史）；其余代码、测试、文档由编排者直接编写。
 
 12. **多轮驱动验证**：此前沙箱启动超时只反映该环境限制；用户随后在沙箱外完成测试并全部通过。Mock 覆盖多轮、纯文本模型的 `NO_TOOL_CALLS`、`NOT_APPROVED`、预算退出码 4、ledger、14 个 CETACEA 加 7 个无害工具及缺密钥退出码 5。真实运行首次未批准场景先查状态并拒绝执行，原测试误期待 `NOT_APPROVED` 而失败；已调整该测试，并用独立强制调用场景验证该错误路径。
 13. 真实 overlay 关闭 session-title、web、telemetry 条目；Harness 错误/诊断 stderr 被丢弃，提供商失败仅显示 `session failed`，排障信息有限。
 14. 驱动的 30 次请求上限因竞争最多超出 1 次；ledger 无跨进程锁，不能供并发进程共享。
-15. 密钥仅由 `DEEPSEEK_API_KEY` 传入，但必须进入 Harness 子进程环境；依赖 Harness 不记录密钥。仓库及证据已 grep 验证不含密钥值，Harness 自身网络及日志行为未审计。2026-11-02 用户在聊天中表示“没问题 可以交给deepseek”，接受发送包含真实客户数据的工具结果，范围为订单 ID、摄影师 ID、批次标签、文件名、文件大小、SHA-256 哈希、图库相对路径、任务/阶段状态和 Lightroom 状态文字。照片像素或文件内容不得发送，当前没有工具返回文件字节；该决定不覆盖未来返回文件内容或缩略图的工具，也不改变 DeepSeek 自身的数据保留条款，用户仍负责审阅适用条款。`photo_list_sources` 返回的来源绝对路径不在决定范围内，仍是开放风险，建议后续只返回来源 ID/标签，待用户决定。详见 [数据流](DATA_FLOW.md)。
+15. 密钥仅由 `DEEPSEEK_API_KEY` 传入，但必须进入 Harness 子进程环境；依赖 Harness 不记录密钥。仓库及证据已 grep 验证不含密钥值，Harness 自身网络及日志行为未审计。2026-11-02 用户在聊天中表示“没问题 可以交给deepseek”，接受发送包含真实客户数据的工具结果，范围为订单 ID、摄影师 ID、批次标签、文件名、文件大小、SHA-256 哈希、图库相对路径、任务/阶段状态和 Lightroom 状态文字。照片像素或文件内容不得发送，当前没有工具返回文件字节；该决定不覆盖未来返回文件内容或缩略图的工具，也不改变 DeepSeek 自身的数据保留条款，用户仍负责审阅适用条款。用户另于 2026-11-02 表示“可以，没问题”，接受 `photo_list_sources` 的来源绝对路径经模型及 Harness 发给 DeepSeek；路径可能暴露用户名、目录结构或卷名。该项决定仅覆盖此工具；未来工具返回文件内容或缩略图，或 DeepSeek 保留条款变化时须重新决定。详见 [数据流](DATA_FLOW.md)。
 
 16. **完成后重执行的配置检查**：即使任务已 `COMPLETED`，再次执行仍检查审批和快照；完成后若相关配置改变，会返回 `PERMISSION_DENIED`，而非直接无操作返回。这是可接受的当前行为。
-17. **合并与测试环境**：`mac-validation` 分支尚未合并；本阶段源文件只改动 `core.py` 和 `mcp_server.py`，合并时需核对。MCP stdio 测试在 Codex 沙箱外通过；先前未验证仅是 Codex 沙箱限制。
+17. **合并与测试环境**：合并前记录：`mac-validation` 分支当时尚未合并；本阶段源文件只改动 `core.py` 和 `mcp_server.py`，合并时需核对。MCP stdio 测试在 Codex 沙箱外通过；先前未验证仅是 Codex 沙箱限制。
+18. **合并后待 Mac 重新验证**：含预设及导出快照的 `plan_digest`、`photo_execute_import`、`photo_retry_task`，以及 Harness/DeepSeek 驱动的完整计划路径，尚未在 Mac 上结合真实 Lightroom 重新验证。Linux 只能运行 Mock Lightroom 测试；此前 Mac 验收是合并前的历史记录。
+
+---
+## macOS validation update — 2026-11-02
+
+详见 [MACOS_VALIDATION.md](MACOS_VALIDATION.md) 和 evidence/mac-acceptance/。基线 macOS 71/71；本次修复和新增回归后 98/98，真实独立 Lightroom catalog 的公开 Nikon Z6 NEF 登记、预设、导出、缺失检测、重复请求、批次关闭/恢复通过。先前“未做任何 macOS/真实 Lightroom 验证”的文字是开发期历史，不能再用来描述本次样本范围。
+
+本次新增失败历史：Bash 3.2 中文括号变量解析失败；第一版合成 DNG 被 Adobe 以 dng_error_unsupported_raw 拒绝；全局禁用硬链接的新回归揭示清单不支持回退，随后导出恢复新回归揭示 SQLite state="FAILED" 与 failed 列冲突；慢调用回归在旧 300 秒租期下暴露 recover 可夺走活任务。上述产品问题已修并保留回归。真实调用的底层错误现不会仅剩 TaskGroup 摘要。无硬链接的锁回退仍有不守锁外部写入者 race。
+
+首次验收时实体卡/读卡器、真实外置 exFAT/SMB、实际 AI 产品客户端（可选 A14）、Z6 III HE/HE★、断电/强杀以及 Windows 仍未通过实机验收；实体卡/读卡器的后续有限样本见下节。A12 关闭点在两张照片之间，不能当作单次 catalog 写入中断证明。样片发行 README 与内嵌版权许可文字有差异，保留来源及作者信息，照片和预览不随 Git 发布。已知 CLI NotApproved 堆栈体验问题仍在。
+
+
+## Physical media follow-up — 2026-11-02
+
+详见 [MACOS_DEVICE_VALIDATION.md](MACOS_DEVICE_VALIDATION.md)。实体SD与USB卡各1张选中NEF只读导入本机和外置APFS通过；源哈希/mtime不变、目标哈希读回、同异哈希保护、外置APFS的完整Mock流程及部分失败重试通过。源是有界单文件预扫描，不代表整卡递归扫描/吞吐。
+
+macOS ENOTSUP=45和EOPNOTSUPP=102不相等，两处回退遗漏ENOTSUP已由新增参数化回归重现后修复；全套100 passed。真实exFAT目标仍未运行：两个建镜像工具失败，未格式化任何原有设备或在卡上写探针。外置盘曾在拷贝前掉线，挂载守卫停止操作，重连核对UUID后才继续。
+
+两张选中Z6III NEF的外置副本还完成真实测试catalog登记、+0.50预设读回、单张JPG导出和verify-preview；原始NEF与库副本不变。该设备补充未独立辨识HE/HE★子类型、未逐项核对相邻XMP/ACR，不能扩展为每种压缩或整卡生产验收。

@@ -1,0 +1,17 @@
+{
+  "meta": null,
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"status\": \"Lightroom MCP connected (real read-only preset probe; catalog identity unverified)\", \"mock\": false}",
+      "annotations": null,
+      "meta": null
+    }
+  ],
+  "structured_content": {
+    "status": "Lightroom MCP connected (real read-only preset probe; catalog identity unverified)",
+    "mock": false
+  },
+  "is_error": false,
+  "result_type": "complete"
+}

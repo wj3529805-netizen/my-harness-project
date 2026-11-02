@@ -1,0 +1,24 @@
+{
+  "task_id": "tsk_5a16a07874374173a9275cd0f38b7209",
+  "registered_before_quit": [
+    {
+      "asset_id": "ast_42286fd069bc6895fe6ab84e",
+      "order_id": "test",
+      "photographer_id": "tester",
+      "batch_id": "interrupted",
+      "rel_path": "CETACEA_INTERRUPT_01.NEF",
+      "size": 25994889,
+      "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "error": null,
+      "dest_rel_path": "test/tester/interrupted/CETACEA_INTERRUPT_01.NEF",
+      "lr_photo_id": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/library/test/tester/interrupted/CETACEA_INTERRUPT_01.NEF",
+      "lr_status": "REGISTERED",
+      "preset_applied": null,
+      "mock": 0,
+      "verified_at": "2026-11-02T13:42:26.566058+00:00"
+    }
+  ],
+  "next_path": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/library/test/tester/interrupted/CETACEA_INTERRUPT_02.NEF"
+}

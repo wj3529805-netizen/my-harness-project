@@ -1,0 +1,54 @@
+{
+  "task_id": "tsk_5a16a07874374173a9275cd0f38b7209",
+  "idempotency_key": "07efd6055487acdad0c0244a9bdab963046857c0105bd1f77e9e80dc556e4c24",
+  "type": "import",
+  "state": "WAITING_APPROVAL",
+  "order_id": "test",
+  "photographer_id": "tester",
+  "batch_id": "interrupted",
+  "source_id": "interrupt",
+  "plan_json": "{\"files\": [{\"rel_path\": \"CETACEA_INTERRUPT_01.NEF\", \"size\": 25994889, \"sha256\": \"8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02\", \"kind\": \"raw\", \"dest_rel_path\": \"test/tester/interrupted/CETACEA_INTERRUPT_01.NEF\", \"asset_id\": \"ast_42286fd069bc6895fe6ab84e\"}, {\"rel_path\": \"CETACEA_INTERRUPT_02.NEF\", \"size\": 25994889, \"sha256\": \"8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02\", \"kind\": \"raw\", \"dest_rel_path\": \"test/tester/interrupted/CETACEA_INTERRUPT_02.NEF\", \"asset_id\": \"ast_9b8dba49434577f44afbc9a1\"}, {\"rel_path\": \"CETACEA_INTERRUPT_03.NEF\", \"size\": 25994889, \"sha256\": \"8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02\", \"kind\": \"raw\", \"dest_rel_path\": \"test/tester/interrupted/CETACEA_INTERRUPT_03.NEF\", \"asset_id\": \"ast_57d2cf2aa9e4f919d86b04a5\"}], \"total_bytes\": 77984667, \"destination\": \"test/tester/interrupted\", \"stages\": [\"ingest\", \"lr_register\"], \"preset_id\": null, \"scan_digest\": \"7a395ad7a698a345a4ba000c1f10de354df5922a17efaceaa32550312f62ea79\"}",
+  "plan_digest": "72e119e402c86944c022bda421a1c5e0f55f2000f39e6e3e310d2ad392869318",
+  "stages_json": "[\"ingest\", \"lr_register\"]",
+  "run_count": 0,
+  "error": null,
+  "created_at": "2026-11-02T13:42:26.525109+00:00",
+  "updated_at": "2026-11-02T13:42:26.525357+00:00",
+  "lease_until": null,
+  "plan": {
+    "files": [
+      {
+        "rel_path": "CETACEA_INTERRUPT_01.NEF",
+        "size": 25994889,
+        "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+        "kind": "raw",
+        "dest_rel_path": "test/tester/interrupted/CETACEA_INTERRUPT_01.NEF",
+        "asset_id": "ast_42286fd069bc6895fe6ab84e"
+      },
+      {
+        "rel_path": "CETACEA_INTERRUPT_02.NEF",
+        "size": 25994889,
+        "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+        "kind": "raw",
+        "dest_rel_path": "test/tester/interrupted/CETACEA_INTERRUPT_02.NEF",
+        "asset_id": "ast_9b8dba49434577f44afbc9a1"
+      },
+      {
+        "rel_path": "CETACEA_INTERRUPT_03.NEF",
+        "size": 25994889,
+        "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+        "kind": "raw",
+        "dest_rel_path": "test/tester/interrupted/CETACEA_INTERRUPT_03.NEF",
+        "asset_id": "ast_57d2cf2aa9e4f919d86b04a5"
+      }
+    ],
+    "total_bytes": 77984667,
+    "destination": "test/tester/interrupted",
+    "stages": [
+      "ingest",
+      "lr_register"
+    ],
+    "preset_id": null,
+    "scan_digest": "7a395ad7a698a345a4ba000c1f10de354df5922a17efaceaa32550312f62ea79"
+  }
+}

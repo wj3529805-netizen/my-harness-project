@@ -1,0 +1,14 @@
+[
+  {
+    "readable_log": "enotsup-before-fix.txt",
+    "raw_archive": "enotsup-before-fix.raw.txt.gz",
+    "raw_sha256": "b6b4c097ea8fec97e39d9ccd080ad81b4c6827b07702ea72c29f99936d7cb8e7",
+    "normalization": "Only trailing whitespace removed from readable .txt; raw bytes retained in gzip"
+  },
+  {
+    "readable_log": "enotsup-copier-only.txt",
+    "raw_archive": "enotsup-copier-only.raw.txt.gz",
+    "raw_sha256": "93499f459af5ef3bffc1fae9f3b970dcebfb77d372fc37e0b6a800670c892c40",
+    "normalization": "Only trailing whitespace removed from readable .txt; raw bytes retained in gzip"
+  }
+]

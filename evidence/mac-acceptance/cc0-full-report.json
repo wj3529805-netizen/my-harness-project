@@ -1,0 +1,140 @@
+{
+  "task": {
+    "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+    "idempotency_key": "84f0acbe6fb14c8158a0b834ad78aa66f84f59ead0b7d752d4f448ef60db259d",
+    "type": "import",
+    "state": "COMPLETED",
+    "order_id": "test",
+    "photographer_id": "tester",
+    "batch_id": "publicraw",
+    "source_id": "cc0",
+    "plan_json": "{\"files\": [{\"rel_path\": \"Nikon-Z6.NEF\", \"size\": 25994889, \"sha256\": \"8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02\", \"kind\": \"raw\", \"dest_rel_path\": \"test/tester/publicraw/Nikon-Z6.NEF\", \"asset_id\": \"ast_2247a7ba5166c0b19b0470fb\"}], \"total_bytes\": 25994889, \"destination\": \"test/tester/publicraw\", \"stages\": [\"ingest\", \"lr_register\", \"lr_preset\", \"lr_export\", \"preview_verify\"], \"preset_id\": \"testpreset\", \"scan_digest\": \"e4db4f9f1e67fe4ff49386a4c622036a4ea0075059728d26938180c0e51518f0\"}",
+    "plan_digest": "9255465944af543e6335ace65cb8f42ac40695165cc982cd9db7cdfb83a6d53d",
+    "stages_json": "[\"ingest\", \"lr_register\", \"lr_preset\", \"lr_export\", \"preview_verify\"]",
+    "run_count": 1,
+    "error": null,
+    "created_at": "2026-11-02T13:36:51.069004+00:00",
+    "updated_at": "2026-11-02T13:37:30.107685+00:00",
+    "lease_until": null,
+    "plan": {
+      "files": [
+        {
+          "rel_path": "Nikon-Z6.NEF",
+          "size": 25994889,
+          "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+          "kind": "raw",
+          "dest_rel_path": "test/tester/publicraw/Nikon-Z6.NEF",
+          "asset_id": "ast_2247a7ba5166c0b19b0470fb"
+        }
+      ],
+      "total_bytes": 25994889,
+      "destination": "test/tester/publicraw",
+      "stages": [
+        "ingest",
+        "lr_register",
+        "lr_preset",
+        "lr_export",
+        "preview_verify"
+      ],
+      "preset_id": "testpreset",
+      "scan_digest": "e4db4f9f1e67fe4ff49386a4c622036a4ea0075059728d26938180c0e51518f0"
+    }
+  },
+  "steps": [
+    {
+      "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+      "run": 1,
+      "stage": "ingest",
+      "state": "COMPLETED",
+      "succeeded": 0,
+      "failed": 0,
+      "skipped": 1,
+      "detail_json": "[{\"rel_path\": \"Nikon-Z6.NEF\", \"size\": 25994889, \"sha256\": \"8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02\", \"kind\": \"raw\", \"dest_rel_path\": \"test/tester/publicraw/Nikon-Z6.NEF\", \"asset_id\": \"ast_2247a7ba5166c0b19b0470fb\", \"status\": \"VERIFIED\", \"skipped_verified\": true, \"error\": null, \"verified_at\": \"2026-11-02T13:36:51.123859+00:00\", \"order\": \"test\", \"photographer\": \"tester\", \"batch\": \"publicraw\", \"source_id\": \"cc0\", \"run\": 1}]",
+      "started_at": "2026-11-02T13:36:51.075965+00:00",
+      "ended_at": "2026-11-02T13:36:51.125364+00:00"
+    },
+    {
+      "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+      "run": 1,
+      "stage": "lr_register",
+      "state": "COMPLETED",
+      "succeeded": 0,
+      "failed": 0,
+      "skipped": 1,
+      "detail_json": "[]",
+      "started_at": "2026-11-02T13:36:51.126638+00:00",
+      "ended_at": "2026-11-02T13:36:51.129522+00:00"
+    },
+    {
+      "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+      "run": 1,
+      "stage": "lr_preset",
+      "state": "COMPLETED",
+      "succeeded": 1,
+      "failed": 0,
+      "skipped": 0,
+      "detail_json": "[{\"asset_id\": \"ast_2247a7ba5166c0b19b0470fb\", \"mock\": false, \"status\": \"Lightroom MCP connected (real read-only preset probe; catalog identity unverified)\"}]",
+      "started_at": "2026-11-02T13:36:51.129791+00:00",
+      "ended_at": "2026-11-02T13:37:09.118539+00:00"
+    },
+    {
+      "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+      "run": 1,
+      "stage": "lr_export",
+      "state": "COMPLETED",
+      "succeeded": 1,
+      "failed": 0,
+      "skipped": 0,
+      "detail_json": "[{\"asset_id\": \"ast_2247a7ba5166c0b19b0470fb\", \"mock\": false, \"status\": \"Lightroom MCP connected (real read-only preset probe; catalog identity unverified)\"}]",
+      "started_at": "2026-11-02T13:37:09.118939+00:00",
+      "ended_at": "2026-11-02T13:37:21.078421+00:00"
+    },
+    {
+      "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+      "run": 1,
+      "stage": "preview_verify",
+      "state": "COMPLETED",
+      "succeeded": 1,
+      "failed": 0,
+      "skipped": 0,
+      "detail_json": "{\"status\": \"OK\", \"mock\": false, \"marker\": \"Lightroom MCP connected (real read-only preset probe; catalog identity unverified)\", \"run\": 1, \"missing\": [], \"failed\": [], \"orphans\": [], \"size_violations\": [], \"expected_count\": 1, \"mapped_count\": 1}",
+      "started_at": "2026-11-02T13:37:21.078732+00:00",
+      "ended_at": "2026-11-02T13:37:30.106913+00:00"
+    }
+  ],
+  "assets": [
+    {
+      "asset_id": "ast_2247a7ba5166c0b19b0470fb",
+      "order_id": "test",
+      "photographer_id": "tester",
+      "batch_id": "publicraw",
+      "rel_path": "Nikon-Z6.NEF",
+      "size": 25994889,
+      "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "error": null,
+      "dest_rel_path": "test/tester/publicraw/Nikon-Z6.NEF",
+      "lr_photo_id": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/library/test/tester/publicraw/Nikon-Z6.NEF",
+      "lr_status": "EXPORTED",
+      "preset_applied": "testpreset",
+      "mock": 0,
+      "verified_at": "2026-11-02T13:36:51.123859+00:00"
+    }
+  ],
+  "mock": false,
+  "marker": "Lightroom MCP connected (real read-only preset probe; catalog identity unverified)",
+  "preview": {
+    "status": "OK",
+    "mock": false,
+    "marker": "Lightroom MCP connected (real read-only preset probe; catalog identity unverified)",
+    "run": 1,
+    "missing": [],
+    "failed": [],
+    "orphans": [],
+    "size_violations": [],
+    "expected_count": 1,
+    "mapped_count": 1
+  },
+  "markdown": "# CETACEA \u4efb\u52a1\u62a5\u544a\n\n**Lightroom MCP connected (real read-only preset probe; catalog identity unverified)**\n\n- \u4efb\u52a1: `tsk_5e8b197eb23c45e5bdb7212aaa752f07`  \u72b6\u6001: **COMPLETED**  \u8fd0\u884c\u6b21\u6570: 1\n- \u8ba2\u5355/\u6444\u5f71\u5e08/\u6279\u6b21: test / tester / publicraw\n- \u6587\u4ef6\u603b\u6570: 1\n\n## \u9636\u6bb5\uff08\u6bcf\u6b21\u8fd0\u884c\uff09\n\n| run | \u9636\u6bb5 | \u72b6\u6001 | \u6210\u529f | \u5931\u8d25 | \u8df3\u8fc7 |\n|---|---|---|---|---|---|\n| 1 | ingest | COMPLETED | 0 | 0 | 1 |\n| 1 | lr_register | COMPLETED | 0 | 0 | 1 |\n| 1 | lr_preset | COMPLETED | 1 | 0 | 0 |\n| 1 | lr_export | COMPLETED | 1 | 0 | 0 |\n| 1 | preview_verify | COMPLETED | 1 | 0 | 0 |\n\n## \u9884\u89c8\u6838\u9a8c\n\n- \u72b6\u6001: **OK**\n- expected_count: 1\n- missing: []\n- failed: []\n- orphans: []\n- size_violations: []\n\n## \u5f02\u5e38\n\n- \u65e0\n"
+}

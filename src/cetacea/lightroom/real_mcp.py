@@ -6,54 +6,158 @@ from mcp.client.session import ClientSession
 from mcp.client.stdio import StdioServerParameters, stdio_client
 from .base import LightroomAdapter, RegisterResult, PresetResult, ExportResult
 
+
 class RealLightroomMcpAdapter(LightroomAdapter):
     ALLOWED_TOOLS = frozenset({'import_photos', 'get_photo_metadata', 'apply_develop_preset', 'export_photos', 'list_develop_presets', 'search_photos'})
+
     def __init__(self, command=None, test_command=None):
         if sys.platform != 'darwin' and not (test_command or command):
             raise RuntimeError('requires macOS Lightroom Classic; explicit test command required')
         self.command = test_command or command or ['npx', '-y', '@mskalski/lightroom-mcp@0.26.0']
         self.testing = bool(test_command) or sys.platform != 'darwin'
+
     def status(self):
-        return 'interface-level only, NOT real Lightroom' if self.testing else 'Lightroom MCP configured; awaiting real Lightroom verification'
+        if self.testing:
+            return 'interface-level only, NOT real Lightroom'
+        try:
+            result = self.call_tool('list_develop_presets', {'limit': 0})
+            self._require_success(result)
+            if not isinstance(result.get('presets'), list):
+                raise ValueError('invalid preset probe response')
+            return 'Lightroom MCP connected (real read-only preset probe; catalog identity unverified)'
+        except Exception as exc:
+            return 'Lightroom MCP disconnected or probe failed: ' + self._error_summary(exc)
+
+    @staticmethod
+    def _error_summary(exc):
+        """Keep actionable MCP errors when async contexts wrap them in groups."""
+        messages = []
+        def visit(error):
+            if isinstance(error, BaseExceptionGroup):
+                for child in error.exceptions:
+                    visit(child)
+            else:
+                message = str(error) or type(error).__name__
+                if message not in messages:
+                    messages.append(message)
+        visit(exc)
+        return '; '.join(messages)
+
+    @staticmethod
+    def _payload(result):
+        if result.is_error:
+            raise RuntimeError('; '.join(c.text for c in result.content if c.type == 'text'))
+        if result.structured_content is not None:
+            payload = result.structured_content
+        else:
+            blocks = [json.loads(c.text) for c in result.content if c.type == 'text']
+            if len(blocks) != 1:
+                raise ValueError('expected one Lightroom JSON response')
+            payload = blocks[0]
+        if not isinstance(payload, dict):
+            raise ValueError('expected Lightroom response object')
+        if payload.get('success') is False or payload.get('error'):
+            raise RuntimeError(str(payload))
+        return payload
+
     def call_tool(self, name, arguments):
-        if name not in self.ALLOWED_TOOLS: raise ValueError('Forbidden Lightroom tool: '+name)
-        if name == 'export_photos' and arguments.get('on_existing') != 'skip': raise ValueError('on_existing must be skip')
-        if name == 'import_photos' and 'copy_to' in arguments: raise ValueError('copy_to forbidden')
+        if name not in self.ALLOWED_TOOLS:
+            raise ValueError('Forbidden Lightroom tool: ' + name)
+        if name == 'export_photos' and arguments.get('on_existing') != 'skip':
+            raise ValueError('on_existing must be skip')
+        if name == 'import_photos' and 'copy_to' in arguments:
+            raise ValueError('copy_to forbidden')
+
         async def invoke():
-            params = StdioServerParameters(command=self.command[0], args=self.command[1:], env={'LIGHTROOM_MCP_TOOLSETS':'develop'})
+            # Upstream always includes core when develop is selected. Keep masks
+            # and all out of this process; CETACEA still enforces its own allowlist.
+            params = StdioServerParameters(command=self.command[0], args=self.command[1:], env={'LIGHTROOM_MCP_TOOLSETS': 'develop'})
+            timeout = 310 if name in {'import_photos', 'export_photos'} else 30
             async with stdio_client(params) as streams:
-                async with ClientSession(*streams, read_timeout_seconds=10) as session:
+                async with ClientSession(*streams, read_timeout_seconds=timeout) as session:
                     await session.initialize()
-                    result = await session.call_tool(name, arguments)
-                    if result.is_error: raise RuntimeError(str(result.content))
-                    if result.structured_content is not None: return result.structured_content
-                    return [json.loads(c.text) for c in result.content if c.type == 'text']
-        return asyncio.run(invoke())
+                    return self._payload(await session.call_tool(name, arguments))
+        try:
+            return asyncio.run(invoke())
+        except ExceptionGroup as exc:
+            raise RuntimeError(self._error_summary(exc)) from exc
+
+    @staticmethod
+    def _require_success(result):
+        if not isinstance(result, dict) or result.get('success') is not True:
+            raise ValueError('Lightroom did not confirm success: ' + str(result))
+        for key in ('missing', 'remaining_paths', 'remaining_ids', 'ai_update_failed'):
+            if result.get(key):
+                raise ValueError('Lightroom reported ' + key + ': ' + str(result[key]))
+        if result.get('complete') is False:
+            raise ValueError('Lightroom operation incomplete')
+
+    def _lookup(self, path):
+        result = self.call_tool('get_photo_metadata', {'photo_ids': [path]})
+        photos, missing = result.get('photos'), result.get('missing')
+        if not isinstance(photos, list) or not isinstance(missing, list):
+            raise ValueError('invalid Lightroom metadata response')
+        if not photos and missing == [path]:
+            return None
+        if missing or len(photos) != 1 or not isinstance(photos[0], dict):
+            raise ValueError('Lightroom metadata did not resolve exactly one photo')
+        photo = photos[0]
+        if photo.get('path') != path or photo.get('id') in (None, '') or photo.get('isVirtualCopy') is not False:
+            raise ValueError('Lightroom photo identity mismatch or virtual copy')
+        return photo
+
     def register(self, files):
         results = []
         for f in files:
             try:
-                self.call_tool('import_photos', {'paths':[str(f.abs_path)]})
-                self.call_tool('get_photo_metadata', {'photo_ids':[str(f.abs_path)]})
-                results.append(RegisterResult(f.asset_id, str(f.abs_path)))
-            except Exception as exc: results.append(RegisterResult(f.asset_id, error=str(exc)))
+                path = str(f.abs_path)
+                # An import may have completed before a connection failed. Query
+                # first on retry so that the uncertain outcome is not re-imported.
+                if self._lookup(path) is None:
+                    imported = self.call_tool('import_photos', {'source_path': path})
+                    self._require_success(imported)
+                    if imported.get('complete') is not True or type(imported.get('imported')) is not int or imported['imported'] not in (0, 1) or imported.get('skipped', 0) != 0:
+                        raise ValueError('unexpected single-photo import result')
+                    if self._lookup(path) is None:
+                        raise ValueError('imported photo absent from Lightroom')
+                # 0.26.0 accepts exact file paths as photo identifiers. Persist
+                # the library path used by all later stages, after readback.
+                results.append(RegisterResult(f.asset_id, path))
+            except Exception as exc:
+                results.append(RegisterResult(f.asset_id, error=self._error_summary(exc)))
         return results
+
     def apply_preset(self, photo_refs, preset):
         results = []
         for f in photo_refs:
             try:
-                self.call_tool('apply_develop_preset', {'photo_ids':[str(f.abs_path)], 'preset_id':preset.get('lightroom_uuid') or preset['lightroom_name']})
+                key = 'preset_uuid' if preset.get('lightroom_uuid') else 'preset_name'
+                selector = preset.get('lightroom_uuid') or preset['lightroom_name']
+                result = self.call_tool('apply_develop_preset', {'photo_ids': [str(f.abs_path)], key: selector})
+                self._require_success(result)
+                if type(result.get('applied')) is not int or result['applied'] != 1:
+                    raise ValueError('Lightroom did not apply preset to exactly one photo')
+                if result.get('uuid' if key == 'preset_uuid' else 'preset') != selector:
+                    raise ValueError('Lightroom applied a different preset')
                 results.append(PresetResult(f.asset_id))
-            except Exception as exc: results.append(PresetResult(f.asset_id, str(exc)))
+            except Exception as exc:
+                results.append(PresetResult(f.asset_id, self._error_summary(exc)))
         return results
+
     def export_jpeg(self, photo_refs, dest_dir, max_edge, quality):
         results = []
         for f in photo_refs:
             try:
-                sub = Path(dest_dir)/f.asset_id; sub.mkdir()
-                self.call_tool('export_photos', {'photo_ids':[str(f.abs_path)], 'destination':str(sub), 'format':'jpeg', 'max_edge':max_edge, 'quality':quality, 'on_existing':'skip'})
+                sub = Path(dest_dir) / f.asset_id
+                sub.mkdir()
+                result = self.call_tool('export_photos', {'photo_ids': [str(f.abs_path)], 'destination': str(sub), 'format': 'jpeg', 'width': max_edge, 'height': max_edge, 'quality': quality, 'on_existing': 'skip'})
+                self._require_success(result)
+                if result.get('complete') is not True or type(result.get('exported')) is not int or result['exported'] != 1 or result.get('destination') != str(sub):
+                    raise ValueError('unexpected single-photo export result')
                 files = list(sub.iterdir())
-                if len(files) != 1 or not files[0].is_file() or files[0].is_symlink(): raise ValueError('expected one regular exported file')
+                if len(files) != 1 or not files[0].is_file() or files[0].is_symlink():
+                    raise ValueError('expected one regular exported file')
                 results.append(ExportResult(f.asset_id, files[0]))
-            except Exception as exc: results.append(ExportResult(f.asset_id, error=str(exc)))
+            except Exception as exc:
+                results.append(ExportResult(f.asset_id, error=self._error_summary(exc)))
         return results

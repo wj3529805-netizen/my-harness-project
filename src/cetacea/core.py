@@ -1,4 +1,5 @@
 import hashlib
+import errno
 import json
 import os
 import shutil
@@ -11,10 +12,17 @@ from .perms import HUMAN, PermissionDenied, NotApproved
 from .tasks import transition, InvalidTransition
 from .ingest.pathsafe import identifier, disjoint, safe
 from .ingest.scanner import scan
-from .ingest.copier import CopyEngine
+from .ingest.copier import CopyEngine, publish_no_overwrite
 from .ingest.manifest import write
 
 def digest(value): return hashlib.sha256(json.dumps(value,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+
+# The real adapter can initialize a session and then wait for one tool result
+# under each timeout. Registration may do metadata (30s), import (310s),
+# metadata readback (30s), and the status probe (30s) for one asset. Include both
+# waits plus 120s for local hashing and subprocess teardown before recovery can
+# treat this runner as stale. Ingest retains its shorter per-file lease.
+LIGHTROOM_ASSET_LEASE_SECONDS = 2 * (30 + 310 + 30 + 30) + 120
 
 class Workbench:
     def __init__(self, home, principal=HUMAN, fault_hook=None, disk_usage=None, adapter=None):
@@ -265,7 +273,7 @@ class Workbench:
         for a in assets:
             with db.connect(self.home) as c:
                 state=c.execute('SELECT state FROM tasks WHERE task_id=?',(t['task_id'],)).fetchone()[0]
-                c.execute('UPDATE tasks SET lease_until=? WHERE task_id=?',(time.time()+300,t['task_id']))
+                c.execute('UPDATE tasks SET lease_until=? WHERE task_id=?',(time.time()+LIGHTROOM_ASSET_LEASE_SECONDS,t['task_id']))
             if state=='CANCELLED': break
             if (stage=='lr_register' and a['lr_photo_id']) or (stage=='lr_preset' and preset_id and a['preset_applied']==preset_id):
                 skipped+=1; continue
@@ -273,13 +281,29 @@ class Workbench:
                 if stage=='lr_export':
                     with db.connect(self.home) as c:
                         previous=c.execute('SELECT * FROM previews WHERE task_id=? AND asset_id=? ORDER BY run DESC LIMIT 1',(t['task_id'],a['asset_id'])).fetchone()
-                        failed_export=c.execute('SELECT 1 FROM task_steps WHERE task_id=? AND stage="lr_export" AND state="FAILED"',(t['task_id'],)).fetchone()
+                        failed_export=c.execute('SELECT 1 FROM task_steps WHERE task_id=? AND stage=? AND state=?',(t['task_id'],'lr_export','FAILED')).fetchone()
                     if previous and failed_export:
                         old_path=safe(self.config['preview_root'],str(Path(previous['path']).relative_to(self.config['preview_root'])))
                         if read_hash(old_path)==previous['sha256']:
                             from .lightroom import ExportResult
                             new_path=directory/(a['asset_id']+'.jpg')
-                            os.link(old_path,new_path)
+                            try:
+                                os.link(old_path,new_path)
+                            except OSError as exc:
+                                if exc.errno not in {errno.ENOTSUP, errno.EOPNOTSUPP, errno.ENOSYS, errno.EXDEV, errno.EPERM}: raise
+                                # Preserve the previous run: only a fresh verified
+                                # temporary copy may be consumed by publication.
+                                temp_path=directory/('.retry-'+uuid.uuid4().hex+'.part')
+                                try:
+                                    with os.fdopen(os.open(old_path,os.O_RDONLY|os.O_NOFOLLOW),'rb') as src:
+                                        with os.fdopen(os.open(temp_path,os.O_CREAT|os.O_EXCL|os.O_WRONLY,0o600),'wb') as out:
+                                            shutil.copyfileobj(src,out)
+                                            out.flush(); os.fsync(out.fileno())
+                                    if read_hash(temp_path)!=previous['sha256']: raise ValueError('Preview retry copy hash mismatch')
+                                    publish_no_overwrite(temp_path,new_path)
+                                finally:
+                                    temp_path.unlink(missing_ok=True)
+                            if read_hash(new_path)!=previous['sha256']: raise ValueError('Preview retry output hash mismatch')
                             preview.persist(self,t,export_run,ExportResult(a['asset_id'],new_path,mock=bool(previous['mock'])))
                             skipped+=1
                             continue

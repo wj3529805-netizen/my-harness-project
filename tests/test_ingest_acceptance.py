@@ -107,6 +107,14 @@ def test_hardlink_fallback(planned,monkeypatch):
     monkeypatch.setattr(os,'link',link); assert run(w,t)['state']=='COMPLETED'
     assert not list(Path(w.config['library_root']).rglob('*.cetacea-lock'))
 
+@pytest.mark.parametrize('correct', [True, False])
+def test_existing_destination_without_hardlinks(planned, monkeypatch, correct):
+    def unsupported_link(source, destination):
+        raise OSError(errno.EOPNOTSUPP, 'filesystem has no hard links')
+    monkeypatch.setattr(os, 'link', unsupported_link)
+    existing_destination(planned, correct)
+    assert not list(Path(planned[0].config['library_root']).rglob('*.cetacea-lock'))
+
 
 def test_05_existing_correct(planned): existing_destination(planned,True)
 

@@ -1,0 +1,915 @@
+{
+  "result": "PASS",
+  "marker": "CETACEA-MOCK; local macOS SDK-to-stdio boundary acceptance",
+  "scope": {
+    "A11": "PASS: AI has no approval tool; unapproved execution denied without library outputs",
+    "A14": "PASS for local MCP SDK stdio client; actual Codex/Claude/Harness client NOT_RUN",
+    "real_lightroom": "NOT_RUN",
+    "production_data": "NOT_USED",
+    "source_data": "synthetic bytes and sidecar; not a decodable RAW"
+  },
+  "runtime": {
+    "python": "3.13.18 (main, Oct 26 2026, 13:59:02) [Clang 23.1.3 ]",
+    "executable": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/.venv/bin/python",
+    "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+    "machine": "arm64"
+  },
+  "stdio": {
+    "command": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/.venv/bin/python",
+    "args": [
+      "-m",
+      "cetacea.cli",
+      "--home",
+      "/var/folders/6b/q6y9phv53h3bcgcrfr_kq_fm0000gn/T/cetacea-mcp-boundary-02isxrb9/home",
+      "mcp-serve",
+      "--actor",
+      "ai:acceptance-sdk"
+    ],
+    "initialize": {
+      "protocol_version": "2025-11-25",
+      "capabilities": {
+        "prompts": {
+          "list_changed": false
+        },
+        "resources": {
+          "subscribe": false,
+          "list_changed": false
+        },
+        "tools": {
+          "list_changed": false
+        }
+      },
+      "server_info": {
+        "name": "CETACEA Photo Workbench",
+        "version": ""
+      }
+    }
+  },
+  "tools": [
+    {
+      "name": "photo_list_orders",
+      "description": "",
+      "input_schema": {
+        "properties": {},
+        "type": "object",
+        "title": "photo_list_ordersArguments"
+      }
+    },
+    {
+      "name": "photo_list_sources",
+      "description": "",
+      "input_schema": {
+        "properties": {},
+        "type": "object",
+        "title": "photo_list_sourcesArguments"
+      }
+    },
+    {
+      "name": "photo_scan_source",
+      "description": "",
+      "input_schema": {
+        "properties": {
+          "source_id": {
+            "title": "Source Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "source_id"
+        ],
+        "type": "object",
+        "title": "photo_scan_sourceArguments"
+      }
+    },
+    {
+      "name": "photo_plan_import",
+      "description": "",
+      "input_schema": {
+        "properties": {
+          "order_id": {
+            "title": "Order Id",
+            "type": "string"
+          },
+          "photographer_id": {
+            "title": "Photographer Id",
+            "type": "string"
+          },
+          "source_id": {
+            "title": "Source Id",
+            "type": "string"
+          },
+          "batch_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Batch Label"
+          },
+          "preset_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Preset Id"
+          },
+          "stages": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Stages"
+          }
+        },
+        "required": [
+          "order_id",
+          "photographer_id",
+          "source_id"
+        ],
+        "type": "object",
+        "title": "photo_plan_importArguments"
+      }
+    },
+    {
+      "name": "photo_execute_import",
+      "description": "",
+      "input_schema": {
+        "properties": {
+          "task_id": {
+            "title": "Task Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id"
+        ],
+        "type": "object",
+        "title": "photo_execute_importArguments"
+      }
+    },
+    {
+      "name": "photo_get_task",
+      "description": "",
+      "input_schema": {
+        "properties": {
+          "task_id": {
+            "title": "Task Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id"
+        ],
+        "type": "object",
+        "title": "photo_get_taskArguments"
+      }
+    },
+    {
+      "name": "photo_cancel_task",
+      "description": "",
+      "input_schema": {
+        "properties": {
+          "task_id": {
+            "title": "Task Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id"
+        ],
+        "type": "object",
+        "title": "photo_cancel_taskArguments"
+      }
+    },
+    {
+      "name": "photo_retry_task",
+      "description": "",
+      "input_schema": {
+        "properties": {
+          "task_id": {
+            "title": "Task Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id"
+        ],
+        "type": "object",
+        "title": "photo_retry_taskArguments"
+      }
+    },
+    {
+      "name": "photo_list_assets",
+      "description": "",
+      "input_schema": {
+        "properties": {
+          "task_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Task Id"
+          },
+          "batch_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Batch Id"
+          }
+        },
+        "type": "object",
+        "title": "photo_list_assetsArguments"
+      }
+    },
+    {
+      "name": "lightroom_get_status",
+      "description": "",
+      "input_schema": {
+        "properties": {},
+        "type": "object",
+        "title": "lightroom_get_statusArguments"
+      }
+    },
+    {
+      "name": "lightroom_import_verified",
+      "description": "",
+      "input_schema": {
+        "properties": {
+          "task_id": {
+            "title": "Task Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id"
+        ],
+        "type": "object",
+        "title": "lightroom_import_verifiedArguments"
+      }
+    },
+    {
+      "name": "lightroom_apply_preset",
+      "description": "",
+      "input_schema": {
+        "properties": {
+          "task_id": {
+            "title": "Task Id",
+            "type": "string"
+          },
+          "preset_id": {
+            "title": "Preset Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id",
+          "preset_id"
+        ],
+        "type": "object",
+        "title": "lightroom_apply_presetArguments"
+      }
+    },
+    {
+      "name": "lightroom_export_preview",
+      "description": "",
+      "input_schema": {
+        "properties": {
+          "task_id": {
+            "title": "Task Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id"
+        ],
+        "type": "object",
+        "title": "lightroom_export_previewArguments"
+      }
+    },
+    {
+      "name": "photo_verify_preview",
+      "description": "",
+      "input_schema": {
+        "properties": {
+          "task_id": {
+            "title": "Task Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "task_id"
+        ],
+        "type": "object",
+        "title": "photo_verify_previewArguments"
+      }
+    }
+  ],
+  "checks": {
+    "tool_count": 14,
+    "exact_14_tool_whitelist": true,
+    "no_path_shell_delete_approve_inputs": true,
+    "unknown_approval_and_arbitrary_tools_rejected": true,
+    "traversal_ids_rejected": true,
+    "unapproved_execution_code": "NOT_APPROVED",
+    "library_files": [],
+    "preview_files": [],
+    "approval_rows": 0,
+    "task_state": "WAITING_APPROVAL",
+    "source_unchanged": true,
+    "ai_audit_event_count": 25
+  },
+  "source_before": {
+    "synthetic.RAF": {
+      "sha256": "c584454c76b2a96b2666b04a38fbd2423edb622eb1e859b8209db16ea00111cc",
+      "mtime_ns": 1793625553911232439
+    },
+    "existing.XMP": {
+      "sha256": "b8b6e6f8498a88047a9b99a9a21fbe5c023edfa0b435324a51d7abd913de3986",
+      "mtime_ns": 1793625553911343552
+    }
+  },
+  "source_after": {
+    "synthetic.RAF": {
+      "sha256": "c584454c76b2a96b2666b04a38fbd2423edb622eb1e859b8209db16ea00111cc",
+      "mtime_ns": 1793625553911232439
+    },
+    "existing.XMP": {
+      "sha256": "b8b6e6f8498a88047a9b99a9a21fbe5c023edfa0b435324a51d7abd913de3986",
+      "mtime_ns": 1793625553911343552
+    }
+  },
+  "calls": [
+    {
+      "tool": "lightroom_get_status",
+      "arguments": {},
+      "response": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"status\": \"MOCK \\u2014 not real Lightroom\", \"mock\": true}"
+          }
+        ],
+        "structured_content": {
+          "status": "MOCK \u2014 not real Lightroom",
+          "mock": true
+        },
+        "is_error": false,
+        "result_type": "complete"
+      }
+    },
+    {
+      "tool": "photo_plan_import",
+      "arguments": {
+        "order_id": "test-order",
+        "photographer_id": "test-photographer",
+        "source_id": "test-card",
+        "preset_id": "test-preset",
+        "stages": [
+          "ingest",
+          "lr_register",
+          "lr_preset",
+          "lr_export",
+          "preview_verify"
+        ]
+      },
+      "response": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"task_id\": \"tsk_08b2a6810f3044b3a8827380a46efb9b\", \"idempotency_key\": \"3e2648aa47954dc46043478b459ba19c9ff197dc159dc62c2cf1835c40df302e\", \"type\": \"import\", \"state\": \"WAITING_APPROVAL\", \"order_id\": \"test-order\", \"photographer_id\": \"test-photographer\", \"batch_id\": \"b_4d05a12a7d49\", \"source_id\": \"test-card\", \"plan_json\": \"{\\\"files\\\": [{\\\"rel_path\\\": \\\"existing.XMP\\\", \\\"size\\\": 39, \\\"sha256\\\": \\\"b8b6e6f8498a88047a9b99a9a21fbe5c023edfa0b435324a51d7abd913de3986\\\", \\\"kind\\\": \\\"sidecar\\\", \\\"dest_rel_path\\\": \\\"test-order/test-photographer/b_4d05a12a7d49/existing.XMP\\\", \\\"asset_id\\\": \\\"ast_8bc268253d89df84bcd015f0\\\"}, {\\\"rel_path\\\": \\\"synthetic.RAF\\\", \\\"size\\\": 51, \\\"sha256\\\": \\\"c584454c76b2a96b2666b04a38fbd2423edb622eb1e859b8209db16ea00111cc\\\", \\\"kind\\\": \\\"raw\\\", \\\"dest_rel_path\\\": \\\"test-order/test-photographer/b_4d05a12a7d49/synthetic.RAF\\\", \\\"asset_id\\\": \\\"ast_1df761b740c1c2a020d8443a\\\"}], \\\"total_bytes\\\": 90, \\\"destination\\\": \\\"test-order/test-photographer/b_4d05a12a7d49\\\", \\\"stages\\\": [\\\"ingest\\\", \\\"lr_register\\\", \\\"lr_preset\\\", \\\"lr_export\\\", \\\"preview_verify\\\"], \\\"preset_id\\\": \\\"test-preset\\\", \\\"scan_digest\\\": \\\"4d05a12a7d49182917c5ebb5c893c3e17d8342f568db2912f7dbd2048dbde2d2\\\"}\", \"plan_digest\": \"df8fe18158faa46fe780b77bc9820eb625103ede129f82541c447402c468ca67\", \"stages_json\": \"[\\\"ingest\\\", \\\"lr_register\\\", \\\"lr_preset\\\", \\\"lr_export\\\", \\\"preview_verify\\\"]\", \"run_count\": 0, \"error\": null, \"created_at\": \"2026-11-02T13:19:14.280012+00:00\", \"updated_at\": \"2026-11-02T13:19:14.280064+00:00\", \"lease_until\": null, \"plan\": {\"files\": [{\"rel_path\": \"existing.XMP\", \"size\": 39, \"sha256\": \"b8b6e6f8498a88047a9b99a9a21fbe5c023edfa0b435324a51d7abd913de3986\", \"kind\": \"sidecar\", \"dest_rel_path\": \"test-order/test-photographer/b_4d05a12a7d49/existing.XMP\", \"asset_id\": \"ast_8bc268253d89df84bcd015f0\"}, {\"rel_path\": \"synthetic.RAF\", \"size\": 51, \"sha256\": \"c584454c76b2a96b2666b04a38fbd2423edb622eb1e859b8209db16ea00111cc\", \"kind\": \"raw\", \"dest_rel_path\": \"test-order/test-photographer/b_4d05a12a7d49/synthetic.RAF\", \"asset_id\": \"ast_1df761b740c1c2a020d8443a\"}], \"total_bytes\": 90, \"destination\": \"test-order/test-photographer/b_4d05a12a7d49\", \"stages\": [\"ingest\", \"lr_register\", \"lr_preset\", \"lr_export\", \"preview_verify\"], \"preset_id\": \"test-preset\", \"scan_digest\": \"4d05a12a7d49182917c5ebb5c893c3e17d8342f568db2912f7dbd2048dbde2d2\"}, \"mock\": true}"
+          }
+        ],
+        "structured_content": {
+          "task_id": "tsk_08b2a6810f3044b3a8827380a46efb9b",
+          "idempotency_key": "3e2648aa47954dc46043478b459ba19c9ff197dc159dc62c2cf1835c40df302e",
+          "type": "import",
+          "state": "WAITING_APPROVAL",
+          "order_id": "test-order",
+          "photographer_id": "test-photographer",
+          "batch_id": "b_4d05a12a7d49",
+          "source_id": "test-card",
+          "plan_json": "{\"files\": [{\"rel_path\": \"existing.XMP\", \"size\": 39, \"sha256\": \"b8b6e6f8498a88047a9b99a9a21fbe5c023edfa0b435324a51d7abd913de3986\", \"kind\": \"sidecar\", \"dest_rel_path\": \"test-order/test-photographer/b_4d05a12a7d49/existing.XMP\", \"asset_id\": \"ast_8bc268253d89df84bcd015f0\"}, {\"rel_path\": \"synthetic.RAF\", \"size\": 51, \"sha256\": \"c584454c76b2a96b2666b04a38fbd2423edb622eb1e859b8209db16ea00111cc\", \"kind\": \"raw\", \"dest_rel_path\": \"test-order/test-photographer/b_4d05a12a7d49/synthetic.RAF\", \"asset_id\": \"ast_1df761b740c1c2a020d8443a\"}], \"total_bytes\": 90, \"destination\": \"test-order/test-photographer/b_4d05a12a7d49\", \"stages\": [\"ingest\", \"lr_register\", \"lr_preset\", \"lr_export\", \"preview_verify\"], \"preset_id\": \"test-preset\", \"scan_digest\": \"4d05a12a7d49182917c5ebb5c893c3e17d8342f568db2912f7dbd2048dbde2d2\"}",
+          "plan_digest": "df8fe18158faa46fe780b77bc9820eb625103ede129f82541c447402c468ca67",
+          "stages_json": "[\"ingest\", \"lr_register\", \"lr_preset\", \"lr_export\", \"preview_verify\"]",
+          "run_count": 0,
+          "error": null,
+          "created_at": "2026-11-02T13:19:14.280012+00:00",
+          "updated_at": "2026-11-02T13:19:14.280064+00:00",
+          "lease_until": null,
+          "plan": {
+            "files": [
+              {
+                "rel_path": "existing.XMP",
+                "size": 39,
+                "sha256": "b8b6e6f8498a88047a9b99a9a21fbe5c023edfa0b435324a51d7abd913de3986",
+                "kind": "sidecar",
+                "dest_rel_path": "test-order/test-photographer/b_4d05a12a7d49/existing.XMP",
+                "asset_id": "ast_8bc268253d89df84bcd015f0"
+              },
+              {
+                "rel_path": "synthetic.RAF",
+                "size": 51,
+                "sha256": "c584454c76b2a96b2666b04a38fbd2423edb622eb1e859b8209db16ea00111cc",
+                "kind": "raw",
+                "dest_rel_path": "test-order/test-photographer/b_4d05a12a7d49/synthetic.RAF",
+                "asset_id": "ast_1df761b740c1c2a020d8443a"
+              }
+            ],
+            "total_bytes": 90,
+            "destination": "test-order/test-photographer/b_4d05a12a7d49",
+            "stages": [
+              "ingest",
+              "lr_register",
+              "lr_preset",
+              "lr_export",
+              "preview_verify"
+            ],
+            "preset_id": "test-preset",
+            "scan_digest": "4d05a12a7d49182917c5ebb5c893c3e17d8342f568db2912f7dbd2048dbde2d2"
+          },
+          "mock": true
+        },
+        "is_error": false,
+        "result_type": "complete"
+      }
+    },
+    {
+      "tool": "photo_execute_import",
+      "arguments": {
+        "task_id": "tsk_08b2a6810f3044b3a8827380a46efb9b"
+      },
+      "response": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"code\": \"NOT_APPROVED\", \"message\": \"tsk_08b2a6810f3044b3a8827380a46efb9b\"}"
+          }
+        ],
+        "structured_content": {
+          "code": "NOT_APPROVED",
+          "message": "tsk_08b2a6810f3044b3a8827380a46efb9b"
+        },
+        "is_error": true,
+        "result_type": "complete"
+      }
+    },
+    {
+      "tool": "lightroom_import_verified",
+      "arguments": {
+        "task_id": "tsk_08b2a6810f3044b3a8827380a46efb9b"
+      },
+      "response": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"code\": \"NOT_APPROVED\", \"message\": \"tsk_08b2a6810f3044b3a8827380a46efb9b\"}"
+          }
+        ],
+        "structured_content": {
+          "code": "NOT_APPROVED",
+          "message": "tsk_08b2a6810f3044b3a8827380a46efb9b"
+        },
+        "is_error": true,
+        "result_type": "complete"
+      }
+    },
+    {
+      "tool": "lightroom_export_preview",
+      "arguments": {
+        "task_id": "tsk_08b2a6810f3044b3a8827380a46efb9b"
+      },
+      "response": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"code\": \"NOT_APPROVED\", \"message\": \"tsk_08b2a6810f3044b3a8827380a46efb9b\"}"
+          }
+        ],
+        "structured_content": {
+          "code": "NOT_APPROVED",
+          "message": "tsk_08b2a6810f3044b3a8827380a46efb9b"
+        },
+        "is_error": true,
+        "result_type": "complete"
+      }
+    },
+    {
+      "tool": "lightroom_apply_preset",
+      "arguments": {
+        "task_id": "tsk_08b2a6810f3044b3a8827380a46efb9b",
+        "preset_id": "test-preset"
+      },
+      "response": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"code\": \"NOT_APPROVED\", \"message\": \"tsk_08b2a6810f3044b3a8827380a46efb9b\"}"
+          }
+        ],
+        "structured_content": {
+          "code": "NOT_APPROVED",
+          "message": "tsk_08b2a6810f3044b3a8827380a46efb9b"
+        },
+        "is_error": true,
+        "result_type": "complete"
+      }
+    },
+    {
+      "tool": "approve",
+      "arguments": {},
+      "response": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Unknown tool: approve"
+          }
+        ],
+        "is_error": true,
+        "result_type": "complete"
+      }
+    },
+    {
+      "tool": "shell",
+      "arguments": {},
+      "response": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Unknown tool: shell"
+          }
+        ],
+        "is_error": true,
+        "result_type": "complete"
+      }
+    },
+    {
+      "tool": "delete_file",
+      "arguments": {},
+      "response": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Unknown tool: delete_file"
+          }
+        ],
+        "is_error": true,
+        "result_type": "complete"
+      }
+    },
+    {
+      "tool": "read_file",
+      "arguments": {},
+      "response": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Unknown tool: read_file"
+          }
+        ],
+        "is_error": true,
+        "result_type": "complete"
+      }
+    },
+    {
+      "tool": "photo_scan_source",
+      "arguments": {
+        "source_id": "../outside"
+      },
+      "response": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"code\": \"INVALID_ARGUMENT\", \"message\": \"Invalid identifier\"}"
+          }
+        ],
+        "structured_content": {
+          "code": "INVALID_ARGUMENT",
+          "message": "Invalid identifier"
+        },
+        "is_error": true,
+        "result_type": "complete"
+      }
+    },
+    {
+      "tool": "photo_get_task",
+      "arguments": {
+        "task_id": "../../outside"
+      },
+      "response": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"code\": \"INVALID_ARGUMENT\", \"message\": \"Invalid identifier\"}"
+          }
+        ],
+        "structured_content": {
+          "code": "INVALID_ARGUMENT",
+          "message": "Invalid identifier"
+        },
+        "is_error": true,
+        "result_type": "complete"
+      }
+    },
+    {
+      "tool": "photo_get_task",
+      "arguments": {
+        "task_id": "tsk_08b2a6810f3044b3a8827380a46efb9b"
+      },
+      "response": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"task_id\": \"tsk_08b2a6810f3044b3a8827380a46efb9b\", \"idempotency_key\": \"3e2648aa47954dc46043478b459ba19c9ff197dc159dc62c2cf1835c40df302e\", \"type\": \"import\", \"state\": \"WAITING_APPROVAL\", \"order_id\": \"test-order\", \"photographer_id\": \"test-photographer\", \"batch_id\": \"b_4d05a12a7d49\", \"source_id\": \"test-card\", \"plan_json\": \"{\\\"files\\\": [{\\\"rel_path\\\": \\\"existing.XMP\\\", \\\"size\\\": 39, \\\"sha256\\\": \\\"b8b6e6f8498a88047a9b99a9a21fbe5c023edfa0b435324a51d7abd913de3986\\\", \\\"kind\\\": \\\"sidecar\\\", \\\"dest_rel_path\\\": \\\"test-order/test-photographer/b_4d05a12a7d49/existing.XMP\\\", \\\"asset_id\\\": \\\"ast_8bc268253d89df84bcd015f0\\\"}, {\\\"rel_path\\\": \\\"synthetic.RAF\\\", \\\"size\\\": 51, \\\"sha256\\\": \\\"c584454c76b2a96b2666b04a38fbd2423edb622eb1e859b8209db16ea00111cc\\\", \\\"kind\\\": \\\"raw\\\", \\\"dest_rel_path\\\": \\\"test-order/test-photographer/b_4d05a12a7d49/synthetic.RAF\\\", \\\"asset_id\\\": \\\"ast_1df761b740c1c2a020d8443a\\\"}], \\\"total_bytes\\\": 90, \\\"destination\\\": \\\"test-order/test-photographer/b_4d05a12a7d49\\\", \\\"stages\\\": [\\\"ingest\\\", \\\"lr_register\\\", \\\"lr_preset\\\", \\\"lr_export\\\", \\\"preview_verify\\\"], \\\"preset_id\\\": \\\"test-preset\\\", \\\"scan_digest\\\": \\\"4d05a12a7d49182917c5ebb5c893c3e17d8342f568db2912f7dbd2048dbde2d2\\\"}\", \"plan_digest\": \"df8fe18158faa46fe780b77bc9820eb625103ede129f82541c447402c468ca67\", \"stages_json\": \"[\\\"ingest\\\", \\\"lr_register\\\", \\\"lr_preset\\\", \\\"lr_export\\\", \\\"preview_verify\\\"]\", \"run_count\": 0, \"error\": null, \"created_at\": \"2026-11-02T13:19:14.280012+00:00\", \"updated_at\": \"2026-11-02T13:19:14.280064+00:00\", \"lease_until\": null, \"plan\": {\"files\": [{\"rel_path\": \"existing.XMP\", \"size\": 39, \"sha256\": \"b8b6e6f8498a88047a9b99a9a21fbe5c023edfa0b435324a51d7abd913de3986\", \"kind\": \"sidecar\", \"dest_rel_path\": \"test-order/test-photographer/b_4d05a12a7d49/existing.XMP\", \"asset_id\": \"ast_8bc268253d89df84bcd015f0\"}, {\"rel_path\": \"synthetic.RAF\", \"size\": 51, \"sha256\": \"c584454c76b2a96b2666b04a38fbd2423edb622eb1e859b8209db16ea00111cc\", \"kind\": \"raw\", \"dest_rel_path\": \"test-order/test-photographer/b_4d05a12a7d49/synthetic.RAF\", \"asset_id\": \"ast_1df761b740c1c2a020d8443a\"}], \"total_bytes\": 90, \"destination\": \"test-order/test-photographer/b_4d05a12a7d49\", \"stages\": [\"ingest\", \"lr_register\", \"lr_preset\", \"lr_export\", \"preview_verify\"], \"preset_id\": \"test-preset\", \"scan_digest\": \"4d05a12a7d49182917c5ebb5c893c3e17d8342f568db2912f7dbd2048dbde2d2\"}, \"mock\": true}"
+          }
+        ],
+        "structured_content": {
+          "task_id": "tsk_08b2a6810f3044b3a8827380a46efb9b",
+          "idempotency_key": "3e2648aa47954dc46043478b459ba19c9ff197dc159dc62c2cf1835c40df302e",
+          "type": "import",
+          "state": "WAITING_APPROVAL",
+          "order_id": "test-order",
+          "photographer_id": "test-photographer",
+          "batch_id": "b_4d05a12a7d49",
+          "source_id": "test-card",
+          "plan_json": "{\"files\": [{\"rel_path\": \"existing.XMP\", \"size\": 39, \"sha256\": \"b8b6e6f8498a88047a9b99a9a21fbe5c023edfa0b435324a51d7abd913de3986\", \"kind\": \"sidecar\", \"dest_rel_path\": \"test-order/test-photographer/b_4d05a12a7d49/existing.XMP\", \"asset_id\": \"ast_8bc268253d89df84bcd015f0\"}, {\"rel_path\": \"synthetic.RAF\", \"size\": 51, \"sha256\": \"c584454c76b2a96b2666b04a38fbd2423edb622eb1e859b8209db16ea00111cc\", \"kind\": \"raw\", \"dest_rel_path\": \"test-order/test-photographer/b_4d05a12a7d49/synthetic.RAF\", \"asset_id\": \"ast_1df761b740c1c2a020d8443a\"}], \"total_bytes\": 90, \"destination\": \"test-order/test-photographer/b_4d05a12a7d49\", \"stages\": [\"ingest\", \"lr_register\", \"lr_preset\", \"lr_export\", \"preview_verify\"], \"preset_id\": \"test-preset\", \"scan_digest\": \"4d05a12a7d49182917c5ebb5c893c3e17d8342f568db2912f7dbd2048dbde2d2\"}",
+          "plan_digest": "df8fe18158faa46fe780b77bc9820eb625103ede129f82541c447402c468ca67",
+          "stages_json": "[\"ingest\", \"lr_register\", \"lr_preset\", \"lr_export\", \"preview_verify\"]",
+          "run_count": 0,
+          "error": null,
+          "created_at": "2026-11-02T13:19:14.280012+00:00",
+          "updated_at": "2026-11-02T13:19:14.280064+00:00",
+          "lease_until": null,
+          "plan": {
+            "files": [
+              {
+                "rel_path": "existing.XMP",
+                "size": 39,
+                "sha256": "b8b6e6f8498a88047a9b99a9a21fbe5c023edfa0b435324a51d7abd913de3986",
+                "kind": "sidecar",
+                "dest_rel_path": "test-order/test-photographer/b_4d05a12a7d49/existing.XMP",
+                "asset_id": "ast_8bc268253d89df84bcd015f0"
+              },
+              {
+                "rel_path": "synthetic.RAF",
+                "size": 51,
+                "sha256": "c584454c76b2a96b2666b04a38fbd2423edb622eb1e859b8209db16ea00111cc",
+                "kind": "raw",
+                "dest_rel_path": "test-order/test-photographer/b_4d05a12a7d49/synthetic.RAF",
+                "asset_id": "ast_1df761b740c1c2a020d8443a"
+              }
+            ],
+            "total_bytes": 90,
+            "destination": "test-order/test-photographer/b_4d05a12a7d49",
+            "stages": [
+              "ingest",
+              "lr_register",
+              "lr_preset",
+              "lr_export",
+              "preview_verify"
+            ],
+            "preset_id": "test-preset",
+            "scan_digest": "4d05a12a7d49182917c5ebb5c893c3e17d8342f568db2912f7dbd2048dbde2d2"
+          },
+          "mock": true
+        },
+        "is_error": false,
+        "result_type": "complete"
+      }
+    }
+  ],
+  "audit": [
+    {
+      "actor": "human:cli",
+      "action": "add_source",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T13:19:13.937572+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "add_orders",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T13:19:13.938866+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "add_photographers",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T13:19:13.940347+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "add_preset",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T13:19:13.941722+00:00"
+    },
+    {
+      "actor": "ai:ai:acceptance-sdk",
+      "action": "mcp.lightroom_status",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T13:19:14.273601+00:00"
+    },
+    {
+      "actor": "ai:ai:acceptance-sdk",
+      "action": "lightroom_status",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T13:19:14.274614+00:00"
+    },
+    {
+      "actor": "ai:ai:acceptance-sdk",
+      "action": "mcp.plan_import",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T13:19:14.277490+00:00"
+    },
+    {
+      "actor": "ai:ai:acceptance-sdk",
+      "action": "plan_import",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T13:19:14.278054+00:00"
+    },
+    {
+      "actor": "ai:ai:acceptance-sdk",
+      "action": "scan_source",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T13:19:14.278606+00:00"
+    },
+    {
+      "actor": "ai:ai:acceptance-sdk",
+      "action": "state_change",
+      "task_id": "tsk_08b2a6810f3044b3a8827380a46efb9b",
+      "detail_json": "[\"PENDING\", \"WAITING_APPROVAL\"]",
+      "ts": "2026-11-02T13:19:14.280084+00:00"
+    },
+    {
+      "actor": "ai:ai:acceptance-sdk",
+      "action": "get_task",
+      "task_id": "tsk_08b2a6810f3044b3a8827380a46efb9b",
+      "detail_json": "null",
+      "ts": "2026-11-02T13:19:14.280923+00:00"
+    },
+    {
+      "actor": "ai:ai:acceptance-sdk",
+      "action": "mcp.execute",
+      "task_id": "tsk_08b2a6810f3044b3a8827380a46efb9b",
+      "detail_json": "null",
+      "ts": "2026-11-02T13:19:14.283771+00:00"
+    },
+    {
+      "actor": "ai:ai:acceptance-sdk",
+      "action": "get_task",
+      "task_id": "tsk_08b2a6810f3044b3a8827380a46efb9b",
+      "detail_json": "null",
+      "ts": "2026-11-02T13:19:14.284385+00:00"
+    },
+    {
+      "actor": "ai:ai:acceptance-sdk",
+      "action": "execute",
+      "task_id": "tsk_08b2a6810f3044b3a8827380a46efb9b",
+      "detail_json": "null",
+      "ts": "2026-11-02T13:19:14.285402+00:00"
+    },
+    {
+      "actor": "ai:ai:acceptance-sdk",
+      "action": "mcp.execute_lightroom",
+      "task_id": "tsk_08b2a6810f3044b3a8827380a46efb9b",
+      "detail_json": "null",
+      "ts": "2026-11-02T13:19:14.290394+00:00"
+    },
+    {
+      "actor": "ai:ai:acceptance-sdk",
+      "action": "get_task",
+      "task_id": "tsk_08b2a6810f3044b3a8827380a46efb9b",
+      "detail_json": "null",
+      "ts": "2026-11-02T13:19:14.291181+00:00"
+    },
+    {
+      "actor": "ai:ai:acceptance-sdk",
+      "action": "execute_lightroom",
+      "task_id": "tsk_08b2a6810f3044b3a8827380a46efb9b",
+      "detail_json": "null",
+      "ts": "2026-11-02T13:19:14.292254+00:00"
+    },
+    {
+      "actor": "ai:ai:acceptance-sdk",
+      "action": "get_task",
+      "task_id": "tsk_08b2a6810f3044b3a8827380a46efb9b",
+      "detail_json": "null",
+      "ts": "2026-11-02T13:19:14.292875+00:00"
+    },
+    {
+      "actor": "ai:ai:acceptance-sdk",
+      "action": "mcp.execute_lightroom",
+      "task_id": "tsk_08b2a6810f3044b3a8827380a46efb9b",
+      "detail_json": "null",
+      "ts": "2026-11-02T13:19:14.296576+00:00"
+    },
+    {
+      "actor": "ai:ai:acceptance-sdk",
+      "action": "get_task",
+      "task_id": "tsk_08b2a6810f3044b3a8827380a46efb9b",
+      "detail_json": "null",
+      "ts": "2026-11-02T13:19:14.297239+00:00"
+    },
+    {
+      "actor": "ai:ai:acceptance-sdk",
+      "action": "execute_lightroom",
+      "task_id": "tsk_08b2a6810f3044b3a8827380a46efb9b",
+      "detail_json": "null",
+      "ts": "2026-11-02T13:19:14.298358+00:00"
+    },
+    {
+      "actor": "ai:ai:acceptance-sdk",
+      "action": "get_task",
+      "task_id": "tsk_08b2a6810f3044b3a8827380a46efb9b",
+      "detail_json": "null",
+      "ts": "2026-11-02T13:19:14.299041+00:00"
+    },
+    {
+      "actor": "ai:ai:acceptance-sdk",
+      "action": "mcp.execute_lightroom",
+      "task_id": "tsk_08b2a6810f3044b3a8827380a46efb9b",
+      "detail_json": "null",
+      "ts": "2026-11-02T13:19:14.302676+00:00"
+    },
+    {
+      "actor": "ai:ai:acceptance-sdk",
+      "action": "get_task",
+      "task_id": "tsk_08b2a6810f3044b3a8827380a46efb9b",
+      "detail_json": "null",
+      "ts": "2026-11-02T13:19:14.303344+00:00"
+    },
+    {
+      "actor": "ai:ai:acceptance-sdk",
+      "action": "execute_lightroom",
+      "task_id": "tsk_08b2a6810f3044b3a8827380a46efb9b",
+      "detail_json": "null",
+      "ts": "2026-11-02T13:19:14.304512+00:00"
+    },
+    {
+      "actor": "ai:ai:acceptance-sdk",
+      "action": "get_task",
+      "task_id": "tsk_08b2a6810f3044b3a8827380a46efb9b",
+      "detail_json": "null",
+      "ts": "2026-11-02T13:19:14.305087+00:00"
+    },
+    {
+      "actor": "ai:ai:acceptance-sdk",
+      "action": "mcp.get_task",
+      "task_id": "tsk_08b2a6810f3044b3a8827380a46efb9b",
+      "detail_json": "null",
+      "ts": "2026-11-02T13:19:14.314991+00:00"
+    },
+    {
+      "actor": "ai:ai:acceptance-sdk",
+      "action": "get_task",
+      "task_id": "tsk_08b2a6810f3044b3a8827380a46efb9b",
+      "detail_json": "null",
+      "ts": "2026-11-02T13:19:14.315954+00:00"
+    },
+    {
+      "actor": "ai:ai:acceptance-sdk",
+      "action": "get_task",
+      "task_id": "tsk_08b2a6810f3044b3a8827380a46efb9b",
+      "detail_json": "null",
+      "ts": "2026-11-02T13:19:14.317447+00:00"
+    }
+  ],
+  "temporary_mock_workspace_removed": true,
+  "recorded_at_utc": "2026-11-02T13:19:14.397963+00:00"
+}

@@ -1,0 +1,10 @@
+Collecting tifffile
+  Downloading tifffile-2026.10.15-py3-none-any.whl.metadata (34 kB)
+Collecting numpy>=2.1 (from tifffile)
+  Downloading numpy-2.5.4-cp313-cp313-macosx_14_0_arm64.whl.metadata (6.6 kB)
+Downloading tifffile-2026.10.15-py3-none-any.whl (276 kB)
+Downloading numpy-2.5.4-cp313-cp313-macosx_14_0_arm64.whl (5.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.4/5.4 MB 6.9 MB/s  0:00:00
+Installing collected packages: numpy, tifffile
+
+Successfully installed numpy-2.5.4 tifffile-2026.10.15

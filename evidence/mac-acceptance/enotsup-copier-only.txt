@@ -1,0 +1,39 @@
+..F.                                                                     [100%]
+=================================== FAILURES ===================================
+_____ test_export_retry_without_hardlinks_preserves_previous_run[ENOTSUP] ______
+
+env = (<cetacea.core.Workbench object at 0x1097e2fd0>, PosixPath('/private/var/folders/6b/q6y9phv53h3bcgcrfr_kq_fm0000gn/T/pytest-of-mac/pytest-16/test_export_retry_without_hard0/card'))
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x109909c70>
+link_errno = 45
+
+    @pytest.mark.parametrize('link_errno', [
+        pytest.param(errno.ENOTSUP, id='ENOTSUP'),
+        pytest.param(errno.EOPNOTSUPP, id='EOPNOTSUPP'),
+    ])
+    def test_export_retry_without_hardlinks_preserves_previous_run(env, monkeypatch, link_errno):
+        w, card, task = setup(env)
+        failed_id = task['plan']['files'][1]['asset_id']
+        w.adapter.failures['export'] = {failed_id}
+        def unsupported_link(source, destination):
+            raise OSError(link_errno, 'filesystem has no hard links')
+        monkeypatch.setattr(os, 'link', unsupported_link)
+
+        assert run(w, task)['state'] == 'FAILED'
+        with db.connect(w.home) as conn:
+            previous = [dict(row) for row in conn.execute('SELECT * FROM previews WHERE task_id=?', (task['task_id'],))]
+        assert len(previous) == 3
+        snapshots = {row['path']: (Path(row['path']).read_bytes(), Path(row['path']).stat().st_ino, Path(row['path']).stat().st_mtime_ns) for row in previous}
+
+        w.adapter.failures.clear()
+        retried = w.retry(task['task_id'])
+>       assert retried['state'] == 'COMPLETED', retried['error']
+E       AssertionError: lr_export: 3 failed
+E       assert 'FAILED' == 'COMPLETED'
+E
+E         - COMPLETED
+E         + FAILED
+
+tests/test_lightroom.py:183: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_lightroom.py::test_export_retry_without_hardlinks_preserves_previous_run[ENOTSUP]
+1 failed, 3 passed, 7 deselected in 0.68s
