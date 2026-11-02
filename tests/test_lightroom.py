@@ -1,4 +1,6 @@
 import json
+import errno
+import os
 import sys
 from pathlib import Path
 import pytest
@@ -113,3 +115,78 @@ def test_library_rehash_refuses_tamper(env):
     w._lightroom_stage=tamper
     assert run(w,t)['state']=='FAILED'
     assert len(w.adapter.ids)==3
+
+def test_full_pipeline_without_hardlinks(env, monkeypatch):
+    """A filesystem without links must publish photos and both manifests."""
+    w, card, task = setup(env)
+    before = {p.name: (read_hash(p), p.stat().st_mtime_ns) for p in card.iterdir()}
+    attempts = []
+    def unsupported_link(source, destination):
+        attempts.append(Path(destination))
+        raise OSError(errno.EOPNOTSUPP, 'filesystem has no hard links')
+    monkeypatch.setattr(os, 'link', unsupported_link)
+
+    result = run(w, task)
+    assert result['state'] == 'COMPLETED', result['error']
+    assert w.verify_preview(task['task_id'])['status'] == 'OK'
+    assert before == {p.name: (read_hash(p), p.stat().st_mtime_ns) for p in card.iterdir()}
+    for asset in w.list_assets(task_id=task['task_id']):
+        assert read_hash(Path(w.config['library_root']) / asset['dest_rel_path']) == before[asset['rel_path']][0]
+
+    library = Path(w.config['library_root'])
+    previews = Path(w.config['preview_root'])
+    imported = next(library.rglob('import-manifest-run1.json'))
+    exported = next(previews.rglob('preview-manifest.json'))
+    assert imported in attempts and exported in attempts
+    imported_before, exported_before = imported.read_bytes(), exported.read_bytes()
+
+    # A second task/run sharing the batch must allocate another manifest.
+    from cetacea.ingest.manifest import write
+    second = Path(write(library, task['plan']['destination'], task['task_id'], 1, [{'another': 'run'}]))
+    assert second.name == 'import-manifest-run2.json'
+    assert imported.read_bytes() == imported_before
+    assert json.loads(second.read_text()) == [{'another': 'run'}]
+
+    # Re-publication must preserve an existing preview manifest as well.
+    with pytest.raises(FileExistsError):
+        preview.manifest(w, w.get_task(task['task_id']), 1, exported.parent, {})
+    assert exported.read_bytes() == exported_before
+    assert not list(library.rglob('*.cetacea-lock'))
+    assert not list(previews.rglob('*.cetacea-lock'))
+    assert not list(library.rglob('*.part'))
+    assert not list(previews.rglob('.manifest-*'))
+
+def test_export_retry_without_hardlinks_preserves_previous_run(env, monkeypatch):
+    w, card, task = setup(env)
+    failed_id = task['plan']['files'][1]['asset_id']
+    w.adapter.failures['export'] = {failed_id}
+    def unsupported_link(source, destination):
+        raise OSError(errno.EOPNOTSUPP, 'filesystem has no hard links')
+    monkeypatch.setattr(os, 'link', unsupported_link)
+
+    assert run(w, task)['state'] == 'FAILED'
+    with db.connect(w.home) as conn:
+        previous = [dict(row) for row in conn.execute('SELECT * FROM previews WHERE task_id=?', (task['task_id'],))]
+    assert len(previous) == 3
+    snapshots = {row['path']: (Path(row['path']).read_bytes(), Path(row['path']).stat().st_ino, Path(row['path']).stat().st_mtime_ns) for row in previous}
+
+    w.adapter.failures.clear()
+    retried = w.retry(task['task_id'])
+    assert retried['state'] == 'COMPLETED', retried['error']
+    assert w.verify_preview(task['task_id'])['status'] == 'OK'
+    for path, snapshot in snapshots.items():
+        assert (Path(path).read_bytes(), Path(path).stat().st_ino, Path(path).stat().st_mtime_ns) == snapshot
+    with db.connect(w.home) as conn:
+        current = {row['asset_id']: dict(row) for row in conn.execute('SELECT * FROM previews WHERE task_id=? AND run=2', (task['task_id'],))}
+    assert len(current) == 4
+    for old in previous:
+        new = Path(current[old['asset_id']]['path'])
+        assert new.read_bytes() == snapshots[old['path']][0]
+        assert new.stat().st_ino != snapshots[old['path']][1]
+        assert current[old['asset_id']]['sha256'] == old['sha256']
+    calls = [aid for stage, aid in w.adapter.calls if stage == 'export']
+    assert calls.count(failed_id) == 2
+    assert all(calls.count(row['asset_id']) == 1 for row in previous), calls
+    previews = Path(w.config['preview_root'])
+    assert not list(previews.rglob('*.part'))
+    assert not list(previews.rglob('*.cetacea-lock'))

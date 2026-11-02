@@ -9,3 +9,12 @@ third_party-review/*/
 !third_party-review/README.md
 .cetacea-home/
 /tmp/
+
+# Local macOS acceptance data and third-party runtime (never source artifacts)
+acceptance-data/
+.lightroom-runtime/
+# Local preflight enumerated installed personal preset names; retain locally.
+evidence/mac-acceptance/probe-list_develop_presets.json
+evidence/mac-acceptance/probe-log.txt
+# Transient manual A12 gate must never be shipped as already released.
+evidence/mac-acceptance/interruption-continue

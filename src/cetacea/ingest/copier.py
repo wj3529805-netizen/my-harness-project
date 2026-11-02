@@ -5,6 +5,28 @@ import stat
 from pathlib import Path
 from .pathsafe import safe, read_hash
 
+def publish_no_overwrite(temp, dest):
+    """Publish on hard-link filesystems or coordinate CETACEA fallback writers.
+
+    The rename fallback retains the documented limitation that external writers
+    which ignore the per-destination lock can race the nonexistence check.
+    """
+    temp, dest = Path(temp), Path(dest)
+    try:
+        os.link(temp, dest)
+    except OSError as exc:
+        if exc.errno not in {errno.EOPNOTSUPP, errno.ENOSYS, errno.EXDEV, errno.EPERM}:
+            raise
+        lock = dest.with_name(dest.name + '.cetacea-lock')
+        lock_fd = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+        try:
+            if os.path.lexists(dest):
+                raise FileExistsError(str(dest))
+            os.rename(temp, dest)
+        finally:
+            os.close(lock_fd)
+            lock.unlink()
+
 class CopyEngine:
     def __init__(self, fault_hook=None): self.fault_hook = fault_hook or (lambda stage,rel: None)
     def copy(self, source, library, task_id, n, item):
@@ -28,18 +50,7 @@ class CopyEngine:
             skipped = False
             try:
                 os.chmod(temp,0o644)
-                try:
-                    os.link(temp,dest)
-                except OSError as exc:
-                    if exc.errno not in {errno.EOPNOTSUPP, errno.ENOSYS, errno.EXDEV, errno.EPERM}: raise
-                    lock = dest.with_name(dest.name+'.cetacea-lock')
-                    lock_fd = os.open(lock,os.O_CREAT|os.O_EXCL|os.O_WRONLY,0o600)
-                    try:
-                        if os.path.lexists(dest): raise FileExistsError(str(dest))
-                        os.rename(temp,dest)
-                    finally:
-                        os.close(lock_fd)
-                        lock.unlink()
+                publish_no_overwrite(temp,dest)
                 if temp.exists(): temp.unlink()
                 directory = os.open(dest.parent,os.O_RDONLY|os.O_DIRECTORY)
                 try: os.fsync(directory)

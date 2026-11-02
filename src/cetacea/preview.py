@@ -6,6 +6,7 @@ from pathlib import Path
 from PIL import Image
 from . import db
 from .ingest.pathsafe import safe, read_hash
+from .ingest.copier import publish_no_overwrite
 
 def expected(assets):
     photos = [a for a in assets if a['status']=='VERIFIED' and a['kind'] in {'raw','jpeg'}]
@@ -49,8 +50,8 @@ def manifest(w, t, run, directory, pairs):
     with temp.open('x') as f:
         json.dump({'task_id':t['task_id'],'run':run,'mock':bool(w.adapter.mock),'previews':rows},f,indent=2)
         f.flush(); os.fsync(f.fileno())
-    try: os.link(temp, directory/'preview-manifest.json')
-    finally: temp.unlink()
+    try: publish_no_overwrite(temp, directory/'preview-manifest.json')
+    finally: temp.unlink(missing_ok=True)
 
 def verify(w, task_id):
     t = w.get_task(task_id)
