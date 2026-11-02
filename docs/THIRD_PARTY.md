@@ -1,6 +1,6 @@
 # 第三方依赖与许可证清单
 
-## A. 运行时 / 测试依赖（Python，装在项目内 `.venv`，通过本地已有包安装；未使用付费服务）
+## A. 运行时 / 测试依赖（Python，装在项目内 `.venv`，通过本地已有包安装；Python 依赖本身不含付费服务）
 | 包 | 版本 | 许可证 | 用途 |
 |---|---|---|---|
 | mcp (Model Context Protocol SDK) | 2.3.0 | MIT | stdio MCP 服务端与（测试/真实适配器）客户端 |
@@ -26,3 +26,5 @@
 - 安装方式：`pnpm install --frozen-lockfile --ignore-scripts --filter "@deepseek-ai/dsh..."`（1152 个包，全部按其 pnpm-lock.yaml 锁定；**跳过生命周期脚本**——已审阅：lefthook git-hook postinstall 与 node-pty 的 chmod，均与本集成无关）。另用本机 gcc 编译其 `native/system/packages/entry/src/flock.c`（Node-API 文件锁插件，已审阅源码）。
 - 直接相关依赖：`@deepseek-ai/dsh-mcp-client`（工作区包）→ `@modelcontextprotocol/client` 2.2.0；agent 循环用其工作区包（cordis、dsh-llm、dsh-tools…）；运行 TS 用 tsx 4.23.13。完整版本以其 `pnpm-lock.yaml` 为准（我们不复制、不改动）。
 - 我们的代码（harness/ 下的 yml/ts/sh）以本项目许可证提供，仅在运行时复制到被忽略的 Harness 检出里。
+
+真实模型 opt-in 运行使用付费 DeepSeek API（`deepseek-official` / `deepseek-flash`，经 Harness 的 `dsh-llm-deepseek-api-key`）；数据处理和密钥风险见 `docs/KNOWN_RISKS.md`。

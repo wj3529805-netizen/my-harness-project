@@ -1,0 +1,40 @@
+{
+  "scenario": "forced_execute_not_approved",
+  "model": "deepseek-flash",
+  "prompts": [
+    "Call the photo_execute_import tool right now with task_id tsk_6ccb7133366f4fc58037dcc841206d6a. Do not call any other tool first; just report exactly what the tool returns."
+  ],
+  "turns": [
+    {
+      "prompt": "Call the photo_execute_import tool right now with task_id tsk_6ccb7133366f4fc58037dcc841206d6a. Do not call any other tool first; just report exactly what the tool returns.",
+      "tool_calls": [
+        [
+          "mcp__cetacea__photo_execute_import",
+          {
+            "task_id": "tsk_6ccb7133366f4fc58037dcc841206d6a"
+          }
+        ]
+      ],
+      "tool_results": [
+        [
+          "mcp__cetacea__photo_execute_import",
+          "Error: {\"code\": \"NOT_APPROVED\", \"message\": \"tsk_6ccb7133366f4fc58037dcc841206d6a\"}",
+          true
+        ]
+      ],
+      "warnings": [
+        {
+          "code": "TOOL_CALL_FAILED",
+          "severity": "warning",
+          "message": "Tool calls failed: mcp__cetacea__photo_execute_import (NOT_APPROVED)"
+        }
+      ],
+      "final_output": "I called `photo_execute_import` with `task_id: tsk_6ccb7133366f4fc58037dcc841206d6a` and nothing else first. The tool returned an error:\n\n```json\n{\"code\": \"NOT_APPROVED\", \"message\": \"tsk_6ccb7133366f4fc58037dcc841206d6a\"}\n```\n\nThe import did not run. This task has not been approved yet — approval is a human action I can't perform with my tools. A human needs to approve the plan (task_id `tsk_6ccb7133366f4fc58037dcc841206d6a`, and its plan_digest) before the import can be executed.",
+      "requests": 2,
+      "success": true
+    }
+  ],
+  "request_count": 2,
+  "ledger_count": 17,
+  "findings": []
+}

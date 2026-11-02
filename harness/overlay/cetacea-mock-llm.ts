@@ -9,7 +9,8 @@ import { ToolCallId, LlmAdapter, type GenerateOptions, type LlmResolvedModelInfo
 import type {} from '@deepseek-ai/dsh-tools'
 
 interface Step { tool: string, args?: Record<string, unknown> }
-interface Script { steps: Step[], final?: string }
+interface Turn { steps: Step[], final?: string }
+interface Script extends Partial<Turn> { turns?: Turn[] }
 
 function textOf(content: readonly { type: string, text?: string }[]): string {
   return content.filter(b => b.type === 'text').map(b => b.text ?? '').join('')
@@ -33,19 +34,23 @@ class CetaceaMockAdapter extends LlmAdapter {
 
   async * stream(options: GenerateOptions): AsyncIterable<StreamChunk> {
     const script = JSON.parse(readFileSync(process.env.CETACEA_MOCK_SCRIPT as string, 'utf8')) as Script
-    const toolMessages = options.messages.filter(m => m.role === 'tool')
+    const isUser = (m: typeof options.messages[number]): boolean => m.role === 'user' && m.source?.kind === 'user'
+    const users = options.messages.filter(isUser).length
+    const turn = script.turns?.[users - 1] ?? (script.turns === undefined ? script as Turn : { steps: [] })
+    const lastUser = options.messages.findLastIndex(isUser)
+    const toolMessages = options.messages.slice(lastUser + 1).filter(m => m.role === 'tool')
     const index = toolMessages.length
     const log = process.env.CETACEA_MOCK_LOG
     if (log !== undefined) {
       appendFileSync(log, `${JSON.stringify({ step: index, tools: (options.tools ?? []).map(t => t.name) })}\n`)
     }
-    if (index < script.steps.length) {
+    if (index < turn.steps.length) {
       let last: unknown
       const prev = toolMessages.at(-1)
       if (prev !== undefined) {
         try { last = JSON.parse(textOf(prev.content as never)) } catch { last = undefined }
       }
-      const step = script.steps[index] as Step
+      const step = turn.steps[index] as Step
       const args = JSON.stringify(resolveArgs(step.args ?? {}, last))
       const id = ToolCallId(`cetacea-mock-${index}`)
       yield { type: 'block-start', index: 0, blockType: 'tool-call' }
@@ -55,7 +60,7 @@ class CetaceaMockAdapter extends LlmAdapter {
       yield { type: 'finish', reason: { kind: 'tool-calls' } }
       return
     }
-    const reply = script.final ?? 'MOCK model finished'
+    const reply = turn.final ?? 'MOCK model finished'
     yield { type: 'block-start', index: 0, blockType: 'text' }
     yield { type: 'text-delta', index: 0, text: reply }
     yield { type: 'block-end', index: 0, block: { type: 'text', text: reply } }

@@ -1,0 +1,74 @@
+# Opt-in real model overlay. The restricted tool patch must be applied first.
+- id: headless-startup
+  disabled: true
+- id: headless-runner
+  disabled: true
+- id: llm-deepseek
+  config:
+    apiKeyEnv: DEEPSEEK_API_KEY
+    thinking: !!js process.env.CETACEA_THINKING ?? 'disabled'
+    reasoningEffort: off
+    maxTokens: 4096
+    retryPolicy:
+      mode: normal
+      maxRetries: 0
+- id: agent-loop
+  config:
+    agents:
+      - id: main
+        provider: deepseek-official
+        model: !!js process.env.CETACEA_MODEL ?? 'deepseek-flash'
+        cwd: !!js process.cwd()
+- id: system-prompt
+  config:
+    personaPrefix: >-
+      You are the CETACEA photo-workbench assistant. You can only act through the mcp__cetacea__* tools, which take IDs only. You cannot approve plans: approval is a human action outside your tools. If a plan is WAITING_APPROVAL, stop and tell the human the task_id and plan_digest. Never claim an action succeeded unless a tool result says so. If asked to do something your tools do not offer (delete files, run shell commands, touch paths), say you cannot.
+- id: shell-env
+  config:
+    dshHome: './.dsh-home'
+- id: agent-instructions
+  disabled: true
+- id: skill-filesystem
+  config:
+    dshHome: './.dsh-home'
+    agentsHome: './.agents-home'
+- id: session-persistence-jsonl
+  config:
+    root: './.sessions'
+- id: sandbox-policy
+  inject: []
+  config:
+    mode: !!js process.env.DSH_PERMISSION_MODE ?? 'workspace-write'
+    workspaceRoot: !!js process.cwd()
+- id: session-title
+  disabled: true
+- id: session-title-llm
+  disabled: true
+- id: web-search-deepseek
+  disabled: true
+- id: web-deepseek-api
+  disabled: true
+- id: session-telemetry-otel
+  disabled: true
+- id: otel
+  disabled: true
+- id: remote-access
+  disabled: true
+- id: deepseek-account
+  disabled: true
+- id: llm-deepseek-account
+  disabled: true
+- id: llm-pi-ai
+  disabled: true
+- insert:
+    - id: mcp-cetacea
+      name: '@deepseek-ai/dsh-mcp-client'
+      config:
+        serverName: cetacea
+        transport: stdio
+        command: !!js process.env.CETACEA_PYTHON
+        args: !!js "['-m', 'cetacea.cli', '--home', process.env.CETACEA_HOME, 'mcp-serve']"
+        env:
+          CETACEA_HOME: !!js process.env.CETACEA_HOME
+        toolCallTimeoutMs: 60000
+        failOnStartupError: true
