@@ -1,0 +1,61 @@
+F.F.                                                                     [100%]
+=================================== FAILURES ===================================
+________________ test_full_pipeline_without_hardlinks[ENOTSUP] _________________
+
+env = (<cetacea.core.Workbench object at 0x10b1027b0>, PosixPath('/private/var/folders/6b/q6y9phv53h3bcgcrfr_kq_fm0000gn/T/pytest-of-mac/pytest-15/test_full_pipeline_without_har0/card'))
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10cf65220>
+link_errno = 45
+
+    @pytest.mark.parametrize('link_errno', [
+        pytest.param(errno.ENOTSUP, id='ENOTSUP'),
+        pytest.param(errno.EOPNOTSUPP, id='EOPNOTSUPP'),
+    ])
+    def test_full_pipeline_without_hardlinks(env, monkeypatch, link_errno):
+        """A filesystem without links must publish photos and both manifests."""
+        w, card, task = setup(env)
+        before = {p.name: (read_hash(p), p.stat().st_mtime_ns) for p in card.iterdir()}
+        attempts = []
+        def unsupported_link(source, destination):
+            attempts.append(Path(destination))
+            raise OSError(link_errno, 'filesystem has no hard links')
+        monkeypatch.setattr(os, 'link', unsupported_link)
+
+        result = run(w, task)
+>       assert result['state'] == 'COMPLETED', result['error']
+E       AssertionError: [Errno 45] filesystem has no hard links
+E       assert 'FAILED' == 'COMPLETED'
+E
+E         - COMPLETED
+E         + FAILED
+
+tests/test_lightroom.py:134: AssertionError
+_____ test_export_retry_without_hardlinks_preserves_previous_run[ENOTSUP] ______
+
+env = (<cetacea.core.Workbench object at 0x10cfda350>, PosixPath('/private/var/folders/6b/q6y9phv53h3bcgcrfr_kq_fm0000gn/T/pytest-of-mac/pytest-15/test_export_retry_without_hard0/card'))
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10cfdf410>
+link_errno = 45
+
+    @pytest.mark.parametrize('link_errno', [
+        pytest.param(errno.ENOTSUP, id='ENOTSUP'),
+        pytest.param(errno.EOPNOTSUPP, id='EOPNOTSUPP'),
+    ])
+    def test_export_retry_without_hardlinks_preserves_previous_run(env, monkeypatch, link_errno):
+        w, card, task = setup(env)
+        failed_id = task['plan']['files'][1]['asset_id']
+        w.adapter.failures['export'] = {failed_id}
+        def unsupported_link(source, destination):
+            raise OSError(link_errno, 'filesystem has no hard links')
+        monkeypatch.setattr(os, 'link', unsupported_link)
+
+        assert run(w, task)['state'] == 'FAILED'
+        with db.connect(w.home) as conn:
+            previous = [dict(row) for row in conn.execute('SELECT * FROM previews WHERE task_id=?', (task['task_id'],))]
+>       assert len(previous) == 3
+E       assert 0 == 3
+E        +  where 0 = len([])
+
+tests/test_lightroom.py:178: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_lightroom.py::test_full_pipeline_without_hardlinks[ENOTSUP]
+FAILED tests/test_lightroom.py::test_export_retry_without_hardlinks_preserves_previous_run[ENOTSUP]
+2 failed, 2 passed, 7 deselected in 0.56s

@@ -279,7 +279,7 @@ class Workbench:
                             try:
                                 os.link(old_path,new_path)
                             except OSError as exc:
-                                if exc.errno not in {errno.EOPNOTSUPP, errno.ENOSYS, errno.EXDEV, errno.EPERM}: raise
+                                if exc.errno not in {errno.ENOTSUP, errno.EOPNOTSUPP, errno.ENOSYS, errno.EXDEV, errno.EPERM}: raise
                                 # Preserve the previous run: only a fresh verified
                                 # temporary copy may be consumed by publication.
                                 temp_path=directory/('.retry-'+uuid.uuid4().hex+'.part')

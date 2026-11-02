@@ -1,0 +1,650 @@
+{
+  "backend": "apfs",
+  "phase": "ingest",
+  "invocation": "20261102T141050Z-e8d2c9e0",
+  "status": "PASS",
+  "marker": "FILESYSTEM TEST / MOCK LIGHTROOM ONLY",
+  "native_syscalls": [
+    {
+      "operation": "os.fsync",
+      "fd_path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/.cetacea-tmp/tsk_1006f0791b5947e9820245533dfb40ed/0.part",
+      "is_directory": false,
+      "ok": true
+    },
+    {
+      "operation": "os.chmod",
+      "path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/.cetacea-tmp/tsk_1006f0791b5947e9820245533dfb40ed/0.part",
+      "requested_mode": "0o644",
+      "before_mode": "0o600",
+      "ok": true,
+      "after_mode": "0o644"
+    },
+    {
+      "operation": "os.link",
+      "source": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/.cetacea-tmp/tsk_1006f0791b5947e9820245533dfb40ed/0.part",
+      "destination": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/test/tester/sd/DSC_6484.NEF",
+      "ok": true
+    },
+    {
+      "operation": "os.fsync",
+      "fd_path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/test/tester/sd",
+      "is_directory": true,
+      "ok": true
+    },
+    {
+      "operation": "os.fsync",
+      "fd_path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/test/tester/sd/DSC_6484.NEF",
+      "is_directory": false,
+      "ok": true
+    },
+    {
+      "operation": "os.link",
+      "source": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/.cetacea-tmp/tsk_1006f0791b5947e9820245533dfb40ed/manifest.part",
+      "destination": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/test/tester/sd/.cetacea/import-manifest-run1.json",
+      "ok": true
+    },
+    {
+      "operation": "os.fsync",
+      "fd_path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/.cetacea-tmp/same_4269b723277c4d2fa7deaeae33e251b2/0.part",
+      "is_directory": false,
+      "ok": true
+    },
+    {
+      "operation": "os.chmod",
+      "path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/.cetacea-tmp/same_4269b723277c4d2fa7deaeae33e251b2/0.part",
+      "requested_mode": "0o644",
+      "before_mode": "0o600",
+      "ok": true,
+      "after_mode": "0o644"
+    },
+    {
+      "operation": "os.link",
+      "source": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/.cetacea-tmp/same_4269b723277c4d2fa7deaeae33e251b2/0.part",
+      "destination": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/test/tester/sd/DSC_6484.NEF",
+      "ok": false,
+      "errno": 17,
+      "errno_name": "EEXIST",
+      "error": "[Errno 17] File exists: '/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/.cetacea-tmp/same_4269b723277c4d2fa7deaeae33e251b2/0.part' -> '/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/test/tester/sd/DSC_6484.NEF'"
+    },
+    {
+      "operation": "os.fsync",
+      "fd_path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/.cetacea-tmp/different_272cd59b2cb949dfb0a2c22c57281502/0.part",
+      "is_directory": false,
+      "ok": true
+    },
+    {
+      "operation": "os.chmod",
+      "path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/.cetacea-tmp/different_272cd59b2cb949dfb0a2c22c57281502/0.part",
+      "requested_mode": "0o644",
+      "before_mode": "0o600",
+      "ok": true,
+      "after_mode": "0o644"
+    },
+    {
+      "operation": "os.link",
+      "source": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/.cetacea-tmp/different_272cd59b2cb949dfb0a2c22c57281502/0.part",
+      "destination": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/test/tester/sd/DSC_6484.NEF",
+      "ok": false,
+      "errno": 17,
+      "errno_name": "EEXIST",
+      "error": "[Errno 17] File exists: '/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/.cetacea-tmp/different_272cd59b2cb949dfb0a2c22c57281502/0.part' -> '/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/test/tester/sd/DSC_6484.NEF'"
+    },
+    {
+      "operation": "os.fsync",
+      "fd_path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/.cetacea-tmp/tsk_eea1b3ce67d2436484c1f71b497b5d38/0.part",
+      "is_directory": false,
+      "ok": true
+    },
+    {
+      "operation": "os.chmod",
+      "path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/.cetacea-tmp/tsk_eea1b3ce67d2436484c1f71b497b5d38/0.part",
+      "requested_mode": "0o644",
+      "before_mode": "0o600",
+      "ok": true,
+      "after_mode": "0o644"
+    },
+    {
+      "operation": "os.link",
+      "source": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/.cetacea-tmp/tsk_eea1b3ce67d2436484c1f71b497b5d38/0.part",
+      "destination": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/test/tester/usbcard/DSC_8443.NEF",
+      "ok": true
+    },
+    {
+      "operation": "os.fsync",
+      "fd_path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/test/tester/usbcard",
+      "is_directory": true,
+      "ok": true
+    },
+    {
+      "operation": "os.fsync",
+      "fd_path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/test/tester/usbcard/DSC_8443.NEF",
+      "is_directory": false,
+      "ok": true
+    },
+    {
+      "operation": "os.link",
+      "source": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/.cetacea-tmp/tsk_eea1b3ce67d2436484c1f71b497b5d38/manifest.part",
+      "destination": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/test/tester/usbcard/.cetacea/import-manifest-run1.json",
+      "ok": true
+    },
+    {
+      "operation": "os.fsync",
+      "fd_path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/.cetacea-tmp/same_6f86902614634b149e29b8dea3ae768f/0.part",
+      "is_directory": false,
+      "ok": true
+    },
+    {
+      "operation": "os.chmod",
+      "path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/.cetacea-tmp/same_6f86902614634b149e29b8dea3ae768f/0.part",
+      "requested_mode": "0o644",
+      "before_mode": "0o600",
+      "ok": true,
+      "after_mode": "0o644"
+    },
+    {
+      "operation": "os.link",
+      "source": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/.cetacea-tmp/same_6f86902614634b149e29b8dea3ae768f/0.part",
+      "destination": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/test/tester/usbcard/DSC_8443.NEF",
+      "ok": false,
+      "errno": 17,
+      "errno_name": "EEXIST",
+      "error": "[Errno 17] File exists: '/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/.cetacea-tmp/same_6f86902614634b149e29b8dea3ae768f/0.part' -> '/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/test/tester/usbcard/DSC_8443.NEF'"
+    },
+    {
+      "operation": "os.fsync",
+      "fd_path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/.cetacea-tmp/different_3eba436330d74c678c1a43ee4d9167c3/0.part",
+      "is_directory": false,
+      "ok": true
+    },
+    {
+      "operation": "os.chmod",
+      "path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/.cetacea-tmp/different_3eba436330d74c678c1a43ee4d9167c3/0.part",
+      "requested_mode": "0o644",
+      "before_mode": "0o600",
+      "ok": true,
+      "after_mode": "0o644"
+    },
+    {
+      "operation": "os.link",
+      "source": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/.cetacea-tmp/different_3eba436330d74c678c1a43ee4d9167c3/0.part",
+      "destination": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/test/tester/usbcard/DSC_8443.NEF",
+      "ok": false,
+      "errno": 17,
+      "errno_name": "EEXIST",
+      "error": "[Errno 17] File exists: '/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/.cetacea-tmp/different_3eba436330d74c678c1a43ee4d9167c3/0.part' -> '/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/test/tester/usbcard/DSC_8443.NEF'"
+    }
+  ],
+  "parent_external_volume": {
+    "AESHardware": false,
+    "APFSContainerFree": 1130190159872,
+    "APFSContainerReference": "disk5",
+    "APFSContainerSize": 2000189177856,
+    "APFSPhysicalStores": [
+      {
+        "APFSPhysicalStore": "disk4s2"
+      }
+    ],
+    "APFSSnapshot": false,
+    "Bootable": true,
+    "BusProtocol": "PCI-Express",
+    "CanBeMadeBootable": false,
+    "CanBeMadeBootableRequiresDestroy": false,
+    "CapacityInUse": 869699178496,
+    "Content": "41504653-0000-11AA-AA11-00306543ECAC",
+    "DeviceBlockSize": 4096,
+    "DeviceIdentifier": "disk5s1",
+    "DeviceNode": "/dev/disk5s1",
+    "DeviceTreePath": "IODeviceTree:/arm-io@10F00000/apciec1@60000000/pcic1-bridge@0/pci-bridge@0/pci-bridge@1/pci15b7,5045@0/IONVMeController",
+    "DiskUUID": "1465C0D1-29A6-4DA1-8E13-3AC474A4BB83",
+    "Ejectable": true,
+    "EjectableMediaAutomaticUnderSoftwareControl": false,
+    "EjectableOnly": false,
+    "Encryption": false,
+    "EncryptionThisVolumeProper": false,
+    "FileVault": false,
+    "FilesystemName": "APFS",
+    "FilesystemType": "apfs",
+    "FilesystemUserVisibleName": "APFS",
+    "FreeSpace": 0,
+    "GlobalPermissionsEnabled": false,
+    "IOKitSize": 2000189177856,
+    "IORegistryEntryName": "Cetacea Studio",
+    "Internal": false,
+    "Locked": false,
+    "MediaName": "",
+    "MediaType": "\u901a\u7528",
+    "MountPoint": "/Volumes/Cetacea Studio",
+    "OSInternalMedia": false,
+    "ParentWholeDisk": "disk5",
+    "PartitionMapPartition": false,
+    "RAIDMaster": false,
+    "RAIDSlice": false,
+    "Removable": false,
+    "RemovableMedia": false,
+    "RemovableMediaOrExternalDevice": true,
+    "SMARTDeviceSpecificKeysMayVaryNotGuaranteed": {
+      "AVAILABLE_SPARE": 100,
+      "AVAILABLE_SPARE_THRESHOLD": 10,
+      "CONTROLLER_BUSY_TIME_0": 1035,
+      "CONTROLLER_BUSY_TIME_1": 0,
+      "DATA_UNITS_READ_0": 16080536,
+      "DATA_UNITS_READ_1": 0,
+      "DATA_UNITS_WRITTEN_0": 9445934,
+      "DATA_UNITS_WRITTEN_1": 0,
+      "HOST_READ_COMMANDS_0": 78503505,
+      "HOST_READ_COMMANDS_1": 0,
+      "HOST_WRITE_COMMANDS_0": 106402796,
+      "HOST_WRITE_COMMANDS_1": 0,
+      "MEDIA_ERRORS_0": 0,
+      "MEDIA_ERRORS_1": 0,
+      "NUM_ERROR_INFO_LOG_ENTRIES_0": 0,
+      "NUM_ERROR_INFO_LOG_ENTRIES_1": 0,
+      "PERCENTAGE_USED": 0,
+      "POWER_CYCLES_0": 203,
+      "POWER_CYCLES_1": 0,
+      "POWER_ON_HOURS_0": 991,
+      "POWER_ON_HOURS_1": 0,
+      "TEMPERATURE": 301,
+      "UNSAFE_SHUTDOWNS_0": 20,
+      "UNSAFE_SHUTDOWNS_1": 0
+    },
+    "SMARTStatus": "Verified",
+    "Sealed": "No",
+    "Size": 2000189177856,
+    "SolidState": true,
+    "SupportsGlobalPermissionsDisable": true,
+    "SystemImage": false,
+    "TotalSize": 2000189177856,
+    "VolumeAllocationBlockSize": 4096,
+    "VolumeName": "Cetacea Studio",
+    "VolumeSize": 0,
+    "VolumeUUID": "1465C0D1-29A6-4DA1-8E13-3AC474A4BB83",
+    "WholeDisk": false,
+    "Writable": true,
+    "WritableMedia": true,
+    "WritableVolume": true
+  },
+  "target_volume": {
+    "AESHardware": false,
+    "APFSContainerFree": 1130190159872,
+    "APFSContainerReference": "disk5",
+    "APFSContainerSize": 2000189177856,
+    "APFSPhysicalStores": [
+      {
+        "APFSPhysicalStore": "disk4s2"
+      }
+    ],
+    "APFSSnapshot": false,
+    "Bootable": true,
+    "BusProtocol": "PCI-Express",
+    "CanBeMadeBootable": false,
+    "CanBeMadeBootableRequiresDestroy": false,
+    "CapacityInUse": 869699178496,
+    "Content": "41504653-0000-11AA-AA11-00306543ECAC",
+    "DeviceBlockSize": 4096,
+    "DeviceIdentifier": "disk5s1",
+    "DeviceNode": "/dev/disk5s1",
+    "DeviceTreePath": "IODeviceTree:/arm-io@10F00000/apciec1@60000000/pcic1-bridge@0/pci-bridge@0/pci-bridge@1/pci15b7,5045@0/IONVMeController",
+    "DiskUUID": "1465C0D1-29A6-4DA1-8E13-3AC474A4BB83",
+    "Ejectable": true,
+    "EjectableMediaAutomaticUnderSoftwareControl": false,
+    "EjectableOnly": false,
+    "Encryption": false,
+    "EncryptionThisVolumeProper": false,
+    "FileVault": false,
+    "FilesystemName": "APFS",
+    "FilesystemType": "apfs",
+    "FilesystemUserVisibleName": "APFS",
+    "FreeSpace": 0,
+    "GlobalPermissionsEnabled": false,
+    "IOKitSize": 2000189177856,
+    "IORegistryEntryName": "Cetacea Studio",
+    "Internal": false,
+    "Locked": false,
+    "MediaName": "",
+    "MediaType": "\u901a\u7528",
+    "MountPoint": "/Volumes/Cetacea Studio",
+    "OSInternalMedia": false,
+    "ParentWholeDisk": "disk5",
+    "PartitionMapPartition": false,
+    "RAIDMaster": false,
+    "RAIDSlice": false,
+    "Removable": false,
+    "RemovableMedia": false,
+    "RemovableMediaOrExternalDevice": true,
+    "SMARTDeviceSpecificKeysMayVaryNotGuaranteed": {
+      "AVAILABLE_SPARE": 100,
+      "AVAILABLE_SPARE_THRESHOLD": 10,
+      "CONTROLLER_BUSY_TIME_0": 1035,
+      "CONTROLLER_BUSY_TIME_1": 0,
+      "DATA_UNITS_READ_0": 16080536,
+      "DATA_UNITS_READ_1": 0,
+      "DATA_UNITS_WRITTEN_0": 9445934,
+      "DATA_UNITS_WRITTEN_1": 0,
+      "HOST_READ_COMMANDS_0": 78503505,
+      "HOST_READ_COMMANDS_1": 0,
+      "HOST_WRITE_COMMANDS_0": 106402796,
+      "HOST_WRITE_COMMANDS_1": 0,
+      "MEDIA_ERRORS_0": 0,
+      "MEDIA_ERRORS_1": 0,
+      "NUM_ERROR_INFO_LOG_ENTRIES_0": 0,
+      "NUM_ERROR_INFO_LOG_ENTRIES_1": 0,
+      "PERCENTAGE_USED": 0,
+      "POWER_CYCLES_0": 203,
+      "POWER_CYCLES_1": 0,
+      "POWER_ON_HOURS_0": 991,
+      "POWER_ON_HOURS_1": 0,
+      "TEMPERATURE": 301,
+      "UNSAFE_SHUTDOWNS_0": 20,
+      "UNSAFE_SHUTDOWNS_1": 0
+    },
+    "SMARTStatus": "Verified",
+    "Sealed": "No",
+    "Size": 2000189177856,
+    "SolidState": true,
+    "SupportsGlobalPermissionsDisable": true,
+    "SystemImage": false,
+    "TotalSize": 2000189177856,
+    "VolumeAllocationBlockSize": 4096,
+    "VolumeName": "Cetacea Studio",
+    "VolumeSize": 0,
+    "VolumeUUID": "1465C0D1-29A6-4DA1-8E13-3AC474A4BB83",
+    "WholeDisk": false,
+    "Writable": true,
+    "WritableMedia": true,
+    "WritableVolume": true
+  },
+  "target_root": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0",
+  "local_state": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0",
+  "sqlite_location": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/home/state.sqlite3",
+  "test_plan_approvals": [
+    {
+      "task_id": "tsk_1006f0791b5947e9820245533dfb40ed",
+      "plan_digest": "9db78b35bc2878702ba59b1066df2ab59e517e82f24dd3055d3dfdacb1bfefcb",
+      "method": "Scripted acceptance harness HUMAN API; exact isolated test plan, not an AI MCP approval"
+    },
+    {
+      "task_id": "tsk_eea1b3ce67d2436484c1f71b497b5d38",
+      "plan_digest": "3d2edab3ab3c14bc9db482912a7d117daf77c58c1c7d583ca1c3930efea3251b",
+      "method": "Scripted acceptance harness HUMAN API; exact isolated test plan, not an AI MCP approval"
+    }
+  ],
+  "results": [
+    {
+      "source_id": "sd",
+      "selected_file": "/Volumes/NIKON Z6_3  1/DCIM/142NZ6_3/DSC_6484.NEF",
+      "volume": {
+        "Bootable": false,
+        "BusProtocol": "Secure Digital",
+        "CanBeMadeBootable": false,
+        "CanBeMadeBootableRequiresDestroy": false,
+        "Content": "Windows_NTFS",
+        "DeviceBlockSize": 512,
+        "DeviceIdentifier": "disk7s1",
+        "DeviceNode": "/dev/disk7s1",
+        "DeviceTreePath": "IODeviceTree:/arm-io@10F00000/apcie0@B0000000/pci-bridge1@1/pcie-sdreader@0",
+        "Ejectable": true,
+        "EjectableMediaAutomaticUnderSoftwareControl": true,
+        "EjectableOnly": true,
+        "FilesystemName": "ExFAT",
+        "FilesystemType": "exfat",
+        "FilesystemUserVisibleName": "ExFAT",
+        "FreeSpace": 85550825472,
+        "GlobalPermissionsEnabled": false,
+        "IOKitSize": 126860918784,
+        "IORegistryEntryName": "Untitled 1",
+        "Internal": true,
+        "MediaName": "",
+        "MediaType": "\u901a\u7528",
+        "MountPoint": "/Volumes/NIKON Z6_3  1",
+        "OSInternalMedia": false,
+        "ParentWholeDisk": "disk7",
+        "PartitionMapPartition": true,
+        "PartitionMapPartitionOffset": 16777216,
+        "RAIDMaster": false,
+        "RAIDSlice": false,
+        "Removable": true,
+        "RemovableMedia": true,
+        "RemovableMediaOrExternalDevice": true,
+        "SMARTDeviceSpecificKeysMayVaryNotGuaranteed": {},
+        "SMARTStatus": "Not Supported",
+        "Size": 126860918784,
+        "SupportsGlobalPermissionsDisable": false,
+        "SystemImage": false,
+        "TotalSize": 126844272640,
+        "VolumeAllocationBlockSize": 131072,
+        "VolumeName": "NIKON Z6_3 ",
+        "VolumeSize": 126844272640,
+        "VolumeUUID": "82A91C0F-BF3C-3DE2-AF4E-DEDF705C8E8E",
+        "WholeDisk": false,
+        "Writable": true,
+        "WritableMedia": true,
+        "WritableVolume": true
+      },
+      "scan_scope": "BOUNDED PRE-SCAN: exactly selected file; no recursive card scanner or directory enumeration",
+      "before": {
+        "sha256": "570d50780edcb135b43ff098878b0067d67ec38883622ce9d031951bcb736ec1",
+        "mtime_ns": 1793527132780000000,
+        "size": 18565632,
+        "inode": 204592
+      },
+      "after": {
+        "sha256": "570d50780edcb135b43ff098878b0067d67ec38883622ce9d031951bcb736ec1",
+        "mtime_ns": 1793527132780000000,
+        "size": 18565632,
+        "inode": 204592
+      },
+      "task": {
+        "task_id": "tsk_1006f0791b5947e9820245533dfb40ed",
+        "idempotency_key": "51c07ab55a33fa810b195fbf219b35bff5e723c4277f688bc2842e2a9aea0367",
+        "type": "import",
+        "state": "COMPLETED",
+        "order_id": "test",
+        "photographer_id": "tester",
+        "batch_id": "sd",
+        "source_id": "sd",
+        "plan_json": "{\"files\": [{\"rel_path\": \"DSC_6484.NEF\", \"size\": 18565632, \"sha256\": \"570d50780edcb135b43ff098878b0067d67ec38883622ce9d031951bcb736ec1\", \"kind\": \"raw\", \"dest_rel_path\": \"test/tester/sd/DSC_6484.NEF\", \"asset_id\": \"ast_8482f16161789cdbfd190714\"}], \"total_bytes\": 18565632, \"destination\": \"test/tester/sd\", \"stages\": [\"ingest\"], \"preset_id\": null, \"scan_digest\": \"83bbfe8db591f0a2b6bc79d1c3b704dc964f67669608691a9f75b70e0df53573\"}",
+        "plan_digest": "9db78b35bc2878702ba59b1066df2ab59e517e82f24dd3055d3dfdacb1bfefcb",
+        "stages_json": "[\"ingest\"]",
+        "run_count": 1,
+        "error": null,
+        "created_at": "2026-11-02T14:10:53.994018+00:00",
+        "updated_at": "2026-11-02T14:10:54.037717+00:00",
+        "lease_until": null,
+        "plan": {
+          "files": [
+            {
+              "rel_path": "DSC_6484.NEF",
+              "size": 18565632,
+              "sha256": "570d50780edcb135b43ff098878b0067d67ec38883622ce9d031951bcb736ec1",
+              "kind": "raw",
+              "dest_rel_path": "test/tester/sd/DSC_6484.NEF",
+              "asset_id": "ast_8482f16161789cdbfd190714"
+            }
+          ],
+          "total_bytes": 18565632,
+          "destination": "test/tester/sd",
+          "stages": [
+            "ingest"
+          ],
+          "preset_id": null,
+          "scan_digest": "83bbfe8db591f0a2b6bc79d1c3b704dc964f67669608691a9f75b70e0df53573"
+        }
+      },
+      "verification": {
+        "assets": [
+          {
+            "asset_id": "ast_8482f16161789cdbfd190714",
+            "destination": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/test/tester/sd/DSC_6484.NEF",
+            "readback": {
+              "sha256": "570d50780edcb135b43ff098878b0067d67ec38883622ce9d031951bcb736ec1",
+              "mtime_ns": 1793628654013802839,
+              "size": 18565632,
+              "inode": 173170
+            }
+          }
+        ],
+        "import_manifests": [
+          "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/test/tester/sd/.cetacea/import-manifest-run1.json"
+        ]
+      },
+      "no_overwrite": {
+        "same_hash": {
+          "status": "VERIFIED",
+          "skipped_verified": true,
+          "error": null
+        },
+        "different_hash": {
+          "status": "CONFLICT",
+          "error": "CONFLICT"
+        },
+        "destination_unchanged": true,
+        "destination": {
+          "sha256": "570d50780edcb135b43ff098878b0067d67ec38883622ce9d031951bcb736ec1",
+          "mtime_ns": 1793628654013802839,
+          "size": 18565632,
+          "inode": 173170
+        }
+      }
+    },
+    {
+      "source_id": "usbcard",
+      "selected_file": "/Volumes/NIKON Z6_3 /DCIM/140NZ6_3/DSC_8443.NEF",
+      "volume": {
+        "Bootable": false,
+        "BusProtocol": "USB",
+        "CanBeMadeBootable": false,
+        "CanBeMadeBootableRequiresDestroy": false,
+        "Content": "Windows_NTFS",
+        "DeviceBlockSize": 512,
+        "DeviceIdentifier": "disk6s1",
+        "DeviceNode": "/dev/disk6s1",
+        "DeviceTreePath": "IODeviceTree:/arm-io@10F00000/usb-drd2@92280000/usb-drd2-port-ss@02200000",
+        "Ejectable": true,
+        "EjectableMediaAutomaticUnderSoftwareControl": false,
+        "EjectableOnly": false,
+        "FilesystemName": "ExFAT",
+        "FilesystemType": "exfat",
+        "FilesystemUserVisibleName": "ExFAT",
+        "FreeSpace": 238258225152,
+        "GlobalPermissionsEnabled": false,
+        "IOKitSize": 256026959872,
+        "IORegistryEntryName": "Untitled 1",
+        "Internal": false,
+        "MediaName": "",
+        "MediaType": "\u901a\u7528",
+        "MountPoint": "/Volumes/NIKON Z6_3 ",
+        "OSInternalMedia": false,
+        "ParentWholeDisk": "disk6",
+        "PartitionMapPartition": true,
+        "PartitionMapPartitionOffset": 33554432,
+        "RAIDMaster": false,
+        "RAIDSlice": false,
+        "Removable": false,
+        "RemovableMedia": false,
+        "RemovableMediaOrExternalDevice": true,
+        "SMARTDeviceSpecificKeysMayVaryNotGuaranteed": {},
+        "SMARTStatus": "Not Supported",
+        "Size": 256026959872,
+        "SolidState": true,
+        "SupportsGlobalPermissionsDisable": false,
+        "SystemImage": false,
+        "TotalSize": 255993577472,
+        "VolumeAllocationBlockSize": 262144,
+        "VolumeName": "NIKON Z6_3 ",
+        "VolumeSize": 255993577472,
+        "VolumeUUID": "7FBCB909-0145-3DD8-AD2C-56989C78F446",
+        "WholeDisk": false,
+        "Writable": true,
+        "WritableMedia": true,
+        "WritableVolume": true
+      },
+      "scan_scope": "BOUNDED PRE-SCAN: exactly selected file; no recursive card scanner or directory enumeration",
+      "before": {
+        "sha256": "afb3f92276e8a7083603aee53c92b0d0cad4e0b4e4791a0265423d7e4a75cfec",
+        "mtime_ns": 1793399589330000000,
+        "size": 17783296,
+        "inode": 1736
+      },
+      "after": {
+        "sha256": "afb3f92276e8a7083603aee53c92b0d0cad4e0b4e4791a0265423d7e4a75cfec",
+        "mtime_ns": 1793399589330000000,
+        "size": 17783296,
+        "inode": 1736
+      },
+      "task": {
+        "task_id": "tsk_eea1b3ce67d2436484c1f71b497b5d38",
+        "idempotency_key": "f49f89e3183978105a86c5c482eba538c9b20d70336701ed227fd4d73007ce38",
+        "type": "import",
+        "state": "COMPLETED",
+        "order_id": "test",
+        "photographer_id": "tester",
+        "batch_id": "usbcard",
+        "source_id": "usbcard",
+        "plan_json": "{\"files\": [{\"rel_path\": \"DSC_8443.NEF\", \"size\": 17783296, \"sha256\": \"afb3f92276e8a7083603aee53c92b0d0cad4e0b4e4791a0265423d7e4a75cfec\", \"kind\": \"raw\", \"dest_rel_path\": \"test/tester/usbcard/DSC_8443.NEF\", \"asset_id\": \"ast_b97328b9e6c1c00bb780d5bc\"}], \"total_bytes\": 17783296, \"destination\": \"test/tester/usbcard\", \"stages\": [\"ingest\"], \"preset_id\": null, \"scan_digest\": \"7f9314ffb0753626eb31c2abe2f0e03c1e737d4c6abdb380183cbd5d3d341d18\"}",
+        "plan_digest": "3d2edab3ab3c14bc9db482912a7d117daf77c58c1c7d583ca1c3930efea3251b",
+        "stages_json": "[\"ingest\"]",
+        "run_count": 1,
+        "error": null,
+        "created_at": "2026-11-02T14:10:54.323736+00:00",
+        "updated_at": "2026-11-02T14:10:54.360876+00:00",
+        "lease_until": null,
+        "plan": {
+          "files": [
+            {
+              "rel_path": "DSC_8443.NEF",
+              "size": 17783296,
+              "sha256": "afb3f92276e8a7083603aee53c92b0d0cad4e0b4e4791a0265423d7e4a75cfec",
+              "kind": "raw",
+              "dest_rel_path": "test/tester/usbcard/DSC_8443.NEF",
+              "asset_id": "ast_b97328b9e6c1c00bb780d5bc"
+            }
+          ],
+          "total_bytes": 17783296,
+          "destination": "test/tester/usbcard",
+          "stages": [
+            "ingest"
+          ],
+          "preset_id": null,
+          "scan_digest": "7f9314ffb0753626eb31c2abe2f0e03c1e737d4c6abdb380183cbd5d3d341d18"
+        }
+      },
+      "verification": {
+        "assets": [
+          {
+            "asset_id": "ast_b97328b9e6c1c00bb780d5bc",
+            "destination": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/test/tester/usbcard/DSC_8443.NEF",
+            "readback": {
+              "sha256": "afb3f92276e8a7083603aee53c92b0d0cad4e0b4e4791a0265423d7e4a75cfec",
+              "mtime_ns": 1793628654339175842,
+              "size": 17783296,
+              "inode": 173185
+            }
+          }
+        ],
+        "import_manifests": [
+          "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/ingest/20261102T141050Z-e8d2c9e0/library/test/tester/usbcard/.cetacea/import-manifest-run1.json"
+        ]
+      },
+      "no_overwrite": {
+        "same_hash": {
+          "status": "VERIFIED",
+          "skipped_verified": true,
+          "error": null
+        },
+        "different_hash": {
+          "status": "CONFLICT",
+          "error": "CONFLICT"
+        },
+        "destination_unchanged": true,
+        "destination": {
+          "sha256": "afb3f92276e8a7083603aee53c92b0d0cad4e0b4e4791a0265423d7e4a75cfec",
+          "mtime_ns": 1793628654339175842,
+          "size": 17783296,
+          "inode": 173185
+        }
+      }
+    }
+  ],
+  "finished_at": "2026-11-02T14:10:54.522751+00:00"
+}

@@ -41,3 +41,12 @@ Stage C validation history:
 本次新增失败历史：Bash 3.2 中文括号变量解析失败；第一版合成 DNG 被 Adobe 以 dng_error_unsupported_raw 拒绝；全局禁用硬链接的新回归揭示清单不支持回退，随后导出恢复新回归揭示 SQLite state="FAILED" 与 failed 列冲突；慢调用回归在旧 300 秒租期下暴露 recover 可夺走活任务。上述产品问题已修并保留回归。真实调用的底层错误现不会仅剩 TaskGroup 摘要。无硬链接的锁回退仍有不守锁外部写入者 race。
 
 实体卡/读卡器、真实外置 exFAT/SMB、实际 AI 产品客户端（可选 A14）、Z6 III HE/HE★、断电/强杀以及 Windows 仍未通过实机验收。A12 关闭点在两张照片之间，不能当作单次 catalog 写入中断证明。样片发行 README 与内嵌版权许可文字有差异，保留来源及作者信息，照片和预览不随 Git 发布。已知 CLI NotApproved 堆栈体验问题仍在。
+
+
+## Physical media follow-up — 2026-11-02
+
+详见 [MACOS_DEVICE_VALIDATION.md](MACOS_DEVICE_VALIDATION.md)。实体SD与USB卡各1张选中NEF只读导入本机和外置APFS通过；源哈希/mtime不变、目标哈希读回、同异哈希保护、外置APFS的完整Mock流程及部分失败重试通过。源是有界单文件预扫描，不代表整卡递归扫描/吞吐。
+
+macOS ENOTSUP=45和EOPNOTSUPP=102不相等，两处回退遗漏ENOTSUP已由新增参数化回归重现后修复；全套100 passed。真实exFAT目标仍未运行：两个建镜像工具失败，未格式化任何原有设备或在卡上写探针。外置盘曾在拷贝前掉线，挂载守卫停止操作，重连核对UUID后才继续。
+
+两张选中Z6III NEF的外置副本还完成真实测试catalog登记、+0.50预设读回、单张JPG导出和verify-preview；原始NEF与库副本不变。该设备补充未独立辨识HE/HE★子类型、未逐项核对相邻XMP/ACR，不能扩展为每种压缩或整卡生产验收。

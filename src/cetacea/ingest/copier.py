@@ -15,7 +15,7 @@ def publish_no_overwrite(temp, dest):
     try:
         os.link(temp, dest)
     except OSError as exc:
-        if exc.errno not in {errno.EOPNOTSUPP, errno.ENOSYS, errno.EXDEV, errno.EPERM}:
+        if exc.errno not in {errno.ENOTSUP, errno.EOPNOTSUPP, errno.ENOSYS, errno.EXDEV, errno.EPERM}:
             raise
         lock = dest.with_name(dest.name + '.cetacea-lock')
         lock_fd = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)

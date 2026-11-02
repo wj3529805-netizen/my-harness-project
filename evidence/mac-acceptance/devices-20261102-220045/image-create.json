@@ -1,0 +1,6 @@
+{
+  "returncode": 1,
+  "stdout": "\n",
+  "stderr": "Error: Failed to create disk image: The operation couldn\u2019t be completed. LOCALIZED_STRING_UNAVAILABLE\n",
+  "image": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/test-exfat.img"
+}

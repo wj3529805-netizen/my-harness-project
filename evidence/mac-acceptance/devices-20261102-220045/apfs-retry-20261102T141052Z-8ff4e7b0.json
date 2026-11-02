@@ -1,0 +1,799 @@
+{
+  "backend": "apfs",
+  "phase": "retry",
+  "invocation": "20261102T141052Z-8ff4e7b0",
+  "status": "PASS",
+  "marker": "FILESYSTEM TEST / MOCK LIGHTROOM ONLY",
+  "native_syscalls": [
+    {
+      "operation": "os.fsync",
+      "fd_path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/.cetacea-tmp/tsk_ac5a563895d04177a80a9b14ebac2403/0.part",
+      "is_directory": false,
+      "ok": true
+    },
+    {
+      "operation": "os.chmod",
+      "path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/.cetacea-tmp/tsk_ac5a563895d04177a80a9b14ebac2403/0.part",
+      "requested_mode": "0o644",
+      "before_mode": "0o600",
+      "ok": true,
+      "after_mode": "0o644"
+    },
+    {
+      "operation": "os.link",
+      "source": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/.cetacea-tmp/tsk_ac5a563895d04177a80a9b14ebac2403/0.part",
+      "destination": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/test/tester/retry/MOCK_SYNTHETIC_0.NEF",
+      "ok": true
+    },
+    {
+      "operation": "os.fsync",
+      "fd_path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/test/tester/retry",
+      "is_directory": true,
+      "ok": true
+    },
+    {
+      "operation": "os.fsync",
+      "fd_path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/.cetacea-tmp/tsk_ac5a563895d04177a80a9b14ebac2403/1.part",
+      "is_directory": false,
+      "ok": true
+    },
+    {
+      "operation": "os.chmod",
+      "path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/.cetacea-tmp/tsk_ac5a563895d04177a80a9b14ebac2403/1.part",
+      "requested_mode": "0o644",
+      "before_mode": "0o600",
+      "ok": true,
+      "after_mode": "0o644"
+    },
+    {
+      "operation": "os.link",
+      "source": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/.cetacea-tmp/tsk_ac5a563895d04177a80a9b14ebac2403/1.part",
+      "destination": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/test/tester/retry/MOCK_SYNTHETIC_1.NEF",
+      "ok": true
+    },
+    {
+      "operation": "os.fsync",
+      "fd_path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/test/tester/retry",
+      "is_directory": true,
+      "ok": true
+    },
+    {
+      "operation": "os.fsync",
+      "fd_path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/.cetacea-tmp/tsk_ac5a563895d04177a80a9b14ebac2403/2.part",
+      "is_directory": false,
+      "ok": true
+    },
+    {
+      "operation": "os.chmod",
+      "path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/.cetacea-tmp/tsk_ac5a563895d04177a80a9b14ebac2403/2.part",
+      "requested_mode": "0o644",
+      "before_mode": "0o600",
+      "ok": true,
+      "after_mode": "0o644"
+    },
+    {
+      "operation": "os.link",
+      "source": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/.cetacea-tmp/tsk_ac5a563895d04177a80a9b14ebac2403/2.part",
+      "destination": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/test/tester/retry/MOCK_SYNTHETIC_2.NEF",
+      "ok": true
+    },
+    {
+      "operation": "os.fsync",
+      "fd_path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/test/tester/retry",
+      "is_directory": true,
+      "ok": true
+    },
+    {
+      "operation": "os.fsync",
+      "fd_path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/.cetacea-tmp/tsk_ac5a563895d04177a80a9b14ebac2403/3.part",
+      "is_directory": false,
+      "ok": true
+    },
+    {
+      "operation": "os.chmod",
+      "path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/.cetacea-tmp/tsk_ac5a563895d04177a80a9b14ebac2403/3.part",
+      "requested_mode": "0o644",
+      "before_mode": "0o600",
+      "ok": true,
+      "after_mode": "0o644"
+    },
+    {
+      "operation": "os.link",
+      "source": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/.cetacea-tmp/tsk_ac5a563895d04177a80a9b14ebac2403/3.part",
+      "destination": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/test/tester/retry/MOCK_SYNTHETIC_3.NEF",
+      "ok": true
+    },
+    {
+      "operation": "os.fsync",
+      "fd_path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/test/tester/retry",
+      "is_directory": true,
+      "ok": true
+    },
+    {
+      "operation": "os.fsync",
+      "fd_path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/.cetacea-tmp/tsk_ac5a563895d04177a80a9b14ebac2403/4.part",
+      "is_directory": false,
+      "ok": true
+    },
+    {
+      "operation": "os.chmod",
+      "path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/.cetacea-tmp/tsk_ac5a563895d04177a80a9b14ebac2403/4.part",
+      "requested_mode": "0o644",
+      "before_mode": "0o600",
+      "ok": true,
+      "after_mode": "0o644"
+    },
+    {
+      "operation": "os.link",
+      "source": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/.cetacea-tmp/tsk_ac5a563895d04177a80a9b14ebac2403/4.part",
+      "destination": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/test/tester/retry/untouched.xmp",
+      "ok": true
+    },
+    {
+      "operation": "os.fsync",
+      "fd_path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/test/tester/retry",
+      "is_directory": true,
+      "ok": true
+    },
+    {
+      "operation": "os.fsync",
+      "fd_path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/test/tester/retry/untouched.xmp",
+      "is_directory": false,
+      "ok": true
+    },
+    {
+      "operation": "os.link",
+      "source": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/.cetacea-tmp/tsk_ac5a563895d04177a80a9b14ebac2403/manifest.part",
+      "destination": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/test/tester/retry/.cetacea/import-manifest-run1.json",
+      "ok": true
+    },
+    {
+      "operation": "os.fsync",
+      "fd_path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/preview/test/tester/retry/tsk_ac5a563895d04177a80a9b14ebac2403/run-1/test_tester_MOCK_SYNTHETIC_3_0528658c.jpg",
+      "is_directory": false,
+      "ok": true
+    },
+    {
+      "operation": "os.link",
+      "source": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/preview/test/tester/retry/tsk_ac5a563895d04177a80a9b14ebac2403/run-1/.manifest-14ebe2c64d944ef4b7da8a1b92175097",
+      "destination": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/preview/test/tester/retry/tsk_ac5a563895d04177a80a9b14ebac2403/run-1/preview-manifest.json",
+      "ok": true
+    },
+    {
+      "operation": "os.link",
+      "source": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/preview/test/tester/retry/tsk_ac5a563895d04177a80a9b14ebac2403/run-1/test_tester_MOCK_SYNTHETIC_0_524a6583.jpg",
+      "destination": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/preview/test/tester/retry/tsk_ac5a563895d04177a80a9b14ebac2403/run-2/ast_524a65839922d3f0ea1116e7.jpg",
+      "ok": true
+    },
+    {
+      "operation": "os.link",
+      "source": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/preview/test/tester/retry/tsk_ac5a563895d04177a80a9b14ebac2403/run-1/test_tester_MOCK_SYNTHETIC_2_4912d855.jpg",
+      "destination": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/preview/test/tester/retry/tsk_ac5a563895d04177a80a9b14ebac2403/run-2/ast_4912d8550873fb7ea28e7d9d.jpg",
+      "ok": true
+    },
+    {
+      "operation": "os.link",
+      "source": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/preview/test/tester/retry/tsk_ac5a563895d04177a80a9b14ebac2403/run-1/test_tester_MOCK_SYNTHETIC_3_0528658c.jpg",
+      "destination": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/preview/test/tester/retry/tsk_ac5a563895d04177a80a9b14ebac2403/run-2/ast_0528658c9b67a549057e0866.jpg",
+      "ok": true
+    },
+    {
+      "operation": "os.fsync",
+      "fd_path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/preview/test/tester/retry/tsk_ac5a563895d04177a80a9b14ebac2403/run-2/ast_0528658c9b67a549057e0866.jpg",
+      "is_directory": false,
+      "ok": true
+    },
+    {
+      "operation": "os.link",
+      "source": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/preview/test/tester/retry/tsk_ac5a563895d04177a80a9b14ebac2403/run-2/.manifest-ea8502a898ab474c8b714027dbe057ff",
+      "destination": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/preview/test/tester/retry/tsk_ac5a563895d04177a80a9b14ebac2403/run-2/preview-manifest.json",
+      "ok": true
+    },
+    {
+      "operation": "os.fsync",
+      "fd_path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/.cetacea-tmp/same_e152299d383041b79586e331c46c3ac0/0.part",
+      "is_directory": false,
+      "ok": true
+    },
+    {
+      "operation": "os.chmod",
+      "path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/.cetacea-tmp/same_e152299d383041b79586e331c46c3ac0/0.part",
+      "requested_mode": "0o644",
+      "before_mode": "0o600",
+      "ok": true,
+      "after_mode": "0o644"
+    },
+    {
+      "operation": "os.link",
+      "source": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/.cetacea-tmp/same_e152299d383041b79586e331c46c3ac0/0.part",
+      "destination": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/test/tester/retry/MOCK_SYNTHETIC_0.NEF",
+      "ok": false,
+      "errno": 17,
+      "errno_name": "EEXIST",
+      "error": "[Errno 17] File exists: '/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/.cetacea-tmp/same_e152299d383041b79586e331c46c3ac0/0.part' -> '/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/test/tester/retry/MOCK_SYNTHETIC_0.NEF'"
+    },
+    {
+      "operation": "os.fsync",
+      "fd_path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/.cetacea-tmp/different_1ce0508758784c139391795661efaade/0.part",
+      "is_directory": false,
+      "ok": true
+    },
+    {
+      "operation": "os.chmod",
+      "path": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/.cetacea-tmp/different_1ce0508758784c139391795661efaade/0.part",
+      "requested_mode": "0o644",
+      "before_mode": "0o600",
+      "ok": true,
+      "after_mode": "0o644"
+    },
+    {
+      "operation": "os.link",
+      "source": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/.cetacea-tmp/different_1ce0508758784c139391795661efaade/0.part",
+      "destination": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/test/tester/retry/MOCK_SYNTHETIC_0.NEF",
+      "ok": false,
+      "errno": 17,
+      "errno_name": "EEXIST",
+      "error": "[Errno 17] File exists: '/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/.cetacea-tmp/different_1ce0508758784c139391795661efaade/0.part' -> '/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/test/tester/retry/MOCK_SYNTHETIC_0.NEF'"
+    }
+  ],
+  "parent_external_volume": {
+    "AESHardware": false,
+    "APFSContainerFree": 1130189844480,
+    "APFSContainerReference": "disk5",
+    "APFSContainerSize": 2000189177856,
+    "APFSPhysicalStores": [
+      {
+        "APFSPhysicalStore": "disk4s2"
+      }
+    ],
+    "APFSSnapshot": false,
+    "Bootable": true,
+    "BusProtocol": "PCI-Express",
+    "CanBeMadeBootable": false,
+    "CanBeMadeBootableRequiresDestroy": false,
+    "CapacityInUse": 869699493888,
+    "Content": "41504653-0000-11AA-AA11-00306543ECAC",
+    "DeviceBlockSize": 4096,
+    "DeviceIdentifier": "disk5s1",
+    "DeviceNode": "/dev/disk5s1",
+    "DeviceTreePath": "IODeviceTree:/arm-io@10F00000/apciec1@60000000/pcic1-bridge@0/pci-bridge@0/pci-bridge@1/pci15b7,5045@0/IONVMeController",
+    "DiskUUID": "1465C0D1-29A6-4DA1-8E13-3AC474A4BB83",
+    "Ejectable": true,
+    "EjectableMediaAutomaticUnderSoftwareControl": false,
+    "EjectableOnly": false,
+    "Encryption": false,
+    "EncryptionThisVolumeProper": false,
+    "FileVault": false,
+    "FilesystemName": "APFS",
+    "FilesystemType": "apfs",
+    "FilesystemUserVisibleName": "APFS",
+    "FreeSpace": 0,
+    "GlobalPermissionsEnabled": false,
+    "IOKitSize": 2000189177856,
+    "IORegistryEntryName": "Cetacea Studio",
+    "Internal": false,
+    "Locked": false,
+    "MediaName": "",
+    "MediaType": "\u901a\u7528",
+    "MountPoint": "/Volumes/Cetacea Studio",
+    "OSInternalMedia": false,
+    "ParentWholeDisk": "disk5",
+    "PartitionMapPartition": false,
+    "RAIDMaster": false,
+    "RAIDSlice": false,
+    "Removable": false,
+    "RemovableMedia": false,
+    "RemovableMediaOrExternalDevice": true,
+    "SMARTDeviceSpecificKeysMayVaryNotGuaranteed": {
+      "AVAILABLE_SPARE": 100,
+      "AVAILABLE_SPARE_THRESHOLD": 10,
+      "CONTROLLER_BUSY_TIME_0": 1035,
+      "CONTROLLER_BUSY_TIME_1": 0,
+      "DATA_UNITS_READ_0": 16080536,
+      "DATA_UNITS_READ_1": 0,
+      "DATA_UNITS_WRITTEN_0": 9445936,
+      "DATA_UNITS_WRITTEN_1": 0,
+      "HOST_READ_COMMANDS_0": 78503516,
+      "HOST_READ_COMMANDS_1": 0,
+      "HOST_WRITE_COMMANDS_0": 106402908,
+      "HOST_WRITE_COMMANDS_1": 0,
+      "MEDIA_ERRORS_0": 0,
+      "MEDIA_ERRORS_1": 0,
+      "NUM_ERROR_INFO_LOG_ENTRIES_0": 0,
+      "NUM_ERROR_INFO_LOG_ENTRIES_1": 0,
+      "PERCENTAGE_USED": 0,
+      "POWER_CYCLES_0": 203,
+      "POWER_CYCLES_1": 0,
+      "POWER_ON_HOURS_0": 991,
+      "POWER_ON_HOURS_1": 0,
+      "TEMPERATURE": 301,
+      "UNSAFE_SHUTDOWNS_0": 20,
+      "UNSAFE_SHUTDOWNS_1": 0
+    },
+    "SMARTStatus": "Verified",
+    "Sealed": "No",
+    "Size": 2000189177856,
+    "SolidState": true,
+    "SupportsGlobalPermissionsDisable": true,
+    "SystemImage": false,
+    "TotalSize": 2000189177856,
+    "VolumeAllocationBlockSize": 4096,
+    "VolumeName": "Cetacea Studio",
+    "VolumeSize": 0,
+    "VolumeUUID": "1465C0D1-29A6-4DA1-8E13-3AC474A4BB83",
+    "WholeDisk": false,
+    "Writable": true,
+    "WritableMedia": true,
+    "WritableVolume": true
+  },
+  "target_volume": {
+    "AESHardware": false,
+    "APFSContainerFree": 1130189844480,
+    "APFSContainerReference": "disk5",
+    "APFSContainerSize": 2000189177856,
+    "APFSPhysicalStores": [
+      {
+        "APFSPhysicalStore": "disk4s2"
+      }
+    ],
+    "APFSSnapshot": false,
+    "Bootable": true,
+    "BusProtocol": "PCI-Express",
+    "CanBeMadeBootable": false,
+    "CanBeMadeBootableRequiresDestroy": false,
+    "CapacityInUse": 869699493888,
+    "Content": "41504653-0000-11AA-AA11-00306543ECAC",
+    "DeviceBlockSize": 4096,
+    "DeviceIdentifier": "disk5s1",
+    "DeviceNode": "/dev/disk5s1",
+    "DeviceTreePath": "IODeviceTree:/arm-io@10F00000/apciec1@60000000/pcic1-bridge@0/pci-bridge@0/pci-bridge@1/pci15b7,5045@0/IONVMeController",
+    "DiskUUID": "1465C0D1-29A6-4DA1-8E13-3AC474A4BB83",
+    "Ejectable": true,
+    "EjectableMediaAutomaticUnderSoftwareControl": false,
+    "EjectableOnly": false,
+    "Encryption": false,
+    "EncryptionThisVolumeProper": false,
+    "FileVault": false,
+    "FilesystemName": "APFS",
+    "FilesystemType": "apfs",
+    "FilesystemUserVisibleName": "APFS",
+    "FreeSpace": 0,
+    "GlobalPermissionsEnabled": false,
+    "IOKitSize": 2000189177856,
+    "IORegistryEntryName": "Cetacea Studio",
+    "Internal": false,
+    "Locked": false,
+    "MediaName": "",
+    "MediaType": "\u901a\u7528",
+    "MountPoint": "/Volumes/Cetacea Studio",
+    "OSInternalMedia": false,
+    "ParentWholeDisk": "disk5",
+    "PartitionMapPartition": false,
+    "RAIDMaster": false,
+    "RAIDSlice": false,
+    "Removable": false,
+    "RemovableMedia": false,
+    "RemovableMediaOrExternalDevice": true,
+    "SMARTDeviceSpecificKeysMayVaryNotGuaranteed": {
+      "AVAILABLE_SPARE": 100,
+      "AVAILABLE_SPARE_THRESHOLD": 10,
+      "CONTROLLER_BUSY_TIME_0": 1035,
+      "CONTROLLER_BUSY_TIME_1": 0,
+      "DATA_UNITS_READ_0": 16080536,
+      "DATA_UNITS_READ_1": 0,
+      "DATA_UNITS_WRITTEN_0": 9445936,
+      "DATA_UNITS_WRITTEN_1": 0,
+      "HOST_READ_COMMANDS_0": 78503516,
+      "HOST_READ_COMMANDS_1": 0,
+      "HOST_WRITE_COMMANDS_0": 106402908,
+      "HOST_WRITE_COMMANDS_1": 0,
+      "MEDIA_ERRORS_0": 0,
+      "MEDIA_ERRORS_1": 0,
+      "NUM_ERROR_INFO_LOG_ENTRIES_0": 0,
+      "NUM_ERROR_INFO_LOG_ENTRIES_1": 0,
+      "PERCENTAGE_USED": 0,
+      "POWER_CYCLES_0": 203,
+      "POWER_CYCLES_1": 0,
+      "POWER_ON_HOURS_0": 991,
+      "POWER_ON_HOURS_1": 0,
+      "TEMPERATURE": 301,
+      "UNSAFE_SHUTDOWNS_0": 20,
+      "UNSAFE_SHUTDOWNS_1": 0
+    },
+    "SMARTStatus": "Verified",
+    "Sealed": "No",
+    "Size": 2000189177856,
+    "SolidState": true,
+    "SupportsGlobalPermissionsDisable": true,
+    "SystemImage": false,
+    "TotalSize": 2000189177856,
+    "VolumeAllocationBlockSize": 4096,
+    "VolumeName": "Cetacea Studio",
+    "VolumeSize": 0,
+    "VolumeUUID": "1465C0D1-29A6-4DA1-8E13-3AC474A4BB83",
+    "WholeDisk": false,
+    "Writable": true,
+    "WritableMedia": true,
+    "WritableVolume": true
+  },
+  "target_root": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0",
+  "local_state": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0",
+  "sqlite_location": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/home/state.sqlite3",
+  "test_plan_approvals": [
+    {
+      "task_id": "tsk_ac5a563895d04177a80a9b14ebac2403",
+      "plan_digest": "d855d3f97a84881f30d7992094fc3bd6abb482c39d4554ef8672a0f070dfbf3b",
+      "method": "Scripted acceptance harness HUMAN API; exact isolated test plan, not an AI MCP approval"
+    }
+  ],
+  "results": {
+    "fixture_marker": "MOCK synthetic bytes; no camera RAW decoding or real Lightroom verification",
+    "initial_task": {
+      "task_id": "tsk_ac5a563895d04177a80a9b14ebac2403",
+      "idempotency_key": "20de2a910e96a558aa7ba77bc17d28e31e549a4627e5b5eea2604e96c6fba595",
+      "type": "import",
+      "state": "FAILED",
+      "order_id": "test",
+      "photographer_id": "tester",
+      "batch_id": "retry",
+      "source_id": "synthetic",
+      "plan_json": "{\"files\": [{\"rel_path\": \"MOCK_SYNTHETIC_0.NEF\", \"size\": 48128, \"sha256\": \"beae492fcce6baf3b39ad642aef1521472b55b19ace8190f4400d615bd0fbd7f\", \"kind\": \"raw\", \"dest_rel_path\": \"test/tester/retry/MOCK_SYNTHETIC_0.NEF\", \"asset_id\": \"ast_524a65839922d3f0ea1116e7\"}, {\"rel_path\": \"MOCK_SYNTHETIC_1.NEF\", \"size\": 48128, \"sha256\": \"f4437674baf50f43655c8ab7a1b7d2559d56e4d7b4aba64fa99e33007c00f610\", \"kind\": \"raw\", \"dest_rel_path\": \"test/tester/retry/MOCK_SYNTHETIC_1.NEF\", \"asset_id\": \"ast_3a614311edb1f4a638c738c8\"}, {\"rel_path\": \"MOCK_SYNTHETIC_2.NEF\", \"size\": 48128, \"sha256\": \"98fb72336e3f8b782a0adbcb5900e8f3c7df58b064d0df6e855f8353be556831\", \"kind\": \"raw\", \"dest_rel_path\": \"test/tester/retry/MOCK_SYNTHETIC_2.NEF\", \"asset_id\": \"ast_4912d8550873fb7ea28e7d9d\"}, {\"rel_path\": \"MOCK_SYNTHETIC_3.NEF\", \"size\": 48128, \"sha256\": \"5001e88f666debfbbb87eb295a042d9e8957cfea325093bba6907bf9a16a2e25\", \"kind\": \"raw\", \"dest_rel_path\": \"test/tester/retry/MOCK_SYNTHETIC_3.NEF\", \"asset_id\": \"ast_0528658c9b67a549057e0866\"}, {\"rel_path\": \"untouched.xmp\", \"size\": 30, \"sha256\": \"5b63a265e28c1624a701c479fb8d04d528fe312d66b820d6e18320610c7865f8\", \"kind\": \"sidecar\", \"dest_rel_path\": \"test/tester/retry/untouched.xmp\", \"asset_id\": \"ast_1e1b83cc6b0da61ec24644fe\"}], \"total_bytes\": 192542, \"destination\": \"test/tester/retry\", \"stages\": [\"ingest\", \"lr_register\", \"lr_preset\", \"lr_export\", \"preview_verify\"], \"preset_id\": \"testpreset\", \"scan_digest\": \"3804e4e792be52bf11f051870b6ebda6306553daa0ab36b1312b99376781b89e\"}",
+      "plan_digest": "d855d3f97a84881f30d7992094fc3bd6abb482c39d4554ef8672a0f070dfbf3b",
+      "stages_json": "[\"ingest\", \"lr_register\", \"lr_preset\", \"lr_export\", \"preview_verify\"]",
+      "run_count": 1,
+      "error": "lr_export: 1 failed",
+      "created_at": "2026-11-02T14:10:52.415168+00:00",
+      "updated_at": "2026-11-02T14:10:52.473995+00:00",
+      "lease_until": null,
+      "plan": {
+        "files": [
+          {
+            "rel_path": "MOCK_SYNTHETIC_0.NEF",
+            "size": 48128,
+            "sha256": "beae492fcce6baf3b39ad642aef1521472b55b19ace8190f4400d615bd0fbd7f",
+            "kind": "raw",
+            "dest_rel_path": "test/tester/retry/MOCK_SYNTHETIC_0.NEF",
+            "asset_id": "ast_524a65839922d3f0ea1116e7"
+          },
+          {
+            "rel_path": "MOCK_SYNTHETIC_1.NEF",
+            "size": 48128,
+            "sha256": "f4437674baf50f43655c8ab7a1b7d2559d56e4d7b4aba64fa99e33007c00f610",
+            "kind": "raw",
+            "dest_rel_path": "test/tester/retry/MOCK_SYNTHETIC_1.NEF",
+            "asset_id": "ast_3a614311edb1f4a638c738c8"
+          },
+          {
+            "rel_path": "MOCK_SYNTHETIC_2.NEF",
+            "size": 48128,
+            "sha256": "98fb72336e3f8b782a0adbcb5900e8f3c7df58b064d0df6e855f8353be556831",
+            "kind": "raw",
+            "dest_rel_path": "test/tester/retry/MOCK_SYNTHETIC_2.NEF",
+            "asset_id": "ast_4912d8550873fb7ea28e7d9d"
+          },
+          {
+            "rel_path": "MOCK_SYNTHETIC_3.NEF",
+            "size": 48128,
+            "sha256": "5001e88f666debfbbb87eb295a042d9e8957cfea325093bba6907bf9a16a2e25",
+            "kind": "raw",
+            "dest_rel_path": "test/tester/retry/MOCK_SYNTHETIC_3.NEF",
+            "asset_id": "ast_0528658c9b67a549057e0866"
+          },
+          {
+            "rel_path": "untouched.xmp",
+            "size": 30,
+            "sha256": "5b63a265e28c1624a701c479fb8d04d528fe312d66b820d6e18320610c7865f8",
+            "kind": "sidecar",
+            "dest_rel_path": "test/tester/retry/untouched.xmp",
+            "asset_id": "ast_1e1b83cc6b0da61ec24644fe"
+          }
+        ],
+        "total_bytes": 192542,
+        "destination": "test/tester/retry",
+        "stages": [
+          "ingest",
+          "lr_register",
+          "lr_preset",
+          "lr_export",
+          "preview_verify"
+        ],
+        "preset_id": "testpreset",
+        "scan_digest": "3804e4e792be52bf11f051870b6ebda6306553daa0ab36b1312b99376781b89e"
+      }
+    },
+    "failure_injections": 1,
+    "failed_asset": "ast_3a614311edb1f4a638c738c8",
+    "export_calls_before": {
+      "ast_524a65839922d3f0ea1116e7": 1,
+      "ast_3a614311edb1f4a638c738c8": 1,
+      "ast_4912d8550873fb7ea28e7d9d": 1,
+      "ast_0528658c9b67a549057e0866": 1
+    },
+    "export_calls_after": {
+      "ast_524a65839922d3f0ea1116e7": 1,
+      "ast_3a614311edb1f4a638c738c8": 2,
+      "ast_4912d8550873fb7ea28e7d9d": 1,
+      "ast_0528658c9b67a549057e0866": 1
+    },
+    "old_successful_previews_unchanged": true,
+    "task": {
+      "task_id": "tsk_ac5a563895d04177a80a9b14ebac2403",
+      "idempotency_key": "20de2a910e96a558aa7ba77bc17d28e31e549a4627e5b5eea2604e96c6fba595",
+      "type": "import",
+      "state": "COMPLETED",
+      "order_id": "test",
+      "photographer_id": "tester",
+      "batch_id": "retry",
+      "source_id": "synthetic",
+      "plan_json": "{\"files\": [{\"rel_path\": \"MOCK_SYNTHETIC_0.NEF\", \"size\": 48128, \"sha256\": \"beae492fcce6baf3b39ad642aef1521472b55b19ace8190f4400d615bd0fbd7f\", \"kind\": \"raw\", \"dest_rel_path\": \"test/tester/retry/MOCK_SYNTHETIC_0.NEF\", \"asset_id\": \"ast_524a65839922d3f0ea1116e7\"}, {\"rel_path\": \"MOCK_SYNTHETIC_1.NEF\", \"size\": 48128, \"sha256\": \"f4437674baf50f43655c8ab7a1b7d2559d56e4d7b4aba64fa99e33007c00f610\", \"kind\": \"raw\", \"dest_rel_path\": \"test/tester/retry/MOCK_SYNTHETIC_1.NEF\", \"asset_id\": \"ast_3a614311edb1f4a638c738c8\"}, {\"rel_path\": \"MOCK_SYNTHETIC_2.NEF\", \"size\": 48128, \"sha256\": \"98fb72336e3f8b782a0adbcb5900e8f3c7df58b064d0df6e855f8353be556831\", \"kind\": \"raw\", \"dest_rel_path\": \"test/tester/retry/MOCK_SYNTHETIC_2.NEF\", \"asset_id\": \"ast_4912d8550873fb7ea28e7d9d\"}, {\"rel_path\": \"MOCK_SYNTHETIC_3.NEF\", \"size\": 48128, \"sha256\": \"5001e88f666debfbbb87eb295a042d9e8957cfea325093bba6907bf9a16a2e25\", \"kind\": \"raw\", \"dest_rel_path\": \"test/tester/retry/MOCK_SYNTHETIC_3.NEF\", \"asset_id\": \"ast_0528658c9b67a549057e0866\"}, {\"rel_path\": \"untouched.xmp\", \"size\": 30, \"sha256\": \"5b63a265e28c1624a701c479fb8d04d528fe312d66b820d6e18320610c7865f8\", \"kind\": \"sidecar\", \"dest_rel_path\": \"test/tester/retry/untouched.xmp\", \"asset_id\": \"ast_1e1b83cc6b0da61ec24644fe\"}], \"total_bytes\": 192542, \"destination\": \"test/tester/retry\", \"stages\": [\"ingest\", \"lr_register\", \"lr_preset\", \"lr_export\", \"preview_verify\"], \"preset_id\": \"testpreset\", \"scan_digest\": \"3804e4e792be52bf11f051870b6ebda6306553daa0ab36b1312b99376781b89e\"}",
+      "plan_digest": "d855d3f97a84881f30d7992094fc3bd6abb482c39d4554ef8672a0f070dfbf3b",
+      "stages_json": "[\"ingest\", \"lr_register\", \"lr_preset\", \"lr_export\", \"preview_verify\"]",
+      "run_count": 2,
+      "error": null,
+      "created_at": "2026-11-02T14:10:52.415168+00:00",
+      "updated_at": "2026-11-02T14:10:52.511867+00:00",
+      "lease_until": null,
+      "plan": {
+        "files": [
+          {
+            "rel_path": "MOCK_SYNTHETIC_0.NEF",
+            "size": 48128,
+            "sha256": "beae492fcce6baf3b39ad642aef1521472b55b19ace8190f4400d615bd0fbd7f",
+            "kind": "raw",
+            "dest_rel_path": "test/tester/retry/MOCK_SYNTHETIC_0.NEF",
+            "asset_id": "ast_524a65839922d3f0ea1116e7"
+          },
+          {
+            "rel_path": "MOCK_SYNTHETIC_1.NEF",
+            "size": 48128,
+            "sha256": "f4437674baf50f43655c8ab7a1b7d2559d56e4d7b4aba64fa99e33007c00f610",
+            "kind": "raw",
+            "dest_rel_path": "test/tester/retry/MOCK_SYNTHETIC_1.NEF",
+            "asset_id": "ast_3a614311edb1f4a638c738c8"
+          },
+          {
+            "rel_path": "MOCK_SYNTHETIC_2.NEF",
+            "size": 48128,
+            "sha256": "98fb72336e3f8b782a0adbcb5900e8f3c7df58b064d0df6e855f8353be556831",
+            "kind": "raw",
+            "dest_rel_path": "test/tester/retry/MOCK_SYNTHETIC_2.NEF",
+            "asset_id": "ast_4912d8550873fb7ea28e7d9d"
+          },
+          {
+            "rel_path": "MOCK_SYNTHETIC_3.NEF",
+            "size": 48128,
+            "sha256": "5001e88f666debfbbb87eb295a042d9e8957cfea325093bba6907bf9a16a2e25",
+            "kind": "raw",
+            "dest_rel_path": "test/tester/retry/MOCK_SYNTHETIC_3.NEF",
+            "asset_id": "ast_0528658c9b67a549057e0866"
+          },
+          {
+            "rel_path": "untouched.xmp",
+            "size": 30,
+            "sha256": "5b63a265e28c1624a701c479fb8d04d528fe312d66b820d6e18320610c7865f8",
+            "kind": "sidecar",
+            "dest_rel_path": "test/tester/retry/untouched.xmp",
+            "asset_id": "ast_1e1b83cc6b0da61ec24644fe"
+          }
+        ],
+        "total_bytes": 192542,
+        "destination": "test/tester/retry",
+        "stages": [
+          "ingest",
+          "lr_register",
+          "lr_preset",
+          "lr_export",
+          "preview_verify"
+        ],
+        "preset_id": "testpreset",
+        "scan_digest": "3804e4e792be52bf11f051870b6ebda6306553daa0ab36b1312b99376781b89e"
+      }
+    },
+    "verification": {
+      "assets": [
+        {
+          "asset_id": "ast_524a65839922d3f0ea1116e7",
+          "destination": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/test/tester/retry/MOCK_SYNTHETIC_0.NEF",
+          "readback": {
+            "sha256": "beae492fcce6baf3b39ad642aef1521472b55b19ace8190f4400d615bd0fbd7f",
+            "mtime_ns": 1793628652422429007,
+            "size": 48128,
+            "inode": 173120
+          }
+        },
+        {
+          "asset_id": "ast_3a614311edb1f4a638c738c8",
+          "destination": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/test/tester/retry/MOCK_SYNTHETIC_1.NEF",
+          "readback": {
+            "sha256": "f4437674baf50f43655c8ab7a1b7d2559d56e4d7b4aba64fa99e33007c00f610",
+            "mtime_ns": 1793628652426268375,
+            "size": 48128,
+            "inode": 173126
+          }
+        },
+        {
+          "asset_id": "ast_4912d8550873fb7ea28e7d9d",
+          "destination": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/test/tester/retry/MOCK_SYNTHETIC_2.NEF",
+          "readback": {
+            "sha256": "98fb72336e3f8b782a0adbcb5900e8f3c7df58b064d0df6e855f8353be556831",
+            "mtime_ns": 1793628652429270911,
+            "size": 48128,
+            "inode": 173129
+          }
+        },
+        {
+          "asset_id": "ast_0528658c9b67a549057e0866",
+          "destination": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/test/tester/retry/MOCK_SYNTHETIC_3.NEF",
+          "readback": {
+            "sha256": "5001e88f666debfbbb87eb295a042d9e8957cfea325093bba6907bf9a16a2e25",
+            "mtime_ns": 1793628652432199072,
+            "size": 48128,
+            "inode": 173132
+          }
+        },
+        {
+          "asset_id": "ast_1e1b83cc6b0da61ec24644fe",
+          "destination": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/test/tester/retry/untouched.xmp",
+          "readback": {
+            "sha256": "5b63a265e28c1624a701c479fb8d04d528fe312d66b820d6e18320610c7865f8",
+            "mtime_ns": 1793628652435084692,
+            "size": 30,
+            "inode": 173135
+          }
+        }
+      ],
+      "import_manifests": [
+        "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045/apfs/retry/20261102T141052Z-8ff4e7b0/library/test/tester/retry/.cetacea/import-manifest-run1.json"
+      ]
+    },
+    "preview": {
+      "status": "OK",
+      "mock": true,
+      "marker": "MOCK \u2014 not real Lightroom",
+      "run": 2,
+      "missing": [],
+      "failed": [],
+      "orphans": [],
+      "size_violations": [],
+      "expected_count": 4,
+      "mapped_count": 4
+    },
+    "no_overwrite": {
+      "same_hash": {
+        "status": "VERIFIED",
+        "skipped_verified": true,
+        "error": null
+      },
+      "different_hash": {
+        "status": "CONFLICT",
+        "error": "CONFLICT"
+      },
+      "destination_unchanged": true,
+      "destination": {
+        "sha256": "beae492fcce6baf3b39ad642aef1521472b55b19ace8190f4400d615bd0fbd7f",
+        "mtime_ns": 1793628652422429007,
+        "size": 48128,
+        "inode": 173120
+      }
+    },
+    "source_before": {
+      "MOCK_SYNTHETIC_1.NEF": {
+        "sha256": "f4437674baf50f43655c8ab7a1b7d2559d56e4d7b4aba64fa99e33007c00f610",
+        "mtime_ns": 1793628652404796958,
+        "size": 48128,
+        "inode": 15920624
+      },
+      "MOCK_SYNTHETIC_0.NEF": {
+        "sha256": "beae492fcce6baf3b39ad642aef1521472b55b19ace8190f4400d615bd0fbd7f",
+        "mtime_ns": 1793628652404549750,
+        "size": 48128,
+        "inode": 15920623
+      },
+      "MOCK_SYNTHETIC_2.NEF": {
+        "sha256": "98fb72336e3f8b782a0adbcb5900e8f3c7df58b064d0df6e855f8353be556831",
+        "mtime_ns": 1793628652405021624,
+        "size": 48128,
+        "inode": 15920625
+      },
+      "MOCK_SYNTHETIC_3.NEF": {
+        "sha256": "5001e88f666debfbbb87eb295a042d9e8957cfea325093bba6907bf9a16a2e25",
+        "mtime_ns": 1793628652405228874,
+        "size": 48128,
+        "inode": 15920626
+      },
+      "untouched.xmp": {
+        "sha256": "5b63a265e28c1624a701c479fb8d04d528fe312d66b820d6e18320610c7865f8",
+        "mtime_ns": 1793628652405495790,
+        "size": 30,
+        "inode": 15920627
+      }
+    },
+    "source_after": {
+      "MOCK_SYNTHETIC_1.NEF": {
+        "sha256": "f4437674baf50f43655c8ab7a1b7d2559d56e4d7b4aba64fa99e33007c00f610",
+        "mtime_ns": 1793628652404796958,
+        "size": 48128,
+        "inode": 15920624
+      },
+      "MOCK_SYNTHETIC_0.NEF": {
+        "sha256": "beae492fcce6baf3b39ad642aef1521472b55b19ace8190f4400d615bd0fbd7f",
+        "mtime_ns": 1793628652404549750,
+        "size": 48128,
+        "inode": 15920623
+      },
+      "MOCK_SYNTHETIC_2.NEF": {
+        "sha256": "98fb72336e3f8b782a0adbcb5900e8f3c7df58b064d0df6e855f8353be556831",
+        "mtime_ns": 1793628652405021624,
+        "size": 48128,
+        "inode": 15920625
+      },
+      "MOCK_SYNTHETIC_3.NEF": {
+        "sha256": "5001e88f666debfbbb87eb295a042d9e8957cfea325093bba6907bf9a16a2e25",
+        "mtime_ns": 1793628652405228874,
+        "size": 48128,
+        "inode": 15920626
+      },
+      "untouched.xmp": {
+        "sha256": "5b63a265e28c1624a701c479fb8d04d528fe312d66b820d6e18320610c7865f8",
+        "mtime_ns": 1793628652405495790,
+        "size": 30,
+        "inode": 15920627
+      }
+    },
+    "mock_calls": [
+      [
+        "register",
+        "ast_524a65839922d3f0ea1116e7"
+      ],
+      [
+        "register",
+        "ast_3a614311edb1f4a638c738c8"
+      ],
+      [
+        "register",
+        "ast_4912d8550873fb7ea28e7d9d"
+      ],
+      [
+        "register",
+        "ast_0528658c9b67a549057e0866"
+      ],
+      [
+        "preset",
+        "ast_524a65839922d3f0ea1116e7"
+      ],
+      [
+        "preset",
+        "ast_3a614311edb1f4a638c738c8"
+      ],
+      [
+        "preset",
+        "ast_4912d8550873fb7ea28e7d9d"
+      ],
+      [
+        "preset",
+        "ast_0528658c9b67a549057e0866"
+      ],
+      [
+        "export",
+        "ast_524a65839922d3f0ea1116e7"
+      ],
+      [
+        "export",
+        "ast_3a614311edb1f4a638c738c8"
+      ],
+      [
+        "export",
+        "ast_4912d8550873fb7ea28e7d9d"
+      ],
+      [
+        "export",
+        "ast_0528658c9b67a549057e0866"
+      ],
+      [
+        "export",
+        "ast_3a614311edb1f4a638c738c8"
+      ]
+    ]
+  },
+  "finished_at": "2026-11-02T14:10:52.529707+00:00"
+}

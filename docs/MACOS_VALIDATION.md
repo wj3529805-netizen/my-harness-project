@@ -4,6 +4,8 @@
 
 代码仓库：`https://github.com/wj3529805-netizen/my-harness-project`，分支 `mac-validation`，基线 `8abed3b62a1603d15b37d45b6a2d3b28797f4d2e`。GitHub clone 与压缩包基线一致。代码修复提交 `2956edc`。全部证据位于 [evidence/mac-acceptance](../evidence/mac-acceptance/)。
 
+后续实体 SD/USB 卡及外置 APFS 补充验收见 [MACOS_DEVICE_VALIDATION.md](MACOS_DEVICE_VALIDATION.md)。下表为首次验收历史；后续全量回归已增至 100/100，A3 已补实体选中样本，A4 已补外置 APFS，exFAT/SMB 目标仍未通过实机验收。
+
 ## 环境和隔离边界
 
 - macOS 27.0.1，arm64；Python 3.13.18，项目内 `.venv`；Node v26.12.1。

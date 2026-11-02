@@ -1,0 +1,156 @@
+Lightroom MCP server v0.26.0 running on stdio
+Connecting to plugin: request :58763, response :58764
+Token file: /Users/mac/.config/lightroom-mcp/token
+[bridge] owning the plugin connection
+[request] connected to 127.0.0.1:58763
+[response] connected to 127.0.0.1:58764
+Shutting down: stdin ended (client exited)
+Lightroom MCP server v0.26.0 running on stdio
+Connecting to plugin: request :58763, response :58764
+Token file: /Users/mac/.config/lightroom-mcp/token
+[bridge] owning the plugin connection
+[request] connected to 127.0.0.1:58763
+[response] connected to 127.0.0.1:58764
+Shutting down: stdin ended (client exited)
+Lightroom MCP server v0.26.0 running on stdio
+Connecting to plugin: request :58763, response :58764
+Token file: /Users/mac/.config/lightroom-mcp/token
+[bridge] owning the plugin connection
+[request] connected to 127.0.0.1:58763
+[response] connected to 127.0.0.1:58764
+Shutting down: stdin ended (client exited)
+Lightroom MCP server v0.26.0 running on stdio
+Connecting to plugin: request :58763, response :58764
+Token file: /Users/mac/.config/lightroom-mcp/token
+[bridge] owning the plugin connection
+[request] connected to 127.0.0.1:58763
+[response] connected to 127.0.0.1:58764
+Shutting down: stdin ended (client exited)
+Lightroom MCP server v0.26.0 running on stdio
+Connecting to plugin: request :58763, response :58764
+Token file: /Users/mac/.config/lightroom-mcp/token
+[bridge] owning the plugin connection
+[request] connected to 127.0.0.1:58763
+[response] connected to 127.0.0.1:58764
+Shutting down: stdin ended (client exited)
+Lightroom MCP server v0.26.0 running on stdio
+Connecting to plugin: request :58763, response :58764
+Token file: /Users/mac/.config/lightroom-mcp/token
+[bridge] owning the plugin connection
+[request] connected to 127.0.0.1:58763
+[response] connected to 127.0.0.1:58764
+Shutting down: stdin ended (client exited)
+Lightroom MCP server v0.26.0 running on stdio
+Connecting to plugin: request :58763, response :58764
+Token file: /Users/mac/.config/lightroom-mcp/token
+[bridge] owning the plugin connection
+[request] connected to 127.0.0.1:58763
+[response] connected to 127.0.0.1:58764
+Shutting down: stdin ended (client exited)
+Lightroom MCP server v0.26.0 running on stdio
+Connecting to plugin: request :58763, response :58764
+Token file: /Users/mac/.config/lightroom-mcp/token
+[bridge] owning the plugin connection
+[request] connected to 127.0.0.1:58763
+[response] connected to 127.0.0.1:58764
+Shutting down: stdin ended (client exited)
+Lightroom MCP server v0.26.0 running on stdio
+Connecting to plugin: request :58763, response :58764
+Token file: /Users/mac/.config/lightroom-mcp/token
+[bridge] owning the plugin connection
+[request] connected to 127.0.0.1:58763
+[response] connected to 127.0.0.1:58764
+Shutting down: stdin ended (client exited)
+Lightroom MCP server v0.26.0 running on stdio
+Connecting to plugin: request :58763, response :58764
+Token file: /Users/mac/.config/lightroom-mcp/token
+[bridge] owning the plugin connection
+[request] connected to 127.0.0.1:58763
+[response] connected to 127.0.0.1:58764
+Shutting down: stdin ended (client exited)
+Lightroom MCP server v0.26.0 running on stdio
+Connecting to plugin: request :58763, response :58764
+Token file: /Users/mac/.config/lightroom-mcp/token
+[bridge] owning the plugin connection
+[request] connected to 127.0.0.1:58763
+[response] connected to 127.0.0.1:58764
+Shutting down: stdin ended (client exited)
+{"source_id": "sd", "task_id": "tsk_c3247c642a7e4c88baa0b43da6f4d6e2", "state": "COMPLETED", "error": null, "source_unchanged": true, "library_copy_unchanged": true, "jpeg_dimensions": [1067, 1600], "jpeg_sha256": "9aca4d04565532b91e75780cd6b3ea5b747990ee80e3ce6ca539226c4f2621d1", "mock": false, "preview": {"status": "OK", "mock": false, "marker": "Lightroom MCP connected (real read-only preset probe; catalog identity unverified)", "run": 1, "missing": [], "failed": [], "orphans": [], "size_violations": [], "expected_count": 1, "mapped_count": 1}, "camera_model": "NIKON Z6_3", "exposure_readback": 0.5, "raw_compression_variant": "NOT_INDEPENDENTLY_IDENTIFIED"}
+Lightroom MCP server v0.26.0 running on stdio
+Connecting to plugin: request :58763, response :58764
+Token file: /Users/mac/.config/lightroom-mcp/token
+[bridge] owning the plugin connection
+[request] connected to 127.0.0.1:58763
+[response] connected to 127.0.0.1:58764
+Shutting down: stdin ended (client exited)
+Lightroom MCP server v0.26.0 running on stdio
+Connecting to plugin: request :58763, response :58764
+Token file: /Users/mac/.config/lightroom-mcp/token
+[bridge] owning the plugin connection
+[request] connected to 127.0.0.1:58763
+[response] connected to 127.0.0.1:58764
+Shutting down: stdin ended (client exited)
+Lightroom MCP server v0.26.0 running on stdio
+Connecting to plugin: request :58763, response :58764
+Token file: /Users/mac/.config/lightroom-mcp/token
+[bridge] owning the plugin connection
+[request] connected to 127.0.0.1:58763
+[response] connected to 127.0.0.1:58764
+Shutting down: stdin ended (client exited)
+Lightroom MCP server v0.26.0 running on stdio
+Connecting to plugin: request :58763, response :58764
+Token file: /Users/mac/.config/lightroom-mcp/token
+[bridge] owning the plugin connection
+[request] connected to 127.0.0.1:58763
+[response] connected to 127.0.0.1:58764
+Shutting down: stdin ended (client exited)
+Lightroom MCP server v0.26.0 running on stdio
+Connecting to plugin: request :58763, response :58764
+Token file: /Users/mac/.config/lightroom-mcp/token
+[bridge] owning the plugin connection
+[request] connected to 127.0.0.1:58763
+[response] connected to 127.0.0.1:58764
+Shutting down: stdin ended (client exited)
+Lightroom MCP server v0.26.0 running on stdio
+Connecting to plugin: request :58763, response :58764
+Token file: /Users/mac/.config/lightroom-mcp/token
+[bridge] owning the plugin connection
+[request] connected to 127.0.0.1:58763
+[response] connected to 127.0.0.1:58764
+Shutting down: stdin ended (client exited)
+Lightroom MCP server v0.26.0 running on stdio
+Connecting to plugin: request :58763, response :58764
+Token file: /Users/mac/.config/lightroom-mcp/token
+[bridge] owning the plugin connection
+[request] connected to 127.0.0.1:58763
+[response] connected to 127.0.0.1:58764
+Shutting down: stdin ended (client exited)
+Lightroom MCP server v0.26.0 running on stdio
+Connecting to plugin: request :58763, response :58764
+Token file: /Users/mac/.config/lightroom-mcp/token
+[bridge] owning the plugin connection
+[request] connected to 127.0.0.1:58763
+[response] connected to 127.0.0.1:58764
+Shutting down: stdin ended (client exited)
+Lightroom MCP server v0.26.0 running on stdio
+Connecting to plugin: request :58763, response :58764
+Token file: /Users/mac/.config/lightroom-mcp/token
+[bridge] owning the plugin connection
+[request] connected to 127.0.0.1:58763
+[response] connected to 127.0.0.1:58764
+Shutting down: stdin ended (client exited)
+Lightroom MCP server v0.26.0 running on stdio
+Connecting to plugin: request :58763, response :58764
+Token file: /Users/mac/.config/lightroom-mcp/token
+[bridge] owning the plugin connection
+[request] connected to 127.0.0.1:58763
+[response] connected to 127.0.0.1:58764
+Shutting down: stdin ended (client exited)
+Lightroom MCP server v0.26.0 running on stdio
+Connecting to plugin: request :58763, response :58764
+Token file: /Users/mac/.config/lightroom-mcp/token
+[bridge] owning the plugin connection
+[request] connected to 127.0.0.1:58763
+[response] connected to 127.0.0.1:58764
+Shutting down: stdin ended (client exited)
+{"source_id": "usbcard", "task_id": "tsk_72287f14be5b4dbda8843afd8485e6a2", "state": "COMPLETED", "error": null, "source_unchanged": true, "library_copy_unchanged": true, "jpeg_dimensions": [1067, 1600], "jpeg_sha256": "265771c10505e3f541447f7a8121a5a812a67385e3931d2abb820f6d5130a5ff", "mock": false, "preview": {"status": "OK", "mock": false, "marker": "Lightroom MCP connected (real read-only preset probe; catalog identity unverified)", "run": 1, "missing": [], "failed": [], "orphans": [], "size_violations": [], "expected_count": 1, "mapped_count": 1}, "camera_model": "NIKON Z6_3", "exposure_readback": 0.5, "raw_compression_variant": "NOT_INDEPENDENTLY_IDENTIFIED"}

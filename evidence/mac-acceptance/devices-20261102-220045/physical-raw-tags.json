@@ -1,0 +1,82 @@
+[
+  {
+    "source_id": "sd",
+    "tags": {
+      "Make": "NIKON CORPORATION",
+      "Model": "NIKON Z6_3",
+      "Compression": 6
+    },
+    "subifds": [
+      {
+        "Compression": 6
+      },
+      {
+        "Compression": 34713,
+        "ImageWidth": 6064,
+        "ImageLength": 4040,
+        "BitsPerSample": 14
+      },
+      {
+        "Compression": 6
+      },
+      {
+        "Compression": 1,
+        "ImageWidth": 384,
+        "ImageLength": 256,
+        "BitsPerSample": 8
+      },
+      {
+        "Compression": 34713,
+        "ImageWidth": 0,
+        "ImageLength": 0,
+        "BitsPerSample": 12
+      },
+      {
+        "Compression": 1,
+        "ImageWidth": 0,
+        "ImageLength": 0,
+        "BitsPerSample": 8
+      }
+    ]
+  },
+  {
+    "source_id": "usbcard",
+    "tags": {
+      "Make": "NIKON CORPORATION",
+      "Model": "NIKON Z6_3",
+      "Compression": 6
+    },
+    "subifds": [
+      {
+        "Compression": 6
+      },
+      {
+        "Compression": 34713,
+        "ImageWidth": 6064,
+        "ImageLength": 4040,
+        "BitsPerSample": 14
+      },
+      {
+        "Compression": 6
+      },
+      {
+        "Compression": 1,
+        "ImageWidth": 384,
+        "ImageLength": 256,
+        "BitsPerSample": 8
+      },
+      {
+        "Compression": 34713,
+        "ImageWidth": 0,
+        "ImageLength": 0,
+        "BitsPerSample": 12
+      },
+      {
+        "Compression": 1,
+        "ImageWidth": 0,
+        "ImageLength": 0,
+        "BitsPerSample": 8
+      }
+    ]
+  }
+]

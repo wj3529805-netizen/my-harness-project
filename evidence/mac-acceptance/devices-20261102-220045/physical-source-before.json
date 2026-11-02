@@ -1,0 +1,20 @@
+[
+  {
+    "source_id": "sd",
+    "path": "/Volumes/NIKON Z6_3  1/DCIM/142NZ6_3/DSC_6484.NEF",
+    "size": 18565632,
+    "sha256": "570d50780edcb135b43ff098878b0067d67ec38883622ce9d031951bcb736ec1",
+    "mtime_ns": 1793527132780000000,
+    "inode": 204592,
+    "read_flags": "O_RDONLY|O_NOFOLLOW"
+  },
+  {
+    "source_id": "usbcard",
+    "path": "/Volumes/NIKON Z6_3 /DCIM/140NZ6_3/DSC_8443.NEF",
+    "size": 17783296,
+    "sha256": "afb3f92276e8a7083603aee53c92b0d0cad4e0b4e4791a0265423d7e4a75cfec",
+    "mtime_ns": 1793399589330000000,
+    "inode": 1736,
+    "read_flags": "O_RDONLY|O_NOFOLLOW"
+  }
+]

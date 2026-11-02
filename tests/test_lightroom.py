@@ -116,14 +116,18 @@ def test_library_rehash_refuses_tamper(env):
     assert run(w,t)['state']=='FAILED'
     assert len(w.adapter.ids)==3
 
-def test_full_pipeline_without_hardlinks(env, monkeypatch):
+@pytest.mark.parametrize('link_errno', [
+    pytest.param(errno.ENOTSUP, id='ENOTSUP'),
+    pytest.param(errno.EOPNOTSUPP, id='EOPNOTSUPP'),
+])
+def test_full_pipeline_without_hardlinks(env, monkeypatch, link_errno):
     """A filesystem without links must publish photos and both manifests."""
     w, card, task = setup(env)
     before = {p.name: (read_hash(p), p.stat().st_mtime_ns) for p in card.iterdir()}
     attempts = []
     def unsupported_link(source, destination):
         attempts.append(Path(destination))
-        raise OSError(errno.EOPNOTSUPP, 'filesystem has no hard links')
+        raise OSError(link_errno, 'filesystem has no hard links')
     monkeypatch.setattr(os, 'link', unsupported_link)
 
     result = run(w, task)
@@ -156,12 +160,16 @@ def test_full_pipeline_without_hardlinks(env, monkeypatch):
     assert not list(library.rglob('*.part'))
     assert not list(previews.rglob('.manifest-*'))
 
-def test_export_retry_without_hardlinks_preserves_previous_run(env, monkeypatch):
+@pytest.mark.parametrize('link_errno', [
+    pytest.param(errno.ENOTSUP, id='ENOTSUP'),
+    pytest.param(errno.EOPNOTSUPP, id='EOPNOTSUPP'),
+])
+def test_export_retry_without_hardlinks_preserves_previous_run(env, monkeypatch, link_errno):
     w, card, task = setup(env)
     failed_id = task['plan']['files'][1]['asset_id']
     w.adapter.failures['export'] = {failed_id}
     def unsupported_link(source, destination):
-        raise OSError(errno.EOPNOTSUPP, 'filesystem has no hard links')
+        raise OSError(link_errno, 'filesystem has no hard links')
     monkeypatch.setattr(os, 'link', unsupported_link)
 
     assert run(w, task)['state'] == 'FAILED'
