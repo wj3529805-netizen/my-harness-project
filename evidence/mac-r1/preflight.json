@@ -1,0 +1,28 @@
+{
+  "time": 1793634452.3195882,
+  "branch": "mac/R1",
+  "baseline": "0142bbc611551fb2cfd934af5e57489e552ddf23",
+  "result": "PREPARATION_ONLY_PAID_SESSION_NOT_RUN",
+  "environment_check_exit_code": 0,
+  "harness_commit": "ce7073d51254c26cd63b22a60835b8f948deb447",
+  "harness_dependencies_already_installed": true,
+  "new_dependencies_installed": false,
+  "deepseek_key_present_in_environment": true,
+  "key_value_recorded": false,
+  "paid_model_requests_this_item": 0,
+  "proposed_model_request_limit": 12,
+  "documented_race_maximum_extra_requests": 1,
+  "approval_required_before_paid_requests": true,
+  "open_catalog_paths": [
+    "/Users/mac/Documents/ChatGPT/AI工作台/cetacea-workbench/acceptance-data/catalog/Cetacea-Phase1-Test-20261102/Cetacea-Phase1-Test-20261102.lrcat"
+  ],
+  "catalog_content_read": false,
+  "proposed_public_raw_sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+  "client_timeout_review": {
+    "current_tool_timeout_ms": 60000,
+    "prior_single_photo_execute_seconds": 58.389,
+    "risk": "Small margin for real Lightroom; review timeout configuration before paid execution."
+  },
+  "new_acceptance_scripts_created": false,
+  "product_code_changed": false
+}

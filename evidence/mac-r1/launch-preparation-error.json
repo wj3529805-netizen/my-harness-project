@@ -1,0 +1,8 @@
+{
+  "stage": "before Node/Harness was started",
+  "error": "Specified agent-work directory did not exist; shell cd failed",
+  "exit_code": 1,
+  "paid_requests_sent": 0,
+  "product_acceptance_was_not_started": true,
+  "correction": "Created the designated isolated work directory; no product code changed"
+}

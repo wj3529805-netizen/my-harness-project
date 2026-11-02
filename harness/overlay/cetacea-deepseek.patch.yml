@@ -70,5 +70,6 @@
         args: !!js "['-m', 'cetacea.cli', '--home', process.env.CETACEA_HOME, 'mcp-serve']"
         env:
           CETACEA_HOME: !!js process.env.CETACEA_HOME
-        toolCallTimeoutMs: 60000
+        # A full approved Lightroom pipeline can exceed one minute.
+        toolCallTimeoutMs: 1200000
         failOnStartupError: true

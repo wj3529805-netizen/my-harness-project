@@ -1,0 +1,1 @@
+{"steps": [{"tool": "mcp__cetacea__lightroom_get_status", "args": {}}], "final": "MOCK controller only; Lightroom status result is real, not AI acceptance."}

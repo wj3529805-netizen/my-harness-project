@@ -1,0 +1,196 @@
+{
+  "date_local": "2026-11-03",
+  "result": "FAIL_STOPPED",
+  "reason": "Second model request failed: DeepSeek Messages transport failed (TRANSPORT), before photo_plan_import. No automatic retry.",
+  "model": "deepseek-flash",
+  "thinking": "disabled",
+  "driver_request_count": 2,
+  "billing_count": "Unknown; failed-transport billing depends on provider.",
+  "tool_calls": [
+    {
+      "turn": 1,
+      "step": 1,
+      "callId": "call_00_fKYQS8GIX7QfsAJD7RHi2817",
+      "name": "mcp__cetacea__photo_list_sources",
+      "arguments": "{}"
+    },
+    {
+      "turn": 1,
+      "step": 1,
+      "callId": "call_01_kOQxngwivnD2Rld9QWEB3600",
+      "name": "mcp__cetacea__photo_list_orders",
+      "arguments": "{}"
+    },
+    {
+      "turn": 1,
+      "step": 1,
+      "callId": "call_02_fIEUtSpiITlwzjTl14zj4651",
+      "name": "mcp__cetacea__lightroom_get_status",
+      "arguments": "{}"
+    }
+  ],
+  "allowed_tool_surface_check": true,
+  "forbidden_tools_offered": false,
+  "transport_errors": [
+    {
+      "type": "session_event",
+      "turn": 1,
+      "sessionId": "main-session-6817d68f-c11c-42fa-a7bf-366a6904938c",
+      "event": {
+        "type": "assistant/attempt",
+        "seq": 22,
+        "time": 1793635730601,
+        "data": {
+          "turn": 1,
+          "step": 2,
+          "stream": [
+            {
+              "type": "chunk",
+              "time": 1793635730601,
+              "chunk": {
+                "type": "finish",
+                "reason": {
+                  "kind": "error",
+                  "failure": {
+                    "message": "DeepSeek Messages transport failed",
+                    "code": "TRANSPORT"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "session_event",
+      "turn": 1,
+      "sessionId": "main-session-6817d68f-c11c-42fa-a7bf-366a6904938c",
+      "event": {
+        "type": "turn/end",
+        "seq": 24,
+        "time": 1793635730606,
+        "data": {
+          "turn": 1,
+          "reason": {
+            "kind": "error",
+            "error": {
+              "message": "DeepSeek Messages transport failed",
+              "code": "TRANSPORT"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "database_counts": {
+    "tasks": 0,
+    "approvals": 0,
+    "assets": 0,
+    "task_steps": 0,
+    "previews": 0
+  },
+  "audit_log": [
+    {
+      "actor": "human:cli",
+      "action": "add_source",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T16:06:32.428856+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "add_orders",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T16:06:32.430061+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "add_photographers",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T16:06:32.431380+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "add_preset",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T16:06:32.432579+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "mcp.lightroom_status",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T16:06:34.582336+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "lightroom_status",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T16:06:34.583238+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "mcp.list_sources",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T16:08:35.798669+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "list_sources",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T16:08:35.799825+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "mcp.list_orders",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T16:08:35.812105+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "list_orders",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T16:08:35.812897+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "mcp.lightroom_status",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T16:08:35.822765+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "lightroom_status",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T16:08:35.823413+00:00"
+    }
+  ],
+  "source_unchanged": true,
+  "library_files": [],
+  "preview_files": [],
+  "checks": {
+    "real_Harness_Lightroom_readonly_status": "PASS mock=false",
+    "AI_fullplan_waiting_approval": "NOT_RUN: no plan created",
+    "preapproval_execute_rejection": "NOT_RUN",
+    "out_of_scope_request_rejection": "NOT_RUN",
+    "human_CLI_approval": "NOT_RUN",
+    "full_execution": "NOT_RUN",
+    "verify_preview": "NOT_RUN",
+    "destination_readback_hash": "NOT_RUN"
+  },
+  "root_cause": "Unknown; runner suppresses provider diagnostic stderr. Recorded code does not prove DNS, key, quota or provider outage.",
+  "stopped_after_failure": true,
+  "further_paid_requests": 0,
+  "remaining_budget_not_used": true
+}

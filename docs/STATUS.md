@@ -2,6 +2,8 @@
 
 标签：已完成且测试通过 / 已实现但测试失败 / 仅 Mock 验证 / 真实模型小规模验证 / 待 Mac 实机验证 / 尚未开发
 
+2026-11-03 R1 Mac 真实 AI 会话：**FAIL_STOPPED**，第 2 次模型请求 TRANSPORT 失败，尚未生成计划；没有批准或照片写入，后续验收 NOT_RUN。详见 [Mac 报告](MACOS_VALIDATION.md) 和 [证据](../evidence/mac-r1/result.json)。未自动重试或进入 R2。
+
 | # | 功能 | 状态 | 证据 |
 |---|---|---|---|
 | 5 | 安全导片（扫描、SHA-256、临时文件+读回+硬链接无覆盖提交、最终读回、冲突检测、清单、日志、路径/软链接防护、断点重试、磁盘满/读失败处理） | 已完成且测试通过（Linux ext/overlay 文件系统；Mac 本机及外置 APFS 有有限样本验收；exFAT/SMB 目标待验证） | tests/test_ingest_acceptance.py（场景 1–10） |

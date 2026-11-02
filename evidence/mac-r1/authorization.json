@@ -1,0 +1,8 @@
+{
+  "scope": "R1 only; public test RAW and independent test catalog",
+  "max_possible_paid_requests": 13,
+  "configured_request_limit": 12,
+  "human_plan_approval_still_required": true,
+  "push_not_yet_authorized": true,
+  "paid_requests_started": true
+}

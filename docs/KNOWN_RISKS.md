@@ -1,5 +1,11 @@
 # Gate 1 validation notes
 
+## R1 Mac real AI — 2026-11-03：FAIL_STOPPED
+
+`mac/R1` 基于路线图 `0142bbc`。真实 DeepSeek 第 2 次模型请求报 `DeepSeek Messages transport failed`（TRANSPORT），尚未生成计划；仅来源/订单/真实 Lightroom 状态查询成功。按路线图停止，没有自动重试或进入 R2。驱动计数 2，失败请求计费未知；不能将 turn_done 或 mock=false 状态查询当完整验收通过。运行器抑制提供商 stderr，根因未证实。全部任务/批准/资产/步骤/预览为 0，源快照不变，库及预览为空；后续验收均 NOT_RUN。见 [报告](MACOS_VALIDATION.md)、[原始事件](../evidence/mac-r1/real-session.jsonl)、[结果](../evidence/mac-r1/result.json)。
+
+付费前发现 60 秒工具超时接近既有 58.389 秒真实执行；本分支调为 20 分钟，离线回归 11 passed，尚无本轮真实完整执行证明。首次启动缺工作目录及证据汇总工具集合断言的辅助错误均有记录，未导致新增 API 请求或照片写入。
+
 - Initial editable install failed because the venv lacked setuptools. Installed the bundled `/usr/share/python-wheels/setuptools-78.1.1-py3-none-any.whl` offline; editable installation then succeeded.
 - Initial unscoped pytest discovery collected the unrelated third_party-review DeepSeek SDK suite and failed with 21 missing-module collection errors. Project discovery is explicitly `tests/`, as specified by this project's layout. Those third-party tests were not changed or deleted.
 - Lightroom, preview, MCP and reports are 尚未开发 in Stage A. No real Lightroom/macOS verification is claimed.

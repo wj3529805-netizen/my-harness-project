@@ -1,5 +1,28 @@
 # macOS validation — 2026-11-02
 
+## R1 真实 AI 会话 — 2026-11-03：FAIL，已停止
+
+基线 `phase1/0142bbc`，工作分支 `mac/R1`。用户授权仅本次 R1、最多 13 次 DeepSeek 计费请求；驱动上限设 12，保留已说明的最多一次取消竞态余量。使用现有 `deepseek-flash`、thinking 关闭、provider 自动重试 0。**驱动记录 2 次模型请求，第 2 次报 `DeepSeek Messages transport failed` / `TRANSPORT`，未生成计划，R1 未通过。** 未自动重试，未使用剩余额度，未进入 R2。失败请求是否计费以提供商为准。
+
+准备仅用公开 Nikon Z6 样片一份、全新 `acceptance-data/mac-r1/` home/源/库/预览，以及原有独立测试 catalog。没有客户数据、生产 catalog、NAS 或新依赖安装。源只读快照及 catalog 打开文件名守卫保留，没有读取 `.lrcat` 内容。[预检](../evidence/mac-r1/preflight.json)、[环境检查](../evidence/mac-r1/check-env.txt)、[catalog 守卫](../evidence/mac-r1/catalog-guard.json)。样片来源和许可证差异沿用下文说明。
+
+本分支在付费请求前将真实 DeepSeek overlay 的 `toolCallTimeoutMs` 从 60000 改为 1200000（20 分钟）：此前真实完整执行已耗时 58.389 秒，原等待余量过小。该配置不改变核心 920 秒资产租期，也未宣称已通过真实长流程验收。离线 Harness session/gating 回归 **11 passed**。[回归日志](../evidence/mac-r1/offline-regression.txt)。Harness 临时 HOME 保持隔离；仅测试 home 的受信任 Lightroom 后端命令通过 `/usr/bin/env HOME=<当前用户HOME>` 使用原桥运行环境，未复制 token 或密钥。
+
+无付费的 Mock 控制器先经受限 Harness 查询真实 Lightroom，状态连接且 `mock=false`；这只证明桥连通，不能充作真实 AI 验收。[桥事件](../evidence/mac-r1/readonly-bridge-events.jsonl)。真实模型第 1 步成功调用 `photo_list_sources`、`photo_list_orders`、`lightroom_get_status`，第 2 步发生 TRANSPORT 错误；turn/end 为 error，不能因随后仍输出 `turn_done` 就判成功。运行器抑制提供商诊断 stderr，现有证据不足以判断具体是网络、认证、额度或提供商故障，未猜测根因。[原始会话](../evidence/mac-r1/real-session.jsonl)、[计数](../evidence/mac-r1/request-ledger.json)。
+
+| 验收项 | 结果 |
+|---|---|
+| 实际工具面：14 个 CETACEA 工具 + 7 个允许的 Harness 工具，无 shell/删除/文件读写/批准入口 | PASS，精确集合已核对 |
+| 真实 Harness → Lightroom 只读状态 | PASS，mock=false |
+| 完整计划与 WAITING_APPROVAL、批准前执行拒绝、越权请求拒绝 | NOT_RUN，尚未生成计划 |
+| 人工 CLI 批准、完整执行、verify-preview、目标 SHA-256 读回 | NOT_RUN |
+| 最终任务/批准/资产/步骤/预览行数 | 全部 0；库和预览为空 |
+| 源 SHA-256、mtime、inode 前后 | 一致 |
+
+[完整结果和审计](../evidence/mac-r1/result.json)、[源前](../evidence/mac-r1/source-before.json)、[源后](../evidence/mac-r1/source-after.json)。首次启动命令漏建会话工作目录，在 Node/Harness 启动和任何 API 请求前退出；补建目录后才启动真实会话，保留[启动错误](../evidence/mac-r1/launch-preparation-error.json)。失败后的只读汇总最初误将仅包含非 CETACEA 工具的 `ALLOWED` 当作全部集合，修正汇总口径后核对精确集合，没有改产品断言或增加请求，保留[修正说明](../evidence/mac-r1/evidence-summary-correction.json)。
+
+失败后仅结束会话、汇总证据及撰写文档。证据已用非空环境变量进行密钥完整值匹配和常见前缀扫描，零命中，未记录密钥值。[扫描结果](../evidence/mac-r1/secret-scan.json)。后续诊断、重新运行和推送 `mac/R1` 等待用户决定。
+
 ## phase2-merged 合并后复验（本轮）
 
 **结果：本轮请求范围内 PASS。** 在 Mac 上执行 `git fetch origin && git checkout phase2-merged`，被验收产品代码为 `08fcfd9b1070ddbed1569b01313cb71727134435`。本轮仅涉及验收脚本、证据、文档及瞬时 gate 文件忽略规则，没有修补产品代码、修改测试断言或启用 DeepSeek 实网请求。证据集中在 [evidence/mac-acceptance-merged](../evidence/mac-acceptance-merged/)。下文首次 `mac-validation` 及实体设备报告为历史记录，不能代替本轮结果。
