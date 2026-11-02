@@ -1,0 +1,22 @@
+{
+  "CETACEA_INTERRUPT_01.NEF": {
+    "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+    "mtime_ns": 1793626946544310669,
+    "inode": 15895517
+  },
+  "CETACEA_INTERRUPT_03.NEF": {
+    "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+    "mtime_ns": 1793626946620560147,
+    "inode": 15895533
+  },
+  "CETACEA_INTERRUPT_02.NEF": {
+    "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+    "mtime_ns": 1793626946581961117,
+    "inode": 15895526
+  },
+  ".cetacea/import-manifest-run1.json": {
+    "sha256": "cb6e06e5fcc3101ff3c28cecbe39c7c5966ea6e9a0fc70a8c6726319874203e9",
+    "mtime_ns": 1793626946645311863,
+    "inode": 15895541
+  }
+}

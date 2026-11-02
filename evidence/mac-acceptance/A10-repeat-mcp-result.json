@@ -1,0 +1,543 @@
+{
+  "check": "A10",
+  "status": "PASS",
+  "started_at": "2026-11-02T13:42:44.138972+00:00",
+  "finished_at": "2026-11-02T13:42:44.667943+00:00",
+  "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+  "scope": {
+    "library": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/library/test/tester/publicraw",
+    "preview": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/preview/test/tester/publicraw/tsk_5e8b197eb23c45e5bdb7212aaa752f07"
+  },
+  "calls": [
+    {
+      "repeat": 1,
+      "tool": "photo_plan_import",
+      "arguments": {
+        "order_id": "test",
+        "photographer_id": "tester",
+        "source_id": "cc0",
+        "batch_label": "publicraw",
+        "preset_id": "testpreset",
+        "stages": [
+          "ingest",
+          "lr_register",
+          "lr_preset",
+          "lr_export",
+          "preview_verify"
+        ]
+      },
+      "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+      "state": "COMPLETED",
+      "mock": false,
+      "run_count": 1
+    },
+    {
+      "repeat": 1,
+      "tool": "photo_execute_import",
+      "arguments": {
+        "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07"
+      },
+      "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+      "state": "COMPLETED",
+      "mock": false,
+      "run_count": 1
+    },
+    {
+      "repeat": 1,
+      "tool": "lightroom_import_verified",
+      "arguments": {
+        "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07"
+      },
+      "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+      "state": "COMPLETED",
+      "mock": false,
+      "run_count": 1
+    },
+    {
+      "repeat": 1,
+      "tool": "lightroom_apply_preset",
+      "arguments": {
+        "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+        "preset_id": "testpreset"
+      },
+      "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+      "state": "COMPLETED",
+      "mock": false,
+      "run_count": 1
+    },
+    {
+      "repeat": 1,
+      "tool": "lightroom_export_preview",
+      "arguments": {
+        "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07"
+      },
+      "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+      "state": "COMPLETED",
+      "mock": false,
+      "run_count": 1
+    },
+    {
+      "repeat": 2,
+      "tool": "photo_plan_import",
+      "arguments": {
+        "order_id": "test",
+        "photographer_id": "tester",
+        "source_id": "cc0",
+        "batch_label": "publicraw",
+        "preset_id": "testpreset",
+        "stages": [
+          "ingest",
+          "lr_register",
+          "lr_preset",
+          "lr_export",
+          "preview_verify"
+        ]
+      },
+      "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+      "state": "COMPLETED",
+      "mock": false,
+      "run_count": 1
+    },
+    {
+      "repeat": 2,
+      "tool": "photo_execute_import",
+      "arguments": {
+        "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07"
+      },
+      "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+      "state": "COMPLETED",
+      "mock": false,
+      "run_count": 1
+    },
+    {
+      "repeat": 2,
+      "tool": "lightroom_import_verified",
+      "arguments": {
+        "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07"
+      },
+      "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+      "state": "COMPLETED",
+      "mock": false,
+      "run_count": 1
+    },
+    {
+      "repeat": 2,
+      "tool": "lightroom_apply_preset",
+      "arguments": {
+        "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+        "preset_id": "testpreset"
+      },
+      "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+      "state": "COMPLETED",
+      "mock": false,
+      "run_count": 1
+    },
+    {
+      "repeat": 2,
+      "tool": "lightroom_export_preview",
+      "arguments": {
+        "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07"
+      },
+      "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+      "state": "COMPLETED",
+      "mock": false,
+      "run_count": 1
+    },
+    {
+      "repeat": 3,
+      "tool": "photo_plan_import",
+      "arguments": {
+        "order_id": "test",
+        "photographer_id": "tester",
+        "source_id": "cc0",
+        "batch_label": "publicraw",
+        "preset_id": "testpreset",
+        "stages": [
+          "ingest",
+          "lr_register",
+          "lr_preset",
+          "lr_export",
+          "preview_verify"
+        ]
+      },
+      "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+      "state": "COMPLETED",
+      "mock": false,
+      "run_count": 1
+    },
+    {
+      "repeat": 3,
+      "tool": "photo_execute_import",
+      "arguments": {
+        "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07"
+      },
+      "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+      "state": "COMPLETED",
+      "mock": false,
+      "run_count": 1
+    },
+    {
+      "repeat": 3,
+      "tool": "lightroom_import_verified",
+      "arguments": {
+        "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07"
+      },
+      "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+      "state": "COMPLETED",
+      "mock": false,
+      "run_count": 1
+    },
+    {
+      "repeat": 3,
+      "tool": "lightroom_apply_preset",
+      "arguments": {
+        "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+        "preset_id": "testpreset"
+      },
+      "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+      "state": "COMPLETED",
+      "mock": false,
+      "run_count": 1
+    },
+    {
+      "repeat": 3,
+      "tool": "lightroom_export_preview",
+      "arguments": {
+        "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07"
+      },
+      "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+      "state": "COMPLETED",
+      "mock": false,
+      "run_count": 1
+    }
+  ],
+  "tool_surface": [
+    "lightroom_apply_preset",
+    "lightroom_export_preview",
+    "lightroom_get_status",
+    "lightroom_import_verified",
+    "photo_cancel_task",
+    "photo_execute_import",
+    "photo_get_task",
+    "photo_list_assets",
+    "photo_list_orders",
+    "photo_list_sources",
+    "photo_plan_import",
+    "photo_retry_task",
+    "photo_scan_source",
+    "photo_verify_preview"
+  ],
+  "before": {
+    "files": {
+      "library/.cetacea/import-manifest-run1.json": {
+        "inode": 15892409,
+        "mtime_ns": 1793626393469114302,
+        "size": 518,
+        "sha256": "5418a1098ec56240a4d52d2ccd48a1fcdc86322c693493442a51867c3d246b4b"
+      },
+      "library/.cetacea/import-manifest-run2.json": {
+        "inode": 15893168,
+        "mtime_ns": 1793626611125954415,
+        "size": 517,
+        "sha256": "24f039f1c4435ae2303583c928e7938d679c33c6e2c0c8f272a0e8ebd1b3523a"
+      },
+      "library/Nikon-Z6.NEF": {
+        "inode": 15892396,
+        "mtime_ns": 1793626393446181031,
+        "size": 25994889,
+        "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02"
+      },
+      "preview/run-1/ast_2247a7ba5166c0b19b0470fb/Nikon-Z6.jpg": {
+        "inode": 15894971,
+        "mtime_ns": 1793626811837995714,
+        "size": 871467,
+        "sha256": "1c713066ea2973a59259b2f221d587a8b683927afb0a8e550ddd5cf7ea8efa9e"
+      },
+      "preview/run-1/preview-manifest.json": {
+        "inode": 15893457,
+        "mtime_ns": 1793626641077675105,
+        "size": 885,
+        "sha256": "222e946221dd41673081204213e01bdb9c1ca43346b224daa17fb7c9fb5a7e57"
+      }
+    },
+    "database": {
+      "task": {
+        "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+        "idempotency_key": "84f0acbe6fb14c8158a0b834ad78aa66f84f59ead0b7d752d4f448ef60db259d",
+        "type": "import",
+        "state": "COMPLETED",
+        "order_id": "test",
+        "photographer_id": "tester",
+        "batch_id": "publicraw",
+        "source_id": "cc0",
+        "plan_json": "{\"files\": [{\"rel_path\": \"Nikon-Z6.NEF\", \"size\": 25994889, \"sha256\": \"8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02\", \"kind\": \"raw\", \"dest_rel_path\": \"test/tester/publicraw/Nikon-Z6.NEF\", \"asset_id\": \"ast_2247a7ba5166c0b19b0470fb\"}], \"total_bytes\": 25994889, \"destination\": \"test/tester/publicraw\", \"stages\": [\"ingest\", \"lr_register\", \"lr_preset\", \"lr_export\", \"preview_verify\"], \"preset_id\": \"testpreset\", \"scan_digest\": \"e4db4f9f1e67fe4ff49386a4c622036a4ea0075059728d26938180c0e51518f0\"}",
+        "plan_digest": "9255465944af543e6335ace65cb8f42ac40695165cc982cd9db7cdfb83a6d53d",
+        "stages_json": "[\"ingest\", \"lr_register\", \"lr_preset\", \"lr_export\", \"preview_verify\"]",
+        "run_count": 1,
+        "error": null,
+        "created_at": "2026-11-02T13:36:51.069004+00:00",
+        "updated_at": "2026-11-02T13:37:30.107685+00:00",
+        "lease_until": null
+      },
+      "counts": {
+        "task_steps": 5,
+        "assets": 1,
+        "previews": 1
+      },
+      "task_steps": [
+        {
+          "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+          "run": 1,
+          "stage": "ingest",
+          "state": "COMPLETED",
+          "succeeded": 0,
+          "failed": 0,
+          "skipped": 1,
+          "detail_json": "[{\"rel_path\": \"Nikon-Z6.NEF\", \"size\": 25994889, \"sha256\": \"8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02\", \"kind\": \"raw\", \"dest_rel_path\": \"test/tester/publicraw/Nikon-Z6.NEF\", \"asset_id\": \"ast_2247a7ba5166c0b19b0470fb\", \"status\": \"VERIFIED\", \"skipped_verified\": true, \"error\": null, \"verified_at\": \"2026-11-02T13:36:51.123859+00:00\", \"order\": \"test\", \"photographer\": \"tester\", \"batch\": \"publicraw\", \"source_id\": \"cc0\", \"run\": 1}]",
+          "started_at": "2026-11-02T13:36:51.075965+00:00",
+          "ended_at": "2026-11-02T13:36:51.125364+00:00"
+        },
+        {
+          "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+          "run": 1,
+          "stage": "lr_export",
+          "state": "COMPLETED",
+          "succeeded": 1,
+          "failed": 0,
+          "skipped": 0,
+          "detail_json": "[{\"asset_id\": \"ast_2247a7ba5166c0b19b0470fb\", \"mock\": false, \"status\": \"Lightroom MCP connected (real read-only preset probe; catalog identity unverified)\"}]",
+          "started_at": "2026-11-02T13:37:09.118939+00:00",
+          "ended_at": "2026-11-02T13:37:21.078421+00:00"
+        },
+        {
+          "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+          "run": 1,
+          "stage": "lr_preset",
+          "state": "COMPLETED",
+          "succeeded": 1,
+          "failed": 0,
+          "skipped": 0,
+          "detail_json": "[{\"asset_id\": \"ast_2247a7ba5166c0b19b0470fb\", \"mock\": false, \"status\": \"Lightroom MCP connected (real read-only preset probe; catalog identity unverified)\"}]",
+          "started_at": "2026-11-02T13:36:51.129791+00:00",
+          "ended_at": "2026-11-02T13:37:09.118539+00:00"
+        },
+        {
+          "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+          "run": 1,
+          "stage": "lr_register",
+          "state": "COMPLETED",
+          "succeeded": 0,
+          "failed": 0,
+          "skipped": 1,
+          "detail_json": "[]",
+          "started_at": "2026-11-02T13:36:51.126638+00:00",
+          "ended_at": "2026-11-02T13:36:51.129522+00:00"
+        },
+        {
+          "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+          "run": 1,
+          "stage": "preview_verify",
+          "state": "COMPLETED",
+          "succeeded": 1,
+          "failed": 0,
+          "skipped": 0,
+          "detail_json": "{\"status\": \"OK\", \"mock\": false, \"marker\": \"Lightroom MCP connected (real read-only preset probe; catalog identity unverified)\", \"run\": 1, \"missing\": [], \"failed\": [], \"orphans\": [], \"size_violations\": [], \"expected_count\": 1, \"mapped_count\": 1}",
+          "started_at": "2026-11-02T13:37:21.078732+00:00",
+          "ended_at": "2026-11-02T13:37:30.106913+00:00"
+        }
+      ],
+      "assets": [
+        {
+          "asset_id": "ast_2247a7ba5166c0b19b0470fb",
+          "order_id": "test",
+          "photographer_id": "tester",
+          "batch_id": "publicraw",
+          "rel_path": "Nikon-Z6.NEF",
+          "size": 25994889,
+          "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+          "kind": "raw",
+          "status": "VERIFIED",
+          "error": null,
+          "dest_rel_path": "test/tester/publicraw/Nikon-Z6.NEF",
+          "lr_photo_id": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/library/test/tester/publicraw/Nikon-Z6.NEF",
+          "lr_status": "EXPORTED",
+          "preset_applied": "testpreset",
+          "mock": 0,
+          "verified_at": "2026-11-02T13:36:51.123859+00:00"
+        }
+      ],
+      "previews": [
+        {
+          "preview_id": "prv_45fd7c75b6824d36b04ea827eeb87ece",
+          "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+          "run": 1,
+          "asset_id": "ast_2247a7ba5166c0b19b0470fb",
+          "path": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/preview/test/tester/publicraw/tsk_5e8b197eb23c45e5bdb7212aaa752f07/run-1/ast_2247a7ba5166c0b19b0470fb/Nikon-Z6.jpg",
+          "sha256": "1c713066ea2973a59259b2f221d587a8b683927afb0a8e550ddd5cf7ea8efa9e",
+          "width": 1600,
+          "height": 1065,
+          "status": "EXPORTED",
+          "mock": 0
+        }
+      ]
+    }
+  },
+  "after": {
+    "files": {
+      "library/.cetacea/import-manifest-run1.json": {
+        "inode": 15892409,
+        "mtime_ns": 1793626393469114302,
+        "size": 518,
+        "sha256": "5418a1098ec56240a4d52d2ccd48a1fcdc86322c693493442a51867c3d246b4b"
+      },
+      "library/.cetacea/import-manifest-run2.json": {
+        "inode": 15893168,
+        "mtime_ns": 1793626611125954415,
+        "size": 517,
+        "sha256": "24f039f1c4435ae2303583c928e7938d679c33c6e2c0c8f272a0e8ebd1b3523a"
+      },
+      "library/Nikon-Z6.NEF": {
+        "inode": 15892396,
+        "mtime_ns": 1793626393446181031,
+        "size": 25994889,
+        "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02"
+      },
+      "preview/run-1/ast_2247a7ba5166c0b19b0470fb/Nikon-Z6.jpg": {
+        "inode": 15894971,
+        "mtime_ns": 1793626811837995714,
+        "size": 871467,
+        "sha256": "1c713066ea2973a59259b2f221d587a8b683927afb0a8e550ddd5cf7ea8efa9e"
+      },
+      "preview/run-1/preview-manifest.json": {
+        "inode": 15893457,
+        "mtime_ns": 1793626641077675105,
+        "size": 885,
+        "sha256": "222e946221dd41673081204213e01bdb9c1ca43346b224daa17fb7c9fb5a7e57"
+      }
+    },
+    "database": {
+      "task": {
+        "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+        "idempotency_key": "84f0acbe6fb14c8158a0b834ad78aa66f84f59ead0b7d752d4f448ef60db259d",
+        "type": "import",
+        "state": "COMPLETED",
+        "order_id": "test",
+        "photographer_id": "tester",
+        "batch_id": "publicraw",
+        "source_id": "cc0",
+        "plan_json": "{\"files\": [{\"rel_path\": \"Nikon-Z6.NEF\", \"size\": 25994889, \"sha256\": \"8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02\", \"kind\": \"raw\", \"dest_rel_path\": \"test/tester/publicraw/Nikon-Z6.NEF\", \"asset_id\": \"ast_2247a7ba5166c0b19b0470fb\"}], \"total_bytes\": 25994889, \"destination\": \"test/tester/publicraw\", \"stages\": [\"ingest\", \"lr_register\", \"lr_preset\", \"lr_export\", \"preview_verify\"], \"preset_id\": \"testpreset\", \"scan_digest\": \"e4db4f9f1e67fe4ff49386a4c622036a4ea0075059728d26938180c0e51518f0\"}",
+        "plan_digest": "9255465944af543e6335ace65cb8f42ac40695165cc982cd9db7cdfb83a6d53d",
+        "stages_json": "[\"ingest\", \"lr_register\", \"lr_preset\", \"lr_export\", \"preview_verify\"]",
+        "run_count": 1,
+        "error": null,
+        "created_at": "2026-11-02T13:36:51.069004+00:00",
+        "updated_at": "2026-11-02T13:37:30.107685+00:00",
+        "lease_until": null
+      },
+      "counts": {
+        "task_steps": 5,
+        "assets": 1,
+        "previews": 1
+      },
+      "task_steps": [
+        {
+          "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+          "run": 1,
+          "stage": "ingest",
+          "state": "COMPLETED",
+          "succeeded": 0,
+          "failed": 0,
+          "skipped": 1,
+          "detail_json": "[{\"rel_path\": \"Nikon-Z6.NEF\", \"size\": 25994889, \"sha256\": \"8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02\", \"kind\": \"raw\", \"dest_rel_path\": \"test/tester/publicraw/Nikon-Z6.NEF\", \"asset_id\": \"ast_2247a7ba5166c0b19b0470fb\", \"status\": \"VERIFIED\", \"skipped_verified\": true, \"error\": null, \"verified_at\": \"2026-11-02T13:36:51.123859+00:00\", \"order\": \"test\", \"photographer\": \"tester\", \"batch\": \"publicraw\", \"source_id\": \"cc0\", \"run\": 1}]",
+          "started_at": "2026-11-02T13:36:51.075965+00:00",
+          "ended_at": "2026-11-02T13:36:51.125364+00:00"
+        },
+        {
+          "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+          "run": 1,
+          "stage": "lr_export",
+          "state": "COMPLETED",
+          "succeeded": 1,
+          "failed": 0,
+          "skipped": 0,
+          "detail_json": "[{\"asset_id\": \"ast_2247a7ba5166c0b19b0470fb\", \"mock\": false, \"status\": \"Lightroom MCP connected (real read-only preset probe; catalog identity unverified)\"}]",
+          "started_at": "2026-11-02T13:37:09.118939+00:00",
+          "ended_at": "2026-11-02T13:37:21.078421+00:00"
+        },
+        {
+          "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+          "run": 1,
+          "stage": "lr_preset",
+          "state": "COMPLETED",
+          "succeeded": 1,
+          "failed": 0,
+          "skipped": 0,
+          "detail_json": "[{\"asset_id\": \"ast_2247a7ba5166c0b19b0470fb\", \"mock\": false, \"status\": \"Lightroom MCP connected (real read-only preset probe; catalog identity unverified)\"}]",
+          "started_at": "2026-11-02T13:36:51.129791+00:00",
+          "ended_at": "2026-11-02T13:37:09.118539+00:00"
+        },
+        {
+          "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+          "run": 1,
+          "stage": "lr_register",
+          "state": "COMPLETED",
+          "succeeded": 0,
+          "failed": 0,
+          "skipped": 1,
+          "detail_json": "[]",
+          "started_at": "2026-11-02T13:36:51.126638+00:00",
+          "ended_at": "2026-11-02T13:36:51.129522+00:00"
+        },
+        {
+          "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+          "run": 1,
+          "stage": "preview_verify",
+          "state": "COMPLETED",
+          "succeeded": 1,
+          "failed": 0,
+          "skipped": 0,
+          "detail_json": "{\"status\": \"OK\", \"mock\": false, \"marker\": \"Lightroom MCP connected (real read-only preset probe; catalog identity unverified)\", \"run\": 1, \"missing\": [], \"failed\": [], \"orphans\": [], \"size_violations\": [], \"expected_count\": 1, \"mapped_count\": 1}",
+          "started_at": "2026-11-02T13:37:21.078732+00:00",
+          "ended_at": "2026-11-02T13:37:30.106913+00:00"
+        }
+      ],
+      "assets": [
+        {
+          "asset_id": "ast_2247a7ba5166c0b19b0470fb",
+          "order_id": "test",
+          "photographer_id": "tester",
+          "batch_id": "publicraw",
+          "rel_path": "Nikon-Z6.NEF",
+          "size": 25994889,
+          "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+          "kind": "raw",
+          "status": "VERIFIED",
+          "error": null,
+          "dest_rel_path": "test/tester/publicraw/Nikon-Z6.NEF",
+          "lr_photo_id": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/library/test/tester/publicraw/Nikon-Z6.NEF",
+          "lr_status": "EXPORTED",
+          "preset_applied": "testpreset",
+          "mock": 0,
+          "verified_at": "2026-11-02T13:36:51.123859+00:00"
+        }
+      ],
+      "previews": [
+        {
+          "preview_id": "prv_45fd7c75b6824d36b04ea827eeb87ece",
+          "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
+          "run": 1,
+          "asset_id": "ast_2247a7ba5166c0b19b0470fb",
+          "path": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/preview/test/tester/publicraw/tsk_5e8b197eb23c45e5bdb7212aaa752f07/run-1/ast_2247a7ba5166c0b19b0470fb/Nikon-Z6.jpg",
+          "sha256": "1c713066ea2973a59259b2f221d587a8b683927afb0a8e550ddd5cf7ea8efa9e",
+          "width": 1600,
+          "height": 1065,
+          "status": "EXPORTED",
+          "mock": 0
+        }
+      ]
+    }
+  },
+  "files_unchanged": true,
+  "task_database_rows_unchanged": true,
+  "limitation": "Uses the completed real-adapter test task through project stdio MCP. No direct Lightroom catalog query is performed here; catalog inventory is separate evidence. Audit log additions from the read/execute requests are expected and excluded."
+}

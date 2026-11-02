@@ -33,3 +33,11 @@ Stage C validation history:
 11. 代码风格偏紧凑（Codex 生成），后续可重构；测试覆盖了行为但未做覆盖率统计。
 12. 开发流程说明：Codex 因 `.git` 沙箱只读无法提交；提交由编排者完成。Codex 在 Stage B/C 两次卡在调试 mcp 2.x stdio 细节时被中止，编排者**直接修改了**：tests/fake_lightroom_mcp.py（改用 `server.run()`）、real_mcp.py（客户端结果字段为 snake_case：`is_error`、`structured_content`）、tests/test_mcp.py（audit_log 列名 actor）、report.py（丰富 Markdown 报告）。
 13. CLI: 未批准就 execute 会输出 Python 堆栈（NotApproved）而不是友好提示；已被拒绝，功能正确，仅体验问题。
+
+## macOS validation update — 2026-11-02
+
+详见 [MACOS_VALIDATION.md](MACOS_VALIDATION.md) 和 evidence/mac-acceptance/。基线 macOS 71/71；本次修复和新增回归后 98/98，真实独立 Lightroom catalog 的公开 Nikon Z6 NEF 登记、预设、导出、缺失检测、重复请求、批次关闭/恢复通过。先前“未做任何 macOS/真实 Lightroom 验证”的文字是开发期历史，不能再用来描述本次样本范围。
+
+本次新增失败历史：Bash 3.2 中文括号变量解析失败；第一版合成 DNG 被 Adobe 以 dng_error_unsupported_raw 拒绝；全局禁用硬链接的新回归揭示清单不支持回退，随后导出恢复新回归揭示 SQLite state="FAILED" 与 failed 列冲突；慢调用回归在旧 300 秒租期下暴露 recover 可夺走活任务。上述产品问题已修并保留回归。真实调用的底层错误现不会仅剩 TaskGroup 摘要。无硬链接的锁回退仍有不守锁外部写入者 race。
+
+实体卡/读卡器、真实外置 exFAT/SMB、实际 AI 产品客户端（可选 A14）、Z6 III HE/HE★、断电/强杀以及 Windows 仍未通过实机验收。A12 关闭点在两张照片之间，不能当作单次 catalog 写入中断证明。样片发行 README 与内嵌版权许可文字有差异，保留来源及作者信息，照片和预览不随 Git 发布。已知 CLI NotApproved 堆栈体验问题仍在。

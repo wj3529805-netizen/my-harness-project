@@ -1,0 +1,17 @@
+{
+  "CETACEA_INTERRUPT_01.NEF": {
+    "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+    "mtime_ns": 1793626946444143016,
+    "inode": 15895476
+  },
+  "CETACEA_INTERRUPT_03.NEF": {
+    "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+    "mtime_ns": 1793626946455888875,
+    "inode": 15895478
+  },
+  "CETACEA_INTERRUPT_02.NEF": {
+    "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+    "mtime_ns": 1793626946452388129,
+    "inode": 15895477
+  }
+}

@@ -1,0 +1,34 @@
+Lightroom MCP server v0.26.0 running on stdio
+Connecting to plugin: request :58763, response :58764
+Token file: /Users/mac/.config/lightroom-mcp/token
+[bridge] owning the plugin connection
+[request] connected to 127.0.0.1:58763
+[response] connected to 127.0.0.1:58764
+[response] disconnected, reconnecting
+[response] connected to 127.0.0.1:58764
+Shutting down: stdin ended (client exited)
+status: {'status': 'Lightroom MCP connected (real read-only preset probe; catalog identity unverified)', 'mock': False}
+Lightroom MCP server v0.26.0 running on stdio
+Connecting to plugin: request :58763, response :58764
+Token file: /Users/mac/.config/lightroom-mcp/token
+[bridge] owning the plugin connection
+[request] connected to 127.0.0.1:58763
+[response] connected to 127.0.0.1:58764
+Shutting down: stdin ended (client exited)
+test preset: {'count': 1, 'has_more': False, 'success': True, 'presets': [{'folder': 'Cetacea Test', 'uuid': '2444613F0424AEAC3ACFD6D012A2FF58', 'name': 'Cetacea Phase1 Test +0.50', 'scope': 'lightroom'}]}
+Lightroom MCP server v0.26.0 running on stdio
+Connecting to plugin: request :58763, response :58764
+Token file: /Users/mac/.config/lightroom-mcp/token
+[bridge] owning the plugin connection
+[request] connected to 127.0.0.1:58763
+[response] connected to 127.0.0.1:58764
+Shutting down: stdin ended (client exited)
+Lightroom MCP server v0.26.0 running on stdio
+Connecting to plugin: request :58763, response :58764
+Token file: /Users/mac/.config/lightroom-mcp/token
+[bridge] owning the plugin connection
+[request] connected to 127.0.0.1:58763
+[response] connected to 127.0.0.1:58764
+Shutting down: stdin ended (client exited)
+result: FAILED lr_register: 1 failed
+assets: [{'asset_id': 'ast_a88a4f8244bc96b262235536', 'order_id': 'test', 'photographer_id': 'tester', 'batch_id': 'single', 'rel_path': 'CETACEA_TEST_01.dng', 'size': 786960, 'sha256': '3f4e7733ba305ce06cffd7de522913a94dca8dc1178ab72653090be0de1203fc', 'kind': 'raw', 'status': 'VERIFIED', 'error': None, 'dest_rel_path': 'test/tester/single/CETACEA_TEST_01.dng', 'lr_photo_id': None, 'lr_status': None, 'preset_applied': None, 'mock': 0, 'verified_at': '2026-11-02T13:17:59.327131+00:00'}]

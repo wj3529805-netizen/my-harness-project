@@ -1,0 +1,22 @@
+Lightroom MCP server v0.26.0 running on stdio
+Connecting to plugin: request :58763, response :58764
+Token file: /Users/mac/.config/lightroom-mcp/token
+[bridge] owning the plugin connection
+[request] connected to 127.0.0.1:58763
+[response] connected to 127.0.0.1:58764
+Shutting down: stdin ended (client exited)
+Lightroom MCP server v0.26.0 running on stdio
+Connecting to plugin: request :58763, response :58764
+Token file: /Users/mac/.config/lightroom-mcp/token
+[bridge] owning the plugin connection
+[request] connected to 127.0.0.1:58763
+[response] connected to 127.0.0.1:58764
+Shutting down: stdin ended (client exited)
+Lightroom MCP server v0.26.0 running on stdio
+Connecting to plugin: request :58763, response :58764
+Token file: /Users/mac/.config/lightroom-mcp/token
+[bridge] owning the plugin connection
+[request] connected to 127.0.0.1:58763
+[response] connected to 127.0.0.1:58764
+Shutting down: stdin ended (client exited)
+{"jpeg_dimensions": [1600, 1065], "jpeg_sha256": "1c713066ea2973a59259b2f221d587a8b683927afb0a8e550ddd5cf7ea8efa9e", "exposure_before": 0, "exposure_after": 0.5, "before": {"status": "OK", "mock": false, "marker": "Lightroom MCP connected (real read-only preset probe; catalog identity unverified)", "run": 1, "missing": [], "failed": [], "orphans": [], "size_violations": [], "expected_count": 1, "mapped_count": 1}, "after_test_deletion": {"status": "FAILED", "mock": false, "marker": "Lightroom MCP connected (real read-only preset probe; catalog identity unverified)", "run": 1, "missing": ["ast_2247a7ba5166c0b19b0470fb"], "failed": [], "orphans": [], "size_violations": [], "expected_count": 1, "mapped_count": 1}, "after_exclusive_restore": {"status": "OK", "mock": false, "marker": "Lightroom MCP connected (real read-only preset probe; catalog identity unverified)", "run": 1, "missing": [], "failed": [], "orphans": [], "size_violations": [], "expected_count": 1, "mapped_count": 1}, "restored_sha256": "1c713066ea2973a59259b2f221d587a8b683927afb0a8e550ddd5cf7ea8efa9e"}

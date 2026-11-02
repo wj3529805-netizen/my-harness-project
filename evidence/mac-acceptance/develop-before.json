@@ -1,0 +1,164 @@
+{
+  "missing": [],
+  "photos": [
+    {
+      "isoSpeedRating": "ISO 100",
+      "lens": "NIKKOR Z 24-70mm f/4 S",
+      "cameraModel": "NIKON Z 6",
+      "filename": "Nikon-Z6.NEF",
+      "colorLabel": "gray",
+      "isVirtualCopy": false,
+      "cameraSerialNumber": "6035906",
+      "focalLength": "52 mm",
+      "fileFormat": "RAW",
+      "aperture": "\u0192 / 6.7",
+      "title": "",
+      "dateTimeDigitized": "2019/11/29 17:14:04.680",
+      "dimensions": "6048 x 4024",
+      "path": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/library/test/tester/publicraw/Nikon-Z6.NEF",
+      "flash": "\u95ea\u5149\u706f\u672a\u95ea",
+      "developSettings": {
+        "blacks": 0,
+        "transform": {
+          "PerspectiveRotate": 0,
+          "PerspectiveUpright": 0,
+          "PerspectiveAspect": 0,
+          "PerspectiveScale": 100,
+          "PerspectiveHorizontal": 0,
+          "PerspectiveVertical": 0
+        },
+        "tint": 8,
+        "parametricSplits": {
+          "ParametricHighlightSplit": 75,
+          "ParametricMidtoneSplit": 50,
+          "ParametricShadowSplit": 25
+        },
+        "lens": {
+          "LensManualDistortionAmount": 0,
+          "LensProfileEnable": 0
+        },
+        "whiteBalance": "As Shot",
+        "parametricDarks": 0,
+        "crop": {
+          "CropLeft": 0,
+          "CropBottom": 1,
+          "CropRight": 1,
+          "CropTop": 0,
+          "CropAngle": 0
+        },
+        "effects": {
+          "PostCropVignetteStyle": 1,
+          "PostCropVignetteRoundness": 0,
+          "GrainAmount": 0,
+          "PostCropVignetteAmount": 0,
+          "PostCropVignetteMidpoint": 50,
+          "GrainFrequency": 50,
+          "PostCropVignetteFeather": 50,
+          "GrainSize": 25
+        },
+        "saturation": 0,
+        "parametricShadows": 0,
+        "toneCurveRed": [
+          0,
+          0,
+          255,
+          255
+        ],
+        "toneCurve": [
+          0,
+          0,
+          255,
+          255
+        ],
+        "shadows": 0,
+        "texture": 0,
+        "vibrance": 0,
+        "highlights": 0,
+        "parametricHighlights": 0,
+        "contrast": 0,
+        "toneCurveGreen": [
+          0,
+          0,
+          255,
+          255
+        ],
+        "hsl": {
+          "HueAdjustmentAqua": 0,
+          "HueAdjustmentPurple": 0,
+          "HueAdjustmentBlue": 0,
+          "SaturationAdjustmentRed": 0,
+          "HueAdjustmentGreen": 0,
+          "SaturationAdjustmentYellow": 0,
+          "LuminanceAdjustmentYellow": 0,
+          "LuminanceAdjustmentRed": 0,
+          "LuminanceAdjustmentMagenta": 0,
+          "LuminanceAdjustmentPurple": 0,
+          "LuminanceAdjustmentBlue": 0,
+          "LuminanceAdjustmentAqua": 0,
+          "SaturationAdjustmentAqua": 0,
+          "HueAdjustmentMagenta": 0,
+          "SaturationAdjustmentBlue": 0,
+          "HueAdjustmentYellow": 0,
+          "LuminanceAdjustmentOrange": 0,
+          "SaturationAdjustmentGreen": 0,
+          "SaturationAdjustmentMagenta": 0,
+          "LuminanceAdjustmentGreen": 0,
+          "SaturationAdjustmentPurple": 0,
+          "HueAdjustmentOrange": 0,
+          "SaturationAdjustmentOrange": 0,
+          "HueAdjustmentRed": 0
+        },
+        "whites": 0,
+        "exposure": 0,
+        "parametricLights": 0,
+        "temperature": 3050,
+        "clarity": 0,
+        "dehaze": 0,
+        "toneCurveBlue": [
+          0,
+          0,
+          255,
+          255
+        ],
+        "convertToGrayscale": false,
+        "toneCurveName": "Linear",
+        "detail": {
+          "ColorNoiseReductionSmoothness": 50,
+          "SharpenDetail": 25,
+          "SharpenRadius": 1,
+          "LuminanceNoiseReductionContrast": 0,
+          "ColorNoiseReduction": 25,
+          "ColorNoiseReductionDetail": 50,
+          "Sharpness": 40,
+          "LuminanceSmoothing": 0,
+          "LuminanceNoiseReductionDetail": 50,
+          "SharpenEdgeMasking": 0
+        }
+      },
+      "shutterSpeed": "1.0 \u79d2",
+      "caption": "",
+      "copyright": {
+        "creatorUrl": "",
+        "rightsUsageTerms": "",
+        "creator": "Ludger Heide",
+        "notice": "(CC-BY-SA 4.0) Ludger Heide",
+        "infoUrl": "",
+        "status": "\u672a\u77e5"
+      },
+      "focalLength35mm": "52 mm",
+      "pickStatus": 0,
+      "dateTimeOriginal": "2019/11/29 17:14:04.680",
+      "id": 81,
+      "keywords": [],
+      "artist": "Ludger Heide",
+      "headline": "",
+      "fileSize": "24.79 MB",
+      "cameraMake": "Nikon",
+      "exposureBias": "0 EV",
+      "keywordPaths": [],
+      "exposureProgram": "\u5149\u5708\u4f18\u5148",
+      "software": "NIKON Z 6 Ver.02.00     ",
+      "meteringMode": "\u77e9\u9635\u6d4b\u5149"
+    }
+  ]
+}

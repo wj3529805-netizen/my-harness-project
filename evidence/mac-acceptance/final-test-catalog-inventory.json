@@ -1,0 +1,27 @@
+{
+  "warning": "No filters applied \u2014 scanned full catalog. Provide filename, keywords, rating, or date filters to narrow results and improve performance.",
+  "photos": [
+    {
+      "id": 81,
+      "filename": "Nikon-Z6.NEF",
+      "dateTimeOriginal": "2019/11/29 17:14:04.680"
+    },
+    {
+      "id": 265,
+      "filename": "CETACEA_INTERRUPT_01.NEF",
+      "dateTimeOriginal": "2019/11/29 17:14:04.680"
+    },
+    {
+      "id": 439,
+      "filename": "CETACEA_INTERRUPT_02.NEF",
+      "dateTimeOriginal": "2019/11/29 17:14:04.680"
+    },
+    {
+      "id": 609,
+      "filename": "CETACEA_INTERRUPT_03.NEF",
+      "dateTimeOriginal": "2019/11/29 17:14:04.680"
+    }
+  ],
+  "count": 4,
+  "has_more": false
+}

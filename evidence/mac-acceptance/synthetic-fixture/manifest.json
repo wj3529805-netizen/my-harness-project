@@ -1,0 +1,20 @@
+{
+  "marker": "SYNTHETIC TEST DATA; not Nikon/NEF acceptance",
+  "candidates": [
+    {
+      "file": "CETACEA_V2_CFA.dng",
+      "size": 787232,
+      "sha256": "02b77dc5a89367f0a8d6396706f6ea5ca9f1e665a054723f069d45e6ae182f86"
+    },
+    {
+      "file": "CETACEA_V2_CFA_SUBIFD.dng",
+      "size": 861200,
+      "sha256": "a16b73372853e0f743c68dd0cb9a9879125346c6bef5358a6af59312a9f0db18"
+    },
+    {
+      "file": "CETACEA_V2_LINEAR.dng",
+      "size": 2360080,
+      "sha256": "8ee28ec2c2527fb5347c87142ddb08ec5142b8da46edbe03e539b3ee1d72d30d"
+    }
+  ]
+}

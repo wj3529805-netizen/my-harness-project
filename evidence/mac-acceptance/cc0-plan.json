@@ -1,0 +1,38 @@
+{
+  "task_id": "tsk_6a04b51a47b74c709f7e71dc641460c8",
+  "idempotency_key": "7a2c939a481511c9052f1d8e7f7fac5a39db36bf179a29655be142ac36096af1",
+  "type": "import",
+  "state": "WAITING_APPROVAL",
+  "order_id": "test",
+  "photographer_id": "tester",
+  "batch_id": "publicraw",
+  "source_id": "cc0",
+  "plan_json": "{\"files\": [{\"rel_path\": \"Nikon-Z6.NEF\", \"size\": 25994889, \"sha256\": \"8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02\", \"kind\": \"raw\", \"dest_rel_path\": \"test/tester/publicraw/Nikon-Z6.NEF\", \"asset_id\": \"ast_2247a7ba5166c0b19b0470fb\"}], \"total_bytes\": 25994889, \"destination\": \"test/tester/publicraw\", \"stages\": [\"ingest\", \"lr_register\"], \"preset_id\": null, \"scan_digest\": \"e4db4f9f1e67fe4ff49386a4c622036a4ea0075059728d26938180c0e51518f0\"}",
+  "plan_digest": "60245ddeaa2e0c2471b93a7b67cb48b3c21358c21ef0cf9d8db365e5cd878018",
+  "stages_json": "[\"ingest\", \"lr_register\"]",
+  "run_count": 0,
+  "error": null,
+  "created_at": "2026-11-02T13:33:13.424899+00:00",
+  "updated_at": "2026-11-02T13:33:13.424938+00:00",
+  "lease_until": null,
+  "plan": {
+    "files": [
+      {
+        "rel_path": "Nikon-Z6.NEF",
+        "size": 25994889,
+        "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+        "kind": "raw",
+        "dest_rel_path": "test/tester/publicraw/Nikon-Z6.NEF",
+        "asset_id": "ast_2247a7ba5166c0b19b0470fb"
+      }
+    ],
+    "total_bytes": 25994889,
+    "destination": "test/tester/publicraw",
+    "stages": [
+      "ingest",
+      "lr_register"
+    ],
+    "preset_id": null,
+    "scan_digest": "e4db4f9f1e67fe4ff49386a4c622036a4ea0075059728d26938180c0e51518f0"
+  }
+}
