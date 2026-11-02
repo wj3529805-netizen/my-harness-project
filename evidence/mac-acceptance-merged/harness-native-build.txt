@@ -1,0 +1,1 @@
+build: built darwin-arm64/bin/system.node

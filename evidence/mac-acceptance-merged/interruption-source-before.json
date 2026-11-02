@@ -1,0 +1,32 @@
+{
+  "public-2.NEF": {
+    "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+    "size": 25994889,
+    "mtime_ns": 1793632947743052235,
+    "inode": 16197987
+  },
+  "public-3.NEF": {
+    "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+    "size": 25994889,
+    "mtime_ns": 1793632947745404227,
+    "inode": 16197988
+  },
+  "public-1.NEF": {
+    "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+    "size": 25994889,
+    "mtime_ns": 1793632947737646794,
+    "inode": 16197986
+  },
+  "existing.ACR": {
+    "sha256": "4b1b0e28f91929be437e7c9225e578ed5e0a8261eb2d74a67656e51ba90c152e",
+    "size": 47,
+    "mtime_ns": 1793632947745751851,
+    "inode": 16197990
+  },
+  "existing.XMP": {
+    "sha256": "cbaeeaf90e02b9155b00f4c8ea8b330307521e13576f3f427ce6ea64ef2e66f2",
+    "size": 51,
+    "mtime_ns": 1793632947745645810,
+    "inode": 16197989
+  }
+}

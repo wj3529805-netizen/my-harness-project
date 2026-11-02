@@ -1,0 +1,383 @@
+{
+  "state": "COMPLETED",
+  "source_unchanged": true,
+  "mock": false,
+  "approval_count": 1,
+  "previews": [
+    {
+      "asset_id": "ast_f644737fdf8c7435a2315142",
+      "dimensions": [
+        1600,
+        1065
+      ],
+      "sha256_matches": true
+    },
+    {
+      "asset_id": "ast_f0c93683b0fa7f52c5476ec5",
+      "dimensions": [
+        1600,
+        1065
+      ],
+      "sha256_matches": true
+    },
+    {
+      "asset_id": "ast_cfc8135aeeabc3f8a0d00324",
+      "dimensions": [
+        1600,
+        1065
+      ],
+      "sha256_matches": true
+    }
+  ],
+  "completed_stages": [
+    "ingest",
+    "lr_register",
+    "lr_preset",
+    "lr_export",
+    "preview_verify"
+  ],
+  "destination_hashes_match": true,
+  "asset_statuses": [
+    {
+      "asset_id": "ast_09cffc3a75fd0b2819f4cb61",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0
+    },
+    {
+      "asset_id": "ast_f30a03ff887e9f5874c3d64f",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0
+    },
+    {
+      "asset_id": "ast_f644737fdf8c7435a2315142",
+      "status": "VERIFIED",
+      "lr_status": "EXPORTED",
+      "preset_applied": "test-preset",
+      "mock": 0
+    },
+    {
+      "asset_id": "ast_f0c93683b0fa7f52c5476ec5",
+      "status": "VERIFIED",
+      "lr_status": "EXPORTED",
+      "preset_applied": "test-preset",
+      "mock": 0
+    },
+    {
+      "asset_id": "ast_cfc8135aeeabc3f8a0d00324",
+      "status": "VERIFIED",
+      "lr_status": "EXPORTED",
+      "preset_applied": "test-preset",
+      "mock": 0
+    }
+  ],
+  "exposure_readback": [
+    0.5,
+    0.5,
+    0.5
+  ],
+  "library_unchanged_by_retry": true,
+  "approval_count_unchanged": true,
+  "registration_retry_steps": [
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "run": 1,
+      "stage": "lr_register",
+      "state": "FAILED",
+      "succeeded": 1,
+      "failed": 2,
+      "skipped": 0,
+      "detail_json": "[{\"asset_id\": \"ast_f644737fdf8c7435a2315142\", \"mock\": false, \"status\": \"Lightroom MCP connected (real read-only preset probe; catalog identity unverified)\"}, {\"asset_id\": \"ast_f0c93683b0fa7f52c5476ec5\", \"error\": \"Lightroom plugin not connected. Bring Lightroom to the front or click 'Start Server' in Plug-in Manager.\", \"mock\": false}, {\"asset_id\": \"ast_cfc8135aeeabc3f8a0d00324\", \"error\": \"Lightroom plugin not connected. Bring Lightroom to the front or click 'Start Server' in Plug-in Manager.\", \"mock\": false}]",
+      "started_at": "2026-11-02T15:22:28.547334+00:00",
+      "ended_at": "2026-11-02T15:23:23.448736+00:00"
+    },
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "run": 2,
+      "stage": "lr_register",
+      "state": "COMPLETED",
+      "succeeded": 2,
+      "failed": 0,
+      "skipped": 1,
+      "detail_json": "[{\"asset_id\": \"ast_f0c93683b0fa7f52c5476ec5\", \"mock\": false, \"status\": \"Lightroom MCP connected (real read-only preset probe; catalog identity unverified)\"}, {\"asset_id\": \"ast_cfc8135aeeabc3f8a0d00324\", \"mock\": false, \"status\": \"Lightroom MCP connected (real read-only preset probe; catalog identity unverified)\"}]",
+      "started_at": "2026-11-02T15:24:04.986505+00:00",
+      "ended_at": "2026-11-02T15:24:37.195578+00:00"
+    }
+  ],
+  "lightroom_asset_lease_constant_seconds": 920,
+  "lease_samples": [
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "state": "RUNNING",
+      "lease_until": 1793633868.549539,
+      "run_count": 1,
+      "updated_at": "2026-11-02T15:22:28.441615+00:00",
+      "lease_remaining_seconds": 919.990403175354,
+      "tool": "get_photo_metadata",
+      "call_id": "32feebaf44694f1685f326c29b63e528"
+    },
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "state": "RUNNING",
+      "lease_until": 1793633868.549539,
+      "run_count": 1,
+      "updated_at": "2026-11-02T15:22:28.441615+00:00",
+      "lease_remaining_seconds": 918.3674130439758,
+      "tool": "import_photos",
+      "call_id": "d687abf5a38f4ef9a3be4a284ba036e6"
+    },
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "state": "RUNNING",
+      "lease_until": 1793633868.549539,
+      "run_count": 1,
+      "updated_at": "2026-11-02T15:22:28.441615+00:00",
+      "lease_remaining_seconds": 914.7323021888733,
+      "tool": "get_photo_metadata",
+      "call_id": "78b99e34d541427fa02351316657ef12"
+    },
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "state": "RUNNING",
+      "lease_until": 1793633868.549539,
+      "run_count": 1,
+      "updated_at": "2026-11-02T15:22:28.441615+00:00",
+      "lease_remaining_seconds": 912.2159421443939,
+      "tool": "list_develop_presets",
+      "call_id": "ea3883ed87404b56985ef2250438e400"
+    },
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "state": "RUNNING",
+      "lease_until": 1793633885.165527,
+      "run_count": 1,
+      "updated_at": "2026-11-02T15:22:28.441615+00:00",
+      "lease_remaining_seconds": 919.9817981719971,
+      "tool": "get_photo_metadata",
+      "call_id": "c2b760ee1c9e4100b5a378263e4fc742"
+    },
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "state": "RUNNING",
+      "lease_until": 1793633920.175047,
+      "run_count": 1,
+      "updated_at": "2026-11-02T15:22:28.441615+00:00",
+      "lease_remaining_seconds": 919.9805188179016,
+      "tool": "get_photo_metadata",
+      "call_id": "510aefaed6e64572b89ed45e4ab21b37"
+    },
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "state": "RUNNING",
+      "lease_until": 1793633964.9908311,
+      "run_count": 2,
+      "updated_at": "2026-11-02T15:24:04.948103+00:00",
+      "lease_remaining_seconds": 919.9898972511292,
+      "tool": "get_photo_metadata",
+      "call_id": "90302ca75eef406f83eba0a10b126420"
+    },
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "state": "RUNNING",
+      "lease_until": 1793633964.9908311,
+      "run_count": 2,
+      "updated_at": "2026-11-02T15:24:04.948103+00:00",
+      "lease_remaining_seconds": 918.3255250453949,
+      "tool": "import_photos",
+      "call_id": "c5592cda2de34f95ab47ae2c1e42d8b1"
+    },
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "state": "RUNNING",
+      "lease_until": 1793633964.9908311,
+      "run_count": 2,
+      "updated_at": "2026-11-02T15:24:04.948103+00:00",
+      "lease_remaining_seconds": 915.5385971069336,
+      "tool": "get_photo_metadata",
+      "call_id": "e48c3362f04c4fb7b853aba694a939c4"
+    },
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "state": "RUNNING",
+      "lease_until": 1793633964.9908311,
+      "run_count": 2,
+      "updated_at": "2026-11-02T15:24:04.948103+00:00",
+      "lease_remaining_seconds": 914.0351982116699,
+      "tool": "list_develop_presets",
+      "call_id": "9137cea7cf1d41d18ada5d302f835f88"
+    },
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "state": "RUNNING",
+      "lease_until": 1793633980.162925,
+      "run_count": 2,
+      "updated_at": "2026-11-02T15:24:04.948103+00:00",
+      "lease_remaining_seconds": 919.9892981052399,
+      "tool": "get_photo_metadata",
+      "call_id": "d444b54e12354c0fb8f51e550ad0a0c8"
+    },
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "state": "RUNNING",
+      "lease_until": 1793633980.162925,
+      "run_count": 2,
+      "updated_at": "2026-11-02T15:24:04.948103+00:00",
+      "lease_remaining_seconds": 918.5051140785217,
+      "tool": "import_photos",
+      "call_id": "16344860916144d9b00e989e621c10ef"
+    },
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "state": "RUNNING",
+      "lease_until": 1793633980.162925,
+      "run_count": 2,
+      "updated_at": "2026-11-02T15:24:04.948103+00:00",
+      "lease_remaining_seconds": 915.8315198421478,
+      "tool": "get_photo_metadata",
+      "call_id": "83d35bb0dd2f4a3c9aae4e93ed0da9d6"
+    },
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "state": "RUNNING",
+      "lease_until": 1793633980.162925,
+      "run_count": 2,
+      "updated_at": "2026-11-02T15:24:04.948103+00:00",
+      "lease_remaining_seconds": 913.3092148303986,
+      "tool": "list_develop_presets",
+      "call_id": "f2bdfa118b8e4e499ca3c44c5ca7ae1f"
+    },
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "state": "RUNNING",
+      "lease_until": 1793633997.198596,
+      "run_count": 2,
+      "updated_at": "2026-11-02T15:24:04.948103+00:00",
+      "lease_remaining_seconds": 919.9887709617615,
+      "tool": "apply_develop_preset",
+      "call_id": "7c28674b187645f385407bbeb6336515"
+    },
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "state": "RUNNING",
+      "lease_until": 1793633997.198596,
+      "run_count": 2,
+      "updated_at": "2026-11-02T15:24:04.948103+00:00",
+      "lease_remaining_seconds": 910.7056920528412,
+      "tool": "list_develop_presets",
+      "call_id": "a24ece3ab8234cb2b36cf797de4a80af"
+    },
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "state": "RUNNING",
+      "lease_until": 1793634016.823306,
+      "run_count": 2,
+      "updated_at": "2026-11-02T15:24:04.948103+00:00",
+      "lease_remaining_seconds": 919.9888870716095,
+      "tool": "apply_develop_preset",
+      "call_id": "740d5be4db924ce6a4b16c2be939c4f2"
+    },
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "state": "RUNNING",
+      "lease_until": 1793634016.823306,
+      "run_count": 2,
+      "updated_at": "2026-11-02T15:24:04.948103+00:00",
+      "lease_remaining_seconds": 909.7286570072174,
+      "tool": "list_develop_presets",
+      "call_id": "b2f03ee7f2ce4bb2a7647149a0f12824"
+    },
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "state": "RUNNING",
+      "lease_until": 1793634037.3319292,
+      "run_count": 2,
+      "updated_at": "2026-11-02T15:24:04.948103+00:00",
+      "lease_remaining_seconds": 919.9901392459869,
+      "tool": "apply_develop_preset",
+      "call_id": "8f609eba74d14695b6f068133ed03760"
+    },
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "state": "RUNNING",
+      "lease_until": 1793634037.3319292,
+      "run_count": 2,
+      "updated_at": "2026-11-02T15:24:04.948103+00:00",
+      "lease_remaining_seconds": 909.6954870223999,
+      "tool": "list_develop_presets",
+      "call_id": "916043abce9c44d68a7acfae36055914"
+    },
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "state": "RUNNING",
+      "lease_until": 1793634057.907991,
+      "run_count": 2,
+      "updated_at": "2026-11-02T15:24:04.948103+00:00",
+      "lease_remaining_seconds": 919.9883058071136,
+      "tool": "export_photos",
+      "call_id": "04d034bba06c49aebf03454c3938dd01"
+    },
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "state": "RUNNING",
+      "lease_until": 1793634057.907991,
+      "run_count": 2,
+      "updated_at": "2026-11-02T15:24:04.948103+00:00",
+      "lease_remaining_seconds": 917.4548969268799,
+      "tool": "list_develop_presets",
+      "call_id": "c5675d9dc9524bab9d91c9f532cc2a58"
+    },
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "state": "RUNNING",
+      "lease_until": 1793634070.6510358,
+      "run_count": 2,
+      "updated_at": "2026-11-02T15:24:04.948103+00:00",
+      "lease_remaining_seconds": 919.9870758056641,
+      "tool": "export_photos",
+      "call_id": "719709c7a0564d128863c6ce0b2670f3"
+    },
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "state": "RUNNING",
+      "lease_until": 1793634070.6510358,
+      "run_count": 2,
+      "updated_at": "2026-11-02T15:24:04.948103+00:00",
+      "lease_remaining_seconds": 917.4475898742676,
+      "tool": "list_develop_presets",
+      "call_id": "23d7996cc2304824b5e6cf2a2af02c93"
+    },
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "state": "RUNNING",
+      "lease_until": 1793634083.2928798,
+      "run_count": 2,
+      "updated_at": "2026-11-02T15:24:04.948103+00:00",
+      "lease_remaining_seconds": 919.9861297607422,
+      "tool": "export_photos",
+      "call_id": "756d6cc43eef419aadebfcdbc9ccb659"
+    },
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "state": "RUNNING",
+      "lease_until": 1793634083.2928798,
+      "run_count": 2,
+      "updated_at": "2026-11-02T15:24:04.948103+00:00",
+      "lease_remaining_seconds": 917.4602687358856,
+      "tool": "list_develop_presets",
+      "call_id": "862f9ee823514d3489a0a7c79be38999"
+    },
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "state": "RUNNING",
+      "lease_until": 1793634083.2928798,
+      "run_count": 2,
+      "updated_at": "2026-11-02T15:24:04.948103+00:00",
+      "lease_remaining_seconds": 908.3686928749084,
+      "tool": "list_develop_presets",
+      "call_id": "cc1f9e8521c84678ad1a67f8858d57a1"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "expected_rejection": true,
+  "message": "preset/export settings changed after approval",
+  "state": "WAITING_APPROVAL",
+  "no_work": true,
+  "library_empty": true,
+  "preview_empty": true,
+  "approval_count": 1,
+  "mock": false,
+  "source_unchanged": true
+}

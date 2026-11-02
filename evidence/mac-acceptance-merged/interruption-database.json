@@ -1,0 +1,300 @@
+{
+  "tasks": [
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "idempotency_key": "e2b8011b7513a1a6561d1a235f116c1b5eb751b002b5473252baf493dc2e8647",
+      "type": "import",
+      "state": "FAILED",
+      "order_id": "test-order",
+      "photographer_id": "tester",
+      "batch_id": "b_b3f33b312ee0",
+      "source_id": "public-source",
+      "plan_json": "{\"files\": [{\"rel_path\": \"existing.ACR\", \"size\": 47, \"sha256\": \"4b1b0e28f91929be437e7c9225e578ed5e0a8261eb2d74a67656e51ba90c152e\", \"kind\": \"sidecar\", \"dest_rel_path\": \"test-order/tester/b_b3f33b312ee0/existing.ACR\", \"asset_id\": \"ast_09cffc3a75fd0b2819f4cb61\"}, {\"rel_path\": \"existing.XMP\", \"size\": 51, \"sha256\": \"cbaeeaf90e02b9155b00f4c8ea8b330307521e13576f3f427ce6ea64ef2e66f2\", \"kind\": \"sidecar\", \"dest_rel_path\": \"test-order/tester/b_b3f33b312ee0/existing.XMP\", \"asset_id\": \"ast_f30a03ff887e9f5874c3d64f\"}, {\"rel_path\": \"public-1.NEF\", \"size\": 25994889, \"sha256\": \"8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02\", \"kind\": \"raw\", \"dest_rel_path\": \"test-order/tester/b_b3f33b312ee0/public-1.NEF\", \"asset_id\": \"ast_f644737fdf8c7435a2315142\"}, {\"rel_path\": \"public-2.NEF\", \"size\": 25994889, \"sha256\": \"8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02\", \"kind\": \"raw\", \"dest_rel_path\": \"test-order/tester/b_b3f33b312ee0/public-2.NEF\", \"asset_id\": \"ast_f0c93683b0fa7f52c5476ec5\"}, {\"rel_path\": \"public-3.NEF\", \"size\": 25994889, \"sha256\": \"8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02\", \"kind\": \"raw\", \"dest_rel_path\": \"test-order/tester/b_b3f33b312ee0/public-3.NEF\", \"asset_id\": \"ast_cfc8135aeeabc3f8a0d00324\"}], \"total_bytes\": 77984765, \"destination\": \"test-order/tester/b_b3f33b312ee0\", \"stages\": [\"ingest\", \"lr_register\", \"lr_preset\", \"lr_export\", \"preview_verify\"], \"preset_id\": \"test-preset\", \"scan_digest\": \"b3f33b312ee0d5ac8046348d86b4117c3d9931bca0f695ad7464faac61d4da14\", \"lightroom\": {\"preset\": {\"label\": \"Cetacea Phase1 Test +0.50\", \"lightroom_uuid\": null, \"lightroom_name\": \"Cetacea Phase1 Test +0.50\"}, \"export\": {\"max_edge\": 1600, \"quality\": 85, \"preview_root\": \"/Users/mac/Documents/ChatGPT/AI\\u5de5\\u4f5c\\u53f0/my-harness-project/acceptance-data/mac-acceptance-merged/interruption/preview\", \"library_root\": \"/Users/mac/Documents/ChatGPT/AI\\u5de5\\u4f5c\\u53f0/my-harness-project/acceptance-data/mac-acceptance-merged/interruption/library\"}}}",
+      "plan_digest": "bbe12aa2cd5a1f622bbd1fa5f899ebddbf83b74151b77a7487d00eb894f5adad",
+      "stages_json": "[\"ingest\", \"lr_register\", \"lr_preset\", \"lr_export\", \"preview_verify\"]",
+      "run_count": 1,
+      "error": "lr_register: 2 failed",
+      "created_at": "2026-11-02T15:22:28.161209+00:00",
+      "updated_at": "2026-11-02T15:23:23.450290+00:00",
+      "lease_until": null
+    }
+  ],
+  "task_steps": [
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "run": 1,
+      "stage": "ingest",
+      "state": "COMPLETED",
+      "succeeded": 5,
+      "failed": 0,
+      "skipped": 0,
+      "detail_json": "[{\"rel_path\": \"existing.ACR\", \"size\": 47, \"sha256\": \"4b1b0e28f91929be437e7c9225e578ed5e0a8261eb2d74a67656e51ba90c152e\", \"kind\": \"sidecar\", \"dest_rel_path\": \"test-order/tester/b_b3f33b312ee0/existing.ACR\", \"asset_id\": \"ast_09cffc3a75fd0b2819f4cb61\", \"status\": \"VERIFIED\", \"skipped_verified\": false, \"error\": null, \"verified_at\": \"2026-11-02T15:22:28.445032+00:00\", \"order\": \"test-order\", \"photographer\": \"tester\", \"batch\": \"b_b3f33b312ee0\", \"source_id\": \"public-source\", \"run\": 1}, {\"rel_path\": \"existing.XMP\", \"size\": 51, \"sha256\": \"cbaeeaf90e02b9155b00f4c8ea8b330307521e13576f3f427ce6ea64ef2e66f2\", \"kind\": \"sidecar\", \"dest_rel_path\": \"test-order/tester/b_b3f33b312ee0/existing.XMP\", \"asset_id\": \"ast_f30a03ff887e9f5874c3d64f\", \"status\": \"VERIFIED\", \"skipped_verified\": false, \"error\": null, \"verified_at\": \"2026-11-02T15:22:28.446907+00:00\", \"order\": \"test-order\", \"photographer\": \"tester\", \"batch\": \"b_b3f33b312ee0\", \"source_id\": \"public-source\", \"run\": 1}, {\"rel_path\": \"public-1.NEF\", \"size\": 25994889, \"sha256\": \"8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02\", \"kind\": \"raw\", \"dest_rel_path\": \"test-order/tester/b_b3f33b312ee0/public-1.NEF\", \"asset_id\": \"ast_f644737fdf8c7435a2315142\", \"status\": \"VERIFIED\", \"skipped_verified\": false, \"error\": null, \"verified_at\": \"2026-11-02T15:22:28.479702+00:00\", \"order\": \"test-order\", \"photographer\": \"tester\", \"batch\": \"b_b3f33b312ee0\", \"source_id\": \"public-source\", \"run\": 1}, {\"rel_path\": \"public-2.NEF\", \"size\": 25994889, \"sha256\": \"8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02\", \"kind\": \"raw\", \"dest_rel_path\": \"test-order/tester/b_b3f33b312ee0/public-2.NEF\", \"asset_id\": \"ast_f0c93683b0fa7f52c5476ec5\", \"status\": \"VERIFIED\", \"skipped_verified\": false, \"error\": null, \"verified_at\": \"2026-11-02T15:22:28.513051+00:00\", \"order\": \"test-order\", \"photographer\": \"tester\", \"batch\": \"b_b3f33b312ee0\", \"source_id\": \"public-source\", \"run\": 1}, {\"rel_path\": \"public-3.NEF\", \"size\": 25994889, \"sha256\": \"8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02\", \"kind\": \"raw\", \"dest_rel_path\": \"test-order/tester/b_b3f33b312ee0/public-3.NEF\", \"asset_id\": \"ast_cfc8135aeeabc3f8a0d00324\", \"status\": \"VERIFIED\", \"skipped_verified\": false, \"error\": null, \"verified_at\": \"2026-11-02T15:22:28.545316+00:00\", \"order\": \"test-order\", \"photographer\": \"tester\", \"batch\": \"b_b3f33b312ee0\", \"source_id\": \"public-source\", \"run\": 1}]",
+      "started_at": "2026-11-02T15:22:28.442969+00:00",
+      "ended_at": "2026-11-02T15:22:28.546298+00:00"
+    },
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "run": 1,
+      "stage": "lr_register",
+      "state": "FAILED",
+      "succeeded": 1,
+      "failed": 2,
+      "skipped": 0,
+      "detail_json": "[{\"asset_id\": \"ast_f644737fdf8c7435a2315142\", \"mock\": false, \"status\": \"Lightroom MCP connected (real read-only preset probe; catalog identity unverified)\"}, {\"asset_id\": \"ast_f0c93683b0fa7f52c5476ec5\", \"error\": \"Lightroom plugin not connected. Bring Lightroom to the front or click 'Start Server' in Plug-in Manager.\", \"mock\": false}, {\"asset_id\": \"ast_cfc8135aeeabc3f8a0d00324\", \"error\": \"Lightroom plugin not connected. Bring Lightroom to the front or click 'Start Server' in Plug-in Manager.\", \"mock\": false}]",
+      "started_at": "2026-11-02T15:22:28.547334+00:00",
+      "ended_at": "2026-11-02T15:23:23.448736+00:00"
+    }
+  ],
+  "assets": [
+    {
+      "asset_id": "ast_09cffc3a75fd0b2819f4cb61",
+      "order_id": "test-order",
+      "photographer_id": "tester",
+      "batch_id": "b_b3f33b312ee0",
+      "rel_path": "existing.ACR",
+      "size": 47,
+      "sha256": "4b1b0e28f91929be437e7c9225e578ed5e0a8261eb2d74a67656e51ba90c152e",
+      "kind": "sidecar",
+      "status": "VERIFIED",
+      "error": null,
+      "dest_rel_path": "test-order/tester/b_b3f33b312ee0/existing.ACR",
+      "lr_photo_id": null,
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "verified_at": "2026-11-02T15:22:28.445032+00:00"
+    },
+    {
+      "asset_id": "ast_f30a03ff887e9f5874c3d64f",
+      "order_id": "test-order",
+      "photographer_id": "tester",
+      "batch_id": "b_b3f33b312ee0",
+      "rel_path": "existing.XMP",
+      "size": 51,
+      "sha256": "cbaeeaf90e02b9155b00f4c8ea8b330307521e13576f3f427ce6ea64ef2e66f2",
+      "kind": "sidecar",
+      "status": "VERIFIED",
+      "error": null,
+      "dest_rel_path": "test-order/tester/b_b3f33b312ee0/existing.XMP",
+      "lr_photo_id": null,
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "verified_at": "2026-11-02T15:22:28.446907+00:00"
+    },
+    {
+      "asset_id": "ast_f644737fdf8c7435a2315142",
+      "order_id": "test-order",
+      "photographer_id": "tester",
+      "batch_id": "b_b3f33b312ee0",
+      "rel_path": "public-1.NEF",
+      "size": 25994889,
+      "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "error": null,
+      "dest_rel_path": "test-order/tester/b_b3f33b312ee0/public-1.NEF",
+      "lr_photo_id": "/Users/mac/Documents/ChatGPT/AI工作台/my-harness-project/acceptance-data/mac-acceptance-merged/interruption/library/test-order/tester/b_b3f33b312ee0/public-1.NEF",
+      "lr_status": "REGISTERED",
+      "preset_applied": null,
+      "mock": 0,
+      "verified_at": "2026-11-02T15:22:28.479702+00:00"
+    },
+    {
+      "asset_id": "ast_f0c93683b0fa7f52c5476ec5",
+      "order_id": "test-order",
+      "photographer_id": "tester",
+      "batch_id": "b_b3f33b312ee0",
+      "rel_path": "public-2.NEF",
+      "size": 25994889,
+      "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "error": null,
+      "dest_rel_path": "test-order/tester/b_b3f33b312ee0/public-2.NEF",
+      "lr_photo_id": null,
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "verified_at": "2026-11-02T15:22:28.513051+00:00"
+    },
+    {
+      "asset_id": "ast_cfc8135aeeabc3f8a0d00324",
+      "order_id": "test-order",
+      "photographer_id": "tester",
+      "batch_id": "b_b3f33b312ee0",
+      "rel_path": "public-3.NEF",
+      "size": 25994889,
+      "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "error": null,
+      "dest_rel_path": "test-order/tester/b_b3f33b312ee0/public-3.NEF",
+      "lr_photo_id": null,
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "verified_at": "2026-11-02T15:22:28.545316+00:00"
+    }
+  ],
+  "previews": [],
+  "approvals": [
+    {
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "plan_digest": "bbe12aa2cd5a1f622bbd1fa5f899ebddbf83b74151b77a7487d00eb894f5adad",
+      "approved_by": "cli",
+      "scopes": "[\"admin\", \"approve\", \"cancel\", \"execute\", \"lightroom\", \"plan\", \"read\"]",
+      "granted_at": "2026-11-02T15:22:28.401896+00:00",
+      "revoked_at": null
+    }
+  ],
+  "audit_log": [
+    {
+      "actor": "human:cli",
+      "action": "add_source",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T15:22:27.749578+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "add_orders",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T15:22:27.750709+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "add_photographers",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T15:22:27.751930+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "add_preset",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T15:22:27.753354+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "mcp.plan_import",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T15:22:28.130452+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "plan_import",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T15:22:28.131440+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "scan_source",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T15:22:28.132072+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "state_change",
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "detail_json": "[\"PENDING\", \"WAITING_APPROVAL\"]",
+      "ts": "2026-11-02T15:22:28.161276+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "get_task",
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "detail_json": "null",
+      "ts": "2026-11-02T15:22:28.162078+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "approve",
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "detail_json": "null",
+      "ts": "2026-11-02T15:22:28.401022+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "get_task",
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "detail_json": "null",
+      "ts": "2026-11-02T15:22:28.402529+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "mcp.execute",
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "detail_json": "null",
+      "ts": "2026-11-02T15:22:28.439275+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "get_task",
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "detail_json": "null",
+      "ts": "2026-11-02T15:22:28.439962+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "execute",
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "detail_json": "null",
+      "ts": "2026-11-02T15:22:28.440989+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "state_change",
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "detail_json": "[\"WAITING_APPROVAL\", \"RUNNING\"]",
+      "ts": "2026-11-02T15:22:28.441626+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "get_task",
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "detail_json": "null",
+      "ts": "2026-11-02T15:22:28.442134+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "lr_register",
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "detail_json": "null",
+      "ts": "2026-11-02T15:22:28.548109+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "list_assets",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T15:22:28.548608+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "state_change",
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "detail_json": "[\"RUNNING\", \"FAILED\"]",
+      "ts": "2026-11-02T15:23:23.450335+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "get_task",
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "detail_json": "null",
+      "ts": "2026-11-02T15:23:23.451841+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "get_task",
+      "task_id": "tsk_af3aa276b31d4165b842663284366782",
+      "detail_json": "null",
+      "ts": "2026-11-02T15:23:23.453751+00:00"
+    }
+  ]
+}

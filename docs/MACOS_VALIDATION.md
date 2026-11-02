@@ -1,5 +1,31 @@
 # macOS validation — 2026-11-02
 
+## phase2-merged 合并后复验（本轮）
+
+**结果：本轮请求范围内 PASS。** 在 Mac 上执行 `git fetch origin && git checkout phase2-merged`，被验收产品代码为 `08fcfd9b1070ddbed1569b01313cb71727134435`。本轮仅涉及验收脚本、证据、文档及瞬时 gate 文件忽略规则，没有修补产品代码、修改测试断言或启用 DeepSeek 实网请求。证据集中在 [evidence/mac-acceptance-merged](../evidence/mac-acceptance-merged/)。下文首次 `mac-validation` 及实体设备报告为历史记录，不能代替本轮结果。
+
+| 请求项 | 结果 | 实测依据 |
+|---|---|---|
+| Python 3.13 venv 全量 pytest | PASS：**132 passed、2 skipped**，36.31 秒 | `.venv` 为 Python 3.13.18，editable 导入当前 checkout。运行 `.venv/bin/python -m pytest -q -rs --maxfail=1`；两个跳过均为需要 `DEEPSEEK_API_KEY` 和 `CETACEA_REALMODEL=1` 的实网模块。[日志](../evidence/mac-acceptance-merged/pytest-final.txt)、[退出码及命令](../evidence/mac-acceptance-merged/pytest-final-exit.json)、[环境](../evidence/mac-acceptance-merged/environment.json) |
+| `photo_execute_import` 默认完整流程 | PASS，真实 Lightroom，`mock=false` | MCP SDK → 真实 CETACEA stdio server → 真实 0.26.0 Lightroom MCP。省略 `stages` 得到 ingest、lr_register、lr_preset、lr_export、preview_verify；一次 CLI 测试批准后一次执行，五阶段均 COMPLETED。公开 Nikon Z6 RAW 的曝光独立读回 **0.5**，实际 JPG 解码 **1600×1065**，`photo_verify_preview` 返回 OK。[计划](../evidence/mac-acceptance-merged/single-plan.json)、[MCP 请求/响应](../evidence/mac-acceptance-merged/single-mcp.jsonl)、[检查](../evidence/mac-acceptance-merged/single-checks.json)、[曝光读回](../evidence/mac-acceptance-merged/single-develop-readback.json) |
+| 单张 Lightroom 租期 | PASS：仍为 **920 秒** | 实际执行路径的常量为 920；登记 metadata、预设、导出开始时，独立只读任务库采样的剩余时间分别为 **919.990、919.984、919.983 秒**。采样使用真实时钟，未改任务库租期。与核心赋值代码及 pytest 慢调用回归一起确认新流程未缩短租期。[真实调用及租期快照](../evidence/mac-acceptance-merged/single-real-calls.jsonl)。这是实际赋值/调用采样，不是持续 920 秒的真实 Lightroom 压测。 |
+| 批准后改预设或导出设置 | PASS：均在工作前拒绝 | 两个全新真实适配器 home：计划并批准后，分别修改持久配置中的 `lightroom_name`、导出 `quality`。新的 MCP 请求均返回 `PERMISSION_DENIED: preset/export settings changed after approval`；任务仍 WAITING_APPROVAL、run_count=0，计划资产保持 PLANNED，无执行步骤、库文件、预览或真实 Lightroom 调用。[预设检查](../evidence/mac-acceptance-merged/tamper-preset-checks.json)、[导出检查](../evidence/mac-acceptance-merged/tamper-export-checks.json)、[零真实调用核对](../evidence/mac-acceptance-merged/final-inventory.json) |
+| 中断后 `photo_retry_task`，不重新批准 | PASS：FAILED → COMPLETED，原批准保留 | 三张公开 RAW 测试副本已读回验证。第一张登记完成、第二张查询前，验收 gate 暂停；通过 UI 正常退出测试 Lightroom，确认进程退出后释放 gate。两个真实请求因插件断开失败，任务如实 FAILED（`lr_register: 2 failed`）。重开并核对同一个测试 catalog 后，由 MCP `photo_retry_task` 续跑，登记 **succeeded=2、skipped=1、failed=0**，随后三张预设、导出及 verify-preview 完成。原批准仍仅一条、摘要相同且未撤销，ingest 只完成一次，每张实际导入调用仅一次，库文件 SHA-256/mtime/inode 不变。[中断检查](../evidence/mac-acceptance-merged/interruption-before-retry-checks.json)、[退出确认](../evidence/mac-acceptance-merged/interruption-shutdown.json)、[重试检查](../evidence/mac-acceptance-merged/retry-resume-checks.json)、[最终清点](../evidence/mac-acceptance-merged/final-inventory.json) |
+
+本轮隔离及证据说明：
+
+- 使用独立测试 catalog `Cetacea-Phase1-Test-20261102.lrcat`，完整路径与下文历史环境一致。初始和恢复时均通过 UI 标题/URL 及 `lsof` 打开文件名确认；没有直接读取 `.lrcat` 内容。[单张守卫](../evidence/mac-acceptance-merged/single-catalog-guard.json)、[恢复守卫](../evidence/mac-acceptance-merged/retry-resume-catalog-guard.json)。
+- 全新 home、源、库、预览位于本 checkout 的 `acceptance-data/mac-acceptance-merged/`（Git 忽略）。只使用下文署名来源的公开 Nikon Z6 样片副本：单张流程一份，中断流程三份；这是同一样片的四份测试副本。源在注册前创建，之后只读，SHA-256/mtime/inode 快照一致。未使用实体卡、客户数据、生产 catalog 或 NAS。
+- 每个源在注册前另建 XMP/ACR 哨兵；全部拷贝资产目标哈希读回一致，最终库侧车路径集合和哈希与计划精确相同，没有新增未登记的 XMP/ACR。[独立最终检查](../evidence/mac-acceptance-merged/final-inventory.json)。哨兵验证字节和集合保留，不代表完整真实 XMP 内容兼容。RAW、JPG、catalog 和 token 不进入 Git。
+- 测试批准由本轮用户授权的 CLI 操作端执行，批准摘要和命令保存于 `*-approval.json`；AI MCP 只有原有 14 个工具，没有获得批准入口。这里证明操作端批准与 AI 执行的边界，不声称用户逐次手工点击过批准 UI。
+- 首轮 pytest 为 **120 passed、4 skipped**：额外两个模块因未安装 Harness 依赖整体跳过。[原始日志](../evidence/mac-acceptance-merged/pytest.txt)、[收集/跳过原因](../evidence/mac-acceptance-merged/collection.txt)。随后检出固定 Harness `ce7073d51254c26cd63b22a60835b8f948deb447`，按文档用 pnpm **11.28.5**、`--frozen-lockfile --ignore-scripts --filter '@deepseek-ai/dsh...'` 安装，再显式编译本机 flock addon，未执行其他生命周期脚本或全仓库构建。[安装日志](../evidence/mac-acceptance-merged/harness-install.txt)、[本机编译](../evidence/mac-acceptance-merged/harness-native-build.txt)。最终 pytest 子进程移除了模型凭据，未使用 DeepSeek key；`pip check` 通过。
+
+复现辅助代码为 [run_acceptance.py](../evidence/mac-acceptance-merged/run_acceptance.py)、[mcp_capture_server.py](../evidence/mac-acceptance-merged/mcp_capture_server.py) 和 [final_inventory.py](../evidence/mac-acceptance-merged/final_inventory.py)。先确认上述测试 catalog，再依次运行 venv Python 的 `run_acceptance.py single`、`tamper-preset`、`tamper-export`、`interruption`、重开测试 Lightroom 后的 `retry-resume`，最后运行 `final_inventory.py`。`interruption` 需观察 `interruption-gate.ready.json`，正常关闭测试 Lightroom、确认进程退出后，才创建对应 release 文件。gate 明确属于验收控制，未注入错误响应、未伪造时钟或修改产品状态；真实调用/错误照常委托并记录。预设列表 probe 只记录 success/数量摘要，避免发布个人预设名称。脚本拒绝复用已有测试目录；复跑应先选择全新隔离目录和 gate 路径，保留旧证据。
+
+本轮限制：没有意外产品验收失败；唯一任务 FAILED 是上述预先设计的断连场景，原错误和恢复记录均保留。中断点在照片之间，不能扩展为单次 catalog 写入时强杀、断电、操作系统崩溃或进程租期过期后的 PAUSED 实机验收。配置篡改验证的是工作台保存的预设选择及导出参数，未验证 Lightroom 内部同名/同 UUID 预设内容被外部修改的检测能力。旧的无 `lightroom` 快照兼容计划、其他 RAW/HE★ 类型、外置盘/Windows/大批量和真实 AI 模型决策均不在本轮结论内；DeepSeek 实网两个模块仍未运行。
+
+## 首次 mac-validation 验收（历史记录）
+
 本次照片处理与验收仅使用用户授权的测试数据和独立 catalog。未对客户照片、生产 NAS 或生产照片目录执行工作台任务，未向日常 catalog 发送照片查询、导入、预设或导出工具请求；不直接读取或修改任何 `.lrcat` 内容。Lightroom 自身通过 UI/插件管理测试 catalog。启动时曾显示日常 catalog，均先切换并确认独立测试 catalog 后才调用照片工具。
 
 代码仓库：`https://github.com/wj3529805-netizen/my-harness-project`，分支 `mac-validation`，基线 `8abed3b62a1603d15b37d45b6a2d3b28797f4d2e`。GitHub clone 与压缩包基线一致。代码修复提交 `2956edc`。全部证据位于 [evidence/mac-acceptance](../evidence/mac-acceptance/)。

@@ -18,3 +18,5 @@ evidence/mac-acceptance/probe-list_develop_presets.json
 evidence/mac-acceptance/probe-log.txt
 # Transient manual A12 gate must never be shipped as already released.
 evidence/mac-acceptance/interruption-continue
+evidence/mac-acceptance-merged/interruption-gate.ready.json
+evidence/mac-acceptance-merged/interruption-gate.release

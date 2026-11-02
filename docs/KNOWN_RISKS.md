@@ -77,3 +77,11 @@ Stage C validation history:
 macOS ENOTSUP=45和EOPNOTSUPP=102不相等，两处回退遗漏ENOTSUP已由新增参数化回归重现后修复；全套100 passed。真实exFAT目标仍未运行：两个建镜像工具失败，未格式化任何原有设备或在卡上写探针。外置盘曾在拷贝前掉线，挂载守卫停止操作，重连核对UUID后才继续。
 
 两张选中Z6III NEF的外置副本还完成真实测试catalog登记、+0.50预设读回、单张JPG导出和verify-preview；原始NEF与库副本不变。该设备补充未独立辨识HE/HE★子类型、未逐项核对相邻XMP/ACR，不能扩展为每种压缩或整卡生产验收。
+
+## phase2-merged Mac follow-up — 2026-11-02
+
+被验收代码 `08fcfd9`；完整结果及证据见 [MACOS_VALIDATION.md](MACOS_VALIDATION.md) 的本轮章节与 `evidence/mac-acceptance-merged/`。Python 3.13 最终 **132 passed、2 skipped**；首轮缺 Harness 依赖导致 120 passed、4 skipped 的日志也保留，补齐固定依赖后未修改产品或测试断言。两个 DeepSeek 实网模块未运行，不能视为模型效果验收。
+
+真实三照片中断测试中，按计划在第一张登记后正常退出测试 Lightroom；后两张插件断连报错，任务实际 FAILED（`lr_register: 2 failed`），没有伪报完成。重开同一测试 catalog 后通过 `photo_retry_task` 补两张、跳过一张，最终全流程完成且未新增批准。此为预期故障刺激及恢复通过，不是单次 catalog 写入中强杀/断电、PAUSED 租期过期恢复或生产可靠性证明。
+
+本轮公开 Nikon Z6 样片、测试 home/catalog、源及库哈希和 XMP/ACR 集合通过；920 秒为代码常量及真实执行时租期采样，不是耗时 920 秒的实机压测。批准后修改工作台预设选择或导出质量会在工作前拒绝；Lightroom 内部同名/同 UUID 预设内容变化的检测、旧无快照计划兼容路径未在本轮实机验收。既有 CLI NotApproved 堆栈体验问题及其他平台/格式/设备限制不因此消除。

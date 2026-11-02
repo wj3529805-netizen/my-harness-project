@@ -1,0 +1,58 @@
+{
+  "result": "PASS",
+  "time": 1793633218.043715,
+  "checks": {
+    "single": {
+      "state": "COMPLETED",
+      "run_count": 1,
+      "approval_count": 1,
+      "approval_preserved": true,
+      "ingest_completed_once": true,
+      "source_unchanged": true,
+      "sidecar_set_and_hashes_preserved": true,
+      "expected_sidecars": {
+        "test-order/tester/b_752f886b8c08/existing.ACR": "4b1b0e28f91929be437e7c9225e578ed5e0a8261eb2d74a67656e51ba90c152e",
+        "test-order/tester/b_752f886b8c08/existing.XMP": "cbaeeaf90e02b9155b00f4c8ea8b330307521e13576f3f427ce6ea64ef2e66f2"
+      },
+      "actual_sidecars": {
+        "test-order/tester/b_752f886b8c08/existing.ACR": "4b1b0e28f91929be437e7c9225e578ed5e0a8261eb2d74a67656e51ba90c152e",
+        "test-order/tester/b_752f886b8c08/existing.XMP": "cbaeeaf90e02b9155b00f4c8ea8b330307521e13576f3f427ce6ea64ef2e66f2"
+      },
+      "import_calls_by_exact_path": {
+        "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/mac-acceptance-merged/single/library/test-order/tester/b_752f886b8c08/public-1.NEF": 1
+      },
+      "all_imports_confirmed_one_photo": true,
+      "all_library_asset_hashes_match": true
+    },
+    "interruption": {
+      "state": "COMPLETED",
+      "run_count": 2,
+      "approval_count": 1,
+      "approval_preserved": true,
+      "ingest_completed_once": true,
+      "source_unchanged": true,
+      "sidecar_set_and_hashes_preserved": true,
+      "expected_sidecars": {
+        "test-order/tester/b_b3f33b312ee0/existing.ACR": "4b1b0e28f91929be437e7c9225e578ed5e0a8261eb2d74a67656e51ba90c152e",
+        "test-order/tester/b_b3f33b312ee0/existing.XMP": "cbaeeaf90e02b9155b00f4c8ea8b330307521e13576f3f427ce6ea64ef2e66f2"
+      },
+      "actual_sidecars": {
+        "test-order/tester/b_b3f33b312ee0/existing.ACR": "4b1b0e28f91929be437e7c9225e578ed5e0a8261eb2d74a67656e51ba90c152e",
+        "test-order/tester/b_b3f33b312ee0/existing.XMP": "cbaeeaf90e02b9155b00f4c8ea8b330307521e13576f3f427ce6ea64ef2e66f2"
+      },
+      "import_calls_by_exact_path": {
+        "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/mac-acceptance-merged/interruption/library/test-order/tester/b_b3f33b312ee0/public-1.NEF": 1,
+        "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/mac-acceptance-merged/interruption/library/test-order/tester/b_b3f33b312ee0/public-2.NEF": 1,
+        "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/mac-acceptance-merged/interruption/library/test-order/tester/b_b3f33b312ee0/public-3.NEF": 1
+      },
+      "all_imports_confirmed_one_photo": true,
+      "all_library_asset_hashes_match": true
+    },
+    "tamper-preset": {
+      "real_lightroom_calls": 0
+    },
+    "tamper-export": {
+      "real_lightroom_calls": 0
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "branch": "phase2-merged",
+  "head": "08fcfd9b1070ddbed1569b01313cb71727134435",
+  "python": "3.13.18 (main, Oct 26 2026, 13:59:02) [Clang 23.1.3 ]",
+  "executable": "/Users/mac/Documents/ChatGPT/AI工作台/my-harness-project/.venv/bin/python",
+  "source": "/Users/mac/Documents/ChatGPT/AI工作台/my-harness-project/src/cetacea/__init__.py",
+  "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
+  "expected": {
+    "passed": 132,
+    "skipped": 2
+  },
+  "deepseek_key_used": false,
+  "packages": {
+    "mcp": "2.3.0",
+    "pillow": "13.0.0",
+    "pytest": "9.2.0"
+  },
+  "node": "v26.12.1",
+  "harness_commit": "ce7073d51254c26cd63b22a60835b8f948deb447",
+  "harness_pnpm": "11.28.5",
+  "harness_install": "npx --yes pnpm@11.28.5 install --frozen-lockfile --ignore-scripts --filter @deepseek-ai/dsh...",
+  "harness_native_build": "node_modules/.bin/tsx native/system/scripts/build.ts --host-addon-only",
+  "model_credentials_removed_from_pytest_child": true,
+  "lightroom_mcp_version": "0.26.0",
+  "pip_check": "No broken requirements found."
+}
