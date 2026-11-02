@@ -1,0 +1,21 @@
+{
+  "route": "direct",
+  "url": "https://api.deepseek.com",
+  "method": "HEAD",
+  "authorization_header_sent": false,
+  "api_key_passed_to_curl": false,
+  "exit_code": 0,
+  "elapsed_seconds": 5.208897113800049,
+  "curl": {
+    "http_code": 401,
+    "http_connect": 0,
+    "remote_ip": "198.18.0.62",
+    "remote_port": 443,
+    "ssl_verify_result": 0,
+    "time_connect": 0.002432,
+    "time_appconnect": 4.727311,
+    "time_total": 5.196634,
+    "proxy_used": 0,
+    "errormsg": null
+  }
+}

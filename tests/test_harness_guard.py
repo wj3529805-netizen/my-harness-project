@@ -6,6 +6,30 @@ from cetacea.harness_guard import assess_turn, format_warning, preflight
 from cetacea.harness_client import TurnResult, redact, write_transcript
 
 
+def test_error_filter_hides_key_and_credential_fields(monkeypatch):
+    from cetacea.harness_guard import safe_error_line
+    secret = 'test-secret-with-special+/characters'
+    monkeypatch.setenv('DEEPSEEK_API_KEY', secret)
+    from urllib.parse import quote
+    line = 'ERROR failed: ' + secret + ' ' + quote(secret, safe='') + ' Authorization: Bearer anothercredential x-api-key=thirdcredential'
+    safe = safe_error_line(line)
+    assert safe and 'failed' in safe
+    for value in [secret, quote(secret, safe=''), 'anothercredential', 'thirdcredential']:
+        assert value not in safe
+    assert safe_error_line('startup profile activated') is None
+    assert 'ECONNRESET' in safe_error_line('Error: socket closed ECONNRESET')
+
+
+def test_error_filter_cli_outputs_only_redacted_errors(monkeypatch):
+    monkeypatch.setenv('DEEPSEEK_API_KEY', 'fake-credential-for-test')
+    p = subprocess.run([sys.executable, '-m', 'cetacea.harness_guard', 'filter-stderr'],
+                       input='ordinary startup\nERROR fake-credential-for-test ECONNRESET\n',
+                       text=True, capture_output=True, check=True)
+    assert p.stdout == ''
+    assert 'ordinary startup' not in p.stderr and 'fake-credential-for-test' not in p.stderr
+    assert 'ECONNRESET' in p.stderr and '[REDACTED]' in p.stderr
+
+
 def codes(warnings):
     return {w.code for w in warnings}
 

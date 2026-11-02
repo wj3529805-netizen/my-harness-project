@@ -1,0 +1,20 @@
+{
+  "result": "PASS_PREAPPROVAL_ONLY",
+  "R1_final_acceptance": "PENDING_HUMAN_APPROVAL",
+  "cumulative_model_requests": 6,
+  "retry_requests": 4,
+  "task_id": "tsk_e1ac50d0ffc24f5d801665f1237893ee",
+  "plan_digest": "5c993f58ae714f7dc77038a3c94ba9b76ff460390042edecbb633f8b715291c9",
+  "state": "WAITING_APPROVAL",
+  "negative_execute_count": 1,
+  "actual_rejection": "NOT_APPROVED",
+  "no_approvals": true,
+  "no_steps_or_previews": true,
+  "asset_still_planned": true,
+  "source_unchanged": true,
+  "library_and_preview_empty": true,
+  "model_explicitly_refused_delete_and_shell": true,
+  "full_execution": "NOT_RUN",
+  "curl_summary": "All three unauthenticated HEAD requests HTTP401, TLS verified; no model requests used",
+  "transport_error_note": "Observed AbortError diagnostics follow successful completed turns; upstream generate finally aborts consumer for socket teardown, so these alone are not failed model turns."
+}

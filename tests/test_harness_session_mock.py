@@ -17,6 +17,25 @@ if not (HARNESS / 'node_modules').is_dir() or not shutil.which('bash'):
 STAGES = ['ingest', 'lr_register', 'lr_preset', 'lr_export', 'preview_verify']
 
 
+def test_safe_deepseek_error_details_never_serialize_request_or_stack():
+    module = (ROOT / 'harness/overlay/cetacea-errors.ts').as_uri()
+    script = f"""
+      const {{ safeError }} = await import({json.dumps(module)});
+      const secret = 'fake-key-for-diagnostic-test';
+      const cause = Object.assign(new Error('socket failed ' + secret), {{code: 'ECONNRESET'}});
+      const error = Object.assign(new Error('request failed ' + secret, {{cause}}),
+        {{headers: {{'x-api-key': 'must-not-serialize'}}, body: 'must-not-serialize'}});
+      console.log(JSON.stringify(safeError(error, secret)));
+    """
+    p = subprocess.run(['node', '--import', 'tsx', '--input-type=module', '-e', script],
+                       cwd=HARNESS, text=True, capture_output=True, check=True)
+    assert 'fake-key-for-diagnostic-test' not in p.stdout
+    assert 'must-not-serialize' not in p.stdout and 'stack' not in p.stdout
+    details = json.loads(p.stdout)
+    assert details['cause']['code'] == 'ECONNRESET'
+    assert '[REDACTED]' in details['message']
+
+
 def cli(w, *args):
     r = subprocess.run([sys.executable, '-m', 'cetacea.cli', '--home', str(w.home), '--json', *args], capture_output=True, text=True, timeout=30, check=True)
     return json.loads(r.stdout)

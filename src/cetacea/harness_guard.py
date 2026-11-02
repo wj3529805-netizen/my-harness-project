@@ -5,6 +5,7 @@ import argparse
 from dataclasses import dataclass
 import json
 import os
+import re
 import sys
 from typing import Any, Iterable
 
@@ -108,14 +109,38 @@ def format_warning(w: Warn) -> str:
     return f'WARNING [{w.code}] {w.message}'
 
 
+def safe_error_line(line: str) -> str | None:
+    """Filter child stderr before it can reach terminal or evidence files."""
+    line = re.sub(r'\x1b\[[0-9;]*m', '', line)
+    if not re.search(r'error|fail|exception|timeout|timed out|ECONN|ENOTFOUND|CERT_', line, re.I):
+        return None
+    secret = os.environ.get('DEEPSEEK_API_KEY', '')
+    if secret:
+        from urllib.parse import quote
+        for value in (secret, quote(secret, safe=''), json.dumps(secret)[1:-1]):
+            line = line.replace(value, '[REDACTED]')
+    line = re.sub(r'sk-[A-Za-z0-9_-]{16,}', '[REDACTED]', line)
+    line = re.sub(r'(?i)\b(Bearer|Basic)\s+[^\s"\x27,}]+', r'\1 [REDACTED]', line)
+    line = re.sub(r'(?i)((?:x-api-key|api_key|apikey|authorization|password)\s*["\x27]?\s*[:=]\s*["\x27]?)[^\s"\x27,}]+', r'\1[REDACTED]', line)
+    line = re.sub(r'(https?://)[^\s/@]+:[^\s/@]+@', r'\1[REDACTED]@', line)
+    return re.sub(r'[\x00-\x1f\x7f]', ' ', line).strip()[:4096]
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     sub = parser.add_subparsers(dest='command', required=True)
+    sub.add_parser('filter-stderr')
     pre = sub.add_parser('preflight')
     pre.add_argument('--provider', required=True); pre.add_argument('--model', required=True); pre.add_argument('--tools', required=True)
     assess = sub.add_parser('assess')
     assess.add_argument('file'); assess.add_argument('--require-tools', action='store_true')
     args = parser.parse_args()
+    if args.command == 'filter-stderr':
+        for line in sys.stdin:
+            safe = safe_error_line(line)
+            if safe is not None:
+                print(safe, file=sys.stderr, flush=True)
+        return 0
     if args.command == 'preflight':
         warnings = preflight(args.provider, args.model, [x.strip() for x in args.tools.split(',') if x.strip()])
     else:

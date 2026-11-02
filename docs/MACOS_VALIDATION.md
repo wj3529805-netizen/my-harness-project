@@ -1,6 +1,30 @@
 # macOS validation — 2026-11-02
 
-## R1 真实 AI 会话 — 2026-11-03：FAIL，已停止
+## R1 授权重跑 — 2026-11-03：本次范围 PASS
+
+用户授权先进行不带 key 的 curl 检查、打开仅错误的脱敏输出，并在原累计最多 13 次请求内重跑一次。默认路径、`--noproxy '*'` 和系统配置代理三次 HTTPS HEAD 都返回 401（未授权请求的预期响应），TLS 校验为 0/通过；代理 CONNECT 返回 200。未发现证书错误或拦截页，但不能据此保证流式连接持续稳定。[网络证据](../evidence/mac-r1/retry-1/)、[代理配置摘要](../evidence/mac-r1/retry-1/proxy-settings.json)。curl 未携带 API key，也未产生模型请求。
+
+curl 终端文本保留实际响应，仅为 Git 空白检查移除了行末 ASCII 空格/tab；原文件 SHA-256 和可精确复原的逐行后缀编辑均保留，HTTP 状态、头、证书及计时未作语义修改。[规范化记录](../evidence/mac-r1/retry-1/curl-text-normalization.json)。
+
+运行器现将 stderr 先交给错误过滤器，普通启动输出丢弃，密钥精确值、常见凭据字段和 Bearer 值在终端/落盘之前脱敏。DeepSeek 诊断只记录错误的 name/code/message/status/cause，不序列化请求、headers、body 或 stack；只读观察 undici 错误，不改网络请求、TLS 或重试策略。实际成功请求后观察到 AbortError；固定 Harness 的 generate-finally 会主动 abort consumer 清理连接，不能仅凭此把成功的 turn/end=completed 判成失败。诊断相关回归 19 passed，全量 **135 passed、2 skipped**。[回归](../evidence/mac-r1/retry-1/diagnostic-regression.txt)、[全量](../evidence/mac-r1/retry-1/pytest-full.txt)。
+
+原 ledger 保留 2，本轮规划、负向检查、批准后执行三轮分别 2、2、3 次，最终累计计数 **9/13**（本轮 7 次）。绝对配置上限保持 12，保留已说明的最多一次竞态余量；没有重置 ledger、追加额度或完成后继续请求。计数不是独立账单核对，首次失败请求是否计费仍以提供商为准。[累计计数](../evidence/mac-r1/request-ledger.json)、[三轮摘要](../evidence/mac-r1/retry-1/model-turn-summaries.json)。
+
+真实模型生成默认五阶段计划后在 WAITING_APPROVAL 停下；受控未批准执行恰调用一次，实际返回 NOT_APPROVED，模型明确拒绝删除和 shell 请求。批准前资产仍 PLANNED、无步骤或预览，源不变，库和预览为空。[计划](../evidence/mac-r1/retry-1/plan.json)、[批准前检查](../evidence/mac-r1/retry-1/preapproval-checks.json)。用户在本聊天审阅并明确批准任务 `tsk_e1ac50d0ffc24f5d801665f1237893ee` 和摘要 `5c993f58ae714f7dc77038a3c94ba9b76ff460390042edecbb633f8b715291c9` 后，才通过外部操作端 CLI approve；AI 无批准工具，实际批准行仅一条且摘要相符。[批准记录](../evidence/mac-r1/retry-1/human-cli-approval.json)。
+
+| 验收项 | 结果与证据 |
+|---|---|
+| 真实 DeepSeek → 受限 Harness → CETACEA → 真实 Lightroom | PASS；实际工具面精确为 14 个 CETACEA 工具 + 7 个允许的 Harness 工具，三轮 turn/end 均 completed。[原始事件](../evidence/mac-r1/retry-1/real-session.jsonl) |
+| 批准后由 AI 执行完整计划 | PASS；`photo_execute_import` 恰调用一次，任务 COMPLETED、run_count=1、error=null、mock=false，ingest/lr_register/lr_preset/lr_export/preview_verify 五个步骤各完成一次。[最终任务](../evidence/mac-r1/retry-1/final-task.json)、[数据库与审计](../evidence/mac-r1/retry-1/final-database.json) |
+| 模型及独立 CLI 核验 | PASS；模型在执行返回 COMPLETED 后才调用 photo_verify_preview，OK/mock=false；独立 CLI verify-preview 同样 OK/mock=false。[CLI 核验](../evidence/mac-r1/retry-1/cli-verify-preview.json) |
+| 目标读回、实际预设及 JPEG | PASS；RAW 目标重新打开读回 SHA-256，与计划及源一致；真实 Lightroom 曝光独立读回 0.5；JPG 完整解码 1600×1065，读回 SHA-256 与预览记录一致。[最终检查](../evidence/mac-r1/retry-1/final-checks.json)、[曝光读回](../evidence/mac-r1/retry-1/develop-readback.json) |
+| 测试边界和批准权限 | PASS；执行前后只核对独立测试 catalog 的打开文件名，不读 .lrcat 内容；源 SHA-256/mtime/inode 前后一致，无新增库 XMP/ACR；批准仅来自人类 CLI，AI 从未批准。[最终 catalog 守卫](../evidence/mac-r1/retry-1/catalog-guard-final.json)、[源快照](../evidence/mac-r1/retry-1/source-after.json) |
+
+[完整结论](../evidence/mac-r1/retry-1/result.json)。本轮只用一张已说明来源/许可证差异的公开 Nikon Z6 样片和专用测试 catalog，没有客户数据、生产 catalog、NAS、实体卡或额外安装。仍只是一次有限样本，不代表生产可靠性、所有机型/HE★、大批量或所有网络条件；核心资产租期仍为 920 秒，本轮未做 920 秒实耗压测。首次 TRANSPORT 的根因没有被证明，本轮没有复现，不能声称已永久修复网络。开启诊断后亦可见固定 Harness 可选 typert-loader 缺少 typert.host.js 的启动错误；实际白名单工具与完整流程成功，不据此宣称这些可选模块通过。密钥完整值及常见前缀扫描零命中。[扫描](../evidence/mac-r1/retry-1/secret-scan-final.json)。会话已结束，未进入 R2；本轮新提交推送仍待用户授权。
+
+## R1 首次真实 AI 会话 — 2026-11-03：FAIL，历史记录
+
+以下保留首次失败时的结论；后续授权检查和成功重跑见上节，不改写首次失败结果。
 
 基线 `phase1/0142bbc`，工作分支 `mac/R1`。用户授权仅本次 R1、最多 13 次 DeepSeek 计费请求；驱动上限设 12，保留已说明的最多一次取消竞态余量。使用现有 `deepseek-flash`、thinking 关闭、provider 自动重试 0。**驱动记录 2 次模型请求，第 2 次报 `DeepSeek Messages transport failed` / `TRANSPORT`，未生成计划，R1 未通过。** 未自动重试，未使用剩余额度，未进入 R2。失败请求是否计费以提供商为准。
 
@@ -23,7 +47,7 @@
 
 失败后仅结束会话、汇总证据及撰写文档。证据已用非空环境变量进行密钥完整值匹配和常见前缀扫描，零命中，未记录密钥值。[扫描结果](../evidence/mac-r1/secret-scan.json)。后续诊断、重新运行和推送 `mac/R1` 等待用户决定。
 
-## phase2-merged 合并后复验（本轮）
+## phase2-merged 合并后复验 — 2026-11-02（历史）
 
 **结果：本轮请求范围内 PASS。** 在 Mac 上执行 `git fetch origin && git checkout phase2-merged`，被验收产品代码为 `08fcfd9b1070ddbed1569b01313cb71727134435`。本轮仅涉及验收脚本、证据、文档及瞬时 gate 文件忽略规则，没有修补产品代码、修改测试断言或启用 DeepSeek 实网请求。证据集中在 [evidence/mac-acceptance-merged](../evidence/mac-acceptance-merged/)。下文首次 `mac-validation` 及实体设备报告为历史记录，不能代替本轮结果。
 

@@ -38,5 +38,6 @@ for name in CETACEA_MOCK_SCRIPT CETACEA_MOCK_LOG CETACEA_REQUEST_LEDGER CETACEA_
   if [ -n "${!name+x}" ]; then child_env+=("$name=${!name}"); fi
 done
 if [ "$mode" = deepseek ]; then child_env+=("DEEPSEEK_API_KEY=$DEEPSEEK_API_KEY"); fi
-# Provider or plugin diagnostics may include credentials; the driver emits safe errors.
-env -i "${child_env[@]}" node --import "$TSX" "$FX/cetacea-session-driver.ts" "$FX/cetacea-combined.patch.yml" 2>/dev/null
+# Filter before output: no raw stderr file, request headers or credential values.
+env -i "${child_env[@]}" node --import "$TSX" "$FX/cetacea-session-driver.ts" "$FX/cetacea-combined.patch.yml" \
+  2> >("$CETACEA_PYTHON" -m cetacea.harness_guard filter-stderr >&2)

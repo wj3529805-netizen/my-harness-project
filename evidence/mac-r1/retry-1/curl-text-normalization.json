@@ -1,0 +1,82 @@
+{
+  "method": "Remove only trailing ASCII space/tab before newline in terminal text captures for git whitespace checks. HTTP status/headers/certificate/metrics remain semantically unchanged. Exact original can be reconstructed using 1-based line suffix edits.",
+  "captures": [
+    {
+      "file": "curl-default.txt",
+      "original_sha256": "0229e47ce9be9848af7ef2065bb4e9694f006be70fe7d7acfa4ae0a935150508",
+      "normalized_sha256": "309b394a907de55d96d8cfc9df9199343ad9aeb75cbbe1e400b8444bf52c366a",
+      "reversible_edits": [
+        {
+          "line": 1,
+          "removed_suffix_hex": "20"
+        },
+        {
+          "line": 71,
+          "removed_suffix_hex": "20"
+        },
+        {
+          "line": 73,
+          "removed_suffix_hex": "20"
+        },
+        {
+          "line": 88,
+          "removed_suffix_hex": "20"
+        }
+      ]
+    },
+    {
+      "file": "curl-direct.txt",
+      "original_sha256": "edb58b4b4066cb7b1a936e9b5f72a44a7da83f23ab8bc51fa037a8e29ffb83b5",
+      "normalized_sha256": "8553b07b3b716b04666aff8ea68b50a53385db63c762aa5c609024fd1c3184ad",
+      "reversible_edits": [
+        {
+          "line": 1,
+          "removed_suffix_hex": "20"
+        },
+        {
+          "line": 71,
+          "removed_suffix_hex": "20"
+        },
+        {
+          "line": 73,
+          "removed_suffix_hex": "20"
+        },
+        {
+          "line": 88,
+          "removed_suffix_hex": "20"
+        }
+      ]
+    },
+    {
+      "file": "curl-system-proxy.txt",
+      "original_sha256": "394dad98191acb983eb6f9827e9bc017e17f4fc32eedebd186104ba05aa992ff",
+      "normalized_sha256": "832c3fc168eda284bb48cd34c90764943dab51357d856fcbf437e1d185f76ad9",
+      "reversible_edits": [
+        {
+          "line": 3,
+          "removed_suffix_hex": "20"
+        },
+        {
+          "line": 34,
+          "removed_suffix_hex": "20"
+        },
+        {
+          "line": 36,
+          "removed_suffix_hex": "20"
+        },
+        {
+          "line": 82,
+          "removed_suffix_hex": "20"
+        },
+        {
+          "line": 84,
+          "removed_suffix_hex": "20"
+        },
+        {
+          "line": 99,
+          "removed_suffix_hex": "20"
+        }
+      ]
+    }
+  ]
+}

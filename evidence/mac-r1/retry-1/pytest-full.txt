@@ -1,0 +1,5 @@
+........................................................................ [ 53%]
+...............................................................          [100%]
+=========================== short test summary info ============================
+SKIPPED [2] tests/test_realmodel_optin.py:15: Real model requires DEEPSEEK_API_KEY and CETACEA_REALMODEL=1
+135 passed, 2 skipped in 30.65s

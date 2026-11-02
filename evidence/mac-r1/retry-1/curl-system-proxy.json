@@ -1,0 +1,21 @@
+{
+  "route": "system-proxy",
+  "url": "https://api.deepseek.com",
+  "method": "HEAD",
+  "authorization_header_sent": false,
+  "api_key_passed_to_curl": false,
+  "exit_code": 0,
+  "elapsed_seconds": 5.243908882141113,
+  "curl": {
+    "http_code": 401,
+    "http_connect": 200,
+    "remote_ip": "127.0.0.1",
+    "remote_port": 7897,
+    "ssl_verify_result": 0,
+    "time_connect": 0.000239,
+    "time_appconnect": 4.730239,
+    "time_total": 5.232505,
+    "proxy_used": 1,
+    "errormsg": null
+  }
+}

@@ -1,11 +1,21 @@
 #!/usr/bin/env node
 import { readFileSync, renameSync, unlinkSync, writeFileSync } from 'node:fs'
 import { createInterface } from 'node:readline'
+import { channel } from 'node:diagnostics_channel'
 import type { Context } from '@deepseek-ai/cordis'
 import { resolveConfigPath } from '@deepseek-ai/dsh-app-boot'
 import { runFixtureTurn } from '@deepseek-ai/dsh-loader-smoke'
 import type { SessionEvent } from '@deepseek-ai/dsh-session'
 import { bootProductionProfile } from '../production-profile.ts'
+import { reportError } from './cetacea-errors.ts'
+
+// Observe transport errors without changing fetch, TLS, responses or retries.
+const transportErrors = channel('undici:request:error')
+const onTransportError = (event: unknown): void => {
+  const item = event as { request?: { origin?: unknown }, error?: unknown }
+  if (String(item.request?.origin) === 'https://api.deepseek.com') reportError('deepseek_transport', item.error)
+}
+transportErrors.subscribe(onTransportError)
 
 // request/header is a model request snapshot (config and tool schemas), not HTTP
 // headers. Drop it entirely so future header fields cannot disclose credentials.
@@ -82,6 +92,13 @@ try {
         surface = Array.isArray(tools) && tools.every(tool => typeof tool.name === 'string')
           ? tools.map(tool => tool.name).sort() : null
       }
+      if (event.type === 'assistant/attempt') {
+        for (const entry of event.data.stream) {
+          if (entry.type === 'chunk' && entry.chunk.type === 'finish' && entry.chunk.reason.kind === 'error') {
+            reportError('model_attempt', entry.chunk.reason.failure)
+          }
+        }
+      }
       if (event.type === 'step/end') emitSurface()
       if (!exceeded) emit({ type: 'session_event', turn, sessionId, event: redactEvent(event) })
     } })
@@ -89,10 +106,12 @@ try {
     emitSurface()
     emit({ type: 'turn_done', turn, output: result.output, usage: result.usage ?? null, requests })
   }
-} catch {
+} catch (error) {
+  reportError('session', error)
   // Errors may contain provider details or credentials; never print them.
   emit({ type: 'error', message: 'session failed' })
   process.exitCode = 1
 } finally {
+  transportErrors.unsubscribe(onTransportError)
   try { await ctx?.fiber.dispose() } catch { process.exitCode ||= 1 }
 }

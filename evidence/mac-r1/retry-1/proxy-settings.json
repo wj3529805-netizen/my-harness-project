@@ -1,0 +1,11 @@
+{
+  "system_proxy": {
+    "HTTPEnable": "1",
+    "HTTPPort": "7897",
+    "HTTPSEnable": "1",
+    "HTTPSPort": "7897",
+    "ProxyAutoConfigEnable": "0",
+    "SOCKSEnable": "1",
+    "SOCKSPort": "7897"
+  }
+}

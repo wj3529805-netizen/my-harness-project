@@ -1,0 +1,51 @@
+{
+  "source_snapshot_unchanged": true,
+  "source_sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+  "destination_sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+  "target_hash_matches_source_and_plan": true,
+  "jpeg": {
+    "format": "JPEG",
+    "width": 1600,
+    "height": 1065,
+    "sha256": "1dd4cc6ac98d3b828fd993daff462b5bbc06c52c8a37a65e8864306b61b5c243"
+  },
+  "jpeg_matches_database_hash": true,
+  "exposure_readback": 0.5,
+  "photo_path_matches": true,
+  "state": "COMPLETED",
+  "run_count": 1,
+  "error": null,
+  "approval_count": 1,
+  "approved_by": "cli",
+  "approval_unrevoked": true,
+  "approval_digest_matches": true,
+  "completed_stages": [
+    "ingest",
+    "lr_register",
+    "lr_preset",
+    "lr_export",
+    "preview_verify"
+  ],
+  "step_count": 5,
+  "asset_status": "VERIFIED",
+  "lr_status": "EXPORTED",
+  "asset_mock": 0,
+  "preview_mock": 0,
+  "preset_applied": "r1-preset",
+  "ai_never_approved": true,
+  "lightroom_asset_lease_constant_seconds": 920,
+  "model_request_count_total": 9,
+  "cli_verify": {
+    "status": "OK",
+    "mock": false,
+    "marker": "Lightroom MCP connected (real read-only preset probe; catalog identity unverified)",
+    "run": 1,
+    "missing": [],
+    "failed": [],
+    "orphans": [],
+    "size_violations": [],
+    "expected_count": 1,
+    "mapped_count": 1
+  },
+  "new_library_sidecars": []
+}

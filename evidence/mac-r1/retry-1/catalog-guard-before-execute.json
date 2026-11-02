@@ -1,0 +1,10 @@
+{
+  "pid": "20854",
+  "catalog_paths": [
+    "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/cetacea-workbench/acceptance-data/catalog/Cetacea-Phase1-Test-20261102/Cetacea-Phase1-Test-20261102.lrcat"
+  ],
+  "expected": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/cetacea-workbench/acceptance-data/catalog/Cetacea-Phase1-Test-20261102/Cetacea-Phase1-Test-20261102.lrcat",
+  "catalog_content_read": false,
+  "user_approved_task_id": "tsk_e1ac50d0ffc24f5d801665f1237893ee",
+  "user_approved_plan_digest": "5c993f58ae714f7dc77038a3c94ba9b76ff460390042edecbb633f8b715291c9"
+}

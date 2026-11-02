@@ -1,6 +1,12 @@
 # Gate 1 validation notes
 
-## R1 Mac real AI — 2026-11-03：FAIL_STOPPED
+## R1 Mac real AI — 2026-11-03：授权重跑有限样本通过
+
+用户后续授权免费 curl 检查、脱敏错误诊断及原 13 次总额内一次重跑，再明确批准具体计划。重跑三轮耗用 7 次，累计 driver count=9（保留首次 2 次），未重置计数。实际 DeepSeek + 真实 Lightroom 完成五阶段、一次人类 CLI 批准，批准前执行拒绝/删除和 shell 请求拒绝，模型与 CLI 均核验 OK/mock=false，RAW 目标读回及曝光/JPG 独立检查通过。[报告](MACOS_VALIDATION.md)、[重跑结果](../evidence/mac-r1/retry-1/result.json)。
+
+三个不带 key 的 curl HEAD 均 HTTP401、TLS 校验通过，未见拦截页；系统代理开启，不能据此证明完全不经代理或流式连接长期稳定。首次 TRANSPORT 根因仍未知，本轮未复现；已开启仅错误的脱敏诊断，普通 stdout/stderr、请求头/正文不作为错误对象序列化。成功请求后的 AbortError 连接清理和可选 typert-loader 缺失模块的启动错误亦如实保留，不能把任意 stderr 行等同于模型失败。当前测试仍仅公开 Nikon Z6 单样本、专用测试 catalog，非客户数据、非生产可靠性证明；两项实网 pytest 模块仍跳过（真实会话另行运行），全量回归 135 passed/2 skipped。R2–R5 尚未开始。
+
+## R1 Mac real AI 首次失败 — 2026-11-03：FAIL_STOPPED，历史
 
 `mac/R1` 基于路线图 `0142bbc`。真实 DeepSeek 第 2 次模型请求报 `DeepSeek Messages transport failed`（TRANSPORT），尚未生成计划；仅来源/订单/真实 Lightroom 状态查询成功。按路线图停止，没有自动重试或进入 R2。驱动计数 2，失败请求计费未知；不能将 turn_done 或 mock=false 状态查询当完整验收通过。运行器抑制提供商 stderr，根因未证实。全部任务/批准/资产/步骤/预览为 0，源快照不变，库及预览为空；后续验收均 NOT_RUN。见 [报告](MACOS_VALIDATION.md)、[原始事件](../evidence/mac-r1/real-session.jsonl)、[结果](../evidence/mac-r1/result.json)。
 

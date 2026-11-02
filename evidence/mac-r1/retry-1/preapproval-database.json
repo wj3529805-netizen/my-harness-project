@@ -1,0 +1,194 @@
+{
+  "tasks": [
+    {
+      "task_id": "tsk_e1ac50d0ffc24f5d801665f1237893ee",
+      "idempotency_key": "76487fa1063660b440905446aed0bf9322472a8e11d739abc499c97184f5f98c",
+      "type": "import",
+      "state": "WAITING_APPROVAL",
+      "order_id": "r1-test",
+      "photographer_id": "tester",
+      "batch_id": "b_d2d19eb165fa",
+      "source_id": "r1-public",
+      "plan_json": "{\"files\": [{\"rel_path\": \"public-test.NEF\", \"size\": 25994889, \"sha256\": \"8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02\", \"kind\": \"raw\", \"dest_rel_path\": \"r1-test/tester/b_d2d19eb165fa/public-test.NEF\", \"asset_id\": \"ast_da4d325f0c0209756cf53cfa\"}], \"total_bytes\": 25994889, \"destination\": \"r1-test/tester/b_d2d19eb165fa\", \"stages\": [\"ingest\", \"lr_register\", \"lr_preset\", \"lr_export\", \"preview_verify\"], \"preset_id\": \"r1-preset\", \"scan_digest\": \"d2d19eb165fa7db5699b068e0c02478ade7aff6241d42750a334aa57dee30472\", \"lightroom\": {\"preset\": {\"label\": \"Cetacea Phase1 Test +0.50\", \"lightroom_uuid\": null, \"lightroom_name\": \"Cetacea Phase1 Test +0.50\"}, \"export\": {\"max_edge\": 1600, \"quality\": 85, \"preview_root\": \"/Users/mac/Documents/ChatGPT/AI\\u5de5\\u4f5c\\u53f0/my-harness-project/acceptance-data/mac-r1/preview\", \"library_root\": \"/Users/mac/Documents/ChatGPT/AI\\u5de5\\u4f5c\\u53f0/my-harness-project/acceptance-data/mac-r1/library\"}}}",
+      "plan_digest": "5c993f58ae714f7dc77038a3c94ba9b76ff460390042edecbb633f8b715291c9",
+      "stages_json": "[\"ingest\", \"lr_register\", \"lr_preset\", \"lr_export\", \"preview_verify\"]",
+      "run_count": 0,
+      "error": null,
+      "created_at": "2026-11-02T16:27:05.509418+00:00",
+      "updated_at": "2026-11-02T16:27:05.509587+00:00",
+      "lease_until": null
+    }
+  ],
+  "approvals": [],
+  "assets": [
+    {
+      "asset_id": "ast_da4d325f0c0209756cf53cfa",
+      "order_id": "r1-test",
+      "photographer_id": "tester",
+      "batch_id": "b_d2d19eb165fa",
+      "rel_path": "public-test.NEF",
+      "size": 25994889,
+      "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+      "kind": "raw",
+      "status": "PLANNED",
+      "error": null,
+      "dest_rel_path": "r1-test/tester/b_d2d19eb165fa/public-test.NEF",
+      "lr_photo_id": null,
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "verified_at": null
+    }
+  ],
+  "task_steps": [],
+  "previews": [],
+  "audit_log": [
+    {
+      "actor": "human:cli",
+      "action": "add_source",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T16:06:32.428856+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "add_orders",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T16:06:32.430061+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "add_photographers",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T16:06:32.431380+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "add_preset",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T16:06:32.432579+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "mcp.lightroom_status",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T16:06:34.582336+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "lightroom_status",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T16:06:34.583238+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "mcp.list_sources",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T16:08:35.798669+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "list_sources",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T16:08:35.799825+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "mcp.list_orders",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T16:08:35.812105+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "list_orders",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T16:08:35.812897+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "mcp.lightroom_status",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T16:08:35.822765+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "lightroom_status",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T16:08:35.823413+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "mcp.plan_import",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T16:27:05.495782+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "plan_import",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T16:27:05.496710+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "scan_source",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T16:27:05.497302+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "state_change",
+      "task_id": "tsk_e1ac50d0ffc24f5d801665f1237893ee",
+      "detail_json": "[\"PENDING\", \"WAITING_APPROVAL\"]",
+      "ts": "2026-11-02T16:27:05.509601+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "get_task",
+      "task_id": "tsk_e1ac50d0ffc24f5d801665f1237893ee",
+      "detail_json": "null",
+      "ts": "2026-11-02T16:27:05.510360+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "mcp.execute",
+      "task_id": "tsk_e1ac50d0ffc24f5d801665f1237893ee",
+      "detail_json": "null",
+      "ts": "2026-11-02T16:27:51.944499+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "get_task",
+      "task_id": "tsk_e1ac50d0ffc24f5d801665f1237893ee",
+      "detail_json": "null",
+      "ts": "2026-11-02T16:27:51.946097+00:00"
+    },
+    {
+      "actor": "ai:ai:mcp",
+      "action": "execute",
+      "task_id": "tsk_e1ac50d0ffc24f5d801665f1237893ee",
+      "detail_json": "null",
+      "ts": "2026-11-02T16:27:51.948121+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "get_task",
+      "task_id": "tsk_e1ac50d0ffc24f5d801665f1237893ee",
+      "detail_json": "null",
+      "ts": "2026-11-02T16:29:10.363212+00:00"
+    }
+  ]
+}
