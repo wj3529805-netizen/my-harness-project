@@ -18,14 +18,14 @@ Stage C validation history:
 ---
 # 已知风险与未完成事项（Phase 1 收尾）
 
-测试：Phase 1 收尾时 71 passed；Phase 2 Mock 阶段 75 passed；真实模型阶段无密钥/开关全量 90 passed、1 skipped，真实模型 opt-in 5 passed（Linux，Python 3.13）。开发过程中的失败与修复历史见上文。
+测试：Phase 1 收尾时 71 passed；Phase 2 Mock 阶段 75 passed；真实模型阶段无密钥/开关全量 90 passed、1 skipped，真实模型 opt-in 5 passed；本阶段无密钥/开关 103 passed、2 skipped（分别为 `tests/test_realmodel_optin.py`、`tests/test_realmodel_fullplan_optin.py`；Linux，Python 3.13）。开发过程中的失败与修复历史见上文。
 
 1. **未在 macOS / 真实 Lightroom 上验证**任何东西。`RealLightroomMcpAdapter` 只对假 MCP 服务器做过接口测试；lightroom-mcp 实际返回格式（import_photos 无 photo id、export_photos 无文件名）按源码阅读做的假设，须在 Mac 上验收清单 A13 确认。
 2. 真实适配器每次调用都启动一个 MCP 子进程（简单、隔离，但慢）；大批量时需改为长连接会话。
 3. Mock 适配器的“已登记”状态在进程内存里；跨进程时以数据库 assets.lr_photo_id 为准。
 4. 硬链接不可用时的回退（`.cetacea-lock` + rename）只对遵守锁的 CETACEA 写入者安全；外部写入者可能竞争。APFS 支持硬链接；exFAT/SMB 待验证。
 5. 性能：扫描一次完整哈希，复制时再读源、读回临时文件、最终读回，共约 4 次读取；大卡（数百 GB）耗时较长，未做基准测试。
-6. `photo_list_sources` 会向 AI 返回已登记来源的绝对路径（只读信息，AI 不能据此读写任意路径）。
+6. `photo_list_sources` 会向 AI 返回已登记来源的绝对路径（会经 Harness 发送给 DeepSeek；AI 不能据此读写任意路径）。可考虑今后只返回 ID/标签，见 [数据流](DATA_FLOW.md)。
 7. 磁盘满/权限错误通过故障注入和 monkeypatch 测试，并非真实磁盘满。
 8. （Phase 1 原文，已被 Phase 2 部分取代）没有真实 AI 客户端联调。Phase 2 之后：Harness 的真实 MCP 客户端及 DeepSeek 已小规模联调；Codex/Claude 客户端未联调。
 9. 私有 GitHub 仓库未能核查（需 GitHub App 授权）。
@@ -37,9 +37,9 @@ Stage C validation history:
 ---
 # Phase 2：deepseek-harness 接入的已知风险与未验证项
 
-状态：已用真实 DeepSeek 小规模验证（5 个场景各 1 次，17 次请求）；非可靠性保证；仅 Linux；Harness 仍为实验性/未审计。
+状态：此前真实 DeepSeek 的 5 个场景各 1 次、17 次请求；完整计划另采样 1 次、8 次请求。均仅 Linux，Lightroom 为 MOCK；不构成可靠性保证；Harness 仍为实验性/未审计。
 
-1. **真实模型样本有限**：仅一个非确定性模型、每场景一次，不构成可靠性或安全保证。人工批准后导片完成并验证，但 `lightroom_import_verified` 返回 `PERMISSION_DENIED`，AI 如实报告预览受阻；预览未完成，权限设计是否如此尚未进一步调查。
+1. **真实模型样本有限**：仅一个非确定性模型、每场景一次，不构成可靠性或安全保证。此前 `lightroom_import_verified` 被拒是因为模型规划时未传 `stages`，core 默认仅 `ingest`，批准的计划没有 Lightroom 阶段；该拒绝正确，检查保留。AI 有 Lightroom scope，但始终没有 approve 权限。新 MCP 默认完整计划后，一次真实模型采样经一次人工批准完成 MOCK 预览核验；见 [完整计划](FULLPLAN.md)。
 2. **Harness 实验性/未审计**：其 SAFETY.md 自述。固定提交，但我们未做安全审计；仅审阅了安装脚本、MCP 客户端、测试驱动和 flock.c。
 3. **Harness 默认给模型 bash/文件读写/web/子代理等工具**（已验证：不加限制时 headless profile 暴露约 40 个工具）。这会绕过 CETACEA “AI 无 shell/路径/删除”的契约。已提供 `harness/cetacea-restricted.patch.yml` 关闭这些工具，测试用“允许清单”断言模型只能看到 14 个 `mcp__cetacea__*` + 目标/待办/MCP 资源列表工具（并经变异验证：去掉限制则测试失败）。**任何真实模型部署必须带上这个限制文件**；它不是 Harness 的默认行为，使用者漏配就不安全。
 4. **工具调用警告仅经 Mock 验证**：本项目 guard 在运行前检查静态能力表和工具面，逐轮检查缺少调用、工具失败及未知工具；要求调用时 `NO_TOOL_CALLS` 会令 `success=False` 并向 stderr 输出 WARNING。能力表不向提供商查询；真实 DeepSeek 只观察到有工具调用和允许无工具的正常拒绝，未用真实不支持工具调用的模型触发警告。
@@ -54,4 +54,7 @@ Stage C validation history:
 12. **多轮驱动验证**：此前沙箱启动超时只反映该环境限制；用户随后在沙箱外完成测试并全部通过。Mock 覆盖多轮、纯文本模型的 `NO_TOOL_CALLS`、`NOT_APPROVED`、预算退出码 4、ledger、14 个 CETACEA 加 7 个无害工具及缺密钥退出码 5。真实运行首次未批准场景先查状态并拒绝执行，原测试误期待 `NOT_APPROVED` 而失败；已调整该测试，并用独立强制调用场景验证该错误路径。
 13. 真实 overlay 关闭 session-title、web、telemetry 条目；Harness 错误/诊断 stderr 被丢弃，提供商失败仅显示 `session failed`，排障信息有限。
 14. 驱动的 30 次请求上限因竞争最多超出 1 次；ledger 无跨进程锁，不能供并发进程共享。
-15. 密钥仅由 `DEEPSEEK_API_KEY` 传入，但必须进入 Harness 子进程环境；依赖 Harness 不记录密钥。仓库及证据已 grep 验证不含密钥值，Harness 自身网络及日志行为未审计。DeepSeek 会收到工具结果内容（订单/摄影师 ID、文件名）；未作数据处理决策前不要使用真实客户数据。
+15. 密钥仅由 `DEEPSEEK_API_KEY` 传入，但必须进入 Harness 子进程环境；依赖 Harness 不记录密钥。仓库及证据已 grep 验证不含密钥值，Harness 自身网络及日志行为未审计。DeepSeek 会收到工具结果内容，包括订单/摄影师 ID、批次标签、文件名、大小、SHA-256、目标相对路径、来源绝对路径和 Lightroom 状态文字；工具不返回照片字节。未作数据处理/合同决策前不要使用真实客户数据，并审阅用户自己的 DeepSeek 数据保留条款。详见 [数据流](DATA_FLOW.md)。
+
+16. **完成后重执行的配置检查**：即使任务已 `COMPLETED`，再次执行仍检查审批和快照；完成后若相关配置改变，会返回 `PERMISSION_DENIED`，而非直接无操作返回。这是可接受的当前行为。
+17. **合并与测试环境**：`mac-validation` 分支尚未合并；本阶段源文件只改动 `core.py` 和 `mcp_server.py`，合并时需核对。MCP stdio 测试在 Codex 沙箱外通过；先前未验证仅是 Codex 沙箱限制。

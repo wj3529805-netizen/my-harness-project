@@ -54,6 +54,14 @@ class Workbench:
         with db.connect(self.home) as c: return [dict(r) for r in c.execute('SELECT * FROM orders')]
     def scan_source(self,source_id):
         self._call('read','scan_source'); return scan(self.config['sources'][source_id]['path'])
+    def _lightroom_snapshot(self, preset_id):
+        cfg=self.config.get('preview',{})
+        return {'preset':self.config['presets'].get(preset_id), 'export':{'max_edge':cfg.get('max_edge',1600), 'quality':cfg.get('quality',85), 'preview_root':self.config['preview_root'], 'library_root':self.config['library_root']}}
+    def _check_approved_plan(self, t):
+        plan=json.loads(t['plan_json'])
+        if digest(plan)!=t['plan_digest']: raise PermissionDenied('plan changed after approval')
+        if 'lightroom' in plan and plan['lightroom']!=self._lightroom_snapshot(plan['preset_id']):
+            raise PermissionDenied('preset/export settings changed after approval')
     def plan_import(self,order_id,photographer_id,source_id,batch_label=None,preset_id=None,stages=None,scan_result=None):
         self._call('plan','plan_import'); identifier(order_id); identifier(photographer_id)
         stages=['ingest'] if stages is None else stages
@@ -69,6 +77,7 @@ class Workbench:
             item['asset_id']='ast_'+hashlib.sha256('\0'.join([order_id,photographer_id,batch,f['rel_path'],f['sha256']]).encode()).hexdigest()[:24]; files.append(item)
         key=digest([order_id,photographer_id,source_id,batch,result['digest'],preset_id,stages])
         plan={'files':files,'total_bytes':sum(f['size'] for f in files),'destination':base,'stages':stages,'preset_id':preset_id,'scan_digest':result['digest']}
+        if any(s.startswith('lr_') or s=='preview_verify' for s in stages): plan['lightroom']=self._lightroom_snapshot(preset_id)
         task_id='tsk_'+uuid.uuid4().hex
         with db.connect(self.home) as c:
             c.execute('BEGIN IMMEDIATE')
@@ -136,9 +145,10 @@ class Workbench:
             row=c.execute('SELECT * FROM tasks WHERE task_id=?',(task_id,)).fetchone()
             if row is None: raise KeyError(task_id)
             t=dict(row)
-            if plan_digest is not None and plan_digest!=t['plan_digest']: raise PermissionDenied('stale plan_digest')
-            if t['state']=='COMPLETED': return t
             if not c.execute('SELECT 1 FROM approvals WHERE task_id=? AND plan_digest=? AND revoked_at IS NULL',(task_id,t['plan_digest'])).fetchone(): raise NotApproved(task_id)
+            if plan_digest is not None and plan_digest!=t['plan_digest']: raise PermissionDenied('stale plan_digest')
+            self._check_approved_plan(t)
+            if t['state']=='COMPLETED': return t
             if t['state']=='RUNNING': raise InvalidTransition('live runner')
             error=transition(c,self.principal,task_id,'RUNNING')
             if not error: c.execute('UPDATE tasks SET run_count=run_count+1,lease_until=? WHERE task_id=?',(time.time()+300,task_id))
@@ -211,6 +221,7 @@ class Workbench:
         with db.connect(self.home) as c:
             if not c.execute('SELECT 1 FROM approvals WHERE task_id=? AND plan_digest=? AND revoked_at IS NULL', (task_id, t['plan_digest'])).fetchone():
                 raise NotApproved(task_id)
+        self._check_approved_plan(t)
         if preset_id is not None:
             identifier(preset_id)
             if preset_id not in self.config['presets']: raise KeyError(preset_id)

@@ -7,7 +7,7 @@
 ## 安装与测试（项目内 venv，无需系统级安装；需 Python ≥ 3.12）
 ```bash
 python3 -m venv .venv && .venv/bin/pip install -e .
-.venv/bin/python -m pytest -q          # 已测：90 passed，1 skipped（无密钥/开关；真实模型 opt-in 模块跳过，需具备 Harness 测试依赖）
+.venv/bin/python -m pytest -q          # 已测：103 passed，2 skipped（Linux，无密钥/开关；两个真实模型 opt-in 模块跳过，需具备 Harness 测试依赖）
 .venv/bin/python scripts/e2e_demo.py   # 端到端 Mock，输出 evidence/e2e/
 ```
 ## 人工流程示例
@@ -23,8 +23,8 @@ cetacea --home $H approve TASK_ID PLAN_DIGEST              # 只有人类可以�
 cetacea --home $H execute TASK_ID && cetacea --home $H report TASK_ID
 ```
 ## AI 客户端接入（stdio MCP）
-`cetacea --home $H mcp-serve`（AI 主体：read/plan/execute/cancel/lightroom；永远没有 approve/admin）。工具只接受 ID。配置片段见 `bash scripts/mac/print_lightroom_mcp_config.sh`（只打印）。
+`cetacea --home $H mcp-serve`（AI 主体：read/plan/execute/cancel/lightroom；永远没有 approve/admin）。工具只接受 ID，14 个工具均有描述。MCP 的 `photo_plan_import` 省略 `stages` 且提供 `preset_id` 时生成五阶段完整计划，经一次人工批准后由 `photo_execute_import` 端到端执行；仅导片须显式传 `stages=["ingest"]`。详情见 [完整计划流程](docs/FULLPLAN.md)。配置片段见 `bash scripts/mac/print_lightroom_mcp_config.sh`（只打印）。
 ## Harness 前端（Phase 2，实验性）
-`deepseek-harness`（固定提交，MIT）经其 MCP 客户端插件以 stdio 调用 CETACEA，工具名 `mcp__cetacea__*`。**必须同时应用 `harness/cetacea-restricted.patch.yml`**（关闭 Harness 自带 bash/文件/web 工具）。准备与用法见 `harness/README.md`。**已用真实 DeepSeek 小规模验证（5 个场景各 1 次，17 次请求）；非可靠性保证；仅 Linux；Harness 仍为实验性/未审计**。真实 Lightroom 和 macOS 尚未测试。
+`deepseek-harness`（固定提交，MIT）经其 MCP 客户端插件以 stdio 调用 CETACEA，工具名 `mcp__cetacea__*`。**必须同时应用 `harness/cetacea-restricted.patch.yml`**（关闭 Harness 自带 bash/文件/web 工具）。准备与用法见 `harness/README.md`。**已用真实 DeepSeek 小规模验证（此前 5 个场景各 1 次、17 次请求；完整计划另 1 次、8 次请求）；非可靠性保证；仅 Linux；Harness 仍为实验性/未审计**。真实 Lightroom 和 macOS 尚未测试。
 ## 文档
-`docs/SPEC.md` 规格；`docs/REUSE_DECISION.md` 复用决策；`docs/ARCHITECTURE.md` 目录结构；`docs/THIRD_PARTY.md` 依赖/许可证/固定提交；`docs/STATUS.md` 状态矩阵；`docs/MACOS_HANDOFF.md` Mac 交接；`docs/KNOWN_RISKS.md` 风险。
+`docs/SPEC.md` 规格；`docs/REUSE_DECISION.md` 复用决策；`docs/ARCHITECTURE.md` 目录结构；`docs/THIRD_PARTY.md` 依赖/许可证/固定提交；`docs/STATUS.md` 状态矩阵；`docs/MACOS_HANDOFF.md` Mac 交接；[docs/KNOWN_RISKS.md](docs/KNOWN_RISKS.md) 风险；[docs/DATA_FLOW.md](docs/DATA_FLOW.md) 工具结果的数据流；[docs/FULLPLAN.md](docs/FULLPLAN.md) 完整计划与审批。

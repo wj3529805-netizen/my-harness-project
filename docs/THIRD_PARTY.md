@@ -27,4 +27,4 @@
 - 直接相关依赖：`@deepseek-ai/dsh-mcp-client`（工作区包）→ `@modelcontextprotocol/client` 2.2.0；agent 循环用其工作区包（cordis、dsh-llm、dsh-tools…）；运行 TS 用 tsx 4.23.13。完整版本以其 `pnpm-lock.yaml` 为准（我们不复制、不改动）。
 - 我们的代码（harness/ 下的 yml/ts/sh）以本项目许可证提供，仅在运行时复制到被忽略的 Harness 检出里。
 
-真实模型 opt-in 运行使用付费 DeepSeek API（`deepseek-official` / `deepseek-flash`，经 Harness 的 `dsh-llm-deepseek-api-key`）；数据处理和密钥风险见 `docs/KNOWN_RISKS.md`。
+真实模型 opt-in 运行使用付费 DeepSeek API（`deepseek-official` / `deepseek-flash`，经 Harness 的 `dsh-llm-deepseek-api-key`）；此前 5 个场景的证据在 `evidence/realmodel/`；另一次完整计划场景使用 MOCK Lightroom，证据在 `evidence/fullplan/`。数据处理和密钥风险见 [KNOWN_RISKS.md](KNOWN_RISKS.md) 与 [DATA_FLOW.md](DATA_FLOW.md)。

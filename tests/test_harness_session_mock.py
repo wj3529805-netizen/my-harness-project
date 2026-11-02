@@ -120,3 +120,24 @@ def test_tool_surface(session):
                 'list_mcp_resource_templates', 'read_mcp_resource'}
     assert result.tool_surface == sorted({f'mcp__cetacea__{name}' for name in cetacea} | harmless)
     assert not any('bash' in name or name.startswith('fs') for name in result.tool_surface)
+
+
+def test_default_full_pipeline_one_approval(session):
+    from cetacea import db
+    w, card, script, make = session
+    (card / 'one.RAF').write_bytes(b'raw')
+    w.add_preset('preset', 'MOCK preset')
+    args = dict(order_id='order', photographer_id='p', source_id='card', preset_id='preset')
+    turns = [{'steps': [{'tool': 'mcp__cetacea__photo_plan_import', 'args': args}], 'final': 'MOCK awaiting approval'}]
+    with make(turns) as s:
+        planned = body(send(s))
+        assert planned['state'] == 'WAITING_APPROVAL' and planned['plan']['stages'] == STAGES
+        cli(w, 'approve', planned['task_id'], planned['plan_digest'])
+        turns.append({'steps': [{'tool': 'mcp__cetacea__photo_execute_import', 'args': {'task_id': planned['task_id']}}], 'final': 'MOCK done'})
+        script.write_text(json.dumps({'turns': turns}))
+        result = send(s)
+        assert result.success and body(result)['state'] == 'COMPLETED' and body(result)['mock'] is True
+    assert w.verify_preview(planned['task_id'])['status'] == 'OK'
+    with db.connect(w.home) as c:
+        assert c.execute('SELECT count(*) FROM approvals').fetchone()[0] == 1
+        assert c.execute('SELECT count(*) FROM previews WHERE status="EXPORTED"').fetchone()[0] > 0
