@@ -1,0 +1,56 @@
+[
+  {
+    "DeviceIdentifier": "disk6s1",
+    "VolumeName": "NIKON Z6_3 ",
+    "MountPoint": "/Volumes/NIKON Z6_3 ",
+    "FilesystemName": "ExFAT",
+    "FilesystemType": "exfat",
+    "FilesystemUserVisibleName": "ExFAT",
+    "BusProtocol": "USB",
+    "TotalSize": 255993577472,
+    "MediaName": "",
+    "Removable": false,
+    "RemovableMedia": false,
+    "Writable": true,
+    "VolumeUUID": "7FBCB909-0145-3DD8-AD2C-56989C78F446",
+    "ParentWholeDisk": "disk6",
+    "Internal": false,
+    "whole_disk": {
+      "DeviceIdentifier": "disk6",
+      "MediaName": "s TypeB Card",
+      "BusProtocol": "USB",
+      "TotalSize": 256060514304,
+      "Internal": false,
+      "Removable": false,
+      "RemovableMedia": false,
+      "DeviceTreePath": "IODeviceTree:/arm-io@10F00000/usb-drd1@8A280000/usb-drd1-port-ss@01200000"
+    }
+  },
+  {
+    "DeviceIdentifier": "disk7s1",
+    "VolumeName": "NIKON Z6_3 ",
+    "MountPoint": "/Volumes/NIKON Z6_3  1",
+    "FilesystemName": "ExFAT",
+    "FilesystemType": "exfat",
+    "FilesystemUserVisibleName": "ExFAT",
+    "BusProtocol": "Secure Digital",
+    "TotalSize": 126844272640,
+    "MediaName": "",
+    "Removable": true,
+    "RemovableMedia": true,
+    "Writable": true,
+    "VolumeUUID": "82A91C0F-BF3C-3DE2-AF4E-DEDF705C8E8E",
+    "ParentWholeDisk": "disk7",
+    "Internal": true,
+    "whole_disk": {
+      "DeviceIdentifier": "disk7",
+      "MediaName": "Built In SDXC Reader",
+      "BusProtocol": "Secure Digital",
+      "TotalSize": 126877696000,
+      "Internal": true,
+      "Removable": true,
+      "RemovableMedia": true,
+      "DeviceTreePath": "IODeviceTree:/arm-io@10F00000/apcie0@B0000000/pci-bridge1@1/pcie-sdreader@0"
+    }
+  }
+]

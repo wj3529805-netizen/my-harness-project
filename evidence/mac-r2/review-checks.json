@@ -1,0 +1,12 @@
+{
+  "helper_syntax_checked_before_run": true,
+  "acceptance_exit_code": 1,
+  "overall_result": "FAIL_STOPPED",
+  "product_src_or_test_diff": [],
+  "exact_key_scan_matches": 0,
+  "key_value_recorded": false,
+  "all_relative_document_links_exist": true,
+  "further_acceptance_after_failure": false,
+  "failed_json_inspection_was_corrected_readonly_and_recorded": true,
+  "paid_API_requests": 0
+}

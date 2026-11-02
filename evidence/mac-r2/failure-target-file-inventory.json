@@ -1,0 +1,194 @@
+[
+  {
+    "path": "._mock-library",
+    "size": 4096,
+    "mtime_ns": 1793639528090000000,
+    "inode": 315054
+  },
+  {
+    "path": "._mock-preview",
+    "size": 4096,
+    "mtime_ns": 1793639528100000000,
+    "inode": 315056
+  },
+  {
+    "path": "mock-library/._.cetacea-tmp",
+    "size": 4096,
+    "mtime_ns": 1793639528460000000,
+    "inode": 315058
+  },
+  {
+    "path": "mock-library/._r2",
+    "size": 4096,
+    "mtime_ns": 1793639528640000000,
+    "inode": 315262
+  },
+  {
+    "path": "mock-preview/._r2",
+    "size": 4096,
+    "mtime_ns": 1793639529000000000,
+    "inode": 315482
+  },
+  {
+    "path": "mock-preview/r2/._tester",
+    "size": 4096,
+    "mtime_ns": 1793639529010000000,
+    "inode": 315484
+  },
+  {
+    "path": "mock-preview/r2/tester/._recovery",
+    "size": 4096,
+    "mtime_ns": 1793639529020000000,
+    "inode": 315486
+  },
+  {
+    "path": "mock-preview/r2/tester/recovery/._tsk_215a25525c3b4926a50749d4dfc79722",
+    "size": 4096,
+    "mtime_ns": 1793639529040000000,
+    "inode": 315488
+  },
+  {
+    "path": "mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/._run-1",
+    "size": 4096,
+    "mtime_ns": 1793639529060000000,
+    "inode": 315490
+  },
+  {
+    "path": "mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/._run-2",
+    "size": 4096,
+    "mtime_ns": 1793639529270000000,
+    "inode": 315498
+  },
+  {
+    "path": "mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-1/r2_tester_a_c404007a.jpg",
+    "size": 17867,
+    "mtime_ns": 1793639529080000000,
+    "inode": 315492
+  },
+  {
+    "path": "mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-1/._r2_tester_a_c404007a.jpg",
+    "size": 4096,
+    "mtime_ns": 1793639529080000000,
+    "inode": 315491
+  },
+  {
+    "path": "mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-1/._preview-manifest.json",
+    "size": 4096,
+    "mtime_ns": 1793639529100000000,
+    "inode": 315493
+  },
+  {
+    "path": "mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-1/preview-manifest.json",
+    "size": 823,
+    "mtime_ns": 1793639529100000000,
+    "inode": 315494
+  },
+  {
+    "path": "mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-2/._ast_c404007acc7f24ba03cbbc8c.jpg",
+    "size": 4096,
+    "mtime_ns": 1793639529270000000,
+    "inode": 315499
+  },
+  {
+    "path": "mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-2/r2_tester_b_3be0e9ef.jpg",
+    "size": 17909,
+    "mtime_ns": 1793639529310000000,
+    "inode": 315504
+  },
+  {
+    "path": "mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-2/._r2_tester_b_3be0e9ef.jpg",
+    "size": 4096,
+    "mtime_ns": 1793639529300000000,
+    "inode": 315503
+  },
+  {
+    "path": "mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-2/._preview-manifest.json",
+    "size": 4096,
+    "mtime_ns": 1793639529310000000,
+    "inode": 315505
+  },
+  {
+    "path": "mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-2/preview-manifest.json",
+    "size": 1551,
+    "mtime_ns": 1793639529320000000,
+    "inode": 315506
+  },
+  {
+    "path": "mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-2/ast_c404007acc7f24ba03cbbc8c.jpg",
+    "size": 17867,
+    "mtime_ns": 1793639529270000000,
+    "inode": 315500
+  },
+  {
+    "path": "mock-library/.cetacea-tmp/._tsk_215a25525c3b4926a50749d4dfc79722",
+    "size": 4096,
+    "mtime_ns": 1793639528470000000,
+    "inode": 315060
+  },
+  {
+    "path": "mock-library/r2/._tester",
+    "size": 4096,
+    "mtime_ns": 1793639528660000000,
+    "inode": 315264
+  },
+  {
+    "path": "mock-library/r2/tester/._recovery",
+    "size": 4096,
+    "mtime_ns": 1793639528680000000,
+    "inode": 315266
+  },
+  {
+    "path": "mock-library/r2/tester/recovery/._.cetacea",
+    "size": 4096,
+    "mtime_ns": 1793639528900000000,
+    "inode": 315476
+  },
+  {
+    "path": "mock-library/r2/tester/recovery/a.NEF",
+    "size": 25994889,
+    "mtime_ns": 1793639528610000000,
+    "inode": 315062
+  },
+  {
+    "path": "mock-library/r2/tester/recovery/._a.NEF",
+    "size": 4096,
+    "mtime_ns": 1793639528470000000,
+    "inode": 315061
+  },
+  {
+    "path": "mock-library/r2/tester/recovery/b.NEF",
+    "size": 25994889,
+    "mtime_ns": 1793639528840000000,
+    "inode": 315270
+  },
+  {
+    "path": "mock-library/r2/tester/recovery/._b.NEF",
+    "size": 4096,
+    "mtime_ns": 1793639528700000000,
+    "inode": 315269
+  },
+  {
+    "path": "mock-library/r2/tester/recovery/existing.XMP",
+    "size": 64,
+    "mtime_ns": 1793639528880000000,
+    "inode": 315472
+  },
+  {
+    "path": "mock-library/r2/tester/recovery/._existing.XMP",
+    "size": 4096,
+    "mtime_ns": 1793639528870000000,
+    "inode": 315471
+  },
+  {
+    "path": "mock-library/r2/tester/recovery/.cetacea/import-manifest-run1.json",
+    "size": 1511,
+    "mtime_ns": 1793639528910000000,
+    "inode": 315478
+  },
+  {
+    "path": "mock-library/r2/tester/recovery/.cetacea/._import-manifest-run1.json",
+    "size": 4096,
+    "mtime_ns": 1793639528910000000,
+    "inode": 315477
+  }
+]

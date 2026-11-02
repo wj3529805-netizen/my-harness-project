@@ -1,0 +1,24 @@
+{
+  "result": "READY_FOR_USER_REVIEW_NO_CARD_WRITES",
+  "target_device": "disk7s1",
+  "target_volume_uuid": "82A91C0F-BF3C-3DE2-AF4E-DEDF705C8E8E",
+  "target_mountpoint": "/Volumes/NIKON Z6_3  1",
+  "filesystem_confirmed": "ExFAT",
+  "proposed_test_root": "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103",
+  "test_root_exists": false,
+  "estimated_maximum_test_data_bytes": 500000000,
+  "source": "Existing local public Nikon Z6 test RAW copies; no card originals used as test input",
+  "planned_R2_checks": [
+    "Real ExFAT import and manifest publication with destination SHA-256 readback",
+    "Preview publication and partial-export retry; capture actual ENOTSUP and real fallback at both required code paths",
+    "Repeat identical import and verify skip",
+    "Create same-name different-content conflict only inside new isolated test directory and verify original test destination unchanged"
+  ],
+  "preserve_all_preexisting_card_entries": true,
+  "formatting_authorized": false,
+  "deletion_of_preexisting_files_authorized": false,
+  "card_write_authorization": "PENDING_USER_CONFIRMATION",
+  "paid_API_calls": 0,
+  "push_authorization": "ASK_AFTER_RESULTS_READY",
+  "inventory_files": "sd-existing-content-inventory.json and sd-existing-content-list.txt"
+}

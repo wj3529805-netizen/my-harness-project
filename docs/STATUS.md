@@ -2,6 +2,8 @@
 
 标签：已完成且测试通过 / 已实现但测试失败 / 仅 Mock 验证 / 真实模型小规模验证 / 待 Mac 实机验证 / 尚未开发
 
+2026-11-03 R2 真实 ExFAT SD 目标：**FAIL_STOPPED**。导入发布和预览复用真实 ENOTSUP=45 回退已发生；最终 preview_verify 将 AppleDouble `._*.jpg` 当作 orphan 而失败。产品未修，重复/冲突及真实 Lightroom 测试 NOT_RUN。原有卡内容保留，未清理现场；见 [报告](MACOS_VALIDATION.md) 和 [失败证据](../evidence/mac-r2/failure-analysis.json)。
+
 2026-11-03 R1 Mac 真实 AI 会话：**授权重跑有限样本 PASS**。首次第 2 次请求 TRANSPORT 失败后停止并保留原证据；用户授权重跑并批准具体计划后，真实 DeepSeek + 真实 Lightroom 五阶段完成，核验 OK/mock=false，批准仅一条，RAW/JPG/曝光独立读回通过。累计 driver count=9/13，未重置额度；回归 135 passed、2 skipped。详见 [Mac 报告](MACOS_VALIDATION.md)、[重跑证据](../evidence/mac-r1/retry-1/result.json) 和[首次失败](../evidence/mac-r1/result.json)。未进入 R2。
 
 | # | 功能 | 状态 | 证据 |

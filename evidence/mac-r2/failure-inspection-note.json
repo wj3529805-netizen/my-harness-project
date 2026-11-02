@@ -1,0 +1,4 @@
+{
+  "initial_readonly_summary_error": "The *manifest*.json glob also matched binary AppleDouble ._ companions; reading one as UTF-8 raised UnicodeDecodeError.",
+  "correction": "Only the evidence JSON parser excludes ._ files. Original failed verification and all companion file paths remain recorded. No product code/test changed; no card writes or repeated acceptance run."
+}

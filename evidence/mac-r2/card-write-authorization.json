@@ -1,0 +1,9 @@
+{
+  "user_confirmed": true,
+  "volume_uuid": "82A91C0F-BF3C-3DE2-AF4E-DEDF705C8E8E",
+  "mountpoint": "/Volumes/NIKON Z6_3  1",
+  "new_test_root": "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103",
+  "maximum_footprint_bytes": 500000000,
+  "formatting": false,
+  "deletion_or_overwrite_of_preexisting_entries": false
+}

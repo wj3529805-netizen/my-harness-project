@@ -1,0 +1,43 @@
+{
+  "mountpoint": "/Volumes/NIKON Z6_3  1",
+  "device": "disk7s1",
+  "filesystem": "ExFAT",
+  "bus": "Secure Digital",
+  "capacity_bytes": 126844272640,
+  "available_bytes": 126842568704,
+  "file_count": 6,
+  "directory_count": 3,
+  "listed_file_bytes": 58590,
+  "extensions": {
+    "(none)": 5,
+    ".dsc": 1
+  },
+  "top_level_entries": [
+    {
+      "path": ".fseventsd",
+      "kind": "directory",
+      "size": 131072,
+      "mtime_ns": 1793638899030000000
+    },
+    {
+      "path": ".Trashes",
+      "kind": "directory",
+      "size": 131072,
+      "mtime_ns": 1793638840510000000
+    },
+    {
+      "path": "NIKON001.DSC",
+      "kind": "file",
+      "size": 512,
+      "mtime_ns": 1793336169750000000
+    }
+  ],
+  "second_level_directories": [
+    ".Trashes/501"
+  ],
+  "listing_errors": [],
+  "elapsed_seconds": 0.12696409225463867,
+  "photo_bytes_opened": false,
+  "card_writes_performed": false,
+  "pending_write_root": "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103"
+}

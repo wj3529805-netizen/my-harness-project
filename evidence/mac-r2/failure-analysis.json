@@ -1,0 +1,335 @@
+{
+  "result": "FAIL_STOPPED",
+  "task_state": "FAILED",
+  "task_error": "preview_verify: 1 failed",
+  "observed_verification": {
+    "status": "FAILED",
+    "mock": true,
+    "marker": "MOCK — not real Lightroom",
+    "run": 2,
+    "missing": [],
+    "failed": [],
+    "orphans": [
+      "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-2/._ast_c404007acc7f24ba03cbbc8c.jpg",
+      "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-2/._r2_tester_b_3be0e9ef.jpg"
+    ],
+    "size_violations": [],
+    "expected_count": 2,
+    "mapped_count": 2
+  },
+  "orphan_identification": [
+    {
+      "path": "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-2/._ast_c404007acc7f24ba03cbbc8c.jpg",
+      "size": 4096,
+      "file_identification": "AppleDouble encoded Macintosh file",
+      "sha256": "541c16105c712a684f61531a8d8372d550a4cd4e71557fa878941810bcf40d85"
+    },
+    {
+      "path": "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-2/._r2_tester_b_3be0e9ef.jpg",
+      "size": 4096,
+      "file_identification": "AppleDouble encoded Macintosh file",
+      "sha256": "541c16105c712a684f61531a8d8372d550a4cd4e71557fa878941810bcf40d85"
+    }
+  ],
+  "diagnosis": "Actual filesystem metadata companions named ._*.jpg are counted as preview orphans by preview.verify rglob logic. This run uses MOCK Lightroom images on real ExFAT, not real Lightroom acceptance.",
+  "actual_ENOTSUP_code": 45,
+  "publication_ENOTSUP_events": [
+    {
+      "time": 1793639528.68577,
+      "operation": "link",
+      "paths": [
+        "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-library/.cetacea-tmp/tsk_215a25525c3b4926a50749d4dfc79722/0.part",
+        "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-library/r2/tester/recovery/a.NEF"
+      ],
+      "caller_file": "/Users/mac/Documents/ChatGPT/AI工作台/my-harness-project/src/cetacea/ingest/copier.py",
+      "caller_function": "publish_no_overwrite",
+      "caller_line": 16,
+      "real_os_call": true,
+      "injected_errno": false,
+      "success": false,
+      "errno": 45,
+      "errno_name": "ENOTSUP",
+      "message": "Operation not supported"
+    },
+    {
+      "time": 1793639528.854146,
+      "operation": "link",
+      "paths": [
+        "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-library/.cetacea-tmp/tsk_215a25525c3b4926a50749d4dfc79722/1.part",
+        "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-library/r2/tester/recovery/b.NEF"
+      ],
+      "caller_file": "/Users/mac/Documents/ChatGPT/AI工作台/my-harness-project/src/cetacea/ingest/copier.py",
+      "caller_function": "publish_no_overwrite",
+      "caller_line": 16,
+      "real_os_call": true,
+      "injected_errno": false,
+      "success": false,
+      "errno": 45,
+      "errno_name": "ENOTSUP",
+      "message": "Operation not supported"
+    },
+    {
+      "time": 1793639528.883163,
+      "operation": "link",
+      "paths": [
+        "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-library/.cetacea-tmp/tsk_215a25525c3b4926a50749d4dfc79722/2.part",
+        "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-library/r2/tester/recovery/existing.XMP"
+      ],
+      "caller_file": "/Users/mac/Documents/ChatGPT/AI工作台/my-harness-project/src/cetacea/ingest/copier.py",
+      "caller_function": "publish_no_overwrite",
+      "caller_line": 16,
+      "real_os_call": true,
+      "injected_errno": false,
+      "success": false,
+      "errno": 45,
+      "errno_name": "ENOTSUP",
+      "message": "Operation not supported"
+    },
+    {
+      "time": 1793639528.915972,
+      "operation": "link",
+      "paths": [
+        "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-library/.cetacea-tmp/tsk_215a25525c3b4926a50749d4dfc79722/manifest.part",
+        "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-library/r2/tester/recovery/.cetacea/import-manifest-run1.json"
+      ],
+      "caller_file": "/Users/mac/Documents/ChatGPT/AI工作台/my-harness-project/src/cetacea/ingest/copier.py",
+      "caller_function": "publish_no_overwrite",
+      "caller_line": 16,
+      "real_os_call": true,
+      "injected_errno": false,
+      "success": false,
+      "errno": 45,
+      "errno_name": "ENOTSUP",
+      "message": "Operation not supported"
+    },
+    {
+      "time": 1793639529.106839,
+      "operation": "link",
+      "paths": [
+        "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-1/.manifest-7ffde28598284036803344072a9a00d6",
+        "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-1/preview-manifest.json"
+      ],
+      "caller_file": "/Users/mac/Documents/ChatGPT/AI工作台/my-harness-project/src/cetacea/ingest/copier.py",
+      "caller_function": "publish_no_overwrite",
+      "caller_line": 16,
+      "real_os_call": true,
+      "injected_errno": false,
+      "success": false,
+      "errno": 45,
+      "errno_name": "ENOTSUP",
+      "message": "Operation not supported"
+    },
+    {
+      "time": 1793639529.279897,
+      "operation": "link",
+      "paths": [
+        "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-2/.retry-e46721a77b8b4e2193acd0bff64f81a0.part",
+        "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-2/ast_c404007acc7f24ba03cbbc8c.jpg"
+      ],
+      "caller_file": "/Users/mac/Documents/ChatGPT/AI工作台/my-harness-project/src/cetacea/ingest/copier.py",
+      "caller_function": "publish_no_overwrite",
+      "caller_line": 16,
+      "real_os_call": true,
+      "injected_errno": false,
+      "success": false,
+      "errno": 45,
+      "errno_name": "ENOTSUP",
+      "message": "Operation not supported"
+    },
+    {
+      "time": 1793639529.322819,
+      "operation": "link",
+      "paths": [
+        "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-2/.manifest-4236113464fc4b7f887d05ac29be0f4f",
+        "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-2/preview-manifest.json"
+      ],
+      "caller_file": "/Users/mac/Documents/ChatGPT/AI工作台/my-harness-project/src/cetacea/ingest/copier.py",
+      "caller_function": "publish_no_overwrite",
+      "caller_line": 16,
+      "real_os_call": true,
+      "injected_errno": false,
+      "success": false,
+      "errno": 45,
+      "errno_name": "ENOTSUP",
+      "message": "Operation not supported"
+    }
+  ],
+  "preview_reuse_ENOTSUP_events": [
+    {
+      "time": 1793639529.273679,
+      "operation": "link",
+      "paths": [
+        "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-1/r2_tester_a_c404007a.jpg",
+        "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-2/ast_c404007acc7f24ba03cbbc8c.jpg"
+      ],
+      "caller_file": "/Users/mac/Documents/ChatGPT/AI工作台/my-harness-project/src/cetacea/core.py",
+      "caller_function": "_lightroom_stage",
+      "caller_line": 291,
+      "real_os_call": true,
+      "injected_errno": false,
+      "success": false,
+      "errno": 45,
+      "errno_name": "ENOTSUP",
+      "message": "Operation not supported"
+    }
+  ],
+  "actual_renames_succeeded": 7,
+  "mock_export_retry_counts": [
+    {
+      "run": 1,
+      "succeeded": 1,
+      "failed": 1,
+      "skipped": 0,
+      "state": "FAILED"
+    },
+    {
+      "run": 2,
+      "succeeded": 1,
+      "failed": 0,
+      "skipped": 1,
+      "state": "COMPLETED"
+    }
+  ],
+  "destination_readback_diagnostics": [
+    {
+      "asset_id": "ast_c404007acc7f24ba03cbbc8c",
+      "dest_rel_path": "r2/tester/recovery/a.NEF",
+      "expected_sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+      "actual_sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+      "matches": true,
+      "status": "VERIFIED"
+    },
+    {
+      "asset_id": "ast_3be0e9efa9939b7178e86eca",
+      "dest_rel_path": "r2/tester/recovery/b.NEF",
+      "expected_sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+      "actual_sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+      "matches": true,
+      "status": "VERIFIED"
+    },
+    {
+      "asset_id": "ast_845b48c72adb7fc14819bf7d",
+      "dest_rel_path": "r2/tester/recovery/existing.XMP",
+      "expected_sha256": "97af48002607e06434f5071b143fcc5e75f30b5ca77812d80e4ec8cb98e82a78",
+      "actual_sha256": "97af48002607e06434f5071b143fcc5e75f30b5ca77812d80e4ec8cb98e82a78",
+      "matches": true,
+      "status": "VERIFIED"
+    }
+  ],
+  "preview_readback_diagnostics": [
+    {
+      "asset_id": "ast_c404007acc7f24ba03cbbc8c",
+      "run": 1,
+      "path": "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-1/r2_tester_a_c404007a.jpg",
+      "sha256_matches": true,
+      "dimensions": [
+        1200,
+        800
+      ],
+      "format": "JPEG",
+      "mock": 1
+    },
+    {
+      "asset_id": "ast_c404007acc7f24ba03cbbc8c",
+      "run": 2,
+      "path": "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-2/ast_c404007acc7f24ba03cbbc8c.jpg",
+      "sha256_matches": true,
+      "dimensions": [
+        1200,
+        800
+      ],
+      "format": "JPEG",
+      "mock": 1
+    },
+    {
+      "asset_id": "ast_3be0e9efa9939b7178e86eca",
+      "run": 2,
+      "path": "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-2/r2_tester_b_3be0e9ef.jpg",
+      "sha256_matches": true,
+      "dimensions": [
+        1200,
+        800
+      ],
+      "format": "JPEG",
+      "mock": 1
+    }
+  ],
+  "old_preview_preserved": true,
+  "reuse_copy_matches_old": true,
+  "reuse_has_new_inode": true,
+  "NIKON001_DSC_unchanged": true,
+  "preexisting_entries_after": [
+    {
+      "path": ".fseventsd",
+      "still_exists": true,
+      "size_before": 131072,
+      "size_after": 131072
+    },
+    {
+      "path": ".fseventsd/0000000013df73b7",
+      "still_exists": true,
+      "size_before": 18297,
+      "size_after": 18297
+    },
+    {
+      "path": ".fseventsd/0000000013df9604",
+      "still_exists": true,
+      "size_before": 17824,
+      "size_after": 17824
+    },
+    {
+      "path": ".fseventsd/0000000013dfb751",
+      "still_exists": true,
+      "size_before": 17825,
+      "size_after": 17825
+    },
+    {
+      "path": ".fseventsd/fseventsd-uuid",
+      "still_exists": true,
+      "size_before": 36,
+      "size_after": 36
+    },
+    {
+      "path": ".Trashes",
+      "still_exists": true,
+      "size_before": 131072,
+      "size_after": 131072
+    },
+    {
+      "path": ".Trashes/._501",
+      "still_exists": true,
+      "size_before": 4096,
+      "size_after": 4096
+    },
+    {
+      "path": ".Trashes/501",
+      "still_exists": true,
+      "size_before": 131072,
+      "size_after": 131072
+    },
+    {
+      "path": "NIKON001.DSC",
+      "still_exists": true,
+      "size_before": 512,
+      "size_after": 512
+    }
+  ],
+  "new_root_entries": [
+    "._Cetacea-R2-Test-20261103",
+    "Cetacea-R2-Test-20261103"
+  ],
+  "test_directory_footprint_bytes": 52141578,
+  "remaining_acceptance": {
+    "repeat_same_file": "NOT_RUN",
+    "different_content_conflict": "NOT_RUN",
+    "real_Lightroom": "NOT_RUN",
+    "full_R2": "FAIL"
+  },
+  "product_code_modified": false,
+  "card_cleanup_performed": false,
+  "paid_API_requests": 0,
+  "local_public_sources_unchanged": true,
+  "helper_exit_code": 1,
+  "only_postfailure_actions": "Read-only device/file/database inspection and local evidence/documentation writes",
+  "root_appledouble_note": "OS-created ._Cetacea-R2-Test-20261103 accompanies the new test directory; retained, not cleaned. This is adjacent to the requested directory, not a modified preexisting file."
+}

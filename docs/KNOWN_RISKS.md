@@ -1,5 +1,11 @@
 # Gate 1 validation notes
 
+## R2 real ExFAT — 2026-11-03：FAIL_STOPPED，产品问题未修
+
+在用户确认的内置 SD 卡 ExFAT 新测试目录内，真实 OS 调用已在导入发布及预览复用两条路径返回 ENOTSUP=45，并实际完成回退。明确 MOCK 的部分导出故障解除后，导出重试成功补 1、复用 1，但最终任务 FAILED：`preview_verify: 1 failed`。核验把 macOS 生成的两个 AppleDouble `._*.jpg` 伴随文件当作 orphan；实际 JPEG 映射、解码、读回哈希均正常。`src/cetacea/preview.py` 的 orphan 枚举未排除此类文件，这是本轮真实 ExFAT 揭示的未修复兼容性问题，不能用 APFS 或 errno 注入测试代替实机结果。[报告](MACOS_VALIDATION.md)、[证据](../evidence/mac-r2/failure-analysis.json)。
+
+已停止后续测试，未修产品或清理 SD 现场。重复/冲突、真实 Lightroom + ExFAT 均 NOT_RUN。原有清点条目仍在，NIKON001.DSC 哈希/mtime/inode 未变；新测试目录之外还有 OS 自动创建的同名 `._` 伴随文件，已如实列出并保留。Mock Lightroom 故障刺激不代表真实 Lightroom，源码中其它单文件目录假设亦尚未在本轮实测。没有格式化、删除原有文件或调用付费 API。
+
 ## R1 Mac real AI — 2026-11-03：授权重跑有限样本通过
 
 用户后续授权免费 curl 检查、脱敏错误诊断及原 13 次总额内一次重跑，再明确批准具体计划。重跑三轮耗用 7 次，累计 driver count=9（保留首次 2 次），未重置计数。实际 DeepSeek + 真实 Lightroom 完成五阶段、一次人类 CLI 批准，批准前执行拒绝/删除和 shell 请求拒绝，模型与 CLI 均核验 OK/mock=false，RAW 目标读回及曝光/JPG 独立检查通过。[报告](MACOS_VALIDATION.md)、[重跑结果](../evidence/mac-r1/retry-1/result.json)。

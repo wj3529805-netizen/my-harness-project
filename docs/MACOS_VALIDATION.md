@@ -1,5 +1,26 @@
 # macOS validation — 2026-11-02
 
+## R2 ExFAT SD 目标 — 2026-11-03：FAIL_STOPPED
+
+从更新后的 `phase1/80acebb` 建立 `mac/R2`。先用 `diskutil info` 确认内置 SDXC 读卡器的 `disk7s1` 为 **ExFAT**，挂载点为 `/Volumes/NIKON Z6_3  1`（两个空格后接 1），可用约 126.84 GB。只读列出原有 6 个文件和 3 个目录：`.fseventsd/`、`.Trashes/`、`NIKON001.DSC`，无照片。用户核对后明确批准仅在新目录 `Cetacea-R2-Test-20261103/` 内进行不超过 500 MB 的测试，不格式化、不删除或覆盖原有文件。[设备信息](../evidence/mac-r2/disk7s1-diskutil-info-text.json)、[原有完整清单](../evidence/mac-r2/sd-existing-content-list.txt)、[写入授权](../evidence/mac-r2/card-write-authorization.json)。同名的 256 GB USB TypeB 卡只核对设备信息，没有对其执行文件测试。
+
+**本轮整体未通过，已在首个非预期失败处停止；没有修复产品代码、清理测试现场或继续测试。** 使用本机公开 Nikon Z6 RAW 的两份副本和合成 XMP 哨兵作为只读源。先使用明确标记为 MOCK 的 Lightroom 导出故障，构造“一张预览成功、另一张失败”的状态；这是故障刺激，不是真实 Lightroom。文件系统及工作台发布/重试代码实际运行在 SD ExFAT，观察器原样调用真实 OS 函数，未注入或替换 ENOTSUP。[可审查脚本](../evidence/mac-r2/run_r2.py)、[真实系统调用](../evidence/mac-r2/real-filesystem-events.jsonl)。
+
+| R2 项目 | 实际结果 |
+|---|---|
+| 实际导入发布/清单硬链接回退 | 已观察真实 `ENOTSUP=45`，随后重命名发布成功；3 个导入资产目标 SHA-256 独立读回一致 |
+| 实际预览复用硬链接回退 | 已观察 `_lightroom_stage` 的真实 `ENOTSUP=45`；成功旧预览复制到新 run，旧文件哈希/mtime/inode 保留，新副本哈希一致、inode 不同 |
+| 部分失败后的导出重试 | lr_export 重试为 succeeded=1、skipped=1、failed=0，但最终 preview_verify **FAILED**，任务仍 FAILED/run_count=2 |
+| 最终预览核验 | **FAIL**：expected_count=2、mapped_count=2，missing/failed/size_violations 为空，却出现两个 `._*.jpg` orphans |
+| 相同内容重复导入、不同内容同名冲突 | **NOT_RUN**，在最终预览失败后即停止 |
+| 单独真实 Lightroom + ExFAT 流程 | **NOT_RUN**，没有向 Lightroom 发出本轮照片处理请求 |
+
+`file` 工具确认两个所谓 orphan 均为 **AppleDouble encoded Macintosh file**（4096 字节），不是导出的照片。只读源码检查定位 `preview.verify`：它递归收集所有后缀为 `.jpg/.jpeg` 且不在映射中的路径，没有排除这些伴随文件，于是把 `._ast_…jpg`、`._r2_tester_b_…jpg` 判为多余 JPG。原本登记的 JPEG 均可解码、SHA-256 与记录相符，仍不能把失败核验改写为通过。[失败数据库/阶段明细](../evidence/mac-r2/failure-database.json)、[文件清点](../evidence/mac-r2/failure-target-file-inventory.json)、[只读诊断](../evidence/mac-r2/failure-analysis.json)、[原始失败](../evidence/mac-r2/result.json)。真实适配器面对这些伴随文件的行为未测，不能扩展此结果为其通过或失败。
+
+原有所有清点条目仍存在，`NIKON001.DSC` 的 SHA-256/mtime/inode 未变；两个本机测试源快照也未变。系统维护的 `.fseventsd/.Trashes` 只列出，不声称它们的内容不可变化。测试目录保留约 **52.14 MB**；macOS 还自动生成相邻的 `._Cetacea-R2-Test-20261103` AppleDouble 文件，亦保留未清理，没有把它隐瞒为“卷根无新增条目”。没有格式化或删除任何原有文件，未调用付费 API。[原有文件前](../evidence/mac-r2/preexisting-nikon-file-before.json)、[后](../evidence/mac-r2/preexisting-nikon-file-after.json)。
+
+失败后仅进行只读文件/卷/数据库诊断和本机证据、文档写入。清单汇总最初把 `._…manifest.json` 当 UTF-8 JSON，出现 UnicodeDecodeError；仅修正了证据解析器的文件选择，未修改产品核验或重复运行，原错误与说明保留于[诊断说明](../evidence/mac-r2/failure-inspection-note.json)。预览缺陷修复、重跑及本轮推送等待用户决定；不进入 R3。
+
 ## R1 授权重跑 — 2026-11-03：本次范围 PASS
 
 用户授权先进行不带 key 的 curl 检查、打开仅错误的脱敏输出，并在原累计最多 13 次请求内重跑一次。默认路径、`--noproxy '*'` 和系统配置代理三次 HTTPS HEAD 都返回 401（未授权请求的预期响应），TLS 校验为 0/通过；代理 CONNECT 返回 200。未发现证书错误或拦截页，但不能据此保证流式连接持续稳定。[网络证据](../evidence/mac-r1/retry-1/)、[代理配置摘要](../evidence/mac-r1/retry-1/proxy-settings.json)。curl 未携带 API key，也未产生模型请求。

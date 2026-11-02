@@ -1,0 +1,9 @@
+{
+  "branch": "mac/R2",
+  "baseline": "80acebb66621e5d4d8002d279baf20cec782089f",
+  "stage": "READ_ONLY_WAITING_FOR_TARGET_CONFIRMATION",
+  "writes_to_any_card": false,
+  "formatting": false,
+  "deletion": false,
+  "paid_API_requests": 0
+}

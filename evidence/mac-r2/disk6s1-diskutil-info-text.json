@@ -1,0 +1,10 @@
+{
+  "command": [
+    "diskutil",
+    "info",
+    "disk6s1"
+  ],
+  "note": "Exact terminal text retained in a JSON string, including significant trailing spaces in volume names and mount paths.",
+  "stdout_sha256": "6017fb4c05a296c098b1d8b4967a28d73ceabcf15e0920ac42b7f6b349a04b1d",
+  "stdout": "   Device Identifier:         disk6s1\n   Device Node:               /dev/disk6s1\n   Whole:                     No\n   Part of Whole:             disk6\n\n   Volume Name:               NIKON Z6_3 \n   Mounted:                   Yes\n   Mount Point:               /Volumes/NIKON Z6_3 \n\n   Partition Type:            Windows_NTFS\n   File System Personality:   ExFAT\n   Type (Bundle):             exfat\n   Name (User Visible):       ExFAT\n\n   OS Can Be Installed:       No\n   Media Type:                通用\n   Protocol:                  USB\n   SMART Status:              Not Supported\n   Volume UUID:               7FBCB909-0145-3DD8-AD2C-56989C78F446\n   Partition Offset:          33554432 Bytes (65536 512-Byte-Device-Blocks)\n\n   Disk Size:                 256.0 GB (256026959872 Bytes) (exactly 500052656 512-Byte-Units)\n   Device Block Size:         512 Bytes\n\n   Volume Total Space:        256.0 GB (255993577472 Bytes) (exactly 499987456 512-Byte-Units)\n   Volume Used Space:         18.8 GB (18795724800 Bytes) (exactly 36710400 512-Byte-Units) (7.3%)\n   Volume Free Space:         237.2 GB (237197852672 Bytes) (exactly 463277056 512-Byte-Units) (92.7%)\n   Allocation Block Size:     262144 Bytes\n\n   Media OS Use Only:         No\n   Media Read-Only:           No\n   Volume Read-Only:          No\n\n   Device Location:           External\n   Removable Media:           Fixed\n\n   Solid State:               Yes\n\n"
+}

@@ -1,0 +1,61 @@
+{
+  "metadata_only": true,
+  "volume_uuid": "82A91C0F-BF3C-3DE2-AF4E-DEDF705C8E8E",
+  "entries": [
+    {
+      "path": ".fseventsd",
+      "kind": "directory",
+      "size": 131072,
+      "mtime_ns": 1793638899030000000
+    },
+    {
+      "path": ".fseventsd/0000000013df73b7",
+      "kind": "file",
+      "size": 18297,
+      "mtime_ns": 1793638862650000000
+    },
+    {
+      "path": ".fseventsd/0000000013df9604",
+      "kind": "file",
+      "size": 17824,
+      "mtime_ns": 1793638874470000000
+    },
+    {
+      "path": ".fseventsd/0000000013dfb751",
+      "kind": "file",
+      "size": 17825,
+      "mtime_ns": 1793638899040000000
+    },
+    {
+      "path": ".fseventsd/fseventsd-uuid",
+      "kind": "file",
+      "size": 36,
+      "mtime_ns": 1793638824830000000
+    },
+    {
+      "path": ".Trashes",
+      "kind": "directory",
+      "size": 131072,
+      "mtime_ns": 1793638840510000000
+    },
+    {
+      "path": ".Trashes/._501",
+      "kind": "file",
+      "size": 4096,
+      "mtime_ns": 1793638840520000000
+    },
+    {
+      "path": ".Trashes/501",
+      "kind": "directory",
+      "size": 131072,
+      "mtime_ns": 1793638885280000000
+    },
+    {
+      "path": "NIKON001.DSC",
+      "kind": "file",
+      "size": 512,
+      "mtime_ns": 1793336169750000000
+    }
+  ],
+  "errors": []
+}

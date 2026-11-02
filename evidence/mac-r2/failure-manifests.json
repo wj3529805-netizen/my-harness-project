@@ -1,0 +1,129 @@
+[
+  {
+    "path": "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-1/preview-manifest.json",
+    "sha256": "013e4050e20df1a291ba0071c1742a2efa0f59830788d3641986392d957177d5",
+    "content": {
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "run": 1,
+      "mock": true,
+      "previews": [
+        {
+          "preview_id": "prv_dc43557d424146d3aa4c2943a5d9159d",
+          "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+          "run": 1,
+          "asset_id": "ast_c404007acc7f24ba03cbbc8c",
+          "path": "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-1/r2_tester_a_c404007a.jpg",
+          "sha256": "7d114f54a17c917b4e4a8225a62935611cccfe2851bf8a20e78770ac489178ab",
+          "width": 1200,
+          "height": 800,
+          "status": "EXPORTED",
+          "mock": 1,
+          "source_rel_path": "a.NEF",
+          "raw_sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+          "paired_jpg_asset_id": null,
+          "marker": "CETACEA-MOCK"
+        }
+      ]
+    }
+  },
+  {
+    "path": "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-2/preview-manifest.json",
+    "sha256": "26ddd6680b9018d9fd4059d0d5f11d5352b5a9e8f41d01229428de4b259b549f",
+    "content": {
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "run": 2,
+      "mock": true,
+      "previews": [
+        {
+          "preview_id": "prv_ffa36ecf1d324338affaa7edf0d6681f",
+          "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+          "run": 2,
+          "asset_id": "ast_c404007acc7f24ba03cbbc8c",
+          "path": "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-2/ast_c404007acc7f24ba03cbbc8c.jpg",
+          "sha256": "7d114f54a17c917b4e4a8225a62935611cccfe2851bf8a20e78770ac489178ab",
+          "width": 1200,
+          "height": 800,
+          "status": "EXPORTED",
+          "mock": 1,
+          "source_rel_path": "a.NEF",
+          "raw_sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+          "paired_jpg_asset_id": null,
+          "marker": "CETACEA-MOCK"
+        },
+        {
+          "preview_id": "prv_d1643480b8c34cb1b40cf8b02c6a8899",
+          "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+          "run": 2,
+          "asset_id": "ast_3be0e9efa9939b7178e86eca",
+          "path": "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-2/r2_tester_b_3be0e9ef.jpg",
+          "sha256": "1052c338fef3e0dc810749366f88309164c0e9b9a46fd76969b943e81583847a",
+          "width": 1200,
+          "height": 800,
+          "status": "EXPORTED",
+          "mock": 1,
+          "source_rel_path": "b.NEF",
+          "raw_sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+          "paired_jpg_asset_id": null,
+          "marker": "CETACEA-MOCK"
+        }
+      ]
+    }
+  },
+  {
+    "path": "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-library/r2/tester/recovery/.cetacea/import-manifest-run1.json",
+    "sha256": "05ca5b59e8577ec44b2f908c6a92c508dea901e6086600d7102e9ca311e78e19",
+    "content": [
+      {
+        "rel_path": "a.NEF",
+        "size": 25994889,
+        "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+        "kind": "raw",
+        "dest_rel_path": "r2/tester/recovery/a.NEF",
+        "asset_id": "ast_c404007acc7f24ba03cbbc8c",
+        "status": "VERIFIED",
+        "skipped_verified": false,
+        "error": null,
+        "verified_at": "2026-11-02T17:12:08.702628+00:00",
+        "order": "r2",
+        "photographer": "tester",
+        "batch": "recovery",
+        "source_id": "public",
+        "run": 1
+      },
+      {
+        "rel_path": "b.NEF",
+        "size": 25994889,
+        "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+        "kind": "raw",
+        "dest_rel_path": "r2/tester/recovery/b.NEF",
+        "asset_id": "ast_3be0e9efa9939b7178e86eca",
+        "status": "VERIFIED",
+        "skipped_verified": false,
+        "error": null,
+        "verified_at": "2026-11-02T17:12:08.873170+00:00",
+        "order": "r2",
+        "photographer": "tester",
+        "batch": "recovery",
+        "source_id": "public",
+        "run": 1
+      },
+      {
+        "rel_path": "existing.XMP",
+        "size": 64,
+        "sha256": "97af48002607e06434f5071b143fcc5e75f30b5ca77812d80e4ec8cb98e82a78",
+        "kind": "sidecar",
+        "dest_rel_path": "r2/tester/recovery/existing.XMP",
+        "asset_id": "ast_845b48c72adb7fc14819bf7d",
+        "status": "VERIFIED",
+        "skipped_verified": false,
+        "error": null,
+        "verified_at": "2026-11-02T17:12:08.893880+00:00",
+        "order": "r2",
+        "photographer": "tester",
+        "batch": "recovery",
+        "source_id": "public",
+        "run": 1
+      }
+    ]
+  }
+]

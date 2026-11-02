@@ -1,0 +1,461 @@
+{
+  "tasks": [
+    {
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "idempotency_key": "b4772e4a4df164b4099baaa7cb529e1e7e9b5619eed9fda2931ed404e2e020ab",
+      "type": "import",
+      "state": "FAILED",
+      "order_id": "r2",
+      "photographer_id": "tester",
+      "batch_id": "recovery",
+      "source_id": "public",
+      "plan_json": "{\"files\": [{\"rel_path\": \"a.NEF\", \"size\": 25994889, \"sha256\": \"8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02\", \"kind\": \"raw\", \"dest_rel_path\": \"r2/tester/recovery/a.NEF\", \"asset_id\": \"ast_c404007acc7f24ba03cbbc8c\"}, {\"rel_path\": \"b.NEF\", \"size\": 25994889, \"sha256\": \"8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02\", \"kind\": \"raw\", \"dest_rel_path\": \"r2/tester/recovery/b.NEF\", \"asset_id\": \"ast_3be0e9efa9939b7178e86eca\"}, {\"rel_path\": \"existing.XMP\", \"size\": 64, \"sha256\": \"97af48002607e06434f5071b143fcc5e75f30b5ca77812d80e4ec8cb98e82a78\", \"kind\": \"sidecar\", \"dest_rel_path\": \"r2/tester/recovery/existing.XMP\", \"asset_id\": \"ast_845b48c72adb7fc14819bf7d\"}], \"total_bytes\": 51989842, \"destination\": \"r2/tester/recovery\", \"stages\": [\"ingest\", \"lr_register\", \"lr_preset\", \"lr_export\", \"preview_verify\"], \"preset_id\": \"mock-preset\", \"scan_digest\": \"d53a11dd9d5125d5470e3b0e0fa89345b97bc26fe606df7d0a48b28959e2e44b\", \"lightroom\": {\"preset\": {\"label\": \"MOCK R2 preset\", \"lightroom_uuid\": null, \"lightroom_name\": \"MOCK R2 preset\"}, \"export\": {\"max_edge\": 1600, \"quality\": 85, \"preview_root\": \"/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-preview\", \"library_root\": \"/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-library\"}}}",
+      "plan_digest": "3eb9fa2d74f4802040844a6ed153c10c849af69d9dcc5184c0da15614fd79320",
+      "stages_json": "[\"ingest\", \"lr_register\", \"lr_preset\", \"lr_export\", \"preview_verify\"]",
+      "run_count": 2,
+      "error": "preview_verify: 1 failed",
+      "created_at": "2026-11-02T17:12:08.148305+00:00",
+      "updated_at": "2026-11-02T17:12:09.346347+00:00",
+      "lease_until": null
+    }
+  ],
+  "task_steps": [
+    {
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "run": 1,
+      "stage": "ingest",
+      "state": "COMPLETED",
+      "succeeded": 3,
+      "failed": 0,
+      "skipped": 0,
+      "detail_json": "[{\"rel_path\": \"a.NEF\", \"size\": 25994889, \"sha256\": \"8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02\", \"kind\": \"raw\", \"dest_rel_path\": \"r2/tester/recovery/a.NEF\", \"asset_id\": \"ast_c404007acc7f24ba03cbbc8c\", \"status\": \"VERIFIED\", \"skipped_verified\": false, \"error\": null, \"verified_at\": \"2026-11-02T17:12:08.702628+00:00\", \"order\": \"r2\", \"photographer\": \"tester\", \"batch\": \"recovery\", \"source_id\": \"public\", \"run\": 1}, {\"rel_path\": \"b.NEF\", \"size\": 25994889, \"sha256\": \"8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02\", \"kind\": \"raw\", \"dest_rel_path\": \"r2/tester/recovery/b.NEF\", \"asset_id\": \"ast_3be0e9efa9939b7178e86eca\", \"status\": \"VERIFIED\", \"skipped_verified\": false, \"error\": null, \"verified_at\": \"2026-11-02T17:12:08.873170+00:00\", \"order\": \"r2\", \"photographer\": \"tester\", \"batch\": \"recovery\", \"source_id\": \"public\", \"run\": 1}, {\"rel_path\": \"existing.XMP\", \"size\": 64, \"sha256\": \"97af48002607e06434f5071b143fcc5e75f30b5ca77812d80e4ec8cb98e82a78\", \"kind\": \"sidecar\", \"dest_rel_path\": \"r2/tester/recovery/existing.XMP\", \"asset_id\": \"ast_845b48c72adb7fc14819bf7d\", \"status\": \"VERIFIED\", \"skipped_verified\": false, \"error\": null, \"verified_at\": \"2026-11-02T17:12:08.893880+00:00\", \"order\": \"r2\", \"photographer\": \"tester\", \"batch\": \"recovery\", \"source_id\": \"public\", \"run\": 1}]",
+      "started_at": "2026-11-02T17:12:08.437461+00:00",
+      "ended_at": "2026-11-02T17:12:08.895009+00:00"
+    },
+    {
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "run": 1,
+      "stage": "lr_register",
+      "state": "COMPLETED",
+      "succeeded": 2,
+      "failed": 0,
+      "skipped": 0,
+      "detail_json": "[{\"asset_id\": \"ast_c404007acc7f24ba03cbbc8c\", \"mock\": true, \"status\": \"MOCK \\u2014 not real Lightroom\"}, {\"asset_id\": \"ast_3be0e9efa9939b7178e86eca\", \"mock\": true, \"status\": \"MOCK \\u2014 not real Lightroom\"}]",
+      "started_at": "2026-11-02T17:12:08.926510+00:00",
+      "ended_at": "2026-11-02T17:12:08.951555+00:00"
+    },
+    {
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "run": 1,
+      "stage": "lr_preset",
+      "state": "COMPLETED",
+      "succeeded": 2,
+      "failed": 0,
+      "skipped": 0,
+      "detail_json": "[{\"asset_id\": \"ast_c404007acc7f24ba03cbbc8c\", \"mock\": true, \"status\": \"MOCK \\u2014 not real Lightroom\"}, {\"asset_id\": \"ast_3be0e9efa9939b7178e86eca\", \"mock\": true, \"status\": \"MOCK \\u2014 not real Lightroom\"}]",
+      "started_at": "2026-11-02T17:12:08.951846+00:00",
+      "ended_at": "2026-11-02T17:12:08.974743+00:00"
+    },
+    {
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "run": 1,
+      "stage": "lr_export",
+      "state": "FAILED",
+      "succeeded": 1,
+      "failed": 1,
+      "skipped": 0,
+      "detail_json": "[{\"asset_id\": \"ast_c404007acc7f24ba03cbbc8c\", \"mock\": true, \"status\": \"MOCK \\u2014 not real Lightroom\"}, {\"asset_id\": \"ast_3be0e9efa9939b7178e86eca\", \"error\": \"MOCK injected export failure\", \"mock\": true}]",
+      "started_at": "2026-11-02T17:12:08.974972+00:00",
+      "ended_at": "2026-11-02T17:12:09.112215+00:00"
+    },
+    {
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "run": 2,
+      "stage": "lr_export",
+      "state": "COMPLETED",
+      "succeeded": 1,
+      "failed": 0,
+      "skipped": 1,
+      "detail_json": "[{\"asset_id\": \"ast_3be0e9efa9939b7178e86eca\", \"mock\": true, \"status\": \"MOCK \\u2014 not real Lightroom\"}]",
+      "started_at": "2026-11-02T17:12:09.254129+00:00",
+      "ended_at": "2026-11-02T17:12:09.335758+00:00"
+    },
+    {
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "run": 2,
+      "stage": "preview_verify",
+      "state": "FAILED",
+      "succeeded": 0,
+      "failed": 1,
+      "skipped": 0,
+      "detail_json": "{\"status\": \"FAILED\", \"mock\": true, \"marker\": \"MOCK \\u2014 not real Lightroom\", \"run\": 2, \"missing\": [], \"failed\": [], \"orphans\": [\"/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-2/._ast_c404007acc7f24ba03cbbc8c.jpg\", \"/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-2/._r2_tester_b_3be0e9ef.jpg\"], \"size_violations\": [], \"expected_count\": 2, \"mapped_count\": 2}",
+      "started_at": "2026-11-02T17:12:09.336352+00:00",
+      "ended_at": "2026-11-02T17:12:09.345716+00:00"
+    }
+  ],
+  "assets": [
+    {
+      "asset_id": "ast_c404007acc7f24ba03cbbc8c",
+      "order_id": "r2",
+      "photographer_id": "tester",
+      "batch_id": "recovery",
+      "rel_path": "a.NEF",
+      "size": 25994889,
+      "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "error": null,
+      "dest_rel_path": "r2/tester/recovery/a.NEF",
+      "lr_photo_id": "mock-lr-1",
+      "lr_status": "EXPORTED",
+      "preset_applied": "mock-preset",
+      "mock": 1,
+      "verified_at": "2026-11-02T17:12:08.702628+00:00"
+    },
+    {
+      "asset_id": "ast_3be0e9efa9939b7178e86eca",
+      "order_id": "r2",
+      "photographer_id": "tester",
+      "batch_id": "recovery",
+      "rel_path": "b.NEF",
+      "size": 25994889,
+      "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "error": null,
+      "dest_rel_path": "r2/tester/recovery/b.NEF",
+      "lr_photo_id": "mock-lr-2",
+      "lr_status": "EXPORTED",
+      "preset_applied": "mock-preset",
+      "mock": 1,
+      "verified_at": "2026-11-02T17:12:08.873170+00:00"
+    },
+    {
+      "asset_id": "ast_845b48c72adb7fc14819bf7d",
+      "order_id": "r2",
+      "photographer_id": "tester",
+      "batch_id": "recovery",
+      "rel_path": "existing.XMP",
+      "size": 64,
+      "sha256": "97af48002607e06434f5071b143fcc5e75f30b5ca77812d80e4ec8cb98e82a78",
+      "kind": "sidecar",
+      "status": "VERIFIED",
+      "error": null,
+      "dest_rel_path": "r2/tester/recovery/existing.XMP",
+      "lr_photo_id": null,
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "verified_at": "2026-11-02T17:12:08.893880+00:00"
+    }
+  ],
+  "previews": [
+    {
+      "preview_id": "prv_dc43557d424146d3aa4c2943a5d9159d",
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "run": 1,
+      "asset_id": "ast_c404007acc7f24ba03cbbc8c",
+      "path": "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-1/r2_tester_a_c404007a.jpg",
+      "sha256": "7d114f54a17c917b4e4a8225a62935611cccfe2851bf8a20e78770ac489178ab",
+      "width": 1200,
+      "height": 800,
+      "status": "EXPORTED",
+      "mock": 1
+    },
+    {
+      "preview_id": "prv_ffa36ecf1d324338affaa7edf0d6681f",
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "run": 2,
+      "asset_id": "ast_c404007acc7f24ba03cbbc8c",
+      "path": "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-2/ast_c404007acc7f24ba03cbbc8c.jpg",
+      "sha256": "7d114f54a17c917b4e4a8225a62935611cccfe2851bf8a20e78770ac489178ab",
+      "width": 1200,
+      "height": 800,
+      "status": "EXPORTED",
+      "mock": 1
+    },
+    {
+      "preview_id": "prv_d1643480b8c34cb1b40cf8b02c6a8899",
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "run": 2,
+      "asset_id": "ast_3be0e9efa9939b7178e86eca",
+      "path": "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-2/r2_tester_b_3be0e9ef.jpg",
+      "sha256": "1052c338fef3e0dc810749366f88309164c0e9b9a46fd76969b943e81583847a",
+      "width": 1200,
+      "height": 800,
+      "status": "EXPORTED",
+      "mock": 1
+    }
+  ],
+  "approvals": [
+    {
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "plan_digest": "3eb9fa2d74f4802040844a6ed153c10c849af69d9dcc5184c0da15614fd79320",
+      "approved_by": "cli",
+      "scopes": "[\"admin\", \"approve\", \"cancel\", \"execute\", \"lightroom\", \"plan\", \"read\"]",
+      "granted_at": "2026-11-02T17:12:08.390710+00:00",
+      "revoked_at": null
+    }
+  ],
+  "audit_log": [
+    {
+      "actor": "human:cli",
+      "action": "add_source",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:08.120704+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "add_orders",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:08.122187+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "add_photographers",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:08.123388+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "add_preset",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:08.124626+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "plan_import",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:08.125673+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "scan_source",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:08.126357+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "state_change",
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "detail_json": "[\"PENDING\", \"WAITING_APPROVAL\"]",
+      "ts": "2026-11-02T17:12:08.148375+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "get_task",
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:08.149265+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "approve",
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:08.389590+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "get_task",
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:08.391321+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "execute",
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:08.434722+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "state_change",
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "detail_json": "[\"WAITING_APPROVAL\", \"RUNNING\"]",
+      "ts": "2026-11-02T17:12:08.435569+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "get_task",
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:08.436249+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "lr_register",
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:08.927722+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "list_assets",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:08.928200+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "lr_preset",
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:08.952468+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "list_assets",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:08.952910+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "lr_export",
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:08.975466+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "list_assets",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:08.975860+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "list_assets",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:09.102743+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "state_change",
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "detail_json": "[\"RUNNING\", \"FAILED\"]",
+      "ts": "2026-11-02T17:12:09.112763+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "get_task",
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:09.113245+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "retry",
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:09.225543+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "get_task",
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:09.226587+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "execute",
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:09.228035+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "state_change",
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "detail_json": "[\"FAILED\", \"RUNNING\"]",
+      "ts": "2026-11-02T17:12:09.228815+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "get_task",
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:09.229565+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "list_assets",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:09.231699+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "lr_export",
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:09.254832+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "list_assets",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:09.255439+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "list_assets",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:09.314314+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "preview_verify",
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:09.337426+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "verify_preview",
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:09.338020+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "get_task",
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:09.339042+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "list_assets",
+      "task_id": null,
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:09.340339+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "state_change",
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "detail_json": "[\"RUNNING\", \"FAILED\"]",
+      "ts": "2026-11-02T17:12:09.346364+00:00"
+    },
+    {
+      "actor": "human:cli",
+      "action": "get_task",
+      "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+      "detail_json": "null",
+      "ts": "2026-11-02T17:12:09.348493+00:00"
+    }
+  ]
+}

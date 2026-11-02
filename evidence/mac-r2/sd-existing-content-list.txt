@@ -1,0 +1,13 @@
+Read-only SD inventory: /Volumes/NIKON Z6_3  1
+Filesystem: ExFAT
+No file contents opened; no writes performed.
+
+directory	131072	.fseventsd
+file	18297	.fseventsd/0000000013df73b7
+file	17824	.fseventsd/0000000013df9604
+file	17825	.fseventsd/0000000013dfb751
+file	36	.fseventsd/fseventsd-uuid
+directory	131072	.Trashes
+file	4096	.Trashes/._501
+directory	131072	.Trashes/501
+file	512	NIKON001.DSC

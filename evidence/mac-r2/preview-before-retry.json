@@ -1,0 +1,20 @@
+{
+  "row": {
+    "preview_id": "prv_dc43557d424146d3aa4c2943a5d9159d",
+    "task_id": "tsk_215a25525c3b4926a50749d4dfc79722",
+    "run": 1,
+    "asset_id": "ast_c404007acc7f24ba03cbbc8c",
+    "path": "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103/mock-preview/r2/tester/recovery/tsk_215a25525c3b4926a50749d4dfc79722/run-1/r2_tester_a_c404007a.jpg",
+    "sha256": "7d114f54a17c917b4e4a8225a62935611cccfe2851bf8a20e78770ac489178ab",
+    "width": 1200,
+    "height": 800,
+    "status": "EXPORTED",
+    "mock": 1
+  },
+  "snapshot": {
+    "sha256": "7d114f54a17c917b4e4a8225a62935611cccfe2851bf8a20e78770ac489178ab",
+    "size": 17867,
+    "mtime_ns": 1793639529080000000,
+    "inode": 315492
+  }
+}
