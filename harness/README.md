@@ -50,4 +50,4 @@ CETACEA_REALMODEL=1 DEEPSEEK_API_KEY=... CETACEA_REALMODEL_EVIDENCE=evidence/rea
 
 本项目的 `harness_guard.py` / `harness_client.py` 在运行前检查 `MODEL_NO_TOOL_CALLING`、`TOOL_CALLING_UNVERIFIED`、`NO_TOOLS_OFFERED`、`UNEXPECTED_TOOL_SURFACE`、`TOOL_SURFACE_UNKNOWN`；逐轮评估 `NO_TOOL_CALLS`、`TOOL_CALL_FAILED`、`UNKNOWN_TOOL_CALLED`。要求工具调用却没有调用时返回 `success=False` 并向 stderr 输出 WARNING。能力表为静态列表，不查询提供商；这些警告及错误路径仅经 Mock 验证。真实 DeepSeek 只观察到有工具调用和 `require_tools=False` 的正常无工具拒绝，未用真实不支持工具调用的模型触发 `NO_TOOL_CALLS`。
 
-真实 overlay 关闭 session-title、web、telemetry；Harness 诊断 stderr 被丢弃，提供商失败只显示 `session failed`。密钥经环境变量传给 Harness 子进程，仓库和证据已 grep 验证无密钥值，但 Harness 自身网络/日志行为未审计。工具结果会发给 DeepSeek，包括来源绝对路径；数据范围与缓解措施见 [数据流](../docs/DATA_FLOW.md)。作出数据处理/合同决策前不要使用真实客户数据。macOS 和真实 Lightroom 均未验证。
+真实 overlay 关闭 session-title、web、telemetry；Harness 诊断 stderr 被丢弃，提供商失败只显示 `session failed`。密钥经环境变量传给 Harness 子进程，仓库和证据已 grep 验证无密钥值，但 Harness 自身网络/日志行为未审计。2026-11-02 用户接受将指定范围内包含真实客户数据的工具结果发送给 DeepSeek；照片像素和文件内容仍不得发送，未来返回文件内容或缩略图的工具不在决定范围内，用户仍须审阅适用的 DeepSeek 数据保留条款。来源绝对路径也不在决定范围内，仍是开放风险；建议后续只返回来源 ID/标签，待用户决定。完整决定及范围见 [数据流](../docs/DATA_FLOW.md)。macOS 和真实 Lightroom 均未验证。

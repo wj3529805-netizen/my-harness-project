@@ -25,7 +25,7 @@ Stage C validation history:
 3. Mock 适配器的“已登记”状态在进程内存里；跨进程时以数据库 assets.lr_photo_id 为准。
 4. 硬链接不可用时的回退（`.cetacea-lock` + rename）只对遵守锁的 CETACEA 写入者安全；外部写入者可能竞争。APFS 支持硬链接；exFAT/SMB 待验证。
 5. 性能：扫描一次完整哈希，复制时再读源、读回临时文件、最终读回，共约 4 次读取；大卡（数百 GB）耗时较长，未做基准测试。
-6. `photo_list_sources` 会向 AI 返回已登记来源的绝对路径（会经 Harness 发送给 DeepSeek；AI 不能据此读写任意路径）。可考虑今后只返回 ID/标签，见 [数据流](DATA_FLOW.md)。
+6. **开放风险，待用户决定**：`photo_list_sources` 会向 AI 返回已登记来源的绝对路径（会经 Harness 发送给 DeepSeek，可能暴露用户名、目录结构或卷名；AI 不能据此读写任意路径）。此路径不在 2026-11-02 用户决定范围内；建议后续只返回来源 ID/标签，见 [数据流](DATA_FLOW.md)。
 7. 磁盘满/权限错误通过故障注入和 monkeypatch 测试，并非真实磁盘满。
 8. （Phase 1 原文，已被 Phase 2 部分取代）没有真实 AI 客户端联调。Phase 2 之后：Harness 的真实 MCP 客户端及 DeepSeek 已小规模联调；Codex/Claude 客户端未联调。
 9. 私有 GitHub 仓库未能核查（需 GitHub App 授权）。
@@ -54,7 +54,7 @@ Stage C validation history:
 12. **多轮驱动验证**：此前沙箱启动超时只反映该环境限制；用户随后在沙箱外完成测试并全部通过。Mock 覆盖多轮、纯文本模型的 `NO_TOOL_CALLS`、`NOT_APPROVED`、预算退出码 4、ledger、14 个 CETACEA 加 7 个无害工具及缺密钥退出码 5。真实运行首次未批准场景先查状态并拒绝执行，原测试误期待 `NOT_APPROVED` 而失败；已调整该测试，并用独立强制调用场景验证该错误路径。
 13. 真实 overlay 关闭 session-title、web、telemetry 条目；Harness 错误/诊断 stderr 被丢弃，提供商失败仅显示 `session failed`，排障信息有限。
 14. 驱动的 30 次请求上限因竞争最多超出 1 次；ledger 无跨进程锁，不能供并发进程共享。
-15. 密钥仅由 `DEEPSEEK_API_KEY` 传入，但必须进入 Harness 子进程环境；依赖 Harness 不记录密钥。仓库及证据已 grep 验证不含密钥值，Harness 自身网络及日志行为未审计。DeepSeek 会收到工具结果内容，包括订单/摄影师 ID、批次标签、文件名、大小、SHA-256、目标相对路径、来源绝对路径和 Lightroom 状态文字；工具不返回照片字节。未作数据处理/合同决策前不要使用真实客户数据，并审阅用户自己的 DeepSeek 数据保留条款。详见 [数据流](DATA_FLOW.md)。
+15. 密钥仅由 `DEEPSEEK_API_KEY` 传入，但必须进入 Harness 子进程环境；依赖 Harness 不记录密钥。仓库及证据已 grep 验证不含密钥值，Harness 自身网络及日志行为未审计。2026-11-02 用户在聊天中表示“没问题 可以交给deepseek”，接受发送包含真实客户数据的工具结果，范围为订单 ID、摄影师 ID、批次标签、文件名、文件大小、SHA-256 哈希、图库相对路径、任务/阶段状态和 Lightroom 状态文字。照片像素或文件内容不得发送，当前没有工具返回文件字节；该决定不覆盖未来返回文件内容或缩略图的工具，也不改变 DeepSeek 自身的数据保留条款，用户仍负责审阅适用条款。`photo_list_sources` 返回的来源绝对路径不在决定范围内，仍是开放风险，建议后续只返回来源 ID/标签，待用户决定。详见 [数据流](DATA_FLOW.md)。
 
 16. **完成后重执行的配置检查**：即使任务已 `COMPLETED`，再次执行仍检查审批和快照；完成后若相关配置改变，会返回 `PERMISSION_DENIED`，而非直接无操作返回。这是可接受的当前行为。
 17. **合并与测试环境**：`mac-validation` 分支尚未合并；本阶段源文件只改动 `core.py` 和 `mcp_server.py`，合并时需核对。MCP stdio 测试在 Codex 沙箱外通过；先前未验证仅是 Codex 沙箱限制。
