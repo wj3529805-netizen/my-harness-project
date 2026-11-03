@@ -159,3 +159,7 @@ curl 终端文本保留实际响应，仅为 Git 空白检查移除了行末 ASC
 发布方 README 标注 CC0，但文件内嵌版权是 `(CC-BY-SA 4.0) Ludger Heide`，creator 为 Ludger Heide。本次保留署名和来源，未修改源文件，未把 RAW/JPG 放进 Git。目录/早期证据中的 `cc0` 是下载时采用的名称，不能消除许可证文字的差异；不要据此宣称已独立解决授权差异。这是 Nikon Z6 样片，不是 Z6 III HE/HE★。
 
 验收脚本在 `evidence/mac-acceptance/`，有测试路径、导入源码位置及 catalog 打开文件名守卫，并对失败返回非零退出。真实操作脚本依赖本机已建立的独立 catalog、测试源和插件运行时，不应在生产 catalog 下运行。中断脚本的控制 gate 不入 Git。证据中的时间部分为 UTC（本地为 Asia/Shanghai）。测试工作目录保留，未清理测试照片或 catalog。
+# AppleDouble follow-up (2026-11-03)
+
+The R2 exFAT run failed when AppleDouble JPEG companions were counted as preview orphans. The fix recognizes regular `._` files by their AppleDouble magic, excludes them from source scans and output selection, and conservatively ignores regular files named exactly `.DS_Store` in output enumeration. Other `._` files are treated normally. Linux tests do not establish macOS or exFAT acceptance: R2 on real exFAT has **not yet been re-verified**.
+

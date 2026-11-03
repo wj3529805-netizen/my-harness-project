@@ -9,6 +9,7 @@ import tempfile
 from pathlib import Path
 from cetacea.core import Workbench
 from cetacea import db
+from cetacea.ingest.pathsafe import read_hash
 
 BANNER = 'MOCK — Linux simulation, not real Lightroom, not macOS'
 STAGES = ['ingest', 'lr_register', 'lr_preset', 'lr_export', 'preview_verify']
@@ -31,7 +32,7 @@ def main(argv=None):
             folder.mkdir(parents=True, exist_ok=True)
             for ext in ['RAF', 'JPG']:
                 (folder/f'IMG_{n:04d}.{ext}').write_bytes(f'MOCK source {n} {ext}\n'.encode()*100)
-        before = {str(p.relative_to(card)): (p.read_bytes(), p.stat().st_mtime_ns) for p in card.rglob('*') if p.is_file()}
+        before = {str(p.relative_to(card)): (read_hash(p), p.stat().st_mtime_ns) for p in card.rglob('*') if p.is_file() and not p.is_symlink()}
         w = Workbench.init(root/'home', root/'library', root/'preview')
         w.add_source('card', card)
         w.create_order('demo', 'Mock demonstration')
@@ -53,7 +54,7 @@ def main(argv=None):
         with db.connect(w.home) as c:
             counts_after = tuple(c.execute(f'SELECT COUNT(*) FROM {table}').fetchone()[0] for table in ['assets', 'previews', 'task_steps'])
         unchanged = all((Path(p).stat().st_ino, Path(p).stat().st_mtime_ns, hashlib.sha256(Path(p).read_bytes()).hexdigest()) == stat for p, stat in snapshot.items())
-        after = {str(p.relative_to(card)): (p.read_bytes(), p.stat().st_mtime_ns) for p in card.rglob('*') if p.is_file()}
+        after = {str(p.relative_to(card)): (read_hash(p), p.stat().st_mtime_ns) for p in card.rglob('*') if p.is_file() and not p.is_symlink()}
         report = w.report(tid)
         report.update(marker=BANNER, idempotent=counts == counts_after and unchanged, source_unchanged=before == after)
         report['markdown'] = BANNER + '\n\n' + report['markdown']

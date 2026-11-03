@@ -5,6 +5,7 @@ import uuid
 from pathlib import Path
 from PIL import Image
 from . import db
+from .appledouble import is_ignorable_macos_metadata
 from .ingest.pathsafe import safe, read_hash
 from .ingest.copier import publish_no_overwrite
 
@@ -84,7 +85,7 @@ def verify(w, task_id):
                 if sha != r['sha256']: raise ValueError('hash mismatch')
             except Exception: result['failed'].append(aid)
     if directory:
-        result['orphans'] = sorted(str(p) for p in directory.rglob('*') if p.suffix.lower() in {'.jpg','.jpeg'} and str(p) not in known)
+        result['orphans'] = sorted(str(p) for p in directory.rglob('*') if p.suffix.lower() in {'.jpg','.jpeg'} and str(p) not in known and not is_ignorable_macos_metadata(p))
     for key in ['missing','failed','orphans','size_violations']: result[key] = sorted(set(result[key]))
     if any(result[k] for k in ['missing','failed','orphans','size_violations']): result['status']='FAILED'
     result['expected_count']=len(assets); result['mapped_count']=len(rows)

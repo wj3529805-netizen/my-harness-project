@@ -5,6 +5,7 @@ from pathlib import Path
 from mcp.client.session import ClientSession
 from mcp.client.stdio import StdioServerParameters, stdio_client
 from .base import LightroomAdapter, RegisterResult, PresetResult, ExportResult
+from ..appledouble import is_ignorable_macos_metadata
 
 
 class RealLightroomMcpAdapter(LightroomAdapter):
@@ -154,7 +155,7 @@ class RealLightroomMcpAdapter(LightroomAdapter):
                 self._require_success(result)
                 if result.get('complete') is not True or type(result.get('exported')) is not int or result['exported'] != 1 or result.get('destination') != str(sub):
                     raise ValueError('unexpected single-photo export result')
-                files = list(sub.iterdir())
+                files = [p for p in sub.iterdir() if not is_ignorable_macos_metadata(p)]
                 if len(files) != 1 or not files[0].is_file() or files[0].is_symlink():
                     raise ValueError('expected one regular exported file')
                 results.append(ExportResult(f.asset_id, files[0]))

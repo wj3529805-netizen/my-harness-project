@@ -103,3 +103,8 @@ macOS ENOTSUP=45和EOPNOTSUPP=102不相等，两处回退遗漏ENOTSUP已由新�
 真实三照片中断测试中，按计划在第一张登记后正常退出测试 Lightroom；后两张插件断连报错，任务实际 FAILED（`lr_register: 2 failed`），没有伪报完成。重开同一测试 catalog 后通过 `photo_retry_task` 补两张、跳过一张，最终全流程完成且未新增批准。此为预期故障刺激及恢复通过，不是单次 catalog 写入中强杀/断电、PAUSED 租期过期恢复或生产可靠性证明。
 
 本轮公开 Nikon Z6 样片、测试 home/catalog、源及库哈希和 XMP/ACR 集合通过；920 秒为代码常量及真实执行时租期采样，不是耗时 920 秒的实机压测。批准后修改工作台预设选择或导出质量会在工作前拒绝；Lightroom 内部同名/同 UUID 预设内容变化的检测、旧无快照计划兼容路径未在本轮实机验收。既有 CLI NotApproved 堆栈体验问题及其他平台/格式/设备限制不因此消除。
+# AppleDouble follow-up (2026-11-03)
+
+The R2 exFAT failure counted macOS AppleDouble companions as preview orphans. Source scans now skip magic-identified regular AppleDouble files without including them in the digest; output enumeration ignores those files and regular files named exactly `.DS_Store`. Non-magic `._` files remain ordinary files. The fix has Linux tests; R2 on real exFAT has **not yet been re-verified**, and the original failure evidence remains unchanged.
+
+Linux validation: full suite on the Linux box passed (128 passed, 4 skipped). Mock/Linux results only; not a macOS or Lightroom pass.

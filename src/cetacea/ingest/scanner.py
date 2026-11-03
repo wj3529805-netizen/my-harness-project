@@ -2,6 +2,7 @@ import os
 import hashlib
 import json
 from .pathsafe import read_hash
+from ..appledouble import is_appledouble
 RAW = set('raf nef nrw arw cr2 cr3 dng orf rw2 pef srw x3f raw 3fr iiq'.split())
 def scan(root):
     files, skipped = [], []
@@ -10,7 +11,8 @@ def scan(root):
             for entry in sorted(entries,key=lambda e:e.name):
                 rel = prefix+entry.name
                 if entry.is_symlink(): skipped.append({'rel_path':rel,'reason':'symlink'})
-                elif entry.name in {'.DS_Store','Thumbs.db'} or entry.name.startswith('._'): skipped.append({'rel_path':rel,'reason':'system'})
+                elif entry.name in {'.DS_Store','Thumbs.db'}: skipped.append({'rel_path':rel,'reason':'system'})
+                elif is_appledouble(entry.path): skipped.append({'rel_path':rel,'reason':'appledouble'})
                 elif entry.is_dir(follow_symlinks=False): walk(entry.path,rel+'/')
                 elif entry.is_file(follow_symlinks=False):
                     ext = entry.name.rsplit('.',1)[-1].lower()

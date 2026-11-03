@@ -165,7 +165,7 @@ class Workbench:
         tempdir=safe(library,f'.cetacea-tmp/{task_id}')
         if tempdir.exists():
             for part in tempdir.iterdir():
-                if part.name.endswith('.part') and not part.is_dir(): part.unlink()
+                if part.name.endswith('.part') and not part.name.startswith('._') and not part.is_dir(): part.unlink()
         results=[]; task_error=None; unsupported=None
         try:
             for stage in (plan['stages'] if _stages is None else _stages):
