@@ -1,5 +1,7 @@
 # 功能状态矩阵（Linux 云盒；无密钥/开关全量测试：103 passed，2 skipped（两个真实模型 opt-in 模块）；Phase 2 Mock 阶段：75 passed）
 
+R5 已在 `prep/R5` 完成样片替换和当前树脱敏；范围、限制及待决事项见 [最终验收](FINAL_ACCEPTANCE.md)。
+
 标签：已完成且测试通过 / 已实现但测试失败 / 仅 Mock 验证 / 真实模型小规模验证 / 待 Mac 实机验证 / 尚未开发
 
 2026-11-03 R2 真实 ExFAT SD 目标：**PASS_IN_SCOPE（单样本）**。原始 `2a8d669` / `evidence/mac-r2/` 因 `preview.verify` 把 AppleDouble `._*.jpg` 计为 orphan 而 FAIL_STOPPED；修复 `fdfce5a` 后，首次重跑仅在验收脚本解析 `._preview-manifest.json` 时失败（产品 verify 为 OK）。第二次重跑在真实 ExFAT SD 卡上以 **MOCK Lightroom** 完成 ENOTSUP/重试/重复/冲突检查（发布 7 次、预览复用 1 次真实 ENOTSUP）；另做独立真实 Lightroom + ExFAT 冒烟，曝光读回 0.5、JPEG 1600×1065。`NIKON001.DSC` 未变，付费 API 0 次；不代表批量或生产可靠性。见 [报告](MACOS_VALIDATION.md)、[首次重跑](../evidence/mac-r2-rerun/result.json)、[最终结果](../evidence/mac-r2-rerun2/result.json)。

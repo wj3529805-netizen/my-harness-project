@@ -108,3 +108,7 @@ macOS ENOTSUP=45和EOPNOTSUPP=102不相等，两处回退遗漏ENOTSUP已由新�
 The R2 exFAT failure counted macOS AppleDouble companions as preview orphans. Source scans now skip magic-identified regular AppleDouble files without including them in the digest; output enumeration ignores those files and regular files named exactly `.DS_Store`. Non-magic `._` files remain ordinary files. Fix `fdfce5a` has Linux tests and a subsequent real ExFAT **PASS_IN_SCOPE** in `evidence/mac-r2-rerun2/result.json` (MOCK Lightroom filesystem checks plus a separate real Lightroom smoke; single sample). Both earlier failure records remain unchanged; see the R2 section above.
 
 Linux validation: full suite on the Linux box passed (128 passed, 4 skipped). Mock/Linux results only; not a macOS or Lightroom pass.
+
+## R5 隐私残留 — 2026-11-03
+
+当前树已脱敏，但公开仓库的 Git 历史仍含原始标识，未重写。harness UUID、卷名、项目文件夹名，以及历史旧样片的 SHA、第三方版权文字和相机序列号仍保留；新样片内嵌标识按所有者同意保留。处置与许可证措辞仍待决定，见 [最终验收](FINAL_ACCEPTANCE.md)。
