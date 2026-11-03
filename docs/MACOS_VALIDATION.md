@@ -159,15 +159,19 @@ curl 终端文本保留实际响应，仅为 Git 空白检查移除了行末 ASC
 - 无硬链接 retry 新回归最初失败并揭示 SQLite 字符串问题；慢调用新回归在旧源码上也确实失败。修复后严格断言保留。
 - 最终只读清点脚本最初误以为 search 摘要包含 path，触发 KeyError；状态请求和四张数量当时已成功，脚本随后改为按 ID 查询完整 metadata 再检查路径。原失败日志保留。
 - Lightroom UI 控制曾连续超时；恢复测试会话并重新核对 catalog 后继续。A9 检查在受限沙箱内访问 bridge 锁被拒，停止该进程并在授权范围重跑成功。没有为此修改安全配置。
-- 实体 SD/读卡器、外置 exFAT/SMB、真实 Windows、Nikon Z6 III HE/HE★、磁盘故障、断电、单张 catalog 写入中强杀、长期大批量运行均未验收。
+- 实体 SD/读卡器、外置 exFAT/SMB、真实 Windows、Nikon Z6 III HE/HE★、磁盘故障、断电、单张 catalog 写入中强杀、长期大批量运行均未在本次 A 级验收；其中 HE 和 HE★ 已在 R3 真实卡重跑覆盖，须结合 R3 证据阅读。
 - 无硬链接回退仍只协调遵守 `.cetacea-lock` 的写入者；不遵守锁的外部进程可能与 rename 竞争。此既有风险未消除。
 - CLI 未批准执行仍会输出 NotApproved Python 堆栈；执行被正确拒绝。此用户已说明的体验问题未改。
 
 ## 测试样片来源与复现
 
+以下公开样片为历史记录，实际用于 A 系列证据；它不在仓库中，许可证差异尚未解决，不再用于新的验证。
+
 公开样片 `Nikon-Z6.NEF`，25,994,889 bytes，SHA-256：`8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02`，与发布方 [SHA256SUMS.txt](https://github.com/tellodaniel/revelraw-sample-raw-files/releases/download/v1/SHA256SUMS.txt) 一致。[发布来源](https://github.com/tellodaniel/revelraw-sample-raw-files)，对应 raw.pixls.us id 3581。
 
 发布方 README 标注 CC0，但文件内嵌版权是 `(CC-BY-SA 4.0) Ludger Heide`，creator 为 Ludger Heide。本次保留署名和来源，未修改源文件，未把 RAW/JPG 放进 Git。目录/早期证据中的 `cc0` 是下载时采用的名称，不能消除许可证文字的差异；不要据此宣称已独立解决授权差异。这是 Nikon Z6 样片，不是 Z6 III HE/HE★。
+
+新的用户自有样片见 [samples/README.md](../samples/README.md)，是首个真实 Z6III HE（无星）样片：已核验标签值 13 与 3.0 bpp 相互佐证。
 
 验收脚本在 `evidence/mac-acceptance/`，有测试路径、导入源码位置及 catalog 打开文件名守卫，并对失败返回非零退出。真实操作脚本依赖本机已建立的独立 catalog、测试源和插件运行时，不应在生产 catalog 下运行。中断脚本的控制 gate 不入 Git。证据中的时间部分为 UTC（本地为 Asia/Shanghai）。测试工作目录保留，未清理测试照片或 catalog。
 # AppleDouble follow-up (2026-11-03)
