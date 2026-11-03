@@ -1,0 +1,14 @@
+[
+  {
+    "preview_id": "prv_724de1024b9543dca9a2b625ea090e4d",
+    "task_id": "tsk_c4f37f0e469246c59b12ae159b4849f4",
+    "run": 1,
+    "asset_id": "ast_bb7899b598b8089559b65fca",
+    "path": "/Volumes/NIKON Z6_3 /Cetacea-R2-Rerun2-20261103/real-preview/real-r2/tester/b_dc4b14e90bba/tsk_c4f37f0e469246c59b12ae159b4849f4/run-1/ast_bb7899b598b8089559b65fca/public.jpg",
+    "sha256": "18dc5ce92f63cb68c709178d80cc8213413f6505b438c0536fed5485f5655180",
+    "width": 1600,
+    "height": 1065,
+    "status": "EXPORTED",
+    "mock": 0
+  }
+]

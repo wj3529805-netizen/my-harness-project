@@ -1,0 +1,12 @@
+{
+  "status": "OK",
+  "mock": true,
+  "marker": "MOCK — not real Lightroom",
+  "run": 2,
+  "missing": [],
+  "failed": [],
+  "orphans": [],
+  "size_violations": [],
+  "expected_count": 2,
+  "mapped_count": 2
+}

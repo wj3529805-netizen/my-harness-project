@@ -1,16 +1,16 @@
 # Gate 1 validation notes
 
-## R2 real ExFAT — 2026-11-03：FAIL_STOPPED，产品问题未修
+## R2 real ExFAT — 2026-11-03：PASS_IN_SCOPE（单样本），失败历史保留
 
-在用户确认的内置 SD 卡 ExFAT 新测试目录内，真实 OS 调用已在导入发布及预览复用两条路径返回 ENOTSUP=45，并实际完成回退。明确 MOCK 的部分导出故障解除后，导出重试成功补 1、复用 1，但最终任务 FAILED：`preview_verify: 1 failed`。核验把 macOS 生成的两个 AppleDouble `._*.jpg` 伴随文件当作 orphan；实际 JPEG 映射、解码、读回哈希均正常。`src/cetacea/preview.py` 的 orphan 枚举未排除此类文件，这是本轮真实 ExFAT 揭示的未修复兼容性问题，不能用 APFS 或 errno 注入测试代替实机结果。[报告](MACOS_VALIDATION.md)、[证据](../evidence/mac-r2/failure-analysis.json)。
+原始 R2（`2a8d669`，[evidence/mac-r2/](../evidence/mac-r2/result.json)）因 `preview.verify` 将 AppleDouble `._*.jpg` 计为 orphan 而 FAIL_STOPPED；修复为 `fdfce5a`。首次重跑的产品 [verify 为 OK/mock=true](../evidence/mac-r2-rerun/mock-verify-preview.json)，仅验收脚本清单读回误解析 `._preview-manifest.json` 为 UTF-8 JSON 而停止，整轮仍为 [FAIL_STOPPED](../evidence/mac-r2-rerun/result.json)。原始失败证据保留。
 
-已停止后续测试，未修产品或清理 SD 现场。重复/冲突、真实 Lightroom + ExFAT 均 NOT_RUN。原有清点条目仍在，NIKON001.DSC 哈希/mtime/inode 未变；新测试目录之外还有 OS 自动创建的同名 `._` 伴随文件，已如实列出并保留。Mock Lightroom 故障刺激不代表真实 Lightroom，源码中其它单文件目录假设亦尚未在本轮实测。没有格式化、删除原有文件或调用付费 API。
+[第二次重跑](../evidence/mac-r2-rerun2/result.json) **PASS_IN_SCOPE**：真实 ExFAT SD 卡上以 **MOCK Lightroom** 完成 ENOTSUP/重试/重复/冲突检查，真实发布 ENOTSUP 7 次、预览复用 1 次；另有独立真实 Lightroom + ExFAT 冒烟，曝光读回 0.5、JPEG 1600×1065。`NIKON001.DSC` 未变，付费 API 0 次。仅单样本范围通过，不代表真实 Lightroom 故障重试、整卡/批量、SMB 或生产可靠性；不遵守 `.cetacea-lock` 的外部写入者仍可能竞争。详见 [报告](MACOS_VALIDATION.md)。
 
 ## R1 Mac real AI — 2026-11-03：授权重跑有限样本通过
 
 用户后续授权免费 curl 检查、脱敏错误诊断及原 13 次总额内一次重跑，再明确批准具体计划。重跑三轮耗用 7 次，累计 driver count=9（保留首次 2 次），未重置计数。实际 DeepSeek + 真实 Lightroom 完成五阶段、一次人类 CLI 批准，批准前执行拒绝/删除和 shell 请求拒绝，模型与 CLI 均核验 OK/mock=false，RAW 目标读回及曝光/JPG 独立检查通过。[报告](MACOS_VALIDATION.md)、[重跑结果](../evidence/mac-r1/retry-1/result.json)。
 
-三个不带 key 的 curl HEAD 均 HTTP401、TLS 校验通过，未见拦截页；系统代理开启，不能据此证明完全不经代理或流式连接长期稳定。首次 TRANSPORT 根因仍未知，本轮未复现；已开启仅错误的脱敏诊断，普通 stdout/stderr、请求头/正文不作为错误对象序列化。成功请求后的 AbortError 连接清理和可选 typert-loader 缺失模块的启动错误亦如实保留，不能把任意 stderr 行等同于模型失败。当前测试仍仅公开 Nikon Z6 单样本、专用测试 catalog，非客户数据、非生产可靠性证明；两项实网 pytest 模块仍跳过（真实会话另行运行），全量回归 135 passed/2 skipped。R2–R5 尚未开始。
+三个不带 key 的 curl HEAD 均 HTTP401、TLS 校验通过，未见拦截页；系统代理开启，不能据此证明完全不经代理或流式连接长期稳定。首次 TRANSPORT 根因仍未知，本轮未复现；已开启仅错误的脱敏诊断，普通 stdout/stderr、请求头/正文不作为错误对象序列化。成功请求后的 AbortError 连接清理和可选 typert-loader 缺失模块的启动错误亦如实保留，不能把任意 stderr 行等同于模型失败。当前测试仍仅公开 Nikon Z6 单样本、专用测试 catalog，非客户数据、非生产可靠性证明；两项实网 pytest 模块仍跳过（真实会话另行运行），全量回归 135 passed/2 skipped。R2 后续结果见上节；R3–R5 尚未开始。
 
 ## R1 Mac real AI 首次失败 — 2026-11-03：FAIL_STOPPED，历史
 
@@ -41,7 +41,7 @@ Stage C validation history:
 1. **Phase 1 收尾时的历史状态：未在 macOS / 真实 Lightroom 上验证**任何东西。`RealLightroomMcpAdapter` 只对假 MCP 服务器做过接口测试；lightroom-mcp 实际返回格式（import_photos 无 photo id、export_photos 无文件名）按源码阅读做的假设，当时须在 Mac 上验收清单 A13 确认；后续验收见下方 macOS 记录。
 2. 真实适配器每次调用都启动一个 MCP 子进程（简单、隔离，但慢）；大批量时需改为长连接会话。
 3. Mock 适配器的“已登记”状态在进程内存里；跨进程时以数据库 assets.lr_photo_id 为准。
-4. 硬链接不可用时的回退（`.cetacea-lock` + rename）只对遵守锁的 CETACEA 写入者安全；外部写入者可能竞争。APFS 支持硬链接；exFAT/SMB 待验证。
+4. 硬链接不可用时的回退（`.cetacea-lock` + rename）只对遵守锁的 CETACEA 写入者安全；外部写入者可能竞争。APFS 支持硬链接；exFAT 已有 R2 单样本范围通过（文件系统检查使用 MOCK Lightroom，另有真实 Lightroom 冒烟），SMB 待验证。
 5. 性能：扫描一次完整哈希，复制时再读源、读回临时文件、最终读回，共约 4 次读取；大卡（数百 GB）耗时较长，未做基准测试。
 6. **已接受的决定（2026-11-02）**：用户表示“可以，没问题”，接受 `photo_list_sources` 向模型返回已登记来源的绝对路径，并经 Harness 发送给 DeepSeek；路径可能暴露用户名、目录结构或卷名，AI 不能据此读写任意路径。此项决定仅覆盖该工具的来源路径；未来若工具返回文件内容或缩略图，或 DeepSeek 保留条款变化，须重新决定。见 [数据流](DATA_FLOW.md)。
 7. 磁盘满/权限错误通过故障注入和 monkeypatch 测试，并非真实磁盘满。
@@ -105,6 +105,6 @@ macOS ENOTSUP=45和EOPNOTSUPP=102不相等，两处回退遗漏ENOTSUP已由新�
 本轮公开 Nikon Z6 样片、测试 home/catalog、源及库哈希和 XMP/ACR 集合通过；920 秒为代码常量及真实执行时租期采样，不是耗时 920 秒的实机压测。批准后修改工作台预设选择或导出质量会在工作前拒绝；Lightroom 内部同名/同 UUID 预设内容变化的检测、旧无快照计划兼容路径未在本轮实机验收。既有 CLI NotApproved 堆栈体验问题及其他平台/格式/设备限制不因此消除。
 # AppleDouble follow-up (2026-11-03)
 
-The R2 exFAT failure counted macOS AppleDouble companions as preview orphans. Source scans now skip magic-identified regular AppleDouble files without including them in the digest; output enumeration ignores those files and regular files named exactly `.DS_Store`. Non-magic `._` files remain ordinary files. The fix has Linux tests; R2 on real exFAT has **not yet been re-verified**, and the original failure evidence remains unchanged.
+The R2 exFAT failure counted macOS AppleDouble companions as preview orphans. Source scans now skip magic-identified regular AppleDouble files without including them in the digest; output enumeration ignores those files and regular files named exactly `.DS_Store`. Non-magic `._` files remain ordinary files. Fix `fdfce5a` has Linux tests and a subsequent real ExFAT **PASS_IN_SCOPE** in `evidence/mac-r2-rerun2/result.json` (MOCK Lightroom filesystem checks plus a separate real Lightroom smoke; single sample). Both earlier failure records remain unchanged; see the R2 section above.
 
 Linux validation: full suite on the Linux box passed (128 passed, 4 skipped). Mock/Linux results only; not a macOS or Lightroom pass.

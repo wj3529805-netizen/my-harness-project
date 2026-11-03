@@ -44,6 +44,7 @@
 
 ## R2：外置 exFAT 目标
 
+- **当前状态（2026-11-03）：** **PASS_IN_SCOPE，单样本**。原始 `2a8d669` / `evidence/mac-r2/` 因 AppleDouble `._*.jpg` 被 `preview.verify` 计为 orphan 而 FAIL_STOPPED；修复 `fdfce5a` 后首次重跑仅在验收脚本解析 `._preview-manifest.json` 时停止（产品 verify 为 OK）。[第二次重跑](../evidence/mac-r2-rerun2/result.json) 在真实 ExFAT SD 上以 **MOCK Lightroom** 通过 ENOTSUP/重试/重复/冲突检查（发布 7 次、预览复用 1 次真实 ENOTSUP），另有独立真实 Lightroom ExFAT 冒烟（曝光读回 0.5、1600×1065）。`NIKON001.DSC` 未变，付费 API 0 次；SMB、整卡及生产可靠性未由此验证。详见 [报告](MACOS_VALIDATION.md)。
 - **目标：** 在外置 exFAT 测试目标验证导入、清单 manifest 和预览发布；可选验证用户指定的 SMB 测试共享。
 - **前置条件：** 用户明确指定可使用的盘，若需格式化须另获授权；空间充足，源卡只读，库和预览位置隔离。可选 SMB 共享必须由用户指定，绝不能是生产 NAS。
 - **步骤要点：** 在目标上完成导入和预览，检查导入 manifest 与预览清单。按照 [copier.py](../src/cetacea/ingest/copier.py) 和 [core.py](../src/cetacea/core.py) 分别检查导入发布及预览重试发布的硬链接不支持回退：后者需要已有成功预览且导出阶段失败后重试。收集实际文件系统返回 `ENOTSUP` 和进入相应回退的证据；若无法实际触发，记为未验证，不以模拟代替。重复导入相同文件，并在隔离测试目标准备不同内容的同名冲突。

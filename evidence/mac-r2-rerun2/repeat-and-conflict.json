@@ -1,0 +1,26 @@
+{
+  "same_task": true,
+  "repeat_outputs_unchanged": true,
+  "same_bytes_copy": {
+    "status": "VERIFIED",
+    "skipped_verified": true,
+    "error": null
+  },
+  "different_bytes_copy": {
+    "status": "CONFLICT",
+    "error": "CONFLICT"
+  },
+  "original_test_destination_before": {
+    "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+    "size": 25994889,
+    "mtime_ns": 1793702623540000000,
+    "inode": 119239
+  },
+  "after": {
+    "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+    "size": 25994889,
+    "mtime_ns": 1793702623540000000,
+    "inode": 119239
+  },
+  "conflict_scope": "Only self-created new test directory; original SD entries never conflict targets"
+}

@@ -2,13 +2,13 @@
 
 标签：已完成且测试通过 / 已实现但测试失败 / 仅 Mock 验证 / 真实模型小规模验证 / 待 Mac 实机验证 / 尚未开发
 
-2026-11-03 R2 真实 ExFAT SD 目标：**FAIL_STOPPED**。导入发布和预览复用真实 ENOTSUP=45 回退已发生；最终 preview_verify 将 AppleDouble `._*.jpg` 当作 orphan 而失败。产品未修，重复/冲突及真实 Lightroom 测试 NOT_RUN。原有卡内容保留，未清理现场；见 [报告](MACOS_VALIDATION.md) 和 [失败证据](../evidence/mac-r2/failure-analysis.json)。
+2026-11-03 R2 真实 ExFAT SD 目标：**PASS_IN_SCOPE（单样本）**。原始 `2a8d669` / `evidence/mac-r2/` 因 `preview.verify` 把 AppleDouble `._*.jpg` 计为 orphan 而 FAIL_STOPPED；修复 `fdfce5a` 后，首次重跑仅在验收脚本解析 `._preview-manifest.json` 时失败（产品 verify 为 OK）。第二次重跑在真实 ExFAT SD 卡上以 **MOCK Lightroom** 完成 ENOTSUP/重试/重复/冲突检查（发布 7 次、预览复用 1 次真实 ENOTSUP）；另做独立真实 Lightroom + ExFAT 冒烟，曝光读回 0.5、JPEG 1600×1065。`NIKON001.DSC` 未变，付费 API 0 次；不代表批量或生产可靠性。见 [报告](MACOS_VALIDATION.md)、[首次重跑](../evidence/mac-r2-rerun/result.json)、[最终结果](../evidence/mac-r2-rerun2/result.json)。
 
 2026-11-03 R1 Mac 真实 AI 会话：**授权重跑有限样本 PASS**。首次第 2 次请求 TRANSPORT 失败后停止并保留原证据；用户授权重跑并批准具体计划后，真实 DeepSeek + 真实 Lightroom 五阶段完成，核验 OK/mock=false，批准仅一条，RAW/JPG/曝光独立读回通过。累计 driver count=9/13，未重置额度；回归 135 passed、2 skipped。详见 [Mac 报告](MACOS_VALIDATION.md)、[重跑证据](../evidence/mac-r1/retry-1/result.json) 和[首次失败](../evidence/mac-r1/result.json)。未进入 R2。
 
 | # | 功能 | 状态 | 证据 |
 |---|---|---|---|
-| 5 | 安全导片（扫描、SHA-256、临时文件+读回+硬链接无覆盖提交、最终读回、冲突检测、清单、日志、路径/软链接防护、断点重试、磁盘满/读失败处理） | 已完成且测试通过（Linux ext/overlay 文件系统；Mac 本机及外置 APFS 有有限样本验收；exFAT/SMB 目标待验证） | tests/test_ingest_acceptance.py（场景 1–10） |
+| 5 | 安全导片（扫描、SHA-256、临时文件+读回+硬链接无覆盖提交、最终读回、冲突检测、清单、日志、路径/软链接防护、断点重试、磁盘满/读失败处理） | 已完成且测试通过（Linux ext/overlay 文件系统；Mac 本机及外置 APFS 有有限样本验收；exFAT 目标已有 R2 单样本范围通过；SMB 待验证） | tests/test_ingest_acceptance.py（场景 1–10） |
 | 6 | 任务状态机、审批（绑定 plan_digest，AI 无 approve 权）、幂等、取消/重试/恢复、租约 | 已完成且测试通过 | tests/test_tasks_acceptance.py（场景 11、12、16） |
 | 7 | MCP stdio 工具服务（14 个工具仅接受注册 ID，无任意路径/shell/删除/批准；来源列表会返回绝对路径，用户已接受其经 Harness 发给 DeepSeek，见 [数据流](DATA_FLOW.md)） + 人工 CLI 共享同一 SQLite 状态 | 已完成且测试通过（经真实 stdio MCP 客户端及 Harness 实测；Codex/Claude 客户端未实测） | tests/test_mcp.py（场景 15、16 + 共享状态证明） |
 | 7b | deepseek-harness MCP 前端（受限工具面） | 保留此前 Linux 真实模型/MOCK Lightroom 记录；另 Mac R1 授权重跑实际 DeepSeek + 真实 Lightroom 单张五阶段通过，仍非可靠性保证；Harness 实验性/未审计 | tests/test_harness_integration.py、tests/test_harness_session_mock.py、evidence/mac-r1/retry-1/、evidence/realmodel/、evidence/fullplan/ |

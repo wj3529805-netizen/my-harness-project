@@ -1,0 +1,62 @@
+[
+  {
+    "task_id": "tsk_c4f37f0e469246c59b12ae159b4849f4",
+    "run": 1,
+    "stage": "ingest",
+    "state": "COMPLETED",
+    "succeeded": 1,
+    "failed": 0,
+    "skipped": 0,
+    "detail_json": "[{\"rel_path\": \"public.NEF\", \"size\": 25994889, \"sha256\": \"8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02\", \"kind\": \"raw\", \"dest_rel_path\": \"real-r2/tester/b_dc4b14e90bba/public.NEF\", \"asset_id\": \"ast_bb7899b598b8089559b65fca\", \"status\": \"VERIFIED\", \"skipped_verified\": false, \"error\": null, \"verified_at\": \"2026-11-03T10:43:45.524036+00:00\", \"order\": \"real-r2\", \"photographer\": \"tester\", \"batch\": \"b_dc4b14e90bba\", \"source_id\": \"public\", \"run\": 1}]",
+    "started_at": "2026-11-03T10:43:45.263854+00:00",
+    "ended_at": "2026-11-03T10:43:45.525203+00:00"
+  },
+  {
+    "task_id": "tsk_c4f37f0e469246c59b12ae159b4849f4",
+    "run": 1,
+    "stage": "lr_register",
+    "state": "COMPLETED",
+    "succeeded": 1,
+    "failed": 0,
+    "skipped": 0,
+    "detail_json": "[{\"asset_id\": \"ast_bb7899b598b8089559b65fca\", \"mock\": false, \"status\": \"Lightroom MCP connected (real read-only preset probe; catalog identity unverified)\"}]",
+    "started_at": "2026-11-03T10:43:45.548092+00:00",
+    "ended_at": "2026-11-03T10:44:01.683587+00:00"
+  },
+  {
+    "task_id": "tsk_c4f37f0e469246c59b12ae159b4849f4",
+    "run": 1,
+    "stage": "lr_preset",
+    "state": "COMPLETED",
+    "succeeded": 1,
+    "failed": 0,
+    "skipped": 0,
+    "detail_json": "[{\"asset_id\": \"ast_bb7899b598b8089559b65fca\", \"mock\": false, \"status\": \"Lightroom MCP connected (real read-only preset probe; catalog identity unverified)\"}]",
+    "started_at": "2026-11-03T10:44:01.683942+00:00",
+    "ended_at": "2026-11-03T10:44:19.455008+00:00"
+  },
+  {
+    "task_id": "tsk_c4f37f0e469246c59b12ae159b4849f4",
+    "run": 1,
+    "stage": "lr_export",
+    "state": "COMPLETED",
+    "succeeded": 1,
+    "failed": 0,
+    "skipped": 0,
+    "detail_json": "[{\"asset_id\": \"ast_bb7899b598b8089559b65fca\", \"mock\": false, \"status\": \"Lightroom MCP connected (real read-only preset probe; catalog identity unverified)\"}]",
+    "started_at": "2026-11-03T10:44:19.455466+00:00",
+    "ended_at": "2026-11-03T10:44:30.573221+00:00"
+  },
+  {
+    "task_id": "tsk_c4f37f0e469246c59b12ae159b4849f4",
+    "run": 1,
+    "stage": "preview_verify",
+    "state": "COMPLETED",
+    "succeeded": 1,
+    "failed": 0,
+    "skipped": 0,
+    "detail_json": "{\"status\": \"OK\", \"mock\": false, \"marker\": \"Lightroom MCP connected (real read-only preset probe; catalog identity unverified)\", \"run\": 1, \"missing\": [], \"failed\": [], \"orphans\": [], \"size_violations\": [], \"expected_count\": 1, \"mapped_count\": 1}",
+    "started_at": "2026-11-03T10:44:30.573532+00:00",
+    "ended_at": "2026-11-03T10:44:40.018211+00:00"
+  }
+]

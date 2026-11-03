@@ -1,6 +1,17 @@
 # macOS validation — 2026-11-02
 
-## R2 ExFAT SD 目标 — 2026-11-03：FAIL_STOPPED
+## R2 修复后重跑 — 2026-11-03：PASS_IN_SCOPE（单样本）
+
+原始 R2（`2a8d669`，`evidence/mac-r2/`）因 `preview.verify` 将 AppleDouble `._*.jpg` 伴随文件计为 orphan 而 **FAIL_STOPPED**，历史记录保留如下。修复为 `fdfce5a`。首次重跑 `evidence/mac-r2-rerun/` 的产品核验已为 [OK/mock=true](../evidence/mac-r2-rerun/mock-verify-preview.json)，但验收脚本在清单读回时误把 `._preview-manifest.json` 当 UTF-8 JSON，发生 UnicodeDecodeError 并停止；这是验收脚本解析失败，不能记作产品 verify 失败或整轮通过。[首次重跑结果](../evidence/mac-r2-rerun/result.json)。
+
+第二次重跑 [result.json](../evidence/mac-r2-rerun2/result.json) 为 **PASS_IN_SCOPE**：
+
+- **真实 ExFAT SD + MOCK Lightroom**：ENOTSUP 回退、部分失败后重试及预览复用、相同内容重复导入、不同内容同名冲突检查通过；真实发布 ENOTSUP=45 共 **7 次**，预览复用 **1 次**，未注入 errno。[文件系统结果](../evidence/mac-r2-rerun2/filesystem-result.json)、[系统调用检查](../evidence/mac-r2-rerun2/real-enotsup-checks.json)、[重复/冲突](../evidence/mac-r2-rerun2/repeat-and-conflict.json)。
+- **独立真实 Lightroom + ExFAT 冒烟**：mock=false，曝光独立读回 **0.5**，JPEG **1600×1065**，RAW/JPEG 目标 SHA-256 读回通过；此项不替代上述 MOCK 故障/重试检查。[曝光读回](../evidence/mac-r2-rerun2/real-develop-readback.json)、[预览核验](../evidence/mac-r2-rerun2/real-verify-preview.json)。
+
+`NIKON001.DSC` 未变，付费 API 调用 **0 次**。这是单样本范围通过，不代表整卡吞吐、所有设备/格式、SMB 或生产可靠性；不遵守目标锁的外部写入者竞争风险仍在。
+
+## R2 原始 ExFAT SD 目标 — 2026-11-03：FAIL_STOPPED（历史）
 
 从更新后的 `phase1/80acebb` 建立 `mac/R2`。先用 `diskutil info` 确认内置 SDXC 读卡器的 `disk7s1` 为 **ExFAT**，挂载点为 `/Volumes/NIKON Z6_3  1`（两个空格后接 1），可用约 126.84 GB。只读列出原有 6 个文件和 3 个目录：`.fseventsd/`、`.Trashes/`、`NIKON001.DSC`，无照片。用户核对后明确批准仅在新目录 `Cetacea-R2-Test-20261103/` 内进行不超过 500 MB 的测试，不格式化、不删除或覆盖原有文件。[设备信息](../evidence/mac-r2/disk7s1-diskutil-info-text.json)、[原有完整清单](../evidence/mac-r2/sd-existing-content-list.txt)、[写入授权](../evidence/mac-r2/card-write-authorization.json)。同名的 256 GB USB TypeB 卡只核对设备信息，没有对其执行文件测试。
 
@@ -19,7 +30,7 @@
 
 原有所有清点条目仍存在，`NIKON001.DSC` 的 SHA-256/mtime/inode 未变；两个本机测试源快照也未变。系统维护的 `.fseventsd/.Trashes` 只列出，不声称它们的内容不可变化。测试目录保留约 **52.14 MB**；macOS 还自动生成相邻的 `._Cetacea-R2-Test-20261103` AppleDouble 文件，亦保留未清理，没有把它隐瞒为“卷根无新增条目”。没有格式化或删除任何原有文件，未调用付费 API。[原有文件前](../evidence/mac-r2/preexisting-nikon-file-before.json)、[后](../evidence/mac-r2/preexisting-nikon-file-after.json)。
 
-失败后仅进行只读文件/卷/数据库诊断和本机证据、文档写入。清单汇总最初把 `._…manifest.json` 当 UTF-8 JSON，出现 UnicodeDecodeError；仅修正了证据解析器的文件选择，未修改产品核验或重复运行，原错误与说明保留于[诊断说明](../evidence/mac-r2/failure-inspection-note.json)。预览缺陷修复、重跑及本轮推送等待用户决定；不进入 R3。
+失败后仅进行只读文件/卷/数据库诊断和本机证据、文档写入。清单汇总最初把 `._…manifest.json` 当 UTF-8 JSON，出现 UnicodeDecodeError；仅修正了证据解析器的文件选择，未修改产品核验或重复运行，原错误与说明保留于[诊断说明](../evidence/mac-r2/failure-inspection-note.json)。当时停止并等待用户决定；后续修复和两次重跑见上节，不改写原始失败结论。
 
 ## R1 授权重跑 — 2026-11-03：本次范围 PASS
 
@@ -161,5 +172,5 @@ curl 终端文本保留实际响应，仅为 Git 空白检查移除了行末 ASC
 验收脚本在 `evidence/mac-acceptance/`，有测试路径、导入源码位置及 catalog 打开文件名守卫，并对失败返回非零退出。真实操作脚本依赖本机已建立的独立 catalog、测试源和插件运行时，不应在生产 catalog 下运行。中断脚本的控制 gate 不入 Git。证据中的时间部分为 UTC（本地为 Asia/Shanghai）。测试工作目录保留，未清理测试照片或 catalog。
 # AppleDouble follow-up (2026-11-03)
 
-The R2 exFAT run failed when AppleDouble JPEG companions were counted as preview orphans. The fix recognizes regular `._` files by their AppleDouble magic, excludes them from source scans and output selection, and conservatively ignores regular files named exactly `.DS_Store` in output enumeration. Other `._` files are treated normally. Linux tests do not establish macOS or exFAT acceptance: R2 on real exFAT has **not yet been re-verified**.
+The R2 exFAT run failed when AppleDouble JPEG companions were counted as preview orphans. The fix recognizes regular `._` files by their AppleDouble magic, excludes them from source scans and output selection, and conservatively ignores regular files named exactly `.DS_Store` in output enumeration. Other `._` files are treated normally. Linux tests alone do not establish macOS or exFAT acceptance. Fix `fdfce5a` was subsequently re-verified on real ExFAT: the second rerun is **PASS_IN_SCOPE**, using MOCK Lightroom for filesystem checks and a separate real Lightroom smoke. See the R2 rerun section above; this remains a single-sample pass.
 

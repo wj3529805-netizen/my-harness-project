@@ -1,0 +1,317 @@
+[
+  {
+    "actor": "human:cli",
+    "action": "add_source",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:43.077482+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "add_orders",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:43.078831+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "add_photographers",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:43.079986+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "add_preset",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:43.081087+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "plan_import",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:43.081806+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "scan_source",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:43.082362+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "state_change",
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "detail_json": "[\"PENDING\", \"WAITING_APPROVAL\"]",
+    "ts": "2026-11-03T10:43:43.104268+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "get_task",
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:43.104965+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "approve",
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:43.320489+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "get_task",
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:43.322047+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "execute",
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:43.357128+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "state_change",
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "detail_json": "[\"WAITING_APPROVAL\", \"RUNNING\"]",
+    "ts": "2026-11-03T10:43:43.357842+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "get_task",
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:43.358335+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "lr_register",
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:43.846966+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "list_assets",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:43.847404+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "lr_preset",
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:43.869609+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "list_assets",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:43.869999+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "lr_export",
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:43.891285+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "list_assets",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:43.891648+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "list_assets",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:44.002362+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "state_change",
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "detail_json": "[\"RUNNING\", \"FAILED\"]",
+    "ts": "2026-11-03T10:43:44.019724+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "get_task",
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:44.020240+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "retry",
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:44.142013+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "get_task",
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:44.142926+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "execute",
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:44.144157+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "state_change",
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "detail_json": "[\"FAILED\", \"RUNNING\"]",
+    "ts": "2026-11-03T10:43:44.144958+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "get_task",
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:44.145661+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "list_assets",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:44.148128+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "lr_export",
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:44.173065+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "list_assets",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:44.173812+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "list_assets",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:44.236280+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "preview_verify",
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:44.255201+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "verify_preview",
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:44.255717+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "get_task",
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:44.256248+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "list_assets",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:44.257184+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "state_change",
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "detail_json": "[\"RUNNING\", \"COMPLETED\"]",
+    "ts": "2026-11-03T10:43:44.262255+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "get_task",
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:44.262791+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "verify_preview",
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:44.263817+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "get_task",
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:44.264278+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "list_assets",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:44.265136+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "list_assets",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:44.269556+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "plan_import",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:44.336901+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "scan_source",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:44.337403+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "get_task",
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:44.357280+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "execute",
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:44.358095+00:00"
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "asset_id": "ast_bb7899b598b8089559b65fca",
+    "order_id": "real-r2",
+    "photographer_id": "tester",
+    "batch_id": "b_dc4b14e90bba",
+    "rel_path": "public.NEF",
+    "size": 25994889,
+    "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+    "kind": "raw",
+    "status": "VERIFIED",
+    "error": null,
+    "dest_rel_path": "real-r2/tester/b_dc4b14e90bba/public.NEF",
+    "lr_photo_id": "/Volumes/NIKON Z6_3 /Cetacea-R2-Rerun2-20261103/real-library/real-r2/tester/b_dc4b14e90bba/public.NEF",
+    "lr_status": "EXPORTED",
+    "preset_applied": "real-preset",
+    "mock": 0,
+    "verified_at": "2026-11-03T10:43:45.524036+00:00"
+  }
+]

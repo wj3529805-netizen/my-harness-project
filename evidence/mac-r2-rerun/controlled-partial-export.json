@@ -1,0 +1,70 @@
+{
+  "task_id": "tsk_c5341be4e5ac437284b82c063a1ba1be",
+  "idempotency_key": "b4772e4a4df164b4099baaa7cb529e1e7e9b5619eed9fda2931ed404e2e020ab",
+  "type": "import",
+  "state": "FAILED",
+  "order_id": "r2",
+  "photographer_id": "tester",
+  "batch_id": "recovery",
+  "source_id": "public",
+  "plan_json": "{\"files\": [{\"rel_path\": \"a.NEF\", \"size\": 25994889, \"sha256\": \"8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02\", \"kind\": \"raw\", \"dest_rel_path\": \"r2/tester/recovery/a.NEF\", \"asset_id\": \"ast_c404007acc7f24ba03cbbc8c\"}, {\"rel_path\": \"b.NEF\", \"size\": 25994889, \"sha256\": \"8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02\", \"kind\": \"raw\", \"dest_rel_path\": \"r2/tester/recovery/b.NEF\", \"asset_id\": \"ast_3be0e9efa9939b7178e86eca\"}, {\"rel_path\": \"existing.XMP\", \"size\": 64, \"sha256\": \"97af48002607e06434f5071b143fcc5e75f30b5ca77812d80e4ec8cb98e82a78\", \"kind\": \"sidecar\", \"dest_rel_path\": \"r2/tester/recovery/existing.XMP\", \"asset_id\": \"ast_845b48c72adb7fc14819bf7d\"}], \"total_bytes\": 51989842, \"destination\": \"r2/tester/recovery\", \"stages\": [\"ingest\", \"lr_register\", \"lr_preset\", \"lr_export\", \"preview_verify\"], \"preset_id\": \"mock-preset\", \"scan_digest\": \"d53a11dd9d5125d5470e3b0e0fa89345b97bc26fe606df7d0a48b28959e2e44b\", \"lightroom\": {\"preset\": {\"label\": \"MOCK R2 preset\", \"lightroom_uuid\": null, \"lightroom_name\": \"MOCK R2 preset\"}, \"export\": {\"max_edge\": 1600, \"quality\": 85, \"preview_root\": \"/Volumes/NIKON Z6_3 /Cetacea-R2-Rerun-20261103/mock-preview\", \"library_root\": \"/Volumes/NIKON Z6_3 /Cetacea-R2-Rerun-20261103/mock-library\"}}}",
+  "plan_digest": "10e8dde7a2c4c9a8d9657893ecc0ccbd0009aae87559d2c4ff4da047fe6f74f4",
+  "stages_json": "[\"ingest\", \"lr_register\", \"lr_preset\", \"lr_export\", \"preview_verify\"]",
+  "run_count": 1,
+  "error": "lr_export: 1 failed",
+  "created_at": "2026-11-03T10:42:12.437078+00:00",
+  "updated_at": "2026-11-03T10:42:13.381432+00:00",
+  "lease_until": null,
+  "plan": {
+    "files": [
+      {
+        "rel_path": "a.NEF",
+        "size": 25994889,
+        "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+        "kind": "raw",
+        "dest_rel_path": "r2/tester/recovery/a.NEF",
+        "asset_id": "ast_c404007acc7f24ba03cbbc8c"
+      },
+      {
+        "rel_path": "b.NEF",
+        "size": 25994889,
+        "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+        "kind": "raw",
+        "dest_rel_path": "r2/tester/recovery/b.NEF",
+        "asset_id": "ast_3be0e9efa9939b7178e86eca"
+      },
+      {
+        "rel_path": "existing.XMP",
+        "size": 64,
+        "sha256": "97af48002607e06434f5071b143fcc5e75f30b5ca77812d80e4ec8cb98e82a78",
+        "kind": "sidecar",
+        "dest_rel_path": "r2/tester/recovery/existing.XMP",
+        "asset_id": "ast_845b48c72adb7fc14819bf7d"
+      }
+    ],
+    "total_bytes": 51989842,
+    "destination": "r2/tester/recovery",
+    "stages": [
+      "ingest",
+      "lr_register",
+      "lr_preset",
+      "lr_export",
+      "preview_verify"
+    ],
+    "preset_id": "mock-preset",
+    "scan_digest": "d53a11dd9d5125d5470e3b0e0fa89345b97bc26fe606df7d0a48b28959e2e44b",
+    "lightroom": {
+      "preset": {
+        "label": "MOCK R2 preset",
+        "lightroom_uuid": null,
+        "lightroom_name": "MOCK R2 preset"
+      },
+      "export": {
+        "max_edge": 1600,
+        "quality": 85,
+        "preview_root": "/Volumes/NIKON Z6_3 /Cetacea-R2-Rerun-20261103/mock-preview",
+        "library_root": "/Volumes/NIKON Z6_3 /Cetacea-R2-Rerun-20261103/mock-library"
+      }
+    }
+  }
+}

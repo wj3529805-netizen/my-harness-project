@@ -1,0 +1,29 @@
+{
+  "filesystem": {
+    "result": "PASS_REAL_EXFAT_MOCK_LIGHTROOM",
+    "mock": true,
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "preview_retry_reused": "ast_c404007acc7f24ba03cbbc8c",
+    "real_publication_ENOTSUP": 7,
+    "real_preview_reuse_ENOTSUP": 1,
+    "footprint_bytes": 52149770
+  },
+  "real_lightroom": {
+    "result": "PASS_REAL_LIGHTROOM_EXFAT",
+    "mock": false,
+    "task_id": "tsk_c4f37f0e469246c59b12ae159b4849f4",
+    "exposure_readback": 0.5,
+    "dimensions": [
+      1600,
+      1065
+    ],
+    "raw_sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",
+    "preview_sha256": "18dc5ce92f63cb68c709178d80cc8213413f6505b438c0536fed5485f5655180"
+  },
+  "result": "PASS_IN_SCOPE",
+  "original_NIKON001_unchanged": true,
+  "final_footprint_bytes": 79087144,
+  "paid_API_calls": 0,
+  "no_programmatic_write_outside_new_test_root": true,
+  "note": "OS-maintained .fseventsd/.Trashes are listed, not treated as immutable application photo content; no original card entry is deleted by this script."
+}

@@ -1,0 +1,9 @@
+{
+  "result": "PASS_REAL_EXFAT_MOCK_LIGHTROOM",
+  "mock": true,
+  "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+  "preview_retry_reused": "ast_c404007acc7f24ba03cbbc8c",
+  "real_publication_ENOTSUP": 7,
+  "real_preview_reuse_ENOTSUP": 1,
+  "footprint_bytes": 52149770
+}

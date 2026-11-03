@@ -1,0 +1,212 @@
+[
+  {
+    "actor": "human:cli",
+    "action": "add_source",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:44.996105+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "add_orders",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:44.997115+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "add_photographers",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:44.998155+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "add_preset",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:44.999110+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "plan_import",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:44.999782+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "scan_source",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:45.000297+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "state_change",
+    "task_id": "tsk_c4f37f0e469246c59b12ae159b4849f4",
+    "detail_json": "[\"PENDING\", \"WAITING_APPROVAL\"]",
+    "ts": "2026-11-03T10:43:45.010791+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "get_task",
+    "task_id": "tsk_c4f37f0e469246c59b12ae159b4849f4",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:45.011309+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "approve",
+    "task_id": "tsk_c4f37f0e469246c59b12ae159b4849f4",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:45.225149+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "get_task",
+    "task_id": "tsk_c4f37f0e469246c59b12ae159b4849f4",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:45.226917+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "execute",
+    "task_id": "tsk_c4f37f0e469246c59b12ae159b4849f4",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:45.261332+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "state_change",
+    "task_id": "tsk_c4f37f0e469246c59b12ae159b4849f4",
+    "detail_json": "[\"WAITING_APPROVAL\", \"RUNNING\"]",
+    "ts": "2026-11-03T10:43:45.262012+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "get_task",
+    "task_id": "tsk_c4f37f0e469246c59b12ae159b4849f4",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:45.262585+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "lr_register",
+    "task_id": "tsk_c4f37f0e469246c59b12ae159b4849f4",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:45.548740+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "list_assets",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:43:45.549185+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "lr_preset",
+    "task_id": "tsk_c4f37f0e469246c59b12ae159b4849f4",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:44:01.684637+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "list_assets",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:44:01.685263+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "lr_export",
+    "task_id": "tsk_c4f37f0e469246c59b12ae159b4849f4",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:44:19.456266+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "list_assets",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:44:19.456891+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "list_assets",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:44:30.550254+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "preview_verify",
+    "task_id": "tsk_c4f37f0e469246c59b12ae159b4849f4",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:44:30.574323+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "verify_preview",
+    "task_id": "tsk_c4f37f0e469246c59b12ae159b4849f4",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:44:30.575022+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "get_task",
+    "task_id": "tsk_c4f37f0e469246c59b12ae159b4849f4",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:44:30.575688+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "list_assets",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:44:30.576732+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "state_change",
+    "task_id": "tsk_c4f37f0e469246c59b12ae159b4849f4",
+    "detail_json": "[\"RUNNING\", \"COMPLETED\"]",
+    "ts": "2026-11-03T10:44:40.019084+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "get_task",
+    "task_id": "tsk_c4f37f0e469246c59b12ae159b4849f4",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:44:40.019843+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "verify_preview",
+    "task_id": "tsk_c4f37f0e469246c59b12ae159b4849f4",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:44:40.021007+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "get_task",
+    "task_id": "tsk_c4f37f0e469246c59b12ae159b4849f4",
+    "detail_json": "null",
+    "ts": "2026-11-03T10:44:40.021578+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "list_assets",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:44:40.022692+00:00"
+  },
+  {
+    "actor": "human:cli",
+    "action": "list_assets",
+    "task_id": null,
+    "detail_json": "null",
+    "ts": "2026-11-03T10:44:49.439672+00:00"
+  }
+]

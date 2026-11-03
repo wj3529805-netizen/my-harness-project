@@ -1,0 +1,38 @@
+[
+  {
+    "preview_id": "prv_ae59d1845ef647648a90cdbd4d6246d1",
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "run": 1,
+    "asset_id": "ast_c404007acc7f24ba03cbbc8c",
+    "path": "/Volumes/NIKON Z6_3 /Cetacea-R2-Rerun2-20261103/mock-preview/r2/tester/recovery/tsk_fdfabb06de73491696b4ce719d8b1f8d/run-1/r2_tester_a_c404007a.jpg",
+    "sha256": "7d114f54a17c917b4e4a8225a62935611cccfe2851bf8a20e78770ac489178ab",
+    "width": 1200,
+    "height": 800,
+    "status": "EXPORTED",
+    "mock": 1
+  },
+  {
+    "preview_id": "prv_f6e83e0830a6420b9764ecf63852a59b",
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "run": 2,
+    "asset_id": "ast_c404007acc7f24ba03cbbc8c",
+    "path": "/Volumes/NIKON Z6_3 /Cetacea-R2-Rerun2-20261103/mock-preview/r2/tester/recovery/tsk_fdfabb06de73491696b4ce719d8b1f8d/run-2/ast_c404007acc7f24ba03cbbc8c.jpg",
+    "sha256": "7d114f54a17c917b4e4a8225a62935611cccfe2851bf8a20e78770ac489178ab",
+    "width": 1200,
+    "height": 800,
+    "status": "EXPORTED",
+    "mock": 1
+  },
+  {
+    "preview_id": "prv_58f6064c6d4d4e5698f06b73f4b1632f",
+    "task_id": "tsk_fdfabb06de73491696b4ce719d8b1f8d",
+    "run": 2,
+    "asset_id": "ast_3be0e9efa9939b7178e86eca",
+    "path": "/Volumes/NIKON Z6_3 /Cetacea-R2-Rerun2-20261103/mock-preview/r2/tester/recovery/tsk_fdfabb06de73491696b4ce719d8b1f8d/run-2/r2_tester_b_3be0e9ef.jpg",
+    "sha256": "1052c338fef3e0dc810749366f88309164c0e9b9a46fd76969b943e81583847a",
+    "width": 1200,
+    "height": 800,
+    "status": "EXPORTED",
+    "mock": 1
+  }
+]

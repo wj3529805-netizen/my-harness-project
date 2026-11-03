@@ -1,0 +1,74 @@
+[
+  {
+    "task_id": "tsk_c5341be4e5ac437284b82c063a1ba1be",
+    "run": 1,
+    "stage": "ingest",
+    "state": "COMPLETED",
+    "succeeded": 3,
+    "failed": 0,
+    "skipped": 0,
+    "detail_json": "[{\"rel_path\": \"a.NEF\", \"size\": 25994889, \"sha256\": \"8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02\", \"kind\": \"raw\", \"dest_rel_path\": \"r2/tester/recovery/a.NEF\", \"asset_id\": \"ast_c404007acc7f24ba03cbbc8c\", \"status\": \"VERIFIED\", \"skipped_verified\": false, \"error\": null, \"verified_at\": \"2026-11-03T10:42:12.965701+00:00\", \"order\": \"r2\", \"photographer\": \"tester\", \"batch\": \"recovery\", \"source_id\": \"public\", \"run\": 1}, {\"rel_path\": \"b.NEF\", \"size\": 25994889, \"sha256\": \"8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02\", \"kind\": \"raw\", \"dest_rel_path\": \"r2/tester/recovery/b.NEF\", \"asset_id\": \"ast_3be0e9efa9939b7178e86eca\", \"status\": \"VERIFIED\", \"skipped_verified\": false, \"error\": null, \"verified_at\": \"2026-11-03T10:42:13.139307+00:00\", \"order\": \"r2\", \"photographer\": \"tester\", \"batch\": \"recovery\", \"source_id\": \"public\", \"run\": 1}, {\"rel_path\": \"existing.XMP\", \"size\": 64, \"sha256\": \"97af48002607e06434f5071b143fcc5e75f30b5ca77812d80e4ec8cb98e82a78\", \"kind\": \"sidecar\", \"dest_rel_path\": \"r2/tester/recovery/existing.XMP\", \"asset_id\": \"ast_845b48c72adb7fc14819bf7d\", \"status\": \"VERIFIED\", \"skipped_verified\": false, \"error\": null, \"verified_at\": \"2026-11-03T10:42:13.159357+00:00\", \"order\": \"r2\", \"photographer\": \"tester\", \"batch\": \"recovery\", \"source_id\": \"public\", \"run\": 1}]",
+    "started_at": "2026-11-03T10:42:12.699883+00:00",
+    "ended_at": "2026-11-03T10:42:13.160182+00:00"
+  },
+  {
+    "task_id": "tsk_c5341be4e5ac437284b82c063a1ba1be",
+    "run": 1,
+    "stage": "lr_register",
+    "state": "COMPLETED",
+    "succeeded": 2,
+    "failed": 0,
+    "skipped": 0,
+    "detail_json": "[{\"asset_id\": \"ast_c404007acc7f24ba03cbbc8c\", \"mock\": true, \"status\": \"MOCK \\u2014 not real Lightroom\"}, {\"asset_id\": \"ast_3be0e9efa9939b7178e86eca\", \"mock\": true, \"status\": \"MOCK \\u2014 not real Lightroom\"}]",
+    "started_at": "2026-11-03T10:42:13.193693+00:00",
+    "ended_at": "2026-11-03T10:42:13.217212+00:00"
+  },
+  {
+    "task_id": "tsk_c5341be4e5ac437284b82c063a1ba1be",
+    "run": 1,
+    "stage": "lr_preset",
+    "state": "COMPLETED",
+    "succeeded": 2,
+    "failed": 0,
+    "skipped": 0,
+    "detail_json": "[{\"asset_id\": \"ast_c404007acc7f24ba03cbbc8c\", \"mock\": true, \"status\": \"MOCK \\u2014 not real Lightroom\"}, {\"asset_id\": \"ast_3be0e9efa9939b7178e86eca\", \"mock\": true, \"status\": \"MOCK \\u2014 not real Lightroom\"}]",
+    "started_at": "2026-11-03T10:42:13.217449+00:00",
+    "ended_at": "2026-11-03T10:42:13.239338+00:00"
+  },
+  {
+    "task_id": "tsk_c5341be4e5ac437284b82c063a1ba1be",
+    "run": 1,
+    "stage": "lr_export",
+    "state": "FAILED",
+    "succeeded": 1,
+    "failed": 1,
+    "skipped": 0,
+    "detail_json": "[{\"asset_id\": \"ast_c404007acc7f24ba03cbbc8c\", \"mock\": true, \"status\": \"MOCK \\u2014 not real Lightroom\"}, {\"asset_id\": \"ast_3be0e9efa9939b7178e86eca\", \"error\": \"MOCK injected export failure\", \"mock\": true}]",
+    "started_at": "2026-11-03T10:42:13.239571+00:00",
+    "ended_at": "2026-11-03T10:42:13.380859+00:00"
+  },
+  {
+    "task_id": "tsk_c5341be4e5ac437284b82c063a1ba1be",
+    "run": 2,
+    "stage": "lr_export",
+    "state": "COMPLETED",
+    "succeeded": 1,
+    "failed": 0,
+    "skipped": 1,
+    "detail_json": "[{\"asset_id\": \"ast_3be0e9efa9939b7178e86eca\", \"mock\": true, \"status\": \"MOCK \\u2014 not real Lightroom\"}]",
+    "started_at": "2026-11-03T10:42:13.538831+00:00",
+    "ended_at": "2026-11-03T10:42:13.618071+00:00"
+  },
+  {
+    "task_id": "tsk_c5341be4e5ac437284b82c063a1ba1be",
+    "run": 2,
+    "stage": "preview_verify",
+    "state": "COMPLETED",
+    "succeeded": 2,
+    "failed": 0,
+    "skipped": 0,
+    "detail_json": "{\"status\": \"OK\", \"mock\": true, \"marker\": \"MOCK \\u2014 not real Lightroom\", \"run\": 2, \"missing\": [], \"failed\": [], \"orphans\": [], \"size_violations\": [], \"expected_count\": 2, \"mapped_count\": 2}",
+    "started_at": "2026-11-03T10:42:13.618314+00:00",
+    "ended_at": "2026-11-03T10:42:13.626535+00:00"
+  }
+]
