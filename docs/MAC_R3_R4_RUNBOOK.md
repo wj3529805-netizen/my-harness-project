@@ -2,7 +2,7 @@
 
 仅使用用户指定的测试素材与独立测试目标，不使用生产目录、NAS 或生产 Lightroom catalog。卡上测试文件夹的名称会按设计以相对路径出现在证据中；其他卡上内容不在范围内，脚本不会列出、哈希或记录这些内容。结果只覆盖所选文件夹，并非 ROADMAP 中的整卡验证；本准备工作没有在 macOS 或真实卡上验证。
 
-先在卡的一个文件夹中拍摄若干 Nikon Z6 III NEF，分别使用 HE 和 HE★ 模式。缺少任一种时 R3 标记 `NOT_COVERED`，退出码非零。脚本只导入该文件夹内的 NEF，但会清点该文件夹的其他普通文件；不要把客户素材放入此文件夹。准备足够大的 NEF，确保能观察到进行中的复制（建议数百 MB）。不要用 Finder 修改卡。
+先在卡的一个文件夹中拍摄若干 Nikon Z6 III NEF，分别使用 HE 和 HE★ 模式。缺少任一种时 R3 标记 `NOT_COVERED`，退出码非零。脚本只导入该文件夹内的 NEF，但会清点该文件夹的其他普通文件；不要把客户素材放入此文件夹。R4 可使用测试限速来观察普通大小 NEF 的复制过程。不要用 Finder 修改卡。
 
 在 Mac 本地查找卡的 UUID（不要把输出或真实 UUID 提交）：
 
@@ -22,12 +22,16 @@ diskutil info /Volumes/NAME | grep UUID
 拔卡恢复（运行时保持目标卷连接）：
 
 ```sh
-.venv/bin/python scripts/mac/r4_unplug.py --source-uuid '<CARD_UUID>' --source-subdir 'DCIM/142NZ6_3' --target-base '<TEST_TARGET_BASE>' --out 'evidence/mac-r4/run-<YYYYMMDD-HHMM>' --confirm-card-readonly --scenario unplug --inter-file-delay 3
+.venv/bin/python -u scripts/mac/r4_unplug.py --source-uuid '<CARD_UUID>' --source-subdir 'DCIM/142NZ6_3' --target-base "$PWD/acceptance-data/r4-target" --confirm-card-readonly --scenario unplug --throttle-mbps 3 --max-files 8 --pull-timeout 600 --reinsert-timeout 1800 --out evidence/mac-r4/run-<ts>
 ```
 
-审批后等待 `NOW PULL THE CARD`，再拔出卡；出现 `REINSERT THE SAME CARD` 后重新插入同一张卡。必须恢复到原挂载点，否则停止。没有观察到复制增长时会报告 `INTERRUPTION_NOT_ACHIEVED`，应换用更大的测试文件。恢复需等待原租约到期，默认最多 1200 秒。
+审批后等待 `NOW PULL THE CARD`，再拔出卡；出现 `REINSERT THE SAME CARD` 后重新插入同一张卡。必须恢复到原挂载点，否则停止。没有观察到复制增长时会报告 `INTERRUPTION_NOT_ACHIEVED`，可使用 `--throttle-mbps 3`。恢复需等待原租约到期，默认最多 1200 秒。
 
-人工拔卡建议使用 `--inter-file-delay 3`，它在每个文件提交后等待三秒，方便操作，但拔卡可能发生在文件之间而非文件复制中。观察 `.part` 要求复制正在进行；观察步骤只有在看到 `.part` 增长后才提示拔卡。`after-interruption-files.json` 的 `parts` 记录中断时是否存在 `.part`，应结合该记录解读结果，不能把文件间拔卡说成文件复制中断。
+约 17 MB 的 NEF 使用上述 `--throttle-mbps 3` 时每张约需 5.7 秒；`--max-files 8` 使运行较短，约有 45 秒的复制窗口，请在第一次提示时拔卡。限速由测试脚本人为施加，限速证据中的吞吐量不能代表产品速度。`--pull-timeout` 和 `--reinsert-timeout` 分别控制等待拔卡和重新插卡的时间。
+
+`--inter-file-delay` 仅在文件提交之间暂停，暂停期间没有 `.part`，单独使用不能创造文件复制中断窗口，也不能触发拔卡提示；仅建议与 `--throttle-mbps` 配合，通常不需要。`after-interruption-files.json` 的 `parts` 和 `result.json` 的 `part_in_progress_at_interruption` 及大小记录中断时的临时文件情况，不能把文件间拔卡说成文件复制中断。
+
+出现提示时证据目录分别保留 `PULL_NOW` 和 `REINSERT_NOW` 标记，内容只有时间、任务 ID 和观察到的临时文件大小。这些标记很小，可以提交，用于记录提示时机。
 
 进程强杀场景不需要拔卡：
 

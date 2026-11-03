@@ -104,6 +104,7 @@ def test_kill_recovery(tmp_path):
     result = r4.run(args, lambda _: card, approve, expire)
     assert result['status'] == 'PASS', result
     assert result['final_state'] == 'COMPLETED' and result['approvals'] == 1
+    assert result['throttled'] is False and result['throttle_mbps'] is None
     for path in out.iterdir(): assert_clean(path)
 
 
@@ -118,3 +119,115 @@ def test_interruption_helpers_detect_partial_publication(tmp_path):
     class Done:
         def poll(self): return 0
     assert not r4.observe_copy(Done(), w, task, 0)
+
+
+def test_throttled_reader_rate_and_integrity():
+    import io
+    import time
+    data = b'abcde' * 100_000
+    start = time.monotonic()
+    with r4.ThrottledReader(io.BytesIO(data), 5) as stream:
+        assert stream.read() == data
+    assert .09 <= time.monotonic() - start < 1
+
+
+def test_watched_directory_matches_copy_engine(tmp_path):
+    from cetacea.ingest.copier import CopyEngine
+    source = tmp_path / 'source'; source.mkdir()
+    (source / 'a.NEF').write_bytes(b'abc')
+    library = tmp_path / 'library'; library.mkdir()
+    task_id = 'test-task'
+    item = {'rel_path': 'a.NEF', 'dest_rel_path': 'a.NEF', 'sha256': hashlib.sha256(b'abc').hexdigest()}
+    seen = []
+    def hook(stage, rel):
+        if stage == 'after_temp_write':
+            seen.extend(library.rglob('*.part'))
+    assert CopyEngine(hook).copy(source, library, task_id, 7, item)['status'] == 'VERIFIED'
+    assert seen == [library / '.cetacea-tmp' / task_id / '7.part']
+
+
+def expire_lease(w, task):
+    from cetacea import db
+    with db.connect(w.home) as c: c.execute('UPDATE tasks SET lease_until=0 WHERE task_id=?', (task['task_id'],))
+
+
+def make_throttled_run(tmp_path, scenario):
+    card = tmp_path / 'card'; folder = card / 'test'; folder.mkdir(parents=True)
+    for i in range(3):
+        (folder / f'{i}.NEF').write_bytes(bytes([i + 1]) * 6_000_000)
+    target = tmp_path / 'target'; target.mkdir(); out = tmp_path / 'out'
+    args = r4.parser().parse_args(['--source-uuid', 'fake', '--source-subdir', 'test', '--target-base', str(target), '--out', str(out), '--confirm-card-readonly', '--scenario', scenario, '--throttle-mbps', '8', '--pull-timeout', '10', '--reinsert-timeout', '10'])
+    return card, folder, out, args
+
+
+def test_throttled_kill_observes_real_growth(tmp_path):
+    card, folder, out, args = make_throttled_run(tmp_path, 'kill-process')
+    result = r4.run(args, lambda _: card, approve, expire_lease)
+    assert result['status'] == 'PASS', result
+    assert result['throttled'] and result['throttle_mbps'] == 8
+    assert result['part_in_progress_at_interruption'] and result['approvals'] == 1
+    captured = json.loads((out / 'after-interruption-files.json').read_text())
+    assert not captured['half_final'] and captured['parts'][0]['size'] >= 1024 * 1024
+    plan = json.loads((out / 'plan.json').read_text())
+    assert plan['watched_temp_dir_rel'] == '.cetacea-tmp/' + plan['task']['task_id']
+    assert not (out / 'PULL_NOW').exists()
+    for path in out.iterdir(): assert_clean(path)
+
+
+def test_unplug_markers_with_simulated_removal(tmp_path, monkeypatch):
+    import time
+    card, folder, out, args = make_throttled_run(tmp_path, 'unplug')
+    before = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in folder.iterdir()}
+    missing = threading.Event()
+    child = []
+    original = r4.subprocess.Popen
+    def launch(*a, **kw):
+        proc = original(*a, **kw); child.append(proc); return proc
+    monkeypatch.setattr(r4.subprocess, 'Popen', launch)
+    def resolver(_):
+        if missing.is_set(): raise RuntimeError('simulated removal')
+        return card
+    def simulate():
+        deadline = time.monotonic() + 15
+        while not (out / 'PULL_NOW').exists() and time.monotonic() < deadline: time.sleep(.01)
+        if not (out / 'PULL_NOW').exists(): return
+        missing.set()
+        # Simulate the read failure without mutating the read-only source tree.
+        child[0].kill()
+        while not (out / 'REINSERT_NOW').exists() and time.monotonic() < deadline: time.sleep(.01)
+        missing.clear()
+    worker = threading.Thread(target=simulate); worker.start()
+    try: result = r4.run(args, resolver, approve, expire_lease)
+    finally: worker.join(timeout=16)
+    assert result['status'] == 'PASS', result
+    assert (out / 'PULL_NOW').exists() and (out / 'REINSERT_NOW').exists()
+    assert before == {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in folder.iterdir()}
+    for path in out.iterdir(): assert_clean(path)
+
+
+def test_r4_default_throttle_off():
+    args = r4.parser().parse_args(['--source-uuid', 'fake', '--source-subdir', 'test', '--confirm-card-readonly'])
+    assert args.throttle_mbps is None and args.inter_file_delay == 0 and args.poll_interval == .05
+
+
+def test_throttled_copy_exposes_multiple_chunk_sizes(tmp_path, monkeypatch):
+    import time
+    import cetacea.ingest.copier as copier
+    source = tmp_path / 'source'; source.mkdir()
+    data = b'x' * 4_000_000
+    (source / 'a.NEF').write_bytes(data)
+    library = tmp_path / 'library'; library.mkdir()
+    item = {'rel_path': 'a.NEF', 'dest_rel_path': 'a.NEF', 'sha256': hashlib.sha256(data).hexdigest()}
+    monkeypatch.setattr(copier, 'os', r4.CopierOSProxy(8))
+    result = []
+    worker = threading.Thread(target=lambda: result.append(copier.CopyEngine().copy(source, library, 'task', 0, item)))
+    worker.start()
+    sizes = set()
+    part = library / '.cetacea-tmp' / 'task' / '0.part'
+    while worker.is_alive():
+        try: sizes.add(part.stat().st_size)
+        except FileNotFoundError: pass
+        time.sleep(.01)
+    worker.join()
+    assert result[0]['status'] == 'VERIFIED'
+    assert 1024 * 1024 in sizes and 2 * 1024 * 1024 in sizes
