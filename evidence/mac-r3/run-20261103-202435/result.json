@@ -1,0 +1,22 @@
+{
+  "scope": "test-folder-only",
+  "source_subdir": "DCIM/142NZ6_3",
+  "out_of_scope_content_not_listed": true,
+  "privacy_note": "The card contains other content deliberately not listed, hashed or recorded.",
+  "status": "PARTIAL_NOT_COVERED",
+  "mock": false,
+  "lightroom": "NOT_RUN (ingest-only)",
+  "real_lightroom": false,
+  "coverage": {
+    "HE": "NOT_COVERED",
+    "HE_STAR": "COVERED"
+  },
+  "counts": {
+    "HE_STAR": 55
+  },
+  "volume_uuid_sha256_prefix": "be6f510360120662",
+  "notes": [
+    "Single test folder, single run; MB/s depends on reader and target.",
+    "Ingest-only run; no Lightroom stage (neither mock nor real) was executed."
+  ]
+}

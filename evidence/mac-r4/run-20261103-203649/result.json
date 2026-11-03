@@ -1,0 +1,15 @@
+{
+  "scope": "test-folder-only",
+  "source_subdir": "DCIM/142NZ6_3",
+  "out_of_scope_content_not_listed": true,
+  "privacy_note": "The card contains other content deliberately not listed, hashed or recorded.",
+  "status": "FAIL_STOPPED",
+  "scenario": "unplug",
+  "throttled": true,
+  "throttle_mbps": 3.0,
+  "throttle_note": "Source reads were deliberately slowed by this test script (test-induced throttle); throughput figures from this run say nothing about product speed.",
+  "inter_file_delay": 0,
+  "part_in_progress_at_interruption": false,
+  "part_sizes_at_interruption": [],
+  "traceback": "Traceback (most recent call last):\n  File \"<HOME>/Documents/ChatGPT/AI工作台/my-harness-project/scripts/mac/r4_unplug.py\", line 161, in run\n    if proc.poll() is not None: raise RuntimeError('Child exited before card removal was observed')\n                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: Child exited before card removal was observed\n"
+}

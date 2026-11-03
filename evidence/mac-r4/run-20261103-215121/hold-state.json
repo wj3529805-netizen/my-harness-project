@@ -1,0 +1,8 @@
+{
+  "engaged": true,
+  "part_size_at_hold_start": 1048576,
+  "started_at": "2026-11-03T13:51:46.669856+00:00",
+  "released_at": "2026-11-03T13:51:52.934141+00:00",
+  "released_by": "card-removed",
+  "part_size_at_release": 1048576
+}
