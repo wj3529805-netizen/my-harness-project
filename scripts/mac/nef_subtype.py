@@ -70,7 +70,8 @@ class TIFF:
 def classify_file(path):
     result = {'subtype': 'UNKNOWN', 'tag_0x0093_value': None, 'tag_0x0051_value': None,
               'tag_0x0093_hex': None, 'make': None, 'model': None, 'method': 'pure-python-tiff-makernote',
-              'evidence_source': SOURCE, 'evidence': [], 'error': None}
+              'evidence_source': SOURCE, 'evidence': [], 'error': None,
+              'raw_strip_bits_per_pixel': None, 'bpp_subtype': None, 'corroborated': False}
     try:
         fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
         with os.fdopen(fd, 'rb') as f:
@@ -93,6 +94,18 @@ def classify_file(path):
                     if e[0] == 0x103:
                         result['evidence'].append('Raw IFD Compression 0x0103: ' + ', '.join(map(str, t.integers(e))))
                     elif e[0] == 0x14a: raw_ifds.extend(t.integers(e))
+                if result['raw_strip_bits_per_pixel'] is None:
+                    fields = {e[0]: e for e in entries if e[0] in (0x100, 0x101, 0x102, 0x103, 0x117)}
+                    if all(tag in fields and fields[tag][1] in (3, 4) and fields[tag][2] == 1
+                           for tag in (0x100, 0x101, 0x102, 0x103, 0x117)):
+                        width, height, bits, compression, strip_bytes = (
+                            t.integers(fields[tag])[0] for tag in (0x100, 0x101, 0x102, 0x103, 0x117))
+                        if compression == 34713 and width and height and bits and strip_bytes:
+                            bpp = round(strip_bytes * 8 / (width * height), 4)
+                            result['raw_strip_bits_per_pixel'] = bpp
+                            result['evidence'].append(f'Raw strip bits/pixel: {bpp}')
+                            if abs(bpp - 3.0) <= 0.05: result['bpp_subtype'] = 'HE'
+                            elif abs(bpp - 5.0) <= 0.05: result['bpp_subtype'] = 'HE_STAR'
             if exif:
                 entries, _ = t.ifd(exif)
                 notes = [e for e in entries if e[0] == 0x927c]
@@ -129,6 +142,16 @@ def classify_file(path):
             else:
                 value = a if a is not None else b
                 if value is not None: result['subtype'] = NAMES.get(value, ('UNKNOWN', ''))[0]
+            tag_subtype, bpp_subtype = result['subtype'], result['bpp_subtype']
+            if tag_subtype in ('HE', 'HE_STAR') and bpp_subtype is not None:
+                if tag_subtype == bpp_subtype:
+                    result['corroborated'] = True
+                    result['evidence'].append('corroborated by raw strip bits/pixel')
+                else:
+                    result['subtype'] = 'UNKNOWN'
+                    result['evidence'].append(f'conflict: tag says {tag_subtype}, strip bits/pixel says {bpp_subtype}')
+            elif a is None and b is None and bpp_subtype is not None:
+                result['evidence'].append('bits/pixel only: not classifying')
     except (OSError, ValueError, struct.error, OverflowError) as exc:
         result['subtype'] = 'UNKNOWN'; result['error'] = str(exc)
     return result

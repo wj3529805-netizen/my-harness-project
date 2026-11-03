@@ -8,7 +8,7 @@ nef = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(nef)
 
 
-def fixture(value=13, second=None, endian='<'):
+def fixture(value=13, second=None, endian='<', raw=None):
     order = b'II' if endian == '<' else b'MM'
     pack = lambda fmt, *v: struct.pack(endian + fmt, *v)
     def entry(tag, typ, count, value): return pack('HHI', tag, typ, count) + value
@@ -24,9 +24,16 @@ def fixture(value=13, second=None, endian='<'):
     ifd_len = 2 + 3 * 12 + 4
     make_off = 8 + ifd_len; model_off = make_off + len(make)
     exif_off = model_off + len(model); note_off = exif_off + 2 + 12 + 4
-    ifd = pack('H', 3) + entry(0x10f, 2, len(make), pack('I', make_off)) + entry(0x110, 2, len(model), pack('I', model_off)) + entry(0x8769, 4, 1, pack('I', exif_off)) + pack('I', 0)
+    raw_off = note_off + len(note) if raw is not None else 0
+    ifd = pack('H', 3) + entry(0x10f, 2, len(make), pack('I', make_off)) + entry(0x110, 2, len(model), pack('I', model_off)) + entry(0x8769, 4, 1, pack('I', exif_off)) + pack('I', raw_off)
     exif = pack('H', 1) + entry(0x927c, 7, len(note), pack('I', note_off)) + pack('I', 0)
-    return order + pack('HI', 42, 8) + ifd + make + model + exif + note
+    raw_ifd = b''
+    if raw is not None:
+        width, height, bits, strip_bytes = raw
+        fields = ((0x100, width), (0x101, height), (0x102, bits),
+                  (0x103, 34713), (0x117, strip_bytes))
+        raw_ifd = pack('H', len(fields)) + b''.join(entry(tag, 4, 1, pack('I', val)) for tag, val in fields) + pack('I', 0)
+    return order + pack('HI', 42, 8) + ifd + make + model + exif + note + raw_ifd
 
 
 def test_compression_values(tmp_path):
@@ -42,3 +49,23 @@ def test_malformed_never_raises(tmp_path):
         p = tmp_path / str(i); p.write_bytes(data)
         result = nef.classify_file(p)
         assert result['subtype'] == 'UNKNOWN' and result['error']
+
+
+def test_raw_strip_corroboration(tmp_path):
+    cases = [
+        (13, (100, 80, 14, 3000), 'HE', 'HE', True, 'corroborated by raw strip bits/pixel'),
+        (14, (100, 80, 14, 5000), 'HE_STAR', 'HE_STAR', True, 'corroborated by raw strip bits/pixel'),
+        (14, (100, 80, 14, 3000), 'UNKNOWN', 'HE', False, 'conflict: tag says HE_STAR, strip bits/pixel says HE'),
+        (14, (0, 80, 14, 5000), 'HE_STAR', None, False, None),
+        (None, (100, 80, 14, 5000), 'UNKNOWN', 'HE_STAR', False, 'bits/pixel only: not classifying'),
+    ]
+    for i, (tag, raw, subtype, bpp_subtype, corroborated, evidence) in enumerate(cases):
+        p = tmp_path / str(i)
+        p.write_bytes(fixture(value=None, second=tag, raw=raw))
+        result = nef.classify_file(p)
+        assert result['error'] is None, result
+        assert result['subtype'] == subtype
+        assert result['bpp_subtype'] == bpp_subtype
+        assert result['corroborated'] is corroborated
+        assert result['raw_strip_bits_per_pixel'] == (None if raw[0] == 0 else raw[3] * 8 / (raw[0] * raw[1]))
+        if evidence: assert evidence in result['evidence']
