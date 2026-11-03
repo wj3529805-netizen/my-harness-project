@@ -22,16 +22,16 @@ diskutil info /Volumes/NAME | grep UUID
 拔卡恢复（运行时保持目标卷连接）：
 
 ```sh
-.venv/bin/python -u scripts/mac/r4_unplug.py --source-uuid '<CARD_UUID>' --source-subdir 'DCIM/142NZ6_3' --target-base "$PWD/acceptance-data/r4-target" --confirm-card-readonly --scenario unplug --throttle-mbps 3 --max-files 8 --pull-timeout 600 --reinsert-timeout 1800 --out evidence/mac-r4/run-<ts>
+.venv/bin/python -u scripts/mac/r4_unplug.py --source-uuid '<CARD_UUID>' --source-subdir 'DCIM/142NZ6_3' --target-base "$PWD/acceptance-data/r4-target" --confirm-card-readonly --scenario unplug --throttle-mbps 3 --hold-mid-file --max-files 8 --pull-timeout 600 --reinsert-timeout 1800 --out evidence/mac-r4/run-<ts>
 ```
 
-审批后等待 `NOW PULL THE CARD`，再拔出卡；出现 `REINSERT THE SAME CARD` 后重新插入同一张卡。必须恢复到原挂载点，否则停止。没有观察到复制增长时会报告 `INTERRUPTION_NOT_ACHIEVED`，可使用 `--throttle-mbps 3`。恢复需等待原租约到期，默认最多 1200 秒。
+审批后，测试脚本会人为在首个文件的复制中途暂停；只有暂停已经生效时才显示 `NOW PULL THE CARD`。拔卡或 600 秒超时后继续读取；拔卡后的读取错误是真实的。出现 `REINSERT THE SAME CARD` 后重新插入同一张卡，必须恢复到原挂载点。`HOLD_TIMEOUT` 表示没有及时拔卡，没有伪造中断；请使用新的 `--out` 重新运行。首个文件不超过 1 MiB 时不会暂停。`--hold-mid-file` 需要限速，只适用于拔卡场景，`--pull-timeout` 最多 3000 秒。
 
-约 17 MB 的 NEF 使用上述 `--throttle-mbps 3` 时每张约需 5.7 秒；`--max-files 8` 使运行较短，约有 45 秒的复制窗口，请在第一次提示时拔卡。限速由测试脚本人为施加，限速证据中的吞吐量不能代表产品速度。`--pull-timeout` 和 `--reinsert-timeout` 分别控制等待拔卡和重新插卡的时间。
+限速由测试脚本人为施加，吞吐量不能代表产品速度。执行租约每个文件开始时更新为 300 秒；较长的暂停可能使租约在子进程仍运行时到期。脚本只在中断后子进程退出时调用恢复，FAILED/PAUSED 任务仍按原流程恢复。恢复默认最多等待 1200 秒。
 
 `--inter-file-delay` 仅在文件提交之间暂停，暂停期间没有 `.part`，单独使用不能创造文件复制中断窗口，也不能触发拔卡提示；仅建议与 `--throttle-mbps` 配合，通常不需要。`after-interruption-files.json` 的 `parts` 和 `result.json` 的 `part_in_progress_at_interruption` 及大小记录中断时的临时文件情况，不能把文件间拔卡说成文件复制中断。
 
-出现提示时证据目录分别保留 `PULL_NOW` 和 `REINSERT_NOW` 标记，内容只有时间、任务 ID 和观察到的临时文件大小。这些标记很小，可以提交，用于记录提示时机。
+出现提示时证据目录分别保留 `PULL_NOW` 和 `REINSERT_NOW` 标记，内容包括时间、任务 ID、观察到的临时文件大小和是否暂停。这些标记很小，可以提交，用于记录提示时机。
 
 进程强杀场景不需要拔卡：
 
