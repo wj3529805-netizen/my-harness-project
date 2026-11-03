@@ -1,0 +1,6 @@
+All rights reserved by the owner (晶 / repo owner); permission granted only for testing within this project (my-harness-project); no other use or redistribution.
+
+所有权利由所有者（晶 / 仓库所有者）保留；仅允许在本项目（my-harness-project）内用于测试；不得用于其他用途或再分发。
+
+文件：Nikon-Z6III-HE-DSC_9725.NEF
+SHA-256: d77f05b50d569de25ce56c435bf7c8d3b40abc250d0a3acee4c376645e941f7e

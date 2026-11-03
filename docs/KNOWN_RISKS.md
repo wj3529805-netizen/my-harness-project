@@ -111,4 +111,4 @@ Linux validation: full suite on the Linux box passed (128 passed, 4 skipped). Mo
 
 ## R5 隐私残留 — 2026-11-03
 
-当前树已脱敏，但公开仓库的 Git 历史仍含原始标识，未重写。harness UUID、卷名、项目文件夹名，以及历史旧样片的 SHA、第三方版权文字和相机序列号仍保留；新样片内嵌标识按所有者同意保留。处置与许可证措辞仍待决定，见 [最终验收](FINAL_ACCEPTANCE.md)。
+当前树已脱敏，但公开仓库的 Git 历史仍含原始标识，未重写。harness UUID、卷名、项目文件夹名，以及历史旧样片的 SHA、第三方版权文字和相机序列号仍保留；新样片内嵌机身和镜头序列号经所有者同意公开。所有者已决定保留这些标识并确定样片许可，见 [最终验收](FINAL_ACCEPTANCE.md) 和 [样片许可](../samples/LICENSE.txt)。

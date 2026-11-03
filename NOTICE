@@ -1,0 +1,5 @@
+samples/（包括 NEF 文件及其文档）不属于可能适用于本项目源代码的任何许可证范围，完全受 samples/LICENSE.txt 约束。
+
+第三方组件保留各自的许可证，详见 docs/THIRD_PARTY.md。
+
+本 NOTICE 不声明本仓库代码的许可证。

@@ -1,6 +1,6 @@
 # 功能状态矩阵（Linux 云盒；无密钥/开关全量测试：103 passed，2 skipped（两个真实模型 opt-in 模块）；Phase 2 Mock 阶段：75 passed）
 
-R5 已在 `prep/R5` 完成样片替换和当前树脱敏；范围、限制及待决事项见 [最终验收](FINAL_ACCEPTANCE.md)。
+R5 已在 `prep/R5` 完成样片替换和当前树脱敏；所有者已确定样片许可及标识保留决定；范围、限制及待决事项见 [最终验收](FINAL_ACCEPTANCE.md)。
 
 标签：已完成且测试通过 / 已实现但测试失败 / 仅 Mock 验证 / 真实模型小规模验证 / 待 Mac 实机验证 / 尚未开发
 

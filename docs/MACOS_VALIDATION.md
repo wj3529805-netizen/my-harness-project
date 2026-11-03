@@ -171,7 +171,7 @@ curl 终端文本保留实际响应，仅为 Git 空白检查移除了行末 ASC
 
 发布方 README 标注 CC0，但文件内嵌版权是 `(CC-BY-SA 4.0) Ludger Heide`，creator 为 Ludger Heide。本次保留署名和来源，未修改源文件，未把 RAW/JPG 放进 Git。目录/早期证据中的 `cc0` 是下载时采用的名称，不能消除许可证文字的差异；不要据此宣称已独立解决授权差异。这是 Nikon Z6 样片，不是 Z6 III HE/HE★。
 
-新的用户自有样片见 [samples/README.md](../samples/README.md)，是首个真实 Z6III HE（无星）样片：已核验标签值 13 与 3.0 bpp 相互佐证。
+新的用户自有样片见 [samples/README.md](../samples/README.md)，是首个真实 Z6III HE（无星）样片：已核验标签值 13 与 3.0 bpp 相互佐证。所有者已确定[样片许可](../samples/LICENSE.txt)，并同意公开内嵌机身和镜头序列号。
 
 验收脚本在 `evidence/mac-acceptance/`，有测试路径、导入源码位置及 catalog 打开文件名守卫，并对失败返回非零退出。真实操作脚本依赖本机已建立的独立 catalog、测试源和插件运行时，不应在生产 catalog 下运行。中断脚本的控制 gate 不入 Git。证据中的时间部分为 UTC（本地为 Asia/Shanghai）。测试工作目录保留，未清理测试照片或 catalog。
 # AppleDouble follow-up (2026-11-03)

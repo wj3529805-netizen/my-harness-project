@@ -27,5 +27,6 @@ cetacea --home $H execute TASK_ID && cetacea --home $H report TASK_ID
 ## Harness 前端（Phase 2，实验性）
 `deepseek-harness`（固定提交，MIT）经其 MCP 客户端插件以 stdio 调用 CETACEA，工具名 `mcp__cetacea__*`。**必须同时应用 `harness/cetacea-restricted.patch.yml`**（关闭 Harness 自带 bash/文件/web 工具）。准备与用法见 `harness/README.md`。**已用真实 DeepSeek 小规模验证（此前 5 个场景各 1 次、17 次请求；完整计划另 1 次、8 次请求）；非可靠性保证；仅 Linux；Harness 仍为实验性/未审计**。真实 Lightroom 和 macOS 尚未测试。
 ## 文档
+许可说明见 [NOTICE](NOTICE)；样片许可见 [samples/LICENSE.txt](samples/LICENSE.txt)。
 [Mac 实机路线图](docs/ROADMAP.md)。
 `docs/SPEC.md` 规格；`docs/REUSE_DECISION.md` 复用决策；`docs/ARCHITECTURE.md` 目录结构；`docs/THIRD_PARTY.md` 依赖/许可证/固定提交；`docs/STATUS.md` 状态矩阵；`docs/MACOS_HANDOFF.md` Mac 交接；[docs/KNOWN_RISKS.md](docs/KNOWN_RISKS.md) 风险；[docs/DATA_FLOW.md](docs/DATA_FLOW.md) 工具结果的数据流；[docs/FULLPLAN.md](docs/FULLPLAN.md) 完整计划与审批。

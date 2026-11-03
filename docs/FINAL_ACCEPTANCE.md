@@ -31,14 +31,18 @@ R3 214716 的 HE 帧是 DSC_9725.NEF；其[清点](../evidence/mac-r3/run-202611
 
 [脱敏映射](../evidence/mac-r5/desensitization-map.json)记录 122 个文件：个人主目录路径替换为 `<HOME>`，三枚真实卷 UUID 及其前缀替换为 `<VOLUME_UUID:...>` 等占位符；分别命中主目录 1006 次、完整 UUID 40 次、8 位前缀 3 次。证据 README 附有事后脱敏说明；[隐私守卫测试](../tests/test_privacy_guard.py)检查约定的残留。
 
-保留 harness 会话/请求 UUID 和 APFS 类型 GUID 以维持运行标识与类型信息；卷名、`<HOME>/Documents/ChatGPT/...` 下的项目文件夹名及公开仓库 URL 中 GitHub 用户名也保留。历史读回中旧公开样片的 SHA-256、第三方版权文字和第三方相机序列号保留以记录实际运行；新样片内嵌机身及镜头序列号和快门计数按所有者同意发布的原文件保留。详见 [R5 说明](../evidence/mac-r5/README.md) 和 [样片说明](../samples/README.md)。
+保留 harness 会话/请求 UUID 和 APFS 类型 GUID 以维持运行标识与类型信息；卷名、`<HOME>/Documents/ChatGPT/...` 下的项目文件夹名及公开仓库 URL 中 GitHub 用户名也保留。历史读回中旧公开样片的 SHA-256、第三方版权文字和第三方相机序列号保留以记录实际运行；新样片内嵌机身及镜头序列号经所有者同意公开，快门计数随原文件保留。详见 [R5 说明](../evidence/mac-r5/README.md) 和 [样片说明](../samples/README.md)。
 
 仓库公开，Git 历史仍含原始标识；脱敏仅影响当前树及未来克隆后的工作文件，不影响历史。修改后的计划不能重新验证原 `plan_digest`，映射保留修改前后哈希以便审计。
 
+## 已决定（2026-11-03 22:08）
+
+1. 所有者选择公开仓库，不重写 Git 历史。
+2. 新样片许可：All rights reserved by the owner (晶 / repo owner); permission granted only for testing within this project (my-harness-project); no other use or redistribution. 中文译文见 [samples/LICENSE.txt](../samples/LICENSE.txt)；所有者同意公开内嵌机身和镜头序列号。
+3. 历史证据中旧样片的署名、SHA-256 和第三方相机序列号有意保留。
+4. 保留 harness UUID、卷名和项目文件夹名。
+
 ## 待用户决定
 
-1. 是否重写 Git 历史；目前未做。
-2. 新样片的 CC0 许可证措辞是否获所有者确认。
-3. 是否进一步脱敏历史旧样片的 SHA、署名及序列号。
-4. 是否接受保留 harness UUID、卷名和项目文件夹名。
-5. 是否将 `prep/R5` 合并到 `phase1`。
+1. 合并到 phase1：见提交记录。
+2. 是否为仓库添加代码 LICENSE（目前没有）。

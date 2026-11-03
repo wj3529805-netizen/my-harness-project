@@ -50,3 +50,10 @@ def test_sample_privacy_fields():
             gps_entries, next_ifd = tiff.ifd(offsets[0])
             assert {entry[0] for entry in gps_entries} <= {0x0000}
             assert next_ifd == 0
+
+
+def test_sample_license_notice():
+    license_text = (ROOT / 'samples' / 'LICENSE.txt').read_text(encoding='utf-8')
+    assert 'All rights reserved by the owner' in license_text
+    for path in (ROOT / 'samples' / 'README.md', ROOT / 'NOTICE'):
+        assert 'CC0-1.0' not in path.read_text(encoding='utf-8')
