@@ -1,0 +1,32 @@
+{
+  "scope": "test-folder-only",
+  "source_subdir": "DCIM/142NZ6_3",
+  "out_of_scope_content_not_listed": true,
+  "privacy_note": "The card contains other content deliberately not listed, hashed or recorded.",
+  "hold_mid_file": true,
+  "hold_engaged": true,
+  "hold_released_by": "card-removed",
+  "hold_result": "HELD_AND_REMOVED",
+  "part_size_at_hold_start": 1048576,
+  "part_size_at_removal": 0,
+  "hold_timeout": 600.0,
+  "hold_note": "Mid-file pause was deliberately induced by this test script (test-induced hold); the source read error after removal is the genuine one.",
+  "child_terminated_by_parent": false,
+  "status": "PASS",
+  "scenario": "unplug",
+  "throttled": true,
+  "throttle_mbps": 3.0,
+  "throttle_note": "Source reads were deliberately slowed by this test script (test-induced throttle); throughput figures from this run say nothing about product speed.",
+  "inter_file_delay": 0,
+  "part_in_progress_at_interruption": false,
+  "part_sizes_at_interruption": [],
+  "final_state": "COMPLETED",
+  "approvals": 1,
+  "remaining_parts": [],
+  "locks": [],
+  "additional_library_files": [
+    "r3/tester/b_de44a6262e83/.cetacea/import-manifest-run2.json",
+    "r3/tester/b_de44a6262e83/.cetacea/import-manifest-run1.json"
+  ],
+  "unplanned_files": []
+}

@@ -1,0 +1,58 @@
+[
+  {
+    "rel_path": "DSC_9585.NEF",
+    "sha256": "42546c29413587957a055f80676b9768533a3369c763a758af9f566c336b0fb9",
+    "expected_sha256": "42546c29413587957a055f80676b9768533a3369c763a758af9f566c336b0fb9",
+    "asset_status": "VERIFIED",
+    "ok": true
+  },
+  {
+    "rel_path": "DSC_9586.NEF",
+    "sha256": "88e450a59d9e31ec3e91614687b2d422c51276df62dcf0b5ae88e5dbfd58f26a",
+    "expected_sha256": "88e450a59d9e31ec3e91614687b2d422c51276df62dcf0b5ae88e5dbfd58f26a",
+    "asset_status": "VERIFIED",
+    "ok": true
+  },
+  {
+    "rel_path": "DSC_9587.NEF",
+    "sha256": "a8cb6ed1c1b299f2057bd689ccdf386eed785863b47f31e35ec5773d93bd4321",
+    "expected_sha256": "a8cb6ed1c1b299f2057bd689ccdf386eed785863b47f31e35ec5773d93bd4321",
+    "asset_status": "VERIFIED",
+    "ok": true
+  },
+  {
+    "rel_path": "DSC_9588.NEF",
+    "sha256": "3d1e0cd72a7eec5636a9a187f29c52c6a8872950944450adb95e83bcb4033246",
+    "expected_sha256": "3d1e0cd72a7eec5636a9a187f29c52c6a8872950944450adb95e83bcb4033246",
+    "asset_status": "VERIFIED",
+    "ok": true
+  },
+  {
+    "rel_path": "DSC_9589.NEF",
+    "sha256": "05bce424ef120ed6ec49529467499940d68294a2f7cc2abd681d697d14af6db3",
+    "expected_sha256": "05bce424ef120ed6ec49529467499940d68294a2f7cc2abd681d697d14af6db3",
+    "asset_status": "VERIFIED",
+    "ok": true
+  },
+  {
+    "rel_path": "DSC_9590.NEF",
+    "sha256": "e40bedc634ccec49c6809ab85bdb975c564472e75fa820cdfc26faaea0facd2c",
+    "expected_sha256": "e40bedc634ccec49c6809ab85bdb975c564472e75fa820cdfc26faaea0facd2c",
+    "asset_status": "VERIFIED",
+    "ok": true
+  },
+  {
+    "rel_path": "DSC_9591.NEF",
+    "sha256": "4d335b11ceb71560430200e6ecfb1222a363cf0b50f3cb3e55443b96d1a1a189",
+    "expected_sha256": "4d335b11ceb71560430200e6ecfb1222a363cf0b50f3cb3e55443b96d1a1a189",
+    "asset_status": "VERIFIED",
+    "ok": true
+  },
+  {
+    "rel_path": "DSC_9592.NEF",
+    "sha256": "6204f36121822355e81b055a7662ea5b0bccc9fb02f277a9fcb5f575d3064a14",
+    "expected_sha256": "6204f36121822355e81b055a7662ea5b0bccc9fb02f277a9fcb5f575d3064a14",
+    "asset_status": "VERIFIED",
+    "ok": true
+  }
+]
