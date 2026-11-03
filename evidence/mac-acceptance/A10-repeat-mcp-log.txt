@@ -8,5 +8,5 @@
     "assets": 1,
     "previews": 1
   },
-  "evidence": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/evidence/mac-acceptance/A10-repeat-mcp-result.json"
+  "evidence": "<HOME>/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/evidence/mac-acceptance/A10-repeat-mcp-result.json"
 }

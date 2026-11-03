@@ -30,7 +30,7 @@ OUT = ROOT / 'evidence/mac-r2'
 LOCAL = ROOT / 'acceptance-data/mac-r2'
 MOUNT = Path('/Volumes/NIKON Z6_3  1')
 TEST_ROOT = MOUNT / 'Cetacea-R2-Test-20261103'
-UUID = '82A91C0F-BF3C-3DE2-AF4E-DEDF705C8E8E'
+UUID = '<VOLUME_UUID:39f4499d9fb1c7a3>'
 STAGES = ['ingest', 'lr_register', 'lr_preset', 'lr_export', 'preview_verify']
 EVENTS = []
 

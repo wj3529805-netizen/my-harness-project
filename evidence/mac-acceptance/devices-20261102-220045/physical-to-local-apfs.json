@@ -6,7 +6,7 @@
       "source_id": "sd",
       "source_volume": {
         "DeviceIdentifier": "disk7s1",
-        "VolumeUUID": "82A91C0F-BF3C-3DE2-AF4E-DEDF705C8E8E",
+        "VolumeUUID": "<VOLUME_UUID:39f4499d9fb1c7a3>",
         "FilesystemType": "exfat",
         "MountPoint": "/Volumes/NIKON Z6_3  1",
         "BusProtocol": "Secure Digital",
@@ -28,7 +28,7 @@
         "inode": 204592,
         "sha256": "570d50780edcb135b43ff098878b0067d67ec38883622ce9d031951bcb736ec1"
       },
-      "destination": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/devices-20261102-220045/local-card-ingest/library/physical/tester/sd/DSC_6484.NEF",
+      "destination": "<HOME>/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/devices-20261102-220045/local-card-ingest/library/physical/tester/sd/DSC_6484.NEF",
       "destination_readback": {
         "size": 18565632,
         "mtime_ns": 1793628396340306128,
@@ -42,7 +42,7 @@
       "source_id": "usbcard",
       "source_volume": {
         "DeviceIdentifier": "disk6s1",
-        "VolumeUUID": "7FBCB909-0145-3DD8-AD2C-56989C78F446",
+        "VolumeUUID": "<VOLUME_UUID:5ae0b1a37395edf7>",
         "FilesystemType": "exfat",
         "MountPoint": "/Volumes/NIKON Z6_3 ",
         "BusProtocol": "USB",
@@ -64,7 +64,7 @@
         "inode": 1736,
         "sha256": "afb3f92276e8a7083603aee53c92b0d0cad4e0b4e4791a0265423d7e4a75cfec"
       },
-      "destination": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/devices-20261102-220045/local-card-ingest/library/physical/tester/usbcard/DSC_8443.NEF",
+      "destination": "<HOME>/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/devices-20261102-220045/local-card-ingest/library/physical/tester/usbcard/DSC_8443.NEF",
       "destination_readback": {
         "size": 17783296,
         "mtime_ns": 1793628396502665100,

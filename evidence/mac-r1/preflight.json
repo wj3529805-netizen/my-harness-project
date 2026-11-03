@@ -14,7 +14,7 @@
   "documented_race_maximum_extra_requests": 1,
   "approval_required_before_paid_requests": true,
   "open_catalog_paths": [
-    "/Users/mac/Documents/ChatGPT/AI工作台/cetacea-workbench/acceptance-data/catalog/Cetacea-Phase1-Test-20261102/Cetacea-Phase1-Test-20261102.lrcat"
+    "<HOME>/Documents/ChatGPT/AI工作台/cetacea-workbench/acceptance-data/catalog/Cetacea-Phase1-Test-20261102/Cetacea-Phase1-Test-20261102.lrcat"
   ],
   "catalog_content_read": false,
   "proposed_public_raw_sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02",

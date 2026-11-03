@@ -1,6 +1,6 @@
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
@@ -10,7 +10,7 @@ Shutting down: stdin ended (client exited)
 status: {'status': 'Lightroom MCP connected (real read-only preset probe; catalog identity unverified)', 'mock': False}
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
@@ -18,14 +18,14 @@ Shutting down: stdin ended (client exited)
 test preset: {'count': 1, 'has_more': False, 'success': True, 'presets': [{'folder': 'Cetacea Test', 'uuid': '2444613F0424AEAC3ACFD6D012A2FF58', 'name': 'Cetacea Phase1 Test +0.50', 'scope': 'lightroom'}]}
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764

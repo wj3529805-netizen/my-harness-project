@@ -116,9 +116,9 @@ curl 终端文本保留实际响应，仅为 Git 空白检查移除了行末 ASC
 - macOS 27.0.1，arm64；Python 3.13.18，项目内 `.venv`；Node v26.12.1。
 - 安装：`python3.13 -m venv .venv`，`.venv/bin/pip install -e '.[dev]'`。`pytest` 是 dev extra，单独 `-e .` 不保证安装它。系统 `python3` 为 3.9.6，未修改系统 Python。
 - `mcp==2.3.0`；Lightroom MCP `@mskalski/lightroom-mcp@0.26.0`，用户 Modules 目录中的插件版本 0.26.0.0。npm 运行时安装在原压缩包工作目录的 `.lightroom-runtime`，没有全局 npm 安装。
-- 实际代码与测试位置：`/Users/mac/Documents/ChatGPT/AI工作台/my-harness-project`。
+- 实际代码与测试位置：`<HOME>/Documents/ChatGPT/AI工作台/my-harness-project`。
 - 所有有效 RAW 源、库、JPG、状态库在上述 checkout 的 `acceptance-data/`，已被 Git 忽略。
-- 独立 catalog：`/Users/mac/Documents/ChatGPT/AI工作台/cetacea-workbench/acceptance-data/catalog/Cetacea-Phase1-Test-20261102/Cetacea-Phase1-Test-20261102.lrcat`。通过 UI 标题、URL 和进程打开文件名确认身份；没有读取 catalog 内容。恢复/重启后重新确认，未向日常 catalog 发送照片操作。
+- 独立 catalog：`<HOME>/Documents/ChatGPT/AI工作台/cetacea-workbench/acceptance-data/catalog/Cetacea-Phase1-Test-20261102/Cetacea-Phase1-Test-20261102.lrcat`。通过 UI 标题、URL 和进程打开文件名确认身份；没有读取 catalog 内容。恢复/重启后重新确认，未向日常 catalog 发送照片操作。
 - 测试预设为新建 `Cetacea Phase1 Test +0.50`，通过 Lightroom UI 导入；仅包含测试曝光调整。没有修改原有照片 XMP/ACR。
 - CLI 测试操作端在本次用户授权范围内登记计划摘要并批准测试任务；没有把批准权限给 AI MCP。人类逐条点击批准的产品流程不在本次证据内。
 

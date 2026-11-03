@@ -1,0 +1,1638 @@
+{
+  "baseline_branch": "prep/R5",
+  "baseline_commit": "0efea7e5bae7a8897c2e44fd456a9701c568c328",
+  "files": [
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 0,
+        "R-UUID-FULL": 3,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "4a94d945d6a2b1e7394a8c422f0bb8dc3f2f5c1b7213086da41e1a78cc7e1688",
+      "old_git_blob_sha1": "33a8eb725d8b174eeae89e16d4de289f04c16e57",
+      "old_sha256": "7d53fb0832eb3245eedc20ccdcfd8fd1982e8df3e7e161cad2394df98b0aa2c6",
+      "path": "docs/MACOS_DEVICE_VALIDATION.md",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 2,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "d643ba51d79707ed05e32879a9f3c4810cbe4b7b46f94290224c584a959a5f84",
+      "old_git_blob_sha1": "f0cdf91595e3a26e64feefa8073f0b3e58fbe4f8",
+      "old_sha256": "a595cb972b4a02c01ca2d8e74a36af6672e6aaea734cc25c0fdca3bbd6211a3d",
+      "path": "docs/MACOS_VALIDATION.md",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 9,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 3
+      },
+      "new_sha256": "3861907e96d65cc27bbd210a164cbe62aaec1cb16d8bebc737c137fd36aba5af",
+      "old_git_blob_sha1": "00ea1151abc1407cec9510c3247fdfd1a5a0b727",
+      "old_sha256": "79f427f1b2f939f0ce7fd5d027782ac2c2e376b481f888c2f066f5d724cc0920",
+      "path": "docs/R5_CLEANUP_PROPOSAL.md",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 1,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "73692e68ad2e7321c576174c6db8892f101e2d0d9ee16b3f4ef1b693888de9e9",
+      "old_git_blob_sha1": "2954bf834fa206708aa192f097cbc13ecf2a4b02",
+      "old_sha256": "54494aa0a4c5a3092d639da6bcccce227cc99bccfe2faa581393fbd7d3946d3b",
+      "path": "docs/ROADMAP.md",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 0,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "dee48d47bff0cf4ad2c9f1a3f5dcffa424c3c70666bd7cc76ab1a80c6bcf8810",
+      "old_git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "old_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "path": "evidence/mac-acceptance-merged/README.md",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 2,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "46e630041478855bdbbe943895dffcbe58e708e92237332549e194b2e34a2619",
+      "old_git_blob_sha1": "50ed851fc98798c10eda8c9319cd586d9efb6d33",
+      "old_sha256": "e113dac03d5c0f332f2b802ef409f859f7b1fc4bf60bf9104abf335d880d7427",
+      "path": "evidence/mac-acceptance-merged/collection.txt",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 2,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "aab5f8a7d9f5bf8038948b3478388b506e38061c298fa98ac74f13c9d84f8dee",
+      "old_git_blob_sha1": "73812392b8ae309778c50ea4c7a7d09b79087894",
+      "old_sha256": "b739010549b931533891c5fbadba7fbaa38f92f88d1826ba80946362830393b8",
+      "path": "evidence/mac-acceptance-merged/environment.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 4,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "c59ad268883240e6f2d132132911a3d264d4997ddfb07c82d5e1bce5bc53b1a8",
+      "old_git_blob_sha1": "3067ddd520e01df2b58c1c96fbe7f8db2a1d0f4d",
+      "old_sha256": "9003c5d48f8ed067b44453ec1b374130685a02e0e335757ac240a34f2193fb44",
+      "path": "evidence/mac-acceptance-merged/final-inventory.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 49,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "9477fc6eaea3740ca027ffa79bc494df3989cb1764dac67481c91f5baa63b207",
+      "old_git_blob_sha1": "729d5e4d261987bb947201156721727da5e73605",
+      "old_sha256": "9b9e5e610d164fa27e14a2e208893391d6e8c817968f28463d56c4e50dac3467",
+      "path": "evidence/mac-acceptance-merged/harness-install.txt",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 6,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "df3e8a801ebfc64818652859e5c635dc14bc27553c754ac18b9178a00d085aca",
+      "old_git_blob_sha1": "4b7b907f0e63c0dfbaee66597808f512e50a6a3f",
+      "old_sha256": "18e181fdaaa9700a4b1c6b8b02fa1b9d1561252471d8b780488595d261545acc",
+      "path": "evidence/mac-acceptance-merged/interruption-approval.json",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 2,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "2787b5c83d1cc865fda6b334595b47615f383135f1754919d23cbc4342d0a8a0",
+      "old_git_blob_sha1": "51b236797d9302b674a9cf8f04eadb204d1ecc6d",
+      "old_sha256": "05bfe6dbfe1edc43227a475d572718d4e09ef1c3bab681f92cb54a1ae2c43b84",
+      "path": "evidence/mac-acceptance-merged/interruption-catalog-guard.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 6,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "62d0173fd1f10d3cafccbd16168a4f7ffcd719495351892956aec3fc409624b5",
+      "old_git_blob_sha1": "dc6ec8bd0d4e5a35c858e9de3089e67c39706dc6",
+      "old_sha256": "a9839aeeaf3186523f81a4bc7fafdb703a2b22ec5baebf8c98c7141aa58048c3",
+      "path": "evidence/mac-acceptance-merged/interruption-console.txt",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 3,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "ca9679dd11e698b92fb64d36ad2f52548ba467041ccb39b5aa74dab256cdc24c",
+      "old_git_blob_sha1": "ec0e02f0b45891859c107cc189be70939265a0d8",
+      "old_sha256": "b7beb14b324219d07f716622ffbf56b5b548206517826134baddd76be1351669",
+      "path": "evidence/mac-acceptance-merged/interruption-database.json",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 16,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "0799914345a00233f808c1ef191e43a6a2d30f3f4adc899ccf52cca914c82d8e",
+      "old_git_blob_sha1": "dc60932bd19283f92355264a96500e89a711f0b0",
+      "old_sha256": "862dad22bb26f9818fe539c4902fb555b443c1ab2a6843037673ec08ddd981a1",
+      "path": "evidence/mac-acceptance-merged/interruption-mcp.jsonl",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 4,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "e4aa7476b699a6911dcc1b3aa65f96bd20975e1fbef9208cc5c32e6f22877313",
+      "old_git_blob_sha1": "06b9040f80a14ac963adbea3b37bfc248f81d484",
+      "old_sha256": "87de4eed9eeacbb9b489d84c0a2de42d2328087897757af0ce7497208edbb446",
+      "path": "evidence/mac-acceptance-merged/interruption-plan.json",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 150,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "d686088b8ea4b012800c90703e4a2570d63fa2d7243dac14ccb20efd6b8943f9",
+      "old_git_blob_sha1": "13913ad1cec0f56779f634da7d2453226d178b49",
+      "old_sha256": "e6b2ff23ecdaae892495b21b07a87ca0246c01b3af1bbd49f5d1b244644a66a6",
+      "path": "evidence/mac-acceptance-merged/interruption-real-calls.jsonl",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 4,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "39ce3f103e472ee9303098e294a648688a8a3e0b516667e61e733a7fafbe1185",
+      "old_git_blob_sha1": "a7b48b36a5d31eb3aa04faab440c0ce2baa8b381",
+      "old_sha256": "83caa21f637d3f0383bae46e5908dff68616cc960b2c4b471abfb98c75c08cf8",
+      "path": "evidence/mac-acceptance-merged/interruption-result.json",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 1,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "ba8c624365f39c9f2ad73d387bfbc1b29fee25e69afb9fd0c06d0053cde0e48d",
+      "old_git_blob_sha1": "1d81d89a8c8d4d9a883e4ae5671dfda2542be586",
+      "old_sha256": "916c6ae3da936af45d310cff446714fb8aee0f8ae4aca6ec84bc320bd73519de",
+      "path": "evidence/mac-acceptance-merged/pytest-final-exit.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 2,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "0d1aa4c9c4d47989e0469c21445f69b399a62432518621ed9cdc27e3b7917d92",
+      "old_git_blob_sha1": "1f677641d2291573166f539b77610a29717e1540",
+      "old_sha256": "c40d280b69e5ec8a8f15ef9d566162b48bbc730dfea10b0d6e47728c51e9b7d6",
+      "path": "evidence/mac-acceptance-merged/retry-resume-catalog-guard.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 23,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "7310e8c45a77df6978f2f7f71402416fe01789defd6d2794bdd59695048525b5",
+      "old_git_blob_sha1": "0cdb46acc03135d6e4a3238e35eedbc416bc61b7",
+      "old_sha256": "ef633786d9c15b1e08f17490476bef447bd7cc555039fc1b05e40a13f7b493c9",
+      "path": "evidence/mac-acceptance-merged/retry-resume-console.txt",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 8,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "819b084b6c12b6bbca29edfa36f6e4e090e39077417628d3dfd1cbc509040099",
+      "old_git_blob_sha1": "e5b3b6d61d299f884b4932ca81c6af9de3cfc614",
+      "old_sha256": "36e2f9b729f29fbe556a1baca3a83e30250ae6b92f679d9c4abecb9a37a80426",
+      "path": "evidence/mac-acceptance-merged/retry-resume-database.json",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 3,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "55ddaaf408ec4396d76399b646371707a05411fc22c0e8030804fe9fb6d3a67d",
+      "old_git_blob_sha1": "a9355371f7ee97dabbde7784a5ea9eea98570a43",
+      "old_sha256": "4604868efa259b4186165572ab0d80f0dc10cfa99f43f9ce01841126ee826001",
+      "path": "evidence/mac-acceptance-merged/retry-resume-develop-readback.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 8,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "04394e4d0c59e24bb72a7fae73bcff83faaff75cc7e035697b64c41334943333",
+      "old_git_blob_sha1": "e064a9072b70d2089e02f7d9ab125439423e45e8",
+      "old_sha256": "f93338055e5f707fae0702e864906d57135275119d4231a7fc6a4f44a6165da4",
+      "path": "evidence/mac-acceptance-merged/retry-resume-mcp.jsonl",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 4,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "fe2f335ac5be2badc562ddbca93b170bbf2ab8a703d346dcaaa558fbae06a030",
+      "old_git_blob_sha1": "0a1fb9f47b356a3e68670d69691696000ea841da",
+      "old_sha256": "8d5e2a78e10532d26630713161b8b0b998131d3a76d57ea8156b081877ebe71c",
+      "path": "evidence/mac-acceptance-merged/retry-resume-result.json",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 6,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "9bcd0bb0c72c4f34f5e9beedf98ec29bc16cfa35557e9a4169ea71ed46f156c1",
+      "old_git_blob_sha1": "088e70eee671d382705cb45161602292aef84556",
+      "old_sha256": "044eae0549a15bdee5250cffacbff20547b933a8a57281443cc300d5170a63da",
+      "path": "evidence/mac-acceptance-merged/single-approval.json",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 2,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "90fff9a723b651f14b4a63f7534de5e4aac6893410d7c0fb29b29df40e870079",
+      "old_git_blob_sha1": "6872893b1336ebeb094629ba7595860acb823532",
+      "old_sha256": "a48680e8656431bc158901e4fcd9e1b837e8509b71edbb17e1d3caad14f42d9c",
+      "path": "evidence/mac-acceptance-merged/single-catalog-guard.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 11,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "7868981984a43f0edfaecab970a6daee24f25ef512316feb5adc43fcde36318c",
+      "old_git_blob_sha1": "8dcd8f88d88bd5fee23ba2568f4214df138b40d5",
+      "old_sha256": "1bee9443b64e4ddb158ebd7f88b018cb5eb31262b9d22c4c177093f901cbff63",
+      "path": "evidence/mac-acceptance-merged/single-console.txt",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 4,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "af9862097af3ff9e63d7f161100bb6ee86f9de9ff239b6dbefb38dba514a0b6b",
+      "old_git_blob_sha1": "7f0a2d3454804dfb16460dd5eaa24e43eb0cf272",
+      "old_sha256": "25dd1cc27bd07096662f576906fd8281f2f8a5ac96a04c42a43418bbe861a221",
+      "path": "evidence/mac-acceptance-merged/single-database.json",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 1,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "1992cc5b359dd0261850ecef4f3170a831d4435706eeca0bb64bbc1abd006c46",
+      "old_git_blob_sha1": "f1900b4d0bf489bcb6b684b62678ee807273b6dd",
+      "old_sha256": "634710b571be83fe873e6e87827bf84caa5335ce65820efd35b9a93dbabd28b8",
+      "path": "evidence/mac-acceptance-merged/single-develop-readback.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 16,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "a7aa1ff7d30120ceadb554464d39b09aa4ce694d022c889a414541d879b3f7aa",
+      "old_git_blob_sha1": "4d9fa15640c3253d63e70e5f76c15fdc22af6810",
+      "old_sha256": "6cc7296f53f0c72199488bd3aa53363f92df946b2ad98066a38614c4b142a111",
+      "path": "evidence/mac-acceptance-merged/single-mcp.jsonl",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 4,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "e24ce02e4095fb454cd5fc7dba5e59c7485f6362529929d16663831f0b608a04",
+      "old_git_blob_sha1": "3c8628c79f782c9e870a0f055488c8112f354121",
+      "old_sha256": "437fc81fbc582b28271ea8ea7bc347a85814650a541f38061064be883187bdff",
+      "path": "evidence/mac-acceptance-merged/single-plan.json",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 51,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "1e8b165ed24edbc2e39b28f359145db2c8a5b96e393727d60c8850fb4b2f07cc",
+      "old_git_blob_sha1": "24ec7364b2f7ddcb5cde045b453bf09cb5676f95",
+      "old_sha256": "7d3522fd378fe73b869a1646621e6dcdc057babc3e57d0e118cd74ec49e55c15",
+      "path": "evidence/mac-acceptance-merged/single-real-calls.jsonl",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 4,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "c33e233816869187307efed1d5793cd419b057f1ec8efaa65355d50cb67b1828",
+      "old_git_blob_sha1": "1e2f5dde133d91cee8be003e40d7504eb5583b58",
+      "old_sha256": "cfc6f3071b4c7fe91c322152e8cb07bff590db52eb7ffe95fee4219b6aaf182f",
+      "path": "evidence/mac-acceptance-merged/single-result.json",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 6,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "10f10bf9712485221358cb91093ebb0f962f3492981b3992d3d8ba1516aa1cae",
+      "old_git_blob_sha1": "539a00d2c0d83a0448cf798480a8d06e606b8e52",
+      "old_sha256": "0a54c48891a06d282fae6112707be3359fdcf41184e436900f86930d786112db",
+      "path": "evidence/mac-acceptance-merged/tamper-export-approval.json",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 2,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "e60335aca489786fdc8349ab88b4957c885b129b7955cd4b198e517e708b69f0",
+      "old_git_blob_sha1": "334640e46aa1553ddf46f8394b9a4c5c079b75d9",
+      "old_sha256": "391fbf3bc3702cb99b0465924a0a4081470f493aa715251db65ebc98beef8585",
+      "path": "evidence/mac-acceptance-merged/tamper-export-catalog-guard.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 2,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "a3ce1bfeafc6acee1c61dcd1db8ecac39d9841c2e9466d2d565931288968cba4",
+      "old_git_blob_sha1": "2629362e3b935e2f2b6285659edc62dbf73b8f37",
+      "old_sha256": "2e9f09fd236ed8995db829492b7fe9399124271a627a5f1474973134343afa07",
+      "path": "evidence/mac-acceptance-merged/tamper-export-database.json",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 8,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "97bb73a01f4cbee0022af93b716fb61d3c62594a4fe8f2a4fbffde567b0c6b49",
+      "old_git_blob_sha1": "d5d70df60985b094089497642f02f491dad53939",
+      "old_sha256": "1e4d071e2d1a02fc801a95a28c65005ff9df7e48382602b171389e42eecc5410",
+      "path": "evidence/mac-acceptance-merged/tamper-export-mcp.jsonl",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 4,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "ea6ea56dfce10d7477a181615130dcbf1ec99fa9cc7cd88e5d1e3ef1fbb91dfb",
+      "old_git_blob_sha1": "a063506f13da03a47dc33448c63225344ee68a4a",
+      "old_sha256": "b8e3cdc65ffbda9df182ec1d2bb6c54aa376384fa3c2d3076505fa38fc6d6f4e",
+      "path": "evidence/mac-acceptance-merged/tamper-export-plan.json",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 6,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "93200aa388f4e068ae8094863d7267a5b4a6212455100632a862ab0f3362aa5b",
+      "old_git_blob_sha1": "74666ecb1588a738587bd3372ea39f49adf758e8",
+      "old_sha256": "48acd1ebfb24062e7789cd8e0bc7cacc45b42cebfb6ab2f70120353f2cd921f3",
+      "path": "evidence/mac-acceptance-merged/tamper-export-real-calls.jsonl",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 6,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "51f97ad2c8e9b41d48174ec5fc178f17dcadff122189e94094d968643808c08a",
+      "old_git_blob_sha1": "53a5f8d037371a2e128d426065016e615cbd8800",
+      "old_sha256": "e0f52687fe3871de2eef891d34aab1a75024b9c9be02e52cc624c0459328eb18",
+      "path": "evidence/mac-acceptance-merged/tamper-preset-approval.json",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 2,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "77be8d88fbd3067ed76a75339f3ccc20c9d7d986cf2f4e490c4fed6d97efedbc",
+      "old_git_blob_sha1": "b3184a45015403f82e1a5515e202f8ce2e8762f8",
+      "old_sha256": "206785fb38e38723d11f825a2dc09ac92c7e493b50e87fcaeccafa0746618551",
+      "path": "evidence/mac-acceptance-merged/tamper-preset-catalog-guard.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 2,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "b0f5964fa5a14360d4bf5abd11c4c8db3409b286c7d00f1af475c769603435c4",
+      "old_git_blob_sha1": "115adc0ba26bfa7affb1ec35e9da1cf3322e8b15",
+      "old_sha256": "04b6f420600a9f384f7a85208c635dd3556633867528b82e60f10dbac93c28aa",
+      "path": "evidence/mac-acceptance-merged/tamper-preset-database.json",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 8,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "0ce0ccc20eaab31c024d73357bdc102579d34b46869fed9971c4c3d62775167b",
+      "old_git_blob_sha1": "0a76724b4c7cc5f6a0ccaeb0bc59107ab8869feb",
+      "old_sha256": "94781267caa4e183b079638c41e06bb578bb4880677448eed6eb2ae719f4d30b",
+      "path": "evidence/mac-acceptance-merged/tamper-preset-mcp.jsonl",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 4,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "07d198e2e1b3ca00e4f0658e85813143240bbc66ab08b2e12881fc78d7ae691f",
+      "old_git_blob_sha1": "3f2fca0714b25383b39c4e5b5386fca145af8d39",
+      "old_sha256": "b9ea0daa9ab447634717d067b72165db17238586348d2bd23aae584827c0b484",
+      "path": "evidence/mac-acceptance-merged/tamper-preset-plan.json",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 6,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "d8725d44df8ce59541ae355bc3064c8ba6e803547ea0cac10405f926c8df3814",
+      "old_git_blob_sha1": "2da25976470df5bec328d8b30874cf01f0b9d9c4",
+      "old_sha256": "c0a883b5c71206e752dbdb109df969e0b10a2a6143d09174cc7a022dcf59700e",
+      "path": "evidence/mac-acceptance-merged/tamper-preset-real-calls.jsonl",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 1,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "b312cdddd5af5db3587d3a32e76f4333eeead39ecab03ac38719a85037871868",
+      "old_git_blob_sha1": "9181151d8cc927ddc73497f881c7a35909e09e43",
+      "old_sha256": "445af4019e0edcb1120c5c639596b92bb069741777c9d3bec75ec83e31811c81",
+      "path": "evidence/mac-acceptance/A10-repeat-mcp-log.txt",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 6,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "ebd8d83c0a190a64d7e775eec35c9929652b0129c48f2a8ae90b33a86c0d8545",
+      "old_git_blob_sha1": "f6cd5aa78dbf7eaba3aa50d8529871310da0d3d5",
+      "old_sha256": "3cadf00780ceb1f91d7e863a34de96e8ccfe750b4841d569fab9116aed78ff82",
+      "path": "evidence/mac-acceptance/A10-repeat-mcp-result.json",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 0,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "dee48d47bff0cf4ad2c9f1a3f5dcffa424c3c70666bd7cc76ab1a80c6bcf8810",
+      "old_git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "old_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "path": "evidence/mac-acceptance/README.md",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 1,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "37a1df2a6746e00d98aeaad2194724d202fed4d68929ec350d829d7ae6013263",
+      "old_git_blob_sha1": "5e9daf47177ebf44b9ba250a0c92e8ca37ce6ca2",
+      "old_sha256": "59608dd169d5e009717af469aa07e2acd126498e33433597e7c07020401f7f91",
+      "path": "evidence/mac-acceptance/cc0-assets.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 1,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "ecd70907e3bf31d5fc057c7852fa743b04566c663cc3e96d7369755bc77ae72b",
+      "old_git_blob_sha1": "3182c8a250f6ac7d08283f3706824b49462f94eb",
+      "old_sha256": "817a6676c68ffd329ba8a73441b980bad55beb0ddcf7aef8f157ae2d37a45264",
+      "path": "evidence/mac-acceptance/cc0-full-checks.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 11,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "49e713afa154c9c85ee413611295067d30a561d8f23171ddb8482daaf5511b3a",
+      "old_git_blob_sha1": "2cd8a93de0c4bc2140ec4aa64e4c3a00ab17ea9e",
+      "old_sha256": "b8c1a42a17d9babfac8958e1a65ccf5bbc1a2f787c8838619ac9759714ecaa46",
+      "path": "evidence/mac-acceptance/cc0-full-log.txt",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 1,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "5f7e1e3985afa0a4232f29059c1c9fc57ac849250d6d632a4f01b3c3a636326e",
+      "old_git_blob_sha1": "8671ae75038cf39c220c04d16174a59d4d1922e5",
+      "old_sha256": "4c1ee88255fcb67ff4e6668f03ef4356b27f2ebd911e81d9dd7c2f4a4bd947a8",
+      "path": "evidence/mac-acceptance/cc0-full-report.json",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 4,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "2f12ad17f854bea9754f0dff0fb0e9bd3fb3d7aa9c4a79ad260adb1f5385b63f",
+      "old_git_blob_sha1": "0554f1b98b3564c437b57f63dcc12e3d2639d086",
+      "old_sha256": "2478c96e11bfa438d7fdce82c3766db849881d068010727610737b4e862f4ecc",
+      "path": "evidence/mac-acceptance/cc0-initial-log.txt",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 1,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "215c28dda2aa402515d89716044674e0c2023e1fd343144945851e66fe84930c",
+      "old_git_blob_sha1": "006f4dc287ec86bd79a93b758678935fe2978a32",
+      "old_sha256": "dfb14fe256acc469bba34cc17b036c35eb288ea339531eafb6cb7ed217311a21",
+      "path": "evidence/mac-acceptance/check-env-final.txt",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 1,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "694de52c99866b9dbe426f40fa8716ee33dd3111d716cb914ccffb24a7b75a97",
+      "old_git_blob_sha1": "b0ab100a7102b9655d1797abbfbd685a0a41ff65",
+      "old_sha256": "36df8b487e69f5617471e3d9a9bcd13781f61ea6867817e2805f7e74645b2e94",
+      "path": "evidence/mac-acceptance/develop-after.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 1,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "9f26de4d3bf1b77475dae3c534bf36b751f65928bb25b300bf0d951608f84bc4",
+      "old_git_blob_sha1": "ce48d98d1bd11e462df0cdb66560e74457d1fef4",
+      "old_sha256": "56b739cd90fd6e70e14b332460bb2e9f443119b32af776a33bc0280f113eef59",
+      "path": "evidence/mac-acceptance/develop-before.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 2,
+        "R-UUID-FULL": 6,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "4ff1e4beacec80ed6333219eacb83f07aa5e8a10df444c99cb192c1cc2f825a4",
+      "old_git_blob_sha1": "bcebd8377465b85f6c9088c44557c3197ec78979",
+      "old_sha256": "afd0c8c375685a9d3bbd74bca24c80761b230c7a97f21ad775984a89a1f185aa",
+      "path": "evidence/mac-acceptance/devices-20261102-220045/apfs-ingest-20261102T141050Z-e8d2c9e0.json",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 2,
+        "R-UUID-FULL": 4,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "136d29706119b1331b12acba228cf6c3f7e084a5fab1f29143a61973c2f72d4d",
+      "old_git_blob_sha1": "aaa158d2928e3fb16019b874b3f8ecf7915fcb47",
+      "old_sha256": "9b0a54da0e2e8f1f86f3c6937ec0e23a69099c6ce93d962753fedb72ec81fd9c",
+      "path": "evidence/mac-acceptance/devices-20261102-220045/apfs-pipeline-20261102T141051Z-76e5e0c7.json",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 2,
+        "R-UUID-FULL": 4,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "2e7bf799099baa58192aeb7eaacfc7c53c78c5fe7ac7ce01f5f48b1941557eca",
+      "old_git_blob_sha1": "25506ff2725a2896e0943b2bbb4eff9846632fe2",
+      "old_sha256": "158d364ee154ebb41880d553fafb6f2f500f807e8d379884a94c3adeeb2686c2",
+      "path": "evidence/mac-acceptance/devices-20261102-220045/apfs-probe-20261102T141045Z-879e1713.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 2,
+        "R-UUID-FULL": 4,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "3fc7da1f68bd2feff9926e326743c14cd8f1858ac710d0defcb6a873acb82947",
+      "old_git_blob_sha1": "cf7bd0602e316c742bd9504c99b6981903fd0b0a",
+      "old_sha256": "ab922bb1e63752f3924c1bedb666f4e2c27bbe036f70f519e071b5560553b7f8",
+      "path": "evidence/mac-acceptance/devices-20261102-220045/apfs-retry-20261102T141052Z-8ff4e7b0.json",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 22,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "9231f6c4d51d1939690038af46ea2b251bf4c5358b6cda1624d290e51b3c953a",
+      "old_git_blob_sha1": "afa8c642aab8b749bdda6d23ffa0aef457b5cc78",
+      "old_sha256": "7a85e1a0c6d3e50a73b3b1978170d0f5b1687ec718476d165688fd88641c14a8",
+      "path": "evidence/mac-acceptance/devices-20261102-220045/physical-lightroom-log.txt",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 2,
+        "R-UUID-FULL": 2,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "726b3755111ddc662a38640684ef214263bcc984bb69b3027314c46a07c42ace",
+      "old_git_blob_sha1": "5cb3dda566a482655edc17adf03baebfa03c869d",
+      "old_sha256": "24c25f5473a30eaf284a48efd35132e791144478d6febe85468198e97436f07a",
+      "path": "evidence/mac-acceptance/devices-20261102-220045/physical-to-local-apfs.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 2,
+        "R-UUID-FULL": 3,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "56fcc6962622bdf13f1d53f2aa8bb7dffafe7d0663ab4de728ec3ece189f1415",
+      "old_git_blob_sha1": "c4a15673c940790c1e238adfe7eefb72297dabdb",
+      "old_sha256": "21a4823598eb025d95192b4e72a15192902a25cce7f509f8b1fbc159d0ac7773",
+      "path": "evidence/mac-acceptance/devices-20261102-220045/setup.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 1,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "e04332f8785c4611266b9b8e4f11cf5012cd52c3724d487ae7eced0df6c9c259",
+      "old_git_blob_sha1": "214221600f8312c3757ab771a33144154c14ceb4",
+      "old_sha256": "8ab7b527eb23e280e1a5d3b0e1581a8f451950ce31812bbeb5e9335fe2ea85e2",
+      "path": "evidence/mac-acceptance/enotsup-regression.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 1,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "a135e98de8e4c9101d4700211667ced2dd390d22d7091f9c639a7176f398b2cb",
+      "old_git_blob_sha1": "287b650047b463d364b9387e2100450cda4702d4",
+      "old_sha256": "38f7264004c8ef292b1b6d8b12fc877f110d657716089c80254aa88e1efa0d92",
+      "path": "evidence/mac-acceptance/environment.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 4,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "1ba1814699adfc92a2e133ce3df6d75a076b228b81202552a3af1c5595b27d21",
+      "old_git_blob_sha1": "45b8a776306de4a4a9022427b531b8aab95ed1e2",
+      "old_sha256": "44018a5011cd380d49b35490027a9dfeacaec4a5ce288cd152c1340b2e98294b",
+      "path": "evidence/mac-acceptance/final-test-catalog-metadata.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 1,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "1d4cd75750d49a0800321a7fb17c17cc63b7b061d542e36f4999fab478a63031",
+      "old_git_blob_sha1": "d908bf8b6b326f468ba3c92c8a4a5c0103b0df92",
+      "old_sha256": "b584456f33ba17c1c7fed5e6764cbd4e784a5476941758bfdcdc4a104b14a518",
+      "path": "evidence/mac-acceptance/interruption-assets-after-close.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 3,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "935c7fafe152719a8316fee16d5bd156a4cd373549aa11ac48334bf838a8a608",
+      "old_git_blob_sha1": "c775c62fbee15085bc36437c87bf34df79b35f58",
+      "old_sha256": "f263ef97f94883febb3e006b4b04765e8063eeeab40a02102cd6c02d373573d4",
+      "path": "evidence/mac-acceptance/interruption-checks.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 2,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "02436e535fab3e25d86e332b2dc3e0fa722ad4b73d9751250e830a0fd78a3169",
+      "old_git_blob_sha1": "afe162bf16ca02cc63653756a1093b63cbe65163",
+      "old_sha256": "46c155702514eb8907670348e21a08d941bd5d2b4fc172fb9dd78c0637cdbd1a",
+      "path": "evidence/mac-acceptance/interruption-ready.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 9,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "f97b0854d277e1ecd45ecd76953916a2351fce274c7e6505efb2f347f26595a5",
+      "old_git_blob_sha1": "2469752f6ca4dc4315b48ba24b032282de09713f",
+      "old_sha256": "111ee1f9e574613a3d369ef7b37c7d7b98f1fab2ae03bd6a279740f295fdfb9a",
+      "path": "evidence/mac-acceptance/interruption-retry-log.txt",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 6,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "ef4ae96021c05b9a235a13997b2330013c44a71ee7e078f3ff4611899b0a71d0",
+      "old_git_blob_sha1": "cb2920c323bcee8737b8d89d3177f71355a07b62",
+      "old_sha256": "bc5f197d8e24ef629b48b330f6cceb7acc8dd0fd13e61b011eca6d1b43c9236a",
+      "path": "evidence/mac-acceptance/interruption-start-log.txt",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 2,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "5bdd46303805b78f7d2c90cef6248b8f772d0503ee6c9b59d83b5ce328bfcc79",
+      "old_git_blob_sha1": "c3c1a2584cfc947bd872ac5fb603b933d2f2a256",
+      "old_sha256": "5568f5108bda175beb685621d01850a3226c979e2373b36cdbc29e0268b36b6a",
+      "path": "evidence/mac-acceptance/mcp-boundary-clone.json",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 2,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "fbd4a33eeed07c3cfdd1b316b8adbe3bdc3d0147c2902fce94a94f28b4cebe79",
+      "old_git_blob_sha1": "46b746275daa7e1c9cd9bbac15d5e5d8d40ba2f2",
+      "old_sha256": "3f08c06960b19a654029305380df01d357a445bc2f26b6cb158517882e3d62fb",
+      "path": "evidence/mac-acceptance/mcp-boundary.json",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 3,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "f30298bfaf2f9a7f65af0b9dab1caac3fa0eafa3b2086df8daa661f94216bb39",
+      "old_git_blob_sha1": "91f0bba74cd56c19d27f49872ff97772d1c13036",
+      "old_sha256": "ff7d264b99a54fa6708f6e4ab50808a4730bc14c2946006b29bc31ca2573d7ea",
+      "path": "evidence/mac-acceptance/real-calls.jsonl",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 34,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "4f685019b929175f679f0a3e767a2cfeeaf4a959b6e9dafd69f696d5647ff8d5",
+      "old_git_blob_sha1": "3283faf0987c481ab3b0d5b4bdf6f2139093df83",
+      "old_sha256": "e8d0826215a56d0577c04402044be509d5b487af4fb375b0cb6cf2eedfeaea5d",
+      "path": "evidence/mac-acceptance/real-cc0-calls.jsonl",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 4,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "5a9d33bbfb8ddc38513cf081ea5b5f4934a5d3ddcbf09d9524befaec5d73a89e",
+      "old_git_blob_sha1": "bb7fe1fb94b37a6241e4352138292b68ca6dc46f",
+      "old_sha256": "e5980ed7a1a0ebbbf11ac33e9708909bcf13df79cd937b8b9479eb2c4690e749",
+      "path": "evidence/mac-acceptance/real-first-log.txt",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 3,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "25e26bd6138631b74a0e3293a403beb66a6dc85d855e2a5c2913cded705de050",
+      "old_git_blob_sha1": "141461edd36ce67aac7e94f1e6e6d5de18ac234c",
+      "old_sha256": "0d7aff9b4d748cf490c02af8cba35c3a01fe5d8c7c1e54cd85204aef63b9b859",
+      "path": "evidence/mac-acceptance/real-mcp-status-final-log.txt",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 4,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "1ec92e8993d5ce129dc3853f7b535f4c30b22c16eac2ad5fb9a9b4d6b1df6e8f",
+      "old_git_blob_sha1": "59a4c39907f250d2f6eab3dbc53fdf98aca14983",
+      "old_sha256": "e1bbbbc8c6992007cd1129f6870ad005e8e6d7b4e345fb147c019397a791c635",
+      "path": "evidence/mac-acceptance/real-mcp-status-log.txt",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 3,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "379b2c566afd1aed09c3412335a26124a5aff8a3185b679d2d938fd121fcc6ee",
+      "old_git_blob_sha1": "7d2e295c1581d045d9719629b01e78c652a44403",
+      "old_sha256": "2feecfe0ebeb28811223913349b585f67f96f38012e1f71db5b9e7a2e3432314",
+      "path": "evidence/mac-acceptance/real-preview-log.txt",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 0,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "dee48d47bff0cf4ad2c9f1a3f5dcffa424c3c70666bd7cc76ab1a80c6bcf8810",
+      "old_git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "old_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "path": "evidence/mac-r1/README.md",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 2,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "0cba46b7cddeb07450a4e69bf3454f7aeb4a0909e6fa2f0cec718586af45c3f8",
+      "old_git_blob_sha1": "11c24186d62709e07b0e5b2bfd3f77a0a88e2181",
+      "old_sha256": "0ab9b4bed9aae98ee8a8cc4de49072a953f77ad3278f40d1addbf131062ffc5d",
+      "path": "evidence/mac-r1/catalog-guard.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 1,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "215c28dda2aa402515d89716044674e0c2023e1fd343144945851e66fe84930c",
+      "old_git_blob_sha1": "006f4dc287ec86bd79a93b758678935fe2978a32",
+      "old_sha256": "dfb14fe256acc469bba34cc17b036c35eb288ea339531eafb6cb7ed217311a21",
+      "path": "evidence/mac-r1/check-env.txt",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 1,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "787f9fd40e496970efb27805ebefb31c3fa54a51d2aa32fffbc22691960c02f0",
+      "old_git_blob_sha1": "48df3b1d5ced160c98ef20465569a34f34272607",
+      "old_sha256": "8c03a2d57569a7e1bf8694f61ae9de25630bb007e184196d3962686694da8b40",
+      "path": "evidence/mac-r1/preflight.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 5,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "bd78c2d41b41c0587b78765e80b0439970628a28f6df86e3f04215af0ac00558",
+      "old_git_blob_sha1": "f39a359e38c1de223b83f249c5c151dc032bd003",
+      "old_sha256": "d7756be8ad1b3d7d71ba48eca5680b33233b7d46a7e3559435fd28d0b3d8112b",
+      "path": "evidence/mac-r1/real-session.jsonl",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 2,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "13db0663810036e62af378d8631e04337d8d8a9f802975fbb44c8bfbb8691869",
+      "old_git_blob_sha1": "f72c31bf2f7fb08821c3285e4fb0a2c65a6cf1b8",
+      "old_sha256": "7f84a5fe548e30d3d49689a8db4bc1b2c6a91fe2249aa8251f715ede7b391dc9",
+      "path": "evidence/mac-r1/retry-1/catalog-guard-before-execute.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 1,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "5695839f81ce5044fe28e12439059fb9d8f1ac42f285c80f30dd88c3c9e97d4b",
+      "old_git_blob_sha1": "beb6c53b41b4d30bb01012ef843bd15584682eae",
+      "old_sha256": "ef41eb5d1e3a19df20204f66c937896ff5085eb61f97a7b220115924b399de8f",
+      "path": "evidence/mac-r1/retry-1/catalog-guard-final.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 1,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "a80fca69a4509151a792cae7e3748664bda4e8309d51c473cf74a199ce4620d1",
+      "old_git_blob_sha1": "237c9765a3c8da2d10e098c1b9ffd24de6accfb3",
+      "old_sha256": "7c7ca19b4d0c19bed22ac93febb40b98b149f71b38dd3b197996b0492c8094cf",
+      "path": "evidence/mac-r1/retry-1/develop-readback.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 42,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "14661109b624ee7d78d6c6f06a97d4a24204a4ae13e1fd77cea67c7f8dbe2555",
+      "old_git_blob_sha1": "6c6489ab8c2884b037b493a2162a7fadd184265c",
+      "old_sha256": "fb66bf8b49225429f92d6f4046373eede3f687b1b87ac3b78a8689b9b8db869e",
+      "path": "evidence/mac-r1/retry-1/errors.txt",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 4,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "64079205e642aa0f5907f5abf5bfba1e165cf177ed53b40b332c2789349ce417",
+      "old_git_blob_sha1": "488b808e1409456e947303ccde8f6cff5dce8b31",
+      "old_sha256": "0ab15ba83409e2e917b080193a00d786f32653a1cb8e619ca94362dfa21d48f6",
+      "path": "evidence/mac-r1/retry-1/final-database.json",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 4,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "0c46f7ecfdb6629ddc888dd6cdf69d3ea4daab00bd24bb3a7a02793ea8aab54c",
+      "old_git_blob_sha1": "9147cb3adc3d6eaf90f2c5fa6a4c7700c78ac81c",
+      "old_sha256": "1405c1fd0b9505228b4ba1d25713186c719fe93baf04312285a814e1da3c8245",
+      "path": "evidence/mac-r1/retry-1/final-task.json",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 6,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "8aac54c8f90ff7fde1e12d006dd18d8f811cba687d088e89c78fbb6b5ebc256c",
+      "old_git_blob_sha1": "70bc3bd5bcca1cff19440912144e394a18b21f81",
+      "old_sha256": "6099b12f1d1a619f4ae177555fdca1af94eac684d0c08a8cace8f8d85df084df",
+      "path": "evidence/mac-r1/retry-1/human-cli-approval.json",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 2,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "8dccc9fca1b21d7eff0ea982645140a664dcf93a06e9ffa44437010580178204",
+      "old_git_blob_sha1": "309ef0a4fee5907bae9ac6c9058464c3e135c80b",
+      "old_sha256": "1fd6e791d5e39d0fa864ea4d2ba4d0441328ea23e6af4f6c1f5683c0ea9e994a",
+      "path": "evidence/mac-r1/retry-1/model-turn-summaries.json",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 4,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "7819a14fbf1385dbc06a0dcd07f6ab511c993ba7841f5957c78ceeca74c6b70f",
+      "old_git_blob_sha1": "86a5d84443f54891faf742e0cf05d4fd876bb1a7",
+      "old_sha256": "36433cadad4de4e46c45a260b0c45de088384672cc6f489f308fc45c77f9c11a",
+      "path": "evidence/mac-r1/retry-1/plan.json",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 2,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "bd9f6859ea2fae9f8f288e269002501c40e4a72a6fc7568cce6247f47c55b31c",
+      "old_git_blob_sha1": "85e60fff6a286cfee336516caaacff755d625791",
+      "old_sha256": "dea77895160ae8364cdef21df593692911c55ca78ed25b9aa6df3b637bad6c04",
+      "path": "evidence/mac-r1/retry-1/preapproval-database.json",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 18,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "05f55920c5847ef1972fbaf079bfc836910d22e420ae8233d7fbf2058ff18af8",
+      "old_git_blob_sha1": "aa8742b7a42374987d78b1d31173d9eab4d90c33",
+      "old_sha256": "90d32263168f230b7e4e3bf51bec654bd76c784a8b09439b79d5ec4c0b1b4d0a",
+      "path": "evidence/mac-r1/retry-1/real-session.jsonl",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 1,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "5cfd120f00c6a941652a6135b8d9d5f329f4eafded17bc4c16c2bb9c9844aaf8",
+      "old_git_blob_sha1": "eec710e07299a3ead2d0d021316a3af908338b86",
+      "old_sha256": "84390895bb3afeabeed626129b58adc61c5f058b9ab84e4fe3d6bd8e71745086",
+      "path": "evidence/mac-r1/retry-1/retry-authorization-and-guard.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 0,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "dee48d47bff0cf4ad2c9f1a3f5dcffa424c3c70666bd7cc76ab1a80c6bcf8810",
+      "old_git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "old_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "path": "evidence/mac-r2-rerun/README.md",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 0,
+        "R-UUID-FULL": 1,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "72fbae822f1ac7861ca4b389c17956e74fd6c6b463d6f7bf2863caafeea51ab1",
+      "old_git_blob_sha1": "90700405fc890ca1fd19efaafbb0098a0ee83815",
+      "old_sha256": "cfa43daf7c5a7a9c7c3c5b975730329273985e39e846cf4bd59fb74e8c1cc447",
+      "path": "evidence/mac-r2-rerun/card-write-authorization.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 8,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "cf8154947869cb86202af048b82580387ae662e87da4fca071136beada46687e",
+      "old_git_blob_sha1": "1adcf0239facc2d329589deb0f7384ffd5a94b18",
+      "old_sha256": "a53379dce7ca2c57196e2e637264a49c0ed61299a58897166e4f0d77053ac3bb",
+      "path": "evidence/mac-r2-rerun/real-enotsup-checks.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 80,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "7b6e4e4e4ba2987aebc8202611a8a34201c9f585147afb89b26553cab7daa4b4",
+      "old_git_blob_sha1": "d308ff537d036d02b20b1eae9862815e2adccb73",
+      "old_sha256": "7d367b4b46bb7bd9fad920ea2fe890b24769ab47a3dc42f6f88b3423d84bf270",
+      "path": "evidence/mac-r2-rerun/real-filesystem-events.jsonl",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 5,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "db68e35852d2b068bf272b1b9f1fc8f9c8c4a276debf9252bf84e93c75466f70",
+      "old_git_blob_sha1": "f3a03027718a1f9294f58a06c4dcc0380e8f165f",
+      "old_sha256": "3edaf3bf7a588fa057f3576c990e04910b4882451a07376669138eea3ebf1d12",
+      "path": "evidence/mac-r2-rerun/result.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 0,
+        "R-UUID-FULL": 1,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "e77f7ad6b67d220e257bf0f31d66cc8e532295aad1de455b094c8a7a369144d2",
+      "old_git_blob_sha1": "a02f70b68d945db7a9519d43c50883bc756f5898",
+      "old_sha256": "7fcfd4dc2dd735d9e795fe743e306149f0b51dd0c1c1cac217b1a9bc4c9363b2",
+      "path": "evidence/mac-r2-rerun/run_r2_rerun.py",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 0,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "dee48d47bff0cf4ad2c9f1a3f5dcffa424c3c70666bd7cc76ab1a80c6bcf8810",
+      "old_git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "old_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "path": "evidence/mac-r2-rerun2/README.md",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 0,
+        "R-UUID-FULL": 1,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "c08b11710867e4d39eeaebe584e51edb052f8ab786a47385ecf63cd209d55f58",
+      "old_git_blob_sha1": "ad26407d11c5187b495f86c50e776498e16ff1b8",
+      "old_sha256": "fdb49040ba1ac7c99d46289a74b1593823f9fb119c2fb9016b5071efd712b782",
+      "path": "evidence/mac-r2-rerun2/card-write-authorization.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 2,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "05fe5ccc0818664554aeba459eb42d44c85d8906b9da2485e4f4f8eab18a685f",
+      "old_git_blob_sha1": "e142ae40b7c4e8ca555860f4295a7375f4f032bb",
+      "old_sha256": "89867b7d363ba45f39370550deedeab5246fac0a866c751e3dd37b0390ff4b7a",
+      "path": "evidence/mac-r2-rerun2/real-catalog-guard.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 8,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "5e274be3adba148b8a04eb65546956fa0b79598a921f0c12cd58957f25c28348",
+      "old_git_blob_sha1": "33afcc70f8737d5ae213c0d9786481078a0f3f78",
+      "old_sha256": "15c56b4b713059ccd7f0d606cd0538e0a7036be5f3f9706be01cbf87fd80e449",
+      "path": "evidence/mac-r2-rerun2/real-enotsup-checks.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 117,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "ce25f97523b0c21089cb8e538af45144007124e2f70e1ef71e08eba9f79951f9",
+      "old_git_blob_sha1": "b17301face30a9c5a56429302ebc4828d1aa4bcf",
+      "old_sha256": "d9ab7050ec11b2027417457eba483ade16f45d9763ff5cca0f98ed26cb87b3bf",
+      "path": "evidence/mac-r2-rerun2/real-filesystem-events.jsonl",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 0,
+        "R-UUID-FULL": 1,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "1ed7cc44b829ed2bdf018f1332a190d9f1dad00eac5a9228d2216eae0241ddfc",
+      "old_git_blob_sha1": "461d8092562e5a0cded75a0a0a5b737751b97382",
+      "old_sha256": "2d78ae076b12db5b8e98ccbcbe281d0964aacb742a61adbb17d572a1628acfba",
+      "path": "evidence/mac-r2-rerun2/run_r2_rerun2.py",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 0,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "dee48d47bff0cf4ad2c9f1a3f5dcffa424c3c70666bd7cc76ab1a80c6bcf8810",
+      "old_git_blob_sha1": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "old_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "path": "evidence/mac-r2/README.md",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 3,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "e68af8309de78fd523bb1e22cb8919728f92ac6541e78e39a47c69c4efef082c",
+      "old_git_blob_sha1": "d8fc28b246996b3d1908447d5874f67a611ce117",
+      "old_sha256": "7f4bbf615d627bec49eaa1663385098090ffaeda1c9435abee77e0066036b99e",
+      "path": "evidence/mac-r2/acceptance-console.txt",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 0,
+        "R-UUID-FULL": 1,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "00d29538f31c592d9819a3bebdc8c4dddcd2a670a4c8ec3f3ffd8dc2cb585734",
+      "old_git_blob_sha1": "0b7636019e93024c3bc88331e0ed255d0497e196",
+      "old_sha256": "5f8a3b1884d44e7959de9951748273bf2e2c38dc013e5f253ddd19148c8ed446",
+      "path": "evidence/mac-r2/card-write-authorization.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 0,
+        "R-UUID-FULL": 1,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "54ca52ca784c84ceaa57b6e15481694becc6f1a55fdb68120a2844d9ee57ee79",
+      "old_git_blob_sha1": "9b55dd6df11042d56b99ab72202862b1ef817d14",
+      "old_sha256": "de2e9702345c70a3da38d0c0ab69ab1b2e181e1ef5e1636ad8ea8756417a3245",
+      "path": "evidence/mac-r2/disk6s1-diskutil-info-text.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 0,
+        "R-UUID-FULL": 1,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "889b81eb5e20928653da7fd27ab394e7801b342733979f0e5b55d80b24c0e66e",
+      "old_git_blob_sha1": "292f92c0ca00211fb5672669d4fb5456b4772913",
+      "old_sha256": "d7ecae4da1c590e7310578f09725824347bfa2c3e4c2726774a334e2e3ee210b",
+      "path": "evidence/mac-r2/disk6s1-diskutil-info.plist",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 0,
+        "R-UUID-FULL": 1,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "ac57e5e8391e6053c0eedec6a95bc2f159b42218f36aafc24e977215ef4dfb8b",
+      "old_git_blob_sha1": "0d95e49d3173bed62d31797e97b9bbc832ff3974",
+      "old_sha256": "5f9fa26c0f569f6c61ec758654eb5e925df3b147088b52e45c5480f14f186b28",
+      "path": "evidence/mac-r2/disk7s1-diskutil-info-text.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 0,
+        "R-UUID-FULL": 1,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "5dd1d347d7598e744b3881d7d228b672f2e2519354a0614a0e4e9081f6cf5179",
+      "old_git_blob_sha1": "38222ffd6b701f9a75f1b796bf036a59ddc780b1",
+      "old_sha256": "7af70874cbc0e454f2a556a423fefc920b68ee5da7367fe4513207878621a930",
+      "path": "evidence/mac-r2/disk7s1-diskutil-info.plist",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 8,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "1a50db83104324b6f2d77a34690375b8a1540bb15d9c8f6dbe33d53377d44e2a",
+      "old_git_blob_sha1": "3be95dcb340dc1c4d271cc53b2aebac785454ab7",
+      "old_sha256": "11a8e56d4fca82db0d0e62f03a986c2d3b99570656b2629eb6bf483da3ba2572",
+      "path": "evidence/mac-r2/failure-analysis.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 0,
+        "R-UUID-FULL": 2,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "25c798f5a42194e057619045c406588fdc8a4a2aecb81d9333bebb136bac26e5",
+      "old_git_blob_sha1": "2aff7b8bf493fd8070642974a2431a2f2041fc16",
+      "old_sha256": "dd63bc2ea1f5af29c2724b9815046f8ec4d349924d82286b9c03d9d95cb8a0d3",
+      "path": "evidence/mac-r2/mounted-card-candidates.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 68,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "0fe126b22b5eade158e978982e1d1326bb84ceb9529c15ad141c8c59599a37c1",
+      "old_git_blob_sha1": "7674a27d7fa602986b8e42273e526f1b98e42083",
+      "old_sha256": "8cb6488934918766ea36513ec37e12f4755dc5dc2f395ae7451f4c1defd4142c",
+      "path": "evidence/mac-r2/real-filesystem-events.jsonl",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 3,
+        "R-UUID-FULL": 0,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "bd59ce6a3fc079cb93b79682c7b4f28c77f31aeab5b190aaa91d3f669182814c",
+      "old_git_blob_sha1": "6f5dbf22d0f9ad76992a8c50c342542cfe1a7f15",
+      "old_sha256": "396ab475c1c7bf2faf7ef48a81c927c3d240b98ceab7b13e028c49a6343d9870",
+      "path": "evidence/mac-r2/result.json",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 0,
+        "R-UUID-FULL": 1,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "dca9859d2ca251a2fbe2272e23da9b26626edb371d815e2e160afe4cf246740b",
+      "old_git_blob_sha1": "ab42e0f5ed9ff1f05405a891d1d89a128ac357bc",
+      "old_sha256": "8174ee9e51a3c1db1dc3637b22cd16071a8f9b44c20c52774badcf063dfe9778",
+      "path": "evidence/mac-r2/run_r2.py",
+      "plan_digest_note": true
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 0,
+        "R-UUID-FULL": 1,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "5b182cf0a95b03d49ac155edf357513d0a32a0baf0df2fa4fafc3861704b52aa",
+      "old_git_blob_sha1": "8f571f6ef69194c63311747adef72ec2894c79b7",
+      "old_sha256": "5fa39a6e30a719f2d162b0d91393eeb0938c71d5e0c88777bad55a6ad02b048a",
+      "path": "evidence/mac-r2/sd-existing-content-inventory.json",
+      "plan_digest_note": false
+    },
+    {
+      "embedded_hash_references": [],
+      "hits_by_rule": {
+        "R-HOME": 0,
+        "R-UUID-FULL": 1,
+        "R-UUID-PREFIX8": 0
+      },
+      "new_sha256": "74550a901eb8dac0d1c0a65be36b0f1d63bc0e5498820784d4610904d9c2ac6c",
+      "old_git_blob_sha1": "ea08319f152aec6310a87b401810aa624bdbf1f1",
+      "old_sha256": "c597d8b598957242d73f53c0afdc69ee78278dfaceb03297a5b5136ea7e6df5a",
+      "path": "evidence/mac-r2/write-proposal.json",
+      "plan_digest_note": false
+    }
+  ],
+  "notes": [
+    "Redaction was post-hoc on the current tree.",
+    "Git history still contains the original values; the public repository history was not rewritten.",
+    "File hashes in this map describe the redacted files and their originals; previously recorded hashes and plan_digests of modified files are not recomputed, so redacted plans cannot re-verify original approvals.",
+    "Harness session/request IDs and the APFS type GUID are retained."
+  ],
+  "rules": [
+    {
+      "description": "Home directory username segment",
+      "hashed_keys": [
+        "348a629f5ceed032c3e8706ec47d9bfafb00fb4250b018dd965435ca50cb836e"
+      ],
+      "id": "R-HOME",
+      "placeholder_pattern": "<HOME>"
+    },
+    {
+      "description": "Selected full volume UUIDs",
+      "hashed_keys": [
+        "0d700d67e691ff250ceefc3ca46c7fa321dd8d0520129fcb0331a70900b88ad7",
+        "39f4499d9fb1c7a3822cd29b6d3b296ca51982d2ab04975fe3f6843e98448fc1",
+        "5ae0b1a37395edf7fd7fd18484853f2ecff48bcf27ee40601601b0197861bb0a",
+        "b9cbb99dcf8d9fa07746f82f558f784c6e1d74a42f78c3a5843237431b48b2b6"
+      ],
+      "id": "R-UUID-FULL",
+      "placeholder_pattern": "<VOLUME_UUID:{digest16}>"
+    },
+    {
+      "description": "Selected volume UUID prefixes",
+      "hashed_keys": [
+        "0f0517e2dcf92a3828c00ebf2080d0a6e37abe697a0e8dc973c29a433339a67b",
+        "7e44fd10214c39e621aedc73f6c0f269192195960e5f951a80d370ee816c8736",
+        "b8237f027e0d863ec2cd6d616e895fe3bcf06212ad94de5edb50e6748c3447c9",
+        "ca13af79ed1df88b5c8f1de0dc34df2662705cbfa7ab98594b999276975e8e8f",
+        "de49470d84504c7e053af04f8ea92ac35f768d8a8e0d05bcc8b74e7d757de233",
+        "e5589f0434248010996b6d094e49655022d27f481bed55078c338b8281b718ff"
+      ],
+      "id": "R-UUID-PREFIX8",
+      "placeholder_pattern": "<VOLUME_UUID:{digest16}> or <VOLUME_UUID_PREFIX>"
+    }
+  ],
+  "schema_version": 1,
+  "totals": {
+    "R-HOME": 1006,
+    "R-UUID-FULL": 40,
+    "R-UUID-PREFIX8": 3
+  }
+}

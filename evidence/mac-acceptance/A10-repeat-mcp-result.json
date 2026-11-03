@@ -5,8 +5,8 @@
   "finished_at": "2026-11-02T13:42:44.667943+00:00",
   "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
   "scope": {
-    "library": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/library/test/tester/publicraw",
-    "preview": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/preview/test/tester/publicraw/tsk_5e8b197eb23c45e5bdb7212aaa752f07"
+    "library": "<HOME>/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/library/test/tester/publicraw",
+    "preview": "<HOME>/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/preview/test/tester/publicraw/tsk_5e8b197eb23c45e5bdb7212aaa752f07"
   },
   "calls": [
     {
@@ -359,7 +359,7 @@
           "status": "VERIFIED",
           "error": null,
           "dest_rel_path": "test/tester/publicraw/Nikon-Z6.NEF",
-          "lr_photo_id": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/library/test/tester/publicraw/Nikon-Z6.NEF",
+          "lr_photo_id": "<HOME>/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/library/test/tester/publicraw/Nikon-Z6.NEF",
           "lr_status": "EXPORTED",
           "preset_applied": "testpreset",
           "mock": 0,
@@ -372,7 +372,7 @@
           "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
           "run": 1,
           "asset_id": "ast_2247a7ba5166c0b19b0470fb",
-          "path": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/preview/test/tester/publicraw/tsk_5e8b197eb23c45e5bdb7212aaa752f07/run-1/ast_2247a7ba5166c0b19b0470fb/Nikon-Z6.jpg",
+          "path": "<HOME>/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/preview/test/tester/publicraw/tsk_5e8b197eb23c45e5bdb7212aaa752f07/run-1/ast_2247a7ba5166c0b19b0470fb/Nikon-Z6.jpg",
           "sha256": "1c713066ea2973a59259b2f221d587a8b683927afb0a8e550ddd5cf7ea8efa9e",
           "width": 1600,
           "height": 1065,
@@ -514,7 +514,7 @@
           "status": "VERIFIED",
           "error": null,
           "dest_rel_path": "test/tester/publicraw/Nikon-Z6.NEF",
-          "lr_photo_id": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/library/test/tester/publicraw/Nikon-Z6.NEF",
+          "lr_photo_id": "<HOME>/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/library/test/tester/publicraw/Nikon-Z6.NEF",
           "lr_status": "EXPORTED",
           "preset_applied": "testpreset",
           "mock": 0,
@@ -527,7 +527,7 @@
           "task_id": "tsk_5e8b197eb23c45e5bdb7212aaa752f07",
           "run": 1,
           "asset_id": "ast_2247a7ba5166c0b19b0470fb",
-          "path": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/preview/test/tester/publicraw/tsk_5e8b197eb23c45e5bdb7212aaa752f07/run-1/ast_2247a7ba5166c0b19b0470fb/Nikon-Z6.jpg",
+          "path": "<HOME>/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/preview/test/tester/publicraw/tsk_5e8b197eb23c45e5bdb7212aaa752f07/run-1/ast_2247a7ba5166c0b19b0470fb/Nikon-Z6.jpg",
           "sha256": "1c713066ea2973a59259b2f221d587a8b683927afb0a8e550ddd5cf7ea8efa9e",
           "width": 1600,
           "height": 1065,

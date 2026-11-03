@@ -1,7 +1,7 @@
 {
   "result": "READY_FOR_USER_REVIEW_NO_CARD_WRITES",
   "target_device": "disk7s1",
-  "target_volume_uuid": "82A91C0F-BF3C-3DE2-AF4E-DEDF705C8E8E",
+  "target_volume_uuid": "<VOLUME_UUID:39f4499d9fb1c7a3>",
   "target_mountpoint": "/Volumes/NIKON Z6_3  1",
   "filesystem_confirmed": "ExFAT",
   "proposed_test_root": "/Volumes/NIKON Z6_3  1/Cetacea-R2-Test-20261103",

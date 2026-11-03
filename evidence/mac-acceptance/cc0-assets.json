@@ -11,7 +11,7 @@
     "status": "VERIFIED",
     "error": null,
     "dest_rel_path": "test/tester/publicraw/Nikon-Z6.NEF",
-    "lr_photo_id": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/library/test/tester/publicraw/Nikon-Z6.NEF",
+    "lr_photo_id": "<HOME>/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/library/test/tester/publicraw/Nikon-Z6.NEF",
     "lr_status": "REGISTERED",
     "preset_applied": null,
     "mock": 0,

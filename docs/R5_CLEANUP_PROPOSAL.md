@@ -4,7 +4,7 @@
 
 ## 标识清单
 
-`/Users/mac` 在 **101 个文件、997 次出现**；独立复核 `rg -c` 为 **101 个文件、673 个匹配行**。一行可含多次出现，口径不同，并无矛盾。主要路径族包括项目目录、film-sim 目录和 `~/.config/lightroom-mcp/token` 路径。已检查 tracked 文件中 token 相关文本：所见是 token 文件路径或说明，未见 token 值；这不是对所有可能秘密的保证。JSON 中还有 `\u5de5` 和 `\\u5de5` 等不同嵌套转义层，简单替换原始中文路径会遗漏。用户名 `mac` 在本次标识清单中以路径形式出现；对 hostname、host_name、computername、localhostname、`.local` 的 tracked 文本搜索无结果，未发现主机名（不等于证明任意未知主机名不存在）。
+`<HOME>` 在 **101 个文件、997 次出现**；独立复核 `rg -c` 为 **101 个文件、673 个匹配行**。一行可含多次出现，口径不同，并无矛盾。主要路径族包括项目目录、film-sim 目录和 `~/.config/lightroom-mcp/token` 路径。已检查 tracked 文件中 token 相关文本：所见是 token 文件路径或说明，未见 token 值；这不是对所有可能秘密的保证。JSON 中还有 `\u5de5` 和 `\\u5de5` 等不同嵌套转义层，简单替换原始中文路径会遗漏。用户名 `mac` 在本次标识清单中以路径形式出现；对 hostname、host_name、computername、localhostname、`.local` 的 tracked 文本搜索无结果，未发现主机名（不等于证明任意未知主机名不存在）。
 
 按目录的小计（文件数；每个文件只计入一个目录）：
 
@@ -17,7 +17,7 @@
 - `evidence/mac-r2-rerun2/`：3
 
 
-<details><summary>/Users/mac 全部文件及出现次数（997 次）</summary>
+<details><summary><HOME> 全部文件及出现次数（997 次）</summary>
 
 - `evidence/mac-acceptance-merged/interruption-real-calls.jsonl`：150
 - `evidence/mac-r2-rerun2/real-filesystem-events.jsonl`：117
@@ -127,7 +127,7 @@
 三个真实卷 UUID 在下表仅显示前 8 位及**大写完整 UUID 的 UTF-8 SHA-256 前 16 位**；哈希前缀有可关联性，不是秘密或匿名保证。
 
 
-<details><summary>82A91C0F… / SHA-256 前缀 39f4499d9fb1c7a3：exFAT SD card (R2 target): 15 files, 15 occurrences</summary>
+<details><summary><VOLUME_UUID:39f4499d9fb1c7a3>… / SHA-256 前缀 39f4499d9fb1c7a3：exFAT SD card (R2 target): 15 files, 15 occurrences</summary>
 
 - `docs/MACOS_DEVICE_VALIDATION.md`：1
 - `evidence/mac-acceptance/devices-20261102-220045/apfs-ingest-20261102T141050Z-e8d2c9e0.json`：1
@@ -148,7 +148,7 @@
 </details>
 
 
-<details><summary>7FBCB909… / SHA-256 前缀 5ae0b1a37395edf7：Nikon card volume (disk6s1): 7 files, 7 occurrences</summary>
+<details><summary><VOLUME_UUID:5ae0b1a37395edf7>… / SHA-256 前缀 5ae0b1a37395edf7：Nikon card volume (disk6s1): 7 files, 7 occurrences</summary>
 
 - `docs/MACOS_DEVICE_VALIDATION.md`：1
 - `evidence/mac-acceptance/devices-20261102-220045/apfs-ingest-20261102T141050Z-e8d2c9e0.json`：1
@@ -161,7 +161,7 @@
 </details>
 
 
-<details><summary>1465C0D1… / SHA-256 前缀 0d700d67e691ff25：APFS volume (Cetacea Studio?): 6 files, 18 occurrences</summary>
+<details><summary><VOLUME_UUID:0d700d67e691ff25>… / SHA-256 前缀 0d700d67e691ff25：APFS volume (Cetacea Studio?): 6 files, 18 occurrences</summary>
 
 - `docs/MACOS_DEVICE_VALIDATION.md`：1
 - `evidence/mac-acceptance/devices-20261102-220045/apfs-ingest-20261102T141050Z-e8d2c9e0.json`：4
@@ -287,9 +287,9 @@ APFS 通用 container type GUID 为类型标识而非设备唯一标识，可保
 
 | 输入 | 输出 |
 |---|---|
-| `/Users/mac/Documents/ChatGPT/AI工作台/my-harness-project` | `<REPO>` |
-| `/Users/mac/.config/lightroom-mcp/token` 或 `~/.config/lightroom-mcp/token` | `<HOME>/.config/lightroom-mcp/token` |
-| 其他 `/Users/mac` | `<HOME>` |
+| `<HOME>/Documents/ChatGPT/AI工作台/my-harness-project` | `<REPO>` |
+| `<HOME>/.config/lightroom-mcp/token` 或 `~/.config/lightroom-mcp/token` | `<HOME>/.config/lightroom-mcp/token` |
+| 其他 `<HOME>` | `<HOME>` |
 | 每个已识别真实卷 UUID（大小写统一后计算） | `<VOLUME_UUID:sha256-prefix16>`，prefix 为其大写完整 UUID 的 SHA-256 前 16 位 |
 | `/Volumes/NIKON Z6_3` | `<VOLUME:SD-CARD-1>` |
 | `/Volumes/Cetacea Studio` | `<VOLUME:TEST-TARGET>` |
@@ -436,10 +436,10 @@ APFS 通用 container type GUID 为类型标识而非设备唯一标识，可保
 ```bash
 git rev-parse HEAD
 git ls-files | wc -l
-git ls-files -z | xargs -0 rg -l -F '/Users/mac'
-git ls-files -z | xargs -0 rg -c -F '/Users/mac' | awk -F: '{s+=$NF; n++} END {print "files",n,"matching lines",s}'
-git ls-files -z | xargs -0 rg -o --no-filename -F '/Users/mac' | wc -l
-git ls-files -z | xargs -0 rg -o -F '/Users/mac' | cut -d: -f1 | sort | uniq -c
+git ls-files -z | xargs -0 rg -l -F '<HOME>'
+git ls-files -z | xargs -0 rg -c -F '<HOME>' | awk -F: '{s+=$NF; n++} END {print "files",n,"matching lines",s}'
+git ls-files -z | xargs -0 rg -o --no-filename -F '<HOME>' | wc -l
+git ls-files -z | xargs -0 rg -o -F '<HOME>' | cut -d: -f1 | sort | uniq -c
 git ls-files -z | xargs -0 rg -l -F '/Volumes/NIKON Z6_3'
 git ls-files -z | xargs -0 rg -o --no-filename -F '/Volumes/NIKON Z6_3' | wc -l
 git ls-files -z | xargs -0 rg -l -F '/Volumes/Cetacea Studio'

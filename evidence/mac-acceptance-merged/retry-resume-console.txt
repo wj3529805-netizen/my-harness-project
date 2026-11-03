@@ -1,6 +1,6 @@
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
@@ -9,154 +9,154 @@ Token file: /Users/mac/.config/lightroom-mcp/token
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764

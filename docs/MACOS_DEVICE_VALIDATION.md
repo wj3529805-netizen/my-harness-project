@@ -6,9 +6,9 @@
 
 | 角色 | 实际设备 / 文件系统 | 本次操作 |
 |---|---|---|
-| SD | 128GB，内置 Secure Digital 读卡器，exFAT，卷 UUID `82A91C0F-BF3C-3DE2-AF4E-DEDF705C8E8E` | 只读选择 `DCIM/142NZ6_3/DSC_6484.NEF` |
-| USB 卡 | 256GB USB，exFAT，卷 UUID `7FBCB909-0145-3DD8-AD2C-56989C78F446` | 只读选择 `DCIM/140NZ6_3/DSC_8443.NEF` |
-| 外置盘 | 2TB Cetacea Studio，APFS，卷 UUID `1465C0D1-29A6-4DA1-8E13-3AC474A4BB83` | 仅新建测试目录，库/预览/合成探针均在其中 |
+| SD | 128GB，内置 Secure Digital 读卡器，exFAT，卷 UUID `<VOLUME_UUID:39f4499d9fb1c7a3>` | 只读选择 `DCIM/142NZ6_3/DSC_6484.NEF` |
+| USB 卡 | 256GB USB，exFAT，卷 UUID `<VOLUME_UUID:5ae0b1a37395edf7>` | 只读选择 `DCIM/140NZ6_3/DSC_8443.NEF` |
+| 外置盘 | 2TB Cetacea Studio，APFS，卷 UUID `<VOLUME_UUID:0d700d67e691ff25>` | 仅新建测试目录，库/预览/合成探针均在其中 |
 
 外置测试根为 `/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045`；SQLite home 和审计记录在 repo 的 `acceptance-data/devices-20261102-220045`，不在外置盘或卡上。
 

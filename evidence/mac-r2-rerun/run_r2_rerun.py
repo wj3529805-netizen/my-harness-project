@@ -28,7 +28,7 @@ from cetacea.lightroom import MockLightroomAdapter
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / 'evidence/mac-r2-rerun'
 LOCAL = ROOT / 'acceptance-data/mac-r2-rerun'
-UUID = '82A91C0F-BF3C-3DE2-AF4E-DEDF705C8E8E'
+UUID = '<VOLUME_UUID:39f4499d9fb1c7a3>'
 
 
 def resolve_mount():

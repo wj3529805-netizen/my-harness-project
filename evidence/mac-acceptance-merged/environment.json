@@ -2,8 +2,8 @@
   "branch": "phase2-merged",
   "head": "08fcfd9b1070ddbed1569b01313cb71727134435",
   "python": "3.13.18 (main, Oct 26 2026, 13:59:02) [Clang 23.1.3 ]",
-  "executable": "/Users/mac/Documents/ChatGPT/AI工作台/my-harness-project/.venv/bin/python",
-  "source": "/Users/mac/Documents/ChatGPT/AI工作台/my-harness-project/src/cetacea/__init__.py",
+  "executable": "<HOME>/Documents/ChatGPT/AI工作台/my-harness-project/.venv/bin/python",
+  "source": "<HOME>/Documents/ChatGPT/AI工作台/my-harness-project/src/cetacea/__init__.py",
   "platform": "macOS-27.0.1-arm64-arm-64bit-Mach-O",
   "expected": {
     "passed": 132,

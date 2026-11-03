@@ -1,71 +1,71 @@
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
 Lightroom MCP server v0.26.0 running on stdio
 Connecting to plugin: request :58763, response :58764
-Token file: /Users/mac/.config/lightroom-mcp/token
+Token file: <HOME>/.config/lightroom-mcp/token
 [bridge] owning the plugin connection
 [request] connected to 127.0.0.1:58763
 [response] connected to 127.0.0.1:58764
 Shutting down: stdin ended (client exited)
-{"state": "COMPLETED", "error": null, "source_unchanged": true, "sidecars_unchanged": true, "preview": {"status": "OK", "mock": false, "marker": "Lightroom MCP connected (real read-only preset probe; catalog identity unverified)", "run": 1, "missing": [], "failed": [], "orphans": [], "size_violations": [], "expected_count": 1, "mapped_count": 1}, "same_task": true, "repeat_files_unchanged": true, "assets": [{"asset_id": "ast_2247a7ba5166c0b19b0470fb", "order_id": "test", "photographer_id": "tester", "batch_id": "publicraw", "rel_path": "Nikon-Z6.NEF", "size": 25994889, "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02", "kind": "raw", "status": "VERIFIED", "error": null, "dest_rel_path": "test/tester/publicraw/Nikon-Z6.NEF", "lr_photo_id": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/library/test/tester/publicraw/Nikon-Z6.NEF", "lr_status": "EXPORTED", "preset_applied": "testpreset", "mock": 0, "verified_at": "2026-11-02T13:36:51.123859+00:00"}]}
+{"state": "COMPLETED", "error": null, "source_unchanged": true, "sidecars_unchanged": true, "preview": {"status": "OK", "mock": false, "marker": "Lightroom MCP connected (real read-only preset probe; catalog identity unverified)", "run": 1, "missing": [], "failed": [], "orphans": [], "size_violations": [], "expected_count": 1, "mapped_count": 1}, "same_task": true, "repeat_files_unchanged": true, "assets": [{"asset_id": "ast_2247a7ba5166c0b19b0470fb", "order_id": "test", "photographer_id": "tester", "batch_id": "publicraw", "rel_path": "Nikon-Z6.NEF", "size": 25994889, "sha256": "8ca94584578b35a422744c1a610174ce37df0691588edfdecaec3111b3fbbb02", "kind": "raw", "status": "VERIFIED", "error": null, "dest_rel_path": "test/tester/publicraw/Nikon-Z6.NEF", "lr_photo_id": "<HOME>/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/library/test/tester/publicraw/Nikon-Z6.NEF", "lr_status": "EXPORTED", "preset_applied": "testpreset", "mock": 0, "verified_at": "2026-11-02T13:36:51.123859+00:00"}]}

@@ -1,11 +1,11 @@
 {
   "run": "devices-20261102-220045",
   "external_test_root": "/Volumes/Cetacea Studio/Cetacea-Workbench-Test-devices-20261102-220045",
-  "local_state_root": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/devices-20261102-220045",
-  "evidence_root": "/Users/mac/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/evidence/mac-acceptance/devices-20261102-220045",
+  "local_state_root": "<HOME>/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/acceptance-data/devices-20261102-220045",
+  "evidence_root": "<HOME>/Documents/ChatGPT/AI\u5de5\u4f5c\u53f0/my-harness-project/evidence/mac-acceptance/devices-20261102-220045",
   "external_volume": {
     "DeviceIdentifier": "disk5s1",
-    "VolumeUUID": "1465C0D1-29A6-4DA1-8E13-3AC474A4BB83",
+    "VolumeUUID": "<VOLUME_UUID:0d700d67e691ff25>",
     "FilesystemType": "apfs",
     "MountPoint": "/Volumes/Cetacea Studio",
     "TotalSize": 2000189177856,
@@ -18,7 +18,7 @@
       "parent": "/Volumes/NIKON Z6_3  1/DCIM/142NZ6_3",
       "volume": {
         "DeviceIdentifier": "disk7s1",
-        "VolumeUUID": "82A91C0F-BF3C-3DE2-AF4E-DEDF705C8E8E",
+        "VolumeUUID": "<VOLUME_UUID:39f4499d9fb1c7a3>",
         "FilesystemType": "exfat",
         "MountPoint": "/Volumes/NIKON Z6_3  1",
         "BusProtocol": "Secure Digital",
@@ -31,7 +31,7 @@
       "parent": "/Volumes/NIKON Z6_3 /DCIM/140NZ6_3",
       "volume": {
         "DeviceIdentifier": "disk6s1",
-        "VolumeUUID": "7FBCB909-0145-3DD8-AD2C-56989C78F446",
+        "VolumeUUID": "<VOLUME_UUID:5ae0b1a37395edf7>",
         "FilesystemType": "exfat",
         "MountPoint": "/Volumes/NIKON Z6_3 ",
         "BusProtocol": "USB",

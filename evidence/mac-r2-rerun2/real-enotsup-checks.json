@@ -8,7 +8,7 @@
         "/Volumes/NIKON Z6_3 /Cetacea-R2-Rerun2-20261103/mock-library/.cetacea-tmp/tsk_fdfabb06de73491696b4ce719d8b1f8d/0.part",
         "/Volumes/NIKON Z6_3 /Cetacea-R2-Rerun2-20261103/mock-library/r2/tester/recovery/a.NEF"
       ],
-      "caller_file": "/Users/mac/Documents/ChatGPT/AI工作台/my-harness-project/src/cetacea/ingest/copier.py",
+      "caller_file": "<HOME>/Documents/ChatGPT/AI工作台/my-harness-project/src/cetacea/ingest/copier.py",
       "caller_function": "publish_no_overwrite",
       "caller_line": 16,
       "real_os_call": true,
@@ -25,7 +25,7 @@
         "/Volumes/NIKON Z6_3 /Cetacea-R2-Rerun2-20261103/mock-library/.cetacea-tmp/tsk_fdfabb06de73491696b4ce719d8b1f8d/1.part",
         "/Volumes/NIKON Z6_3 /Cetacea-R2-Rerun2-20261103/mock-library/r2/tester/recovery/b.NEF"
       ],
-      "caller_file": "/Users/mac/Documents/ChatGPT/AI工作台/my-harness-project/src/cetacea/ingest/copier.py",
+      "caller_file": "<HOME>/Documents/ChatGPT/AI工作台/my-harness-project/src/cetacea/ingest/copier.py",
       "caller_function": "publish_no_overwrite",
       "caller_line": 16,
       "real_os_call": true,
@@ -42,7 +42,7 @@
         "/Volumes/NIKON Z6_3 /Cetacea-R2-Rerun2-20261103/mock-library/.cetacea-tmp/tsk_fdfabb06de73491696b4ce719d8b1f8d/2.part",
         "/Volumes/NIKON Z6_3 /Cetacea-R2-Rerun2-20261103/mock-library/r2/tester/recovery/existing.XMP"
       ],
-      "caller_file": "/Users/mac/Documents/ChatGPT/AI工作台/my-harness-project/src/cetacea/ingest/copier.py",
+      "caller_file": "<HOME>/Documents/ChatGPT/AI工作台/my-harness-project/src/cetacea/ingest/copier.py",
       "caller_function": "publish_no_overwrite",
       "caller_line": 16,
       "real_os_call": true,
@@ -59,7 +59,7 @@
         "/Volumes/NIKON Z6_3 /Cetacea-R2-Rerun2-20261103/mock-library/.cetacea-tmp/tsk_fdfabb06de73491696b4ce719d8b1f8d/manifest.part",
         "/Volumes/NIKON Z6_3 /Cetacea-R2-Rerun2-20261103/mock-library/r2/tester/recovery/.cetacea/import-manifest-run1.json"
       ],
-      "caller_file": "/Users/mac/Documents/ChatGPT/AI工作台/my-harness-project/src/cetacea/ingest/copier.py",
+      "caller_file": "<HOME>/Documents/ChatGPT/AI工作台/my-harness-project/src/cetacea/ingest/copier.py",
       "caller_function": "publish_no_overwrite",
       "caller_line": 16,
       "real_os_call": true,
@@ -76,7 +76,7 @@
         "/Volumes/NIKON Z6_3 /Cetacea-R2-Rerun2-20261103/mock-preview/r2/tester/recovery/tsk_fdfabb06de73491696b4ce719d8b1f8d/run-1/.manifest-1bbd114c94e3475186304c0a87fd5b66",
         "/Volumes/NIKON Z6_3 /Cetacea-R2-Rerun2-20261103/mock-preview/r2/tester/recovery/tsk_fdfabb06de73491696b4ce719d8b1f8d/run-1/preview-manifest.json"
       ],
-      "caller_file": "/Users/mac/Documents/ChatGPT/AI工作台/my-harness-project/src/cetacea/ingest/copier.py",
+      "caller_file": "<HOME>/Documents/ChatGPT/AI工作台/my-harness-project/src/cetacea/ingest/copier.py",
       "caller_function": "publish_no_overwrite",
       "caller_line": 16,
       "real_os_call": true,
@@ -93,7 +93,7 @@
         "/Volumes/NIKON Z6_3 /Cetacea-R2-Rerun2-20261103/mock-preview/r2/tester/recovery/tsk_fdfabb06de73491696b4ce719d8b1f8d/run-2/.retry-edbddc752ec5401bb34f7f812a8143cb.part",
         "/Volumes/NIKON Z6_3 /Cetacea-R2-Rerun2-20261103/mock-preview/r2/tester/recovery/tsk_fdfabb06de73491696b4ce719d8b1f8d/run-2/ast_c404007acc7f24ba03cbbc8c.jpg"
       ],
-      "caller_file": "/Users/mac/Documents/ChatGPT/AI工作台/my-harness-project/src/cetacea/ingest/copier.py",
+      "caller_file": "<HOME>/Documents/ChatGPT/AI工作台/my-harness-project/src/cetacea/ingest/copier.py",
       "caller_function": "publish_no_overwrite",
       "caller_line": 16,
       "real_os_call": true,
@@ -110,7 +110,7 @@
         "/Volumes/NIKON Z6_3 /Cetacea-R2-Rerun2-20261103/mock-preview/r2/tester/recovery/tsk_fdfabb06de73491696b4ce719d8b1f8d/run-2/.manifest-0e75c8d998464d71a23f82626cb89ec9",
         "/Volumes/NIKON Z6_3 /Cetacea-R2-Rerun2-20261103/mock-preview/r2/tester/recovery/tsk_fdfabb06de73491696b4ce719d8b1f8d/run-2/preview-manifest.json"
       ],
-      "caller_file": "/Users/mac/Documents/ChatGPT/AI工作台/my-harness-project/src/cetacea/ingest/copier.py",
+      "caller_file": "<HOME>/Documents/ChatGPT/AI工作台/my-harness-project/src/cetacea/ingest/copier.py",
       "caller_function": "publish_no_overwrite",
       "caller_line": 16,
       "real_os_call": true,
@@ -129,7 +129,7 @@
         "/Volumes/NIKON Z6_3 /Cetacea-R2-Rerun2-20261103/mock-preview/r2/tester/recovery/tsk_fdfabb06de73491696b4ce719d8b1f8d/run-1/r2_tester_a_c404007a.jpg",
         "/Volumes/NIKON Z6_3 /Cetacea-R2-Rerun2-20261103/mock-preview/r2/tester/recovery/tsk_fdfabb06de73491696b4ce719d8b1f8d/run-2/ast_c404007acc7f24ba03cbbc8c.jpg"
       ],
-      "caller_file": "/Users/mac/Documents/ChatGPT/AI工作台/my-harness-project/src/cetacea/core.py",
+      "caller_file": "<HOME>/Documents/ChatGPT/AI工作台/my-harness-project/src/cetacea/core.py",
       "caller_function": "_lightroom_stage",
       "caller_line": 291,
       "real_os_call": true,
