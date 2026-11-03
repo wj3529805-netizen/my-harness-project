@@ -143,6 +143,10 @@ def test_hold_unplug_real_read_failure_and_recovery(tmp_path):
     assert result['hold_released_by'] in ('card-removed', 'parent-release')
     assert (out / 'PULL_NOW').exists() and (out / 'REINSERT_NOW').exists()
     assert result['part_in_progress_at_interruption']
+    assert result['held_file_failed_first'] and result['simulated_by_test']
+    assert result['first_failed_error_class'] == 'SOURCE_CHANGED'
+    assert 'parts_after_failure' in result
+    assert json.loads((out / 'hold-state.json').read_text())['part_size_at_release'] == result['part_size_at_removal']
     assert 0 < result['part_size_at_removal'] < len(original)
     assert result['approvals'] == 1
     captured = json.loads((out / 'after-interruption-files.json').read_text())
@@ -196,3 +200,39 @@ def test_hold_child_failure_with_card_present_fails_stopped(tmp_path):
     assert any(asset.get('error') == 'SOURCE_CHANGED' for asset in interruption['assets']), interruption
     assert not (out / 'REINSERT_NOW').exists()
     for path in out.iterdir(): assert_clean(path)
+
+
+@pytest.mark.parametrize('change', [
+    {'hold_result': None},
+    {'held_file_failed_first': False},
+    {'part_in_progress_at_interruption': False},
+    {'child_exit_code': 0},
+    {'first_failed_error_class': 'SOURCE_CHANGED'},
+])
+def test_hold_verdict_rejects_unverified(change):
+    evidence = dict(hold_result='HELD_AND_REMOVED', part_in_progress_at_interruption=True,
+                    held_file_failed_first=True, child_exit_code=1, first_failed_error_class='ENXIO')
+    evidence.update(change)
+    verdict, reasons = r4.hold_verdict(evidence)
+    assert verdict == 'FAIL_UNVERIFIED_INTERRUPTION' and reasons
+
+
+def test_hold_verdict_accepts_device_error():
+    evidence = dict(hold_result='HELD_AND_REMOVED', part_in_progress_at_interruption=True,
+                    held_file_failed_first=True, child_exit_code=1, first_failed_error_class='ENXIO')
+    assert r4.hold_verdict(evidence) == ('PASS', [])
+
+
+def test_failure_evidence_uses_plan_order_and_only_error_class():
+    task = {'plan': {'files': [{'asset_id': 'a', 'rel_path': 'a.NEF'},
+                               {'asset_id': 'b', 'rel_path': 'b.NEF'}]}}
+    interruption = {'child_exit_code': 1, 'assets': [
+        {'asset_id': 'b', 'rel_path': 'b.NEF', 'status': 'FAILED', 'error': 'ENOENT /private/path'},
+        {'asset_id': 'a', 'rel_path': 'a.NEF', 'status': 'FAILED', 'error': 'ENXIO /private/path'},
+    ]}
+    evidence = r4.failure_evidence(task, interruption)
+    assert evidence['first_failed_file'] == 'a.NEF'
+    assert evidence['first_failed_error_class'] == 'ENXIO'
+    assert evidence['held_file_failed_first'] and evidence['failed_file_count'] == 2
+    assert evidence['later_files_failed_because_card_absent']
+    assert '/private/path' not in json.dumps(evidence)

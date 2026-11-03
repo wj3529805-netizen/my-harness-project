@@ -7,6 +7,7 @@ import json
 import math
 from datetime import datetime, timezone
 import os
+import re
 import shlex
 import signal
 import subprocess
@@ -170,6 +171,40 @@ def observe_copy(proc, w, task, interval, hold_file=None):
     return False
 
 
+DEVICE_ERRORS = {'ENXIO', 'EIO', 'ENODEV', 'ENOENT', 'ESTALE', 'EBADF'}
+
+
+def hold_verdict(evidence, simulated_by_test=False):
+    """Return the hold-specific verdict and reasons, independently of recovery."""
+    errors = DEVICE_ERRORS | ({'SOURCE_CHANGED'} if simulated_by_test else set())
+    checks = {
+        'hold was not confirmed removed': evidence.get('hold_result') == 'HELD_AND_REMOVED',
+        'no partial first file was recorded at release': evidence.get('part_in_progress_at_interruption') is True,
+        'held file was not the first failed file': evidence.get('held_file_failed_first') is True,
+        'child did not exit with an error': evidence.get('child_exit_code') is not None and evidence['child_exit_code'] != 0,
+        'first failure was not an accepted read or device error': evidence.get('first_failed_error_class') in errors,
+    }
+    reasons = [reason for reason, ok in checks.items() if not ok]
+    return ('FAIL_UNVERIFIED_INTERRUPTION' if reasons else 'PASS', reasons)
+
+
+def failure_evidence(task, interruption):
+    assets = {asset['asset_id']: asset for asset in interruption['assets']}
+    ordered = [assets.get(item['asset_id'], {}) for item in task['plan']['files']]
+    failed = [asset for asset in ordered if asset.get('status') == 'FAILED']
+    first = failed[0] if failed else {}
+    held = task['plan']['files'][0]['rel_path'] if task['plan']['files'] else None
+    def error_class(asset):
+        match = re.match(r'^([A-Z][A-Z0-9_]*)(?:\s|$)', asset.get('error') or '')
+        return match.group(1) if match else None
+    later_absent = any(error_class(asset) in {'ENOENT', 'ENXIO', 'EIO', 'ENODEV'} for asset in ordered[1:] if asset.get('status') == 'FAILED')
+    return dict(first_failed_file=first.get('rel_path'), first_failed_error_class=error_class(first),
+                failed_file_count=len(failed), held_file_rel=held,
+                held_file_failed_first=bool(first and first.get('rel_path') == held),
+                child_exit_code=interruption['child_exit_code'],
+                later_files_failed_because_card_absent='Later files reported card-absence/device errors after removal.' if later_absent else None)
+
+
 class NoInterruption(Exception):
     pass
 
@@ -182,7 +217,7 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approva
     out.mkdir(parents=True, exist_ok=True)
     mapping = {str(Path.home()): '<HOME>', args.source_uuid: '<UUID>'}
     throttle = {'throttled': args.throttle_mbps is not None, 'throttle_mbps': args.throttle_mbps, 'throttle_note': THROTTLE_NOTE if args.throttle_mbps is not None else None}
-    hold_fields = dict(hold_mid_file=args.hold_mid_file, hold_engaged=False, hold_released_by=None, hold_result=None, part_size_at_hold_start=None, part_size_at_removal=None, hold_timeout=args.pull_timeout if args.hold_mid_file else None, hold_note=HOLD_NOTE if args.hold_mid_file else None, child_terminated_by_parent=False)
+    hold_fields = dict(hold_mid_file=args.hold_mid_file, hold_engaged=False, hold_released_by=None, hold_result=None, part_size_at_hold_start=None, part_size_at_removal=None, hold_timeout=args.pull_timeout if args.hold_mid_file else None, hold_note=HOLD_NOTE if args.hold_mid_file else None, child_terminated_by_parent=False, part_in_progress_at_interruption=False, parts_after_failure=None, first_failed_file=None, first_failed_error_class=None, failed_file_count=0, held_file_rel=None, held_file_failed_first=False, child_exit_code=None, later_files_failed_because_card_absent=None, simulated_by_test=bool(args.test_only_gone_flag_file))
     result = {**scope(args), **hold_fields, 'status': 'FAIL_STOPPED', 'scenario': args.scenario, **throttle, 'inter_file_delay': args.inter_file_delay, 'part_in_progress_at_interruption': False, 'part_sizes_at_interruption': []}
     proc = None
     exception_class = None
@@ -273,13 +308,22 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approva
                         raise TimeoutError('Card removal not observed')
                     if args.hold_mid_file: release('card-removed')
                     captured = files_state(w, task)
-                    if args.hold_mid_file: result.update(hold_result='HELD_AND_REMOVED', part_size_at_removal=max((x['size'] for x in captured['parts']), default=0))
+                    if args.hold_mid_file: result['hold_result'] = 'HELD_AND_REMOVED'
                     proc.wait(timeout=60)
-                    if args.hold_mid_file: update_hold()
-                    if args.hold_mid_file and proc.returncode == 0: raise RuntimeError('Child completed despite card removal; no read interruption occurred')
+                    if args.hold_mid_file:
+                        hs = update_hold()
+                        result['part_size_at_removal'] = hs.get('part_size_at_release')
+                        captured = files_state(w, task)
+                        result['parts_after_failure'] = captured['parts']
                 expected_sizes = {f'{n}.part': item['size'] for n, item in enumerate(task['plan']['files'])}
-                result.update(part_in_progress_at_interruption=any(0 < x['size'] < expected_sizes.get(Path(x['path']).name, 0) for x in captured['parts']), part_sizes_at_interruption=captured['parts'])
-                save(out, 'interruption-state.json', {**state(w, task['task_id']), 'child_exit_code': proc.returncode, 'child_output': log.read_text(errors='replace')}, mapping)
+                if args.hold_mid_file:
+                    size = result['part_size_at_removal']
+                    result['part_in_progress_at_interruption'] = size is not None and 0 < size < task['plan']['files'][0]['size']
+                else:
+                    result.update(part_in_progress_at_interruption=any(0 < x['size'] < expected_sizes.get(Path(x['path']).name, 0) for x in captured['parts']), part_sizes_at_interruption=captured['parts'])
+                interruption = {**state(w, task['task_id']), 'child_exit_code': proc.returncode, 'child_output': log.read_text(errors='replace')}
+                if args.hold_mid_file: result.update(failure_evidence(task, interruption))
+                save(out, 'interruption-state.json', interruption, mapping)
                 save(out, 'after-interruption-files.json', captured, mapping)
                 if args.scenario == 'unplug':
                     print('REINSERT THE SAME CARD', flush=True)
@@ -318,6 +362,10 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approva
                 unexpected = [p for p in extras if not (Path(p).parent.name == '.cetacea' and Path(p).name.startswith('import-manifest-run') and p.endswith('.json'))]
                 result.update(status='PASS' if finished['state'] == 'COMPLETED' and all(x['ok'] for x in reads) and not captured['half_final'] and not remaining['parts'] and not locks and not unexpected and comparison['identical'] and compare['identical'] else 'FAIL',
                               final_state=finished['state'], approvals=len(approvals(w, task['task_id'])), remaining_parts=remaining['parts'], locks=locks, additional_library_files=extras, unplanned_files=unexpected)
+                if args.hold_mid_file and result['status'] == 'PASS':
+                    verdict, reasons = hold_verdict(result, bool(args.test_only_gone_flag_file))
+                    result['status'] = verdict
+                    if reasons: result['notes'] = ['Interruption could not be verified: ' + '; '.join(reasons)]
     except NoInterruption:
         pass
     except Exception as exc:
@@ -327,6 +375,10 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approva
             save(out, 'interruption-state.json', {**state(w, task['task_id']), 'child_exit_code': proc.returncode, 'child_output': log.read_text(errors='replace')}, mapping)
         exception_class = type(exc).__name__
         result['traceback'] = traceback.format_exc()
+    if args.hold_mid_file and proc is not None:
+        result['child_exit_code'] = proc.returncode
+        hold_path = home / 'hold-state.json'
+        if hold_path.exists(): save(out, 'hold-state.json', json.loads(hold_path.read_text(encoding='utf-8')), mapping)
     if plan_evidence is not None:
         plan_evidence.update({k: result[k] for k in hold_fields})
         save(out, 'plan.json', plan_evidence, mapping)

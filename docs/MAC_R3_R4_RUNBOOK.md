@@ -44,3 +44,5 @@ diskutil info /Volumes/NAME | grep UUID
 证据分别位于 `evidence/mac-r3/`、`evidence/mac-r4/` 的运行目录中，包括范围声明、清点、计划、审批、读回和结果；检查 `result.json`，不要将失败或未覆盖说成通过。提交的证据目录只能包含脱敏后的输出；提交前检查结果，切勿提交真实 UUID、用户名、绝对挂载路径、原始照片、临时 home、日志或目标文件。R3 的 HE/HE★ 判定由纯 Python MakerNote 解析产生，不依赖 exiftool；无法识别的值保留原始数字并标记 UNKNOWN。
 
 证据文件采用不覆盖写入；重复运行前请用 `--out` 指定新的证据目录。`--lightroom real` 当前会明确拒绝运行，尚未实现真实测试 catalog 守卫。
+
+`result.json`、`plan.json` 和 README 记录暂停释放时的 `part_size_at_removal`（子进程在恢复读取前记录）、`part_in_progress_at_interruption`，以及失败后的 `parts_after_failure`。`hold-state.json` 保存暂停时间和大小。`held_file_rel`、`first_failed_file`、`first_failed_error_class`、`failed_file_count`、`held_file_failed_first` 和 `child_exit_code` 用于核对首个文件确实在中途失败；`simulated_by_test` 标记仅供测试的模拟。拔卡后后续文件可能在打开时报告 ENOENT，因为卡已不在；相关情况记录在 `later_files_failed_because_card_absent`。恢复成功但中断证据不足时结果为 `FAIL_UNVERIFIED_INTERRUPTION`。
