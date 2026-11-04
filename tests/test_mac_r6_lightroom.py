@@ -631,3 +631,59 @@ def test_preview_outside_run_is_check_failure(tmp_path):
     previews = [{'run': 1, 'path': str(tmp_path / 'outside.jpg'), 'asset_id': 'asset'}]
     rows, pairs, valid, manifests = r6.preview_evidence(previews, [], task, tmp_path)
     assert not valid and not rows and not pairs and not manifests
+
+
+def make_large_run(tmp_path):
+    args, mount, sibling = make_run(tmp_path)
+    (sibling / 'decoy').unlink()
+    for i in range(12):
+        (sibling / f'DSC_{i:04}.NEF').write_bytes(b'fake nef')
+        (sibling / f'DSC_{i:04}.JPG').write_bytes(b'fake jpg')
+    (sibling / 'DSC_0558.JPG').write_bytes(b'unpaired')
+    (sibling / 'NC_FLLST.DAT').write_bytes(b'dat')
+    args.mode = 'large'
+    args.source_subdir = r6.LARGE_SCOPE
+    args.expect_nef, args.expect_jpg = 12, 13
+    return args, mount
+
+
+def test_large_mock_all_and_throughput(tmp_path):
+    args, mount = make_large_run(tmp_path)
+    lr = r6.MockLightroomAdapter(size=(1600, 1067))
+    result = r6.run(args, mount_resolver=lambda _: mount, approval_waiter=approve, adapter=lr)
+    assert result['status'] == 'PASS_MOCK_NOT_REAL_LIGHTROOM', result
+    assert result['lr_scope'] == {'mode': 'all', 'count': 12, 'total_raw': 12}
+    assert result['counts'] == {'nef': 12, 'jpg': 13, 'other': 1}
+    assert all(c['passed'] for c in result['checks'].values())
+    assert {s['stage']: s['succeeded'] for s in result['lightroom_stage_summary']} == dict(ingest=26, lr_register=12, lr_preset=12, lr_export=12, preview_verify=12)
+    assert 'DSC_0558.JPG' not in str(lr.calls)
+    stats = r6.json.loads((Path(args.out) / 'throughput.json').read_text())
+    assert stats == result['throughput'] and stats['total_wall_s'] > 0
+    assert stats['peak_rss'] > 0 and stats['peak_rss_unit'] in ('bytes', 'KiB')
+    assert stats['stages']['ingest']['items'] == 26 and stats['stages']['ingest']['bytes'] > 0
+    assert_evidence_clean(args.out)
+
+
+def test_large_count_mismatch_stops(tmp_path):
+    args, mount = make_large_run(tmp_path)
+    args.expect_jpg = 12
+    result = r6.run(args, mount_resolver=lambda _: mount, approval_waiter=approve)
+    assert result['status'] == 'FAIL_STOPPED'
+    assert not (Path(args.out) / 'plan.json').exists()
+
+
+@pytest.mark.parametrize('mode,subdir', [('large', r6.SCOPE), ('r3', r6.LARGE_SCOPE)])
+def test_mode_scope_lock(tmp_path, mode, subdir):
+    args, mount = make_large_run(tmp_path)
+    args.mode, args.source_subdir = mode, subdir
+    with pytest.raises(r6.argparse.ArgumentTypeError, match='hard locked'):
+        r6.run(args, mount_resolver=lambda _: mount)
+    assert not Path(args.out).exists()
+
+
+def test_large_sampling_rejected_before_io(tmp_path):
+    args, mount = make_large_run(tmp_path)
+    args.lr_sample = '3'
+    with pytest.raises(ValueError, match='sampling is not supported'):
+        r6.run(args, mount_resolver=lambda _: mount)
+    assert not Path(args.out).exists()

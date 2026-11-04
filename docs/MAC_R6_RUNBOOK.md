@@ -83,3 +83,18 @@ export CETACEA_SOURCE_UUID='<CARD_UUID>'
 ```
 
 重新判定不修改原证据、home 数据库或目标文件，并检查 home 的数据库和配置以及目标库和预览树前后未变。它无法观察原运行的内存适配器调用日志，结果明确记录 `adapter_calls_observed: false`；其他文件、数据库、manifest、阶段和读回证据仍参与判定。模拟结果仍标为 `PASS_MOCK_NOT_REAL_LIGHTROOM`。若数据库仍有未检查点的 WAL，脚本会停止，以免只读快照遗漏尚未合并的数据；不要在重新判定期间打开或改写该 home。
+
+## 大批量模式
+
+`--mode large` 仅允许 `DCIM/143NZ6_3`，必须明确传入正整数 `--expect-nef 120 --expect-jpg 121`；实际数量不符或出现其他未知文件时停止。允许一个 `NC_FLLST.DAT`，`.DS_Store` 和合法的 AppleDouble 元数据按现有规则跳过。所有文件均导入并重新读取目标文件验证 SHA-256；没有配对 NEF 的 JPG（例如 DSC_0558.JPG）只导入，不进入 Lightroom。
+
+示例（卡标识建议通过环境变量提供，不要写入命令历史或证据）：
+
+```sh
+.venv/bin/python scripts/mac/r6_lightroom.py --mode large --confirm-card-readonly \
+  --expect-nef 120 --expect-jpg 121 --lightroom mock
+```
+
+`--lr-sample all` 为默认值。当前 workbench API 无法安全地按资产限制已批准计划中的 Lightroom 阶段，因此暂不支持数字采样；指定数字会在读取卡之前拒绝。MOCK 仅供演练，不代表真实 Lightroom 或 macOS 验证。正式运行需按本手册既有流程选择 real、测试 catalog 并完成一次审批。
+
+审批等待默认 1800 秒，整个运行的默认上限为 14400 秒，可用 `--max-runtime-s` 调整。`throughput.json` 记录各阶段耗时、数量和吞吐量、导入字节数、总耗时和运行进程峰值 RSS；macOS 的 RSS 单位为字节，Linux 为 KiB。数据库没有逐文件导入耗时，故不提供该指标。

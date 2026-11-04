@@ -1,7 +1,6 @@
 """R6 scoped Lightroom acceptance runner.
 
-Only DCIM/142NZ6_3 is in scope. Never inspect 143NZ6_3, a production
-catalog, or a NAS. Source media is always read-only.
+Each mode is locked to its designated test folder. Source media is read-only.
 """
 import argparse
 import os
@@ -9,6 +8,9 @@ import json
 import plistlib
 import shlex
 import sqlite3
+import resource
+import signal
+import time
 from contextlib import contextmanager
 from urllib.parse import quote
 import tempfile
@@ -29,6 +31,7 @@ from cetacea.lightroom import MockLightroomAdapter, RealLightroomMcpAdapter
 from cetacea.ingest.pathsafe import read_hash, safe
 
 SCOPE = 'DCIM/142NZ6_3'
+LARGE_SCOPE = 'DCIM/143NZ6_3'
 
 
 def scope_argument(value):
@@ -46,12 +49,12 @@ def default_mcp_index(repo=None):
 
 def parser():
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument('--mode', choices=('r3', 'r4'), required=True)
+    p.add_argument('--mode', choices=('r3', 'r4', 'large'), required=True)
     p.add_argument('--source-uuid')
-    p.add_argument('--source-subdir', type=scope_argument, default=SCOPE)
+    p.add_argument('--source-subdir')
     p.add_argument('--confirm-card-readonly', action='store_true', required=True)
-    p.add_argument('--expect-nef', type=int, default=9)
-    p.add_argument('--expect-jpg', type=int, default=9)
+    p.add_argument('--expect-nef', type=int)
+    p.add_argument('--expect-jpg', type=int)
     p.add_argument('--target-base', default='/Volumes/Cetacea Studio')
     p.add_argument('--out')
     homes = p.add_mutually_exclusive_group()
@@ -67,6 +70,8 @@ def parser():
     p.add_argument('--lightroom-test-catalog-path')
     p.add_argument('--lightroom-process-name', default='Adobe Lightroom Classic')
     p.add_argument('--preset-name', default='Cetacea Phase1 Test +0.50')
+    p.add_argument('--lr-sample', default='all')
+    p.add_argument('--max-runtime-s', type=float, default=14400)
     p.add_argument('--approval-timeout', type=float, default=1800)
     p.add_argument('--approval-interval', type=float, default=1)
     p.add_argument('--preflight-only', action='store_true')
@@ -110,9 +115,10 @@ def source_uuid(args, environ=None):
     return value
 
 
-def scope_listing(mount, subdir=SCOPE, expect_nef=9, expect_jpg=9):
+def scope_listing(mount, subdir=SCOPE, expect_nef=9, expect_jpg=9, *, allowed_scope=SCOPE):
     # Validate before resolving or making any filesystem call.
-    scope_argument(subdir)
+    if subdir != allowed_scope or allowed_scope not in (SCOPE, LARGE_SCOPE):
+        raise argparse.ArgumentTypeError('source scope is hard locked to ' + allowed_scope)
     for component in (Path(mount) / 'DCIM', Path(mount) / subdir):
         if component.is_symlink():
             raise ValueError('Scope path must not contain symlinks')
@@ -143,7 +149,7 @@ def scope_listing(mount, subdir=SCOPE, expect_nef=9, expect_jpg=9):
     return sorted(files, key=lambda f: f['rel_path'])
 
 
-def other_never_in_lightroom(assets, previews, paired_ids, steps, adapter_calls, readback_paths):
+def other_never_in_lightroom(assets, previews, paired_ids, steps, adapter_calls, readback_paths, expected=9):
     others = [a for a in assets if a['kind'] == 'other']
     identifiers = {a['asset_id'] for a in others}
     references = identifiers | {a['rel_path'] for a in others} | {a['dest_rel_path'] for a in others if a['dest_rel_path']}
@@ -152,7 +158,7 @@ def other_never_in_lightroom(assets, previews, paired_ids, steps, adapter_calls,
             and all(p['asset_id'] not in identifiers for p in previews)
             and not identifiers.intersection(paired_ids)
             and all(ref not in evidence for ref in references)
-            and all(any(s['stage'] == stage and s['state'] == 'COMPLETED' and s['succeeded'] == 9 for s in steps)
+            and all(any(s['stage'] == stage and s['state'] == 'COMPLETED' and s['succeeded'] == expected for s in steps)
                     for stage in ('lr_register', 'lr_preset', 'lr_export')))
 
 
@@ -220,12 +226,52 @@ def reader_info(mount, runner=None):
     return {k: info.get(k) for k in keys}
 
 
+class RawLightroomWorkbench(Workbench):
+    """Exclude standalone JPEGs from Lightroom and its preview expectations."""
+    _lr_view = False
+
+    def list_assets(self, *args, **kwargs):
+        assets = super().list_assets(*args, **kwargs)
+        if not self._lr_view:
+            return assets
+        raw_stems = {str(Path(a['rel_path']).with_suffix('')) for a in assets if a['kind'] == 'raw'}
+        return [a for a in assets if a['kind'] != 'jpeg' or str(Path(a['rel_path']).with_suffix('')) in raw_stems]
+
+    def _lightroom_stage(self, task, stage):
+        self._lr_view = True
+        try:
+            return super()._lightroom_stage(task, stage)
+        finally:
+            self._lr_view = False
+
+    def verify_preview(self, task_id):
+        previous = self._lr_view
+        self._lr_view = True
+        try:
+            return super().verify_preview(task_id)
+        finally:
+            self._lr_view = previous
+
+
 def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=r3.wait_approval,
         command_runner=None, reader_runner=None, adapter=None):
+    expected_scope = LARGE_SCOPE if args.mode == 'large' else SCOPE
+    args.source_subdir = args.source_subdir or expected_scope
+    if args.source_subdir != expected_scope:
+        raise argparse.ArgumentTypeError('source scope is hard locked to ' + expected_scope)
+    if args.mode == 'large':
+        if args.expect_nef is None or args.expect_jpg is None or args.expect_nef <= 0 or args.expect_jpg <= 0:
+            raise ValueError('large mode requires positive --expect-nef and --expect-jpg')
+    else:
+        args.expect_nef = 9 if args.expect_nef is None else args.expect_nef
+        args.expect_jpg = 9 if args.expect_jpg is None else args.expect_jpg
+    if args.lr_sample != 'all':
+        raise ValueError('Lightroom sampling is not supported by the workbench; use --lr-sample all')
+    if args.max_runtime_s <= 0:
+        raise ValueError('--max-runtime-s must be positive')
     if args.rejudge:
         return rejudge(args, mount_resolver, command_runner, adapter)
-    # Validate the scope before any filesystem access, including output creation.
-    scope_argument(args.source_subdir)
+    started_wall = time.monotonic()
     if args.mode == 'r4':
         raise ValueError('R4+LR 已推迟，未准备为可运行')
     args.source_uuid = source_uuid(args)
@@ -235,7 +281,7 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=r3.wait_appr
     out = Path(args.out or f'evidence/mac-r6/{args.mode}/run-{stamp}').absolute()
     mapping = {args.source_uuid: '<UUID>', args.source_uuid.upper(): '<UUID>', str(Path.home()): '<HOME>'}
     result = {'mode': args.mode, 'status': 'FAIL_STOPPED', 'real_lightroom': args.lightroom == 'real',
-              'mock': args.lightroom == 'mock', 'scope': 'test-folder-only', 'scope_subdir': SCOPE,
+              'mock': args.lightroom == 'mock', 'scope': 'test-folder-only', 'scope_subdir': expected_scope,
               'counts': {}, 'checks': {}, 'preflight_checks': [], 'failed_step': None, 'failures': [], 'notes': [],
               'reader_changed_from_usb': True, 'volume_uuid_sha256_prefix': uuid_prefix(args.source_uuid)}
     location = 'custom' if args.home_dir else 'target' if args.home_on_target else 'tmp'
@@ -249,6 +295,11 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=r3.wait_appr
     def check(name, value, reason):
         result['checks'][name] = {'passed': bool(value), 'reason': reason}
         if not value: result['failures'].append(reason)
+    old_handler = signal.getsignal(signal.SIGALRM)
+    def runtime_timeout(signum, frame):
+        raise TimeoutError('maximum runtime exceeded')
+    signal.signal(signal.SIGALRM, runtime_timeout)
+    signal.setitimer(signal.ITIMER_REAL, args.max_runtime_s)
     try:
         # Resolve the card before creating evidence so a known card is never written.
         step = 'card_mount'
@@ -315,15 +366,16 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=r3.wait_appr
         listing = None
         def list_scope():
             nonlocal source, listing
-            if args.expect_nef != 9 or args.expect_jpg != 9:
+            if args.mode != 'large' and (args.expect_nef != 9 or args.expect_jpg != 9):
                 raise ValueError('invalid expected counts')
             volume_guard(args.source_uuid, mount, mount.stat().st_dev, mount_resolver)
-            listing = scope_listing(mount, args.source_subdir, args.expect_nef, args.expect_jpg)
+            listing = scope_listing(mount, args.source_subdir, args.expect_nef, args.expect_jpg, allowed_scope=expected_scope)
             source = scoped_source(mount, args.source_subdir)
-            mapping[str(source)] = '<CARD>/' + SCOPE
+            mapping[str(source)] = '<CARD>/' + expected_scope
             result['counts'] = {kind: sum(f['kind'] == kind for f in listing) for kind in ('nef', 'jpg', 'other')}
+            result['lr_scope'] = {'mode': 'all', 'count': result['counts']['nef'], 'total_raw': result['counts']['nef']}
             return True
-        attempt('scope_listing_9nef_9jpg', '检查测试文件夹是否恰有 9 个 NEF 和 9 个 JPG，可选一个精确命名的 NC_FLLST.DAT，不能有其他文件', list_scope, card_ok)
+        attempt('scope_listing_9nef_9jpg' if args.mode != 'large' else 'scope_listing_expected_counts', '检查测试文件夹是否恰有 9 个 NEF 和 9 个 JPG，可选一个精确命名的 NC_FLLST.DAT，不能有其他文件', list_scope, card_ok)
         real = args.lightroom == 'real'
         node_ok, _ = attempt('node_binary_exists', 'Node 不存在，请用 --lightroom-node 指定运行时', lambda: Path(args.lightroom_node).is_file()) if real else (record('node_binary_exists', True, ''), None)
         index_ok, _ = attempt('mcp_index_exists', 'MCP index.js 不存在，请用 --lightroom-mcp-index 指定', lambda: Path(args.lightroom_mcp_index).is_file()) if real else (record('mcp_index_exists', True, ''), None)
@@ -405,7 +457,7 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=r3.wait_appr
             else:
                 home = Path(tempfile.mkdtemp(prefix='cetacea-r6-'))
             mapping[str(target)] = '<TARGET>'; mapping[str(home)] = '<RUN_HOME>'
-            w = Workbench.init(home, target / 'library', target / 'preview')
+            w = (RawLightroomWorkbench if args.mode == 'large' else Workbench).init(home, target / 'library', target / 'preview')
             w.config['lightroom'] = {'adapter': 'mock' if args.lightroom == 'mock' else 'real_mcp', 'command': command}
             w.config['preview'] = {'max_edge': 1600, 'quality': 85}
             config.save(home, w.config); w.adapter = lr
@@ -430,6 +482,8 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=r3.wait_appr
             for method in ('register', 'apply_preset', 'export_jpeg'):
                 original = getattr(lr, method)
                 def observe(files, *a, _original=original, _method=method, **kw):
+                    if time.monotonic() - started_wall >= args.max_runtime_s:
+                        raise TimeoutError('maximum runtime exceeded')
                     adapter_calls.append([_method, [(f.asset_id, f.rel_path, str(f.abs_path)) for f in files]])
                     return _original(files, *a, **kw)
                 setattr(lr, method, observe)
@@ -499,14 +553,19 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=r3.wait_appr
             save('nef-subtype-report.json', subtype); result['nef_subtypes'] = subtype['counts']
             stage_map = {s['stage']: s for s in steps}
             expected_ingest = len(listing)
+            raw_count = result['counts']['nef']
+            raw_stems = {str(Path(a['rel_path']).with_suffix('')) for a in raw}
+            unpaired = [a for a in jpg if str(Path(a['rel_path']).with_suffix('')) not in raw_stems]
+            calls_evidence = json.dumps([adapter_calls, list(getattr(lr, 'calls', [])), manifests, readback_paths])
             check('task_completed', finished['state'] == 'COMPLETED', 'Task must complete')
             check('verified_library', len(reads) == expected_ingest and all(x['ok'] for x in reads), f'All {expected_ingest} destination hashes must match source')
             check('ingest', stage_map.get('ingest', {}).get('state') == 'COMPLETED' and stage_map['ingest']['succeeded'] == expected_ingest, f'Ingest must complete {expected_ingest} files')
-            check('lightroom_stages', all(stage_map.get(s, {}).get('state') == 'COMPLETED' and stage_map[s]['succeeded'] == 9 for s in STAGES[1:]), 'All Lightroom and preview stages must complete nine photos')
-            check('raw_and_jpg', len(raw) == len(jpg) == 9 and all(a['lr_status'] == 'EXPORTED' and a['preset_applied'] == 'test-preset' and a['lr_photo_id'] and bool(a['mock']) == (args.lightroom == 'mock') for a in raw) and all(not a['lr_photo_id'] for a in jpg), 'Only nine RAW files must be registered, preset and exported')
-            check('other_never_in_lightroom', other_never_in_lightroom(assets, previews, paired_ids, steps, adapter_calls + list(getattr(lr, 'calls', [])) + manifests, readback_paths), 'Other assets must never enter Lightroom or paired previews; each Lightroom stage must succeed for nine RAW files')
-            check('previews', manifest_ok and len(preview_rows) == 9 and all(max(p['width'], p['height']) == 1600 and p['paired_jpg'] for p in preview_rows) and verification['status'] == 'OK' and verification['mock'] == (args.lightroom == 'mock'), 'Nine 1600-pixel paired previews must independently verify')
-            check('readback', args.lightroom == 'mock' or (len(metadata) == 9 and missing == 0 and all(p['exposure'] == 0.5 for p in metadata)), 'Real Lightroom must independently read back nine exposures of 0.5; mock is a rehearsal')
+            check('lightroom_stages', all(stage_map.get(s, {}).get('state') == 'COMPLETED' and stage_map[s]['succeeded'] == raw_count for s in STAGES[1:]), f'All Lightroom and preview stages must complete {raw_count} photos')
+            check('raw_and_jpg', len(raw) == raw_count and len(jpg) == result['counts']['jpg'] and all(a['lr_status'] == 'EXPORTED' and a['preset_applied'] == 'test-preset' and a['lr_photo_id'] and bool(a['mock']) == (args.lightroom == 'mock') for a in raw) and all(not a['lr_photo_id'] for a in jpg), f'Only {raw_count} RAW files must be registered, preset and exported')
+            check('other_never_in_lightroom', other_never_in_lightroom(assets, previews, paired_ids, steps, adapter_calls + list(getattr(lr, 'calls', [])) + manifests, readback_paths, raw_count), 'Other assets must never enter Lightroom or paired previews; each Lightroom stage must succeed for nine RAW files')
+            check('unpaired_jpg_never_in_lightroom', all(not a['lr_photo_id'] and not a['lr_status'] and not a['preset_applied'] and a['asset_id'] not in paired_ids and all(ref not in calls_evidence for ref in (a['asset_id'], a['rel_path'], a['dest_rel_path'])) for a in unpaired), 'Unpaired JPEGs must never enter Lightroom')
+            check('previews', manifest_ok and len(preview_rows) == raw_count and all(max(p['width'], p['height']) == 1600 and (args.mode == 'large' or p['paired_jpg']) for p in preview_rows) and verification['status'] == 'OK' and verification['mock'] == (args.lightroom == 'mock'), f'{raw_count} 1600-pixel previews must independently verify')
+            check('readback', args.lightroom == 'mock' or (len(metadata) == raw_count and missing == 0 and all(p['exposure'] == 0.5 for p in metadata)), f'Real Lightroom must independently read back {raw_count} exposures of 0.5; mock is a rehearsal')
             check('approval', len(approval_after) == 1 and approval_before == approval_after and approval_after[0]['plan_digest'] == task['plan_digest'], 'Exactly one unchanged approval')
             check('source_unchanged', compare_snapshots(before, after)['identical'], 'Source inventory must remain unchanged')
             if 'catalog_guard' not in result['checks']:
@@ -527,11 +586,34 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=r3.wait_appr
         result['failures'].append(message)
         messages.append(message)
     finally:
+        signal.setitimer(signal.ITIMER_REAL, 0)
+        signal.signal(signal.SIGALRM, old_handler)
         if created:
+            if args.mode == 'large':
+                stage_stats = {}
+                for row in locals().get('timing', []):
+                    elapsed = row['elapsed_seconds']
+                    items = row['succeeded'] + row['failed'] + row['skipped']
+                    stage_stats[row['stage']] = {'elapsed_s': elapsed, 'items': items,
+                        'items_per_s': items / elapsed if elapsed > 0 else None,
+                        's_per_item': elapsed / items if items else None}
+                ingest_step = next((row for row in locals().get('steps', []) if row['stage'] == 'ingest'), None)
+                ingest_events = json.loads(ingest_step['detail_json']) if ingest_step else []
+                ingest_bytes = sum(event['size'] for event in ingest_events if event.get('status') == 'VERIFIED' and not event.get('skipped_verified'))
+                if 'ingest' in stage_stats:
+                    stage_stats['ingest']['bytes'] = ingest_bytes
+                    elapsed = stage_stats['ingest']['elapsed_s']
+                    stage_stats['ingest']['mb_per_s'] = ingest_bytes / 1000000 / elapsed if elapsed > 0 else None
+                throughput = {'stages': stage_stats, 'total_wall_s': time.monotonic() - started_wall,
+                              'peak_rss': resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
+                              'peak_rss_unit': 'bytes' if sys.platform == 'darwin' else 'KiB',
+                              'notes': ['Per-file ingest timing is unavailable in the database.']}
+                result['throughput'] = throughput
+                save('throughput.json', throughput)
             save('catalog-guard.json', guards)
             r3.save_result(out, result, mapping)
             home_note = 'The temporary home <RUN_HOME> may be purged on reboot.' if location == 'tmp' else f'Run home: <RUN_HOME> ({location}).'
-            for name, content in [('README.md', f"# R6 {result['status']}\n\nMode: {args.lightroom}; scope: {SCOPE}. Reader changed from USB. Mock is not real Lightroom verification.\n\n{home_note}\n"), ('console.txt', '\n'.join(messages) + '\n')]:
+            for name, content in [('README.md', f"# R6 {result['status']}\n\nMode: {args.lightroom}; scope: {expected_scope}. Reader changed from USB. Mock is not real Lightroom verification.\n\n{home_note}\n"), ('console.txt', '\n'.join(messages) + '\n')]:
                 clean = desensitize(content, mapping)
                 try: assert_clean(clean)
                 except ValueError: clean = 'Details withheld because they contain identifying information.\n'
