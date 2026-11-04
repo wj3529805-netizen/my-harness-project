@@ -66,3 +66,17 @@ MCP index 默认按顺序查找 `<REPO>/.lightroom-runtime/node_modules/@mskalsk
 ## 局限
 
 仅一张卡、一个已更换的内置 SD 读卡器、一台 Mac 和测试 catalog；不覆盖生产 catalog、NAS、其他卡或读卡器、断电及自然拔卡。R4 的受控 hold 设计也不能代表自然拔卡。mock 不等于 Mac 验收；适配器自身的 catalog identity unverified 由外部 `lsof` guard 补充，不能证明其他环境安全。
+
+## r3-1 离线重新判定
+
+r3-1 实际任务已完成，但真实 Lightroom 将每张预览放在 `run-N/<asset_id>/` 下，旧版证据循环错误地在该子目录寻找位于 `run-N/` 的 `preview-manifest.json`，导致 `execution_evidence` 报错。修复后可对原任务重新判定，无需重新导入、批准或执行任何阶段。先保留原证据和目标卷，使用原任务 ID 及原运行打印的临时 home；该 home 位于 `$TMPDIR`，macOS 可能清理它，请尽快执行。卡仍须挂载；脚本只读地重新读取并计算测试卡文件夹的哈希，并与原 `inventory-before.json` 比较。真实 Lightroom 只调用只读的预设查询和元数据读取；仍须打开唯一的测试 catalog 并连接 MCP。
+
+在 `<REPO>` 中执行，将 `<HOME>` 换成本机主目录、`<TMP_HOME>` 换成原运行的临时 home、`<TASK_ID>` 换成原任务 ID，并将两个证据目录替换为实际原目录和全新目录：
+
+```sh
+cd <REPO>
+export CETACEA_SOURCE_UUID='<CARD_UUID>'
+.venv/bin/python scripts/mac/r6_lightroom.py --mode r3 --rejudge --rejudge-home '<TMP_HOME>' --rejudge-task '<TASK_ID>' --rejudge-from '<REPO>/evidence/mac-r6/r3-1' --out '<REPO>/evidence/mac-r6/r3-1-rejudge' --confirm-card-readonly --lightroom real --lightroom-test-catalog-path '<HOME>/Documents/ChatGPT/AI工作台/cetacea-workbench/acceptance-data/catalog/Cetacea-Phase1-Test-20261102/Cetacea-Phase1-Test-20261102.lrcat' --target-base '/Volumes/Cetacea Studio'
+```
+
+重新判定不修改原证据、home 数据库或目标文件，并检查 home 的数据库和配置以及目标库和预览树前后未变。它无法观察原运行的内存适配器调用日志，结果明确记录 `adapter_calls_observed: false`；其他文件、数据库、manifest、阶段和读回证据仍参与判定。模拟结果仍标为 `PASS_MOCK_NOT_REAL_LIGHTROOM`。若数据库仍有未检查点的 WAL，脚本会停止，以免只读快照遗漏尚未合并的数据；不要在重新判定期间打开或改写该 home。

@@ -8,6 +8,9 @@ import os
 import json
 import plistlib
 import shlex
+import sqlite3
+from contextlib import contextmanager
+from urllib.parse import quote
 import tempfile
 from datetime import datetime
 import subprocess
@@ -51,6 +54,10 @@ def parser():
     p.add_argument('--expect-jpg', type=int, default=9)
     p.add_argument('--target-base', default='/Volumes/Cetacea Studio')
     p.add_argument('--out')
+    p.add_argument('--rejudge', action='store_true')
+    p.add_argument('--rejudge-home')
+    p.add_argument('--rejudge-task')
+    p.add_argument('--rejudge-from')
     p.add_argument('--lightroom', choices=('real', 'mock'), default='real')
     p.add_argument('--lightroom-node', default='/opt/homebrew/bin/node')
     p.add_argument('--lightroom-mcp-index', default=default_mcp_index())
@@ -118,6 +125,28 @@ def other_never_in_lightroom(assets, previews, paired_ids, steps, adapter_calls,
                     for stage in ('lr_register', 'lr_preset', 'lr_export')))
 
 
+def preview_evidence(previews, assets, task, preview_root):
+    lookup = {a['asset_id']: a for a in assets}
+    manifests, rows, paired_ids = {}, [], []
+    try:
+        for p in previews:
+            directory = safe(preview_root, f"{task['order_id']}/{task['photographer_id']}/{task['batch_id']}/{task['task_id']}/run-{p['run']}")
+            path = Path(p['path'])
+            if not path.is_absolute() or not path.resolve().is_relative_to(directory.resolve()):
+                raise ValueError('Preview path outside its run directory')
+            safe(preview_root, str(path.relative_to(Path(preview_root))))
+            if p['run'] not in manifests:
+                manifests[p['run']] = json.loads((directory / 'preview-manifest.json').read_text())
+                paired_ids.extend(x.get('paired_jpg_asset_id') for x in manifests[p['run']]['previews'])
+            item = next(x for x in manifests[p['run']]['previews'] if x['asset_id'] == p['asset_id'])
+            a = lookup[p['asset_id']]
+            pair = lookup.get(item.get('paired_jpg_asset_id'))
+            rows.append({'rel_path': a['rel_path'], 'width': p['width'], 'height': p['height'], 'sha256': p['sha256'], 'library_sha256': a['sha256'], 'paired_jpg': pair['rel_path'] if pair else None, 'mock': bool(p['mock'])})
+        return rows, paired_ids, True, list(manifests.values())
+    except (OSError, ValueError, KeyError, StopIteration, TypeError):
+        return rows, paired_ids, False, list(manifests.values())
+
+
 def catalog_guard(expected, process_name='Adobe Lightroom Classic', runner=None, label='preflight'):
     if not Path(expected).is_absolute() or not str(expected).endswith('.lrcat'):
         raise ValueError('Expected test catalog must be an absolute .lrcat path')
@@ -162,6 +191,8 @@ def reader_info(mount, runner=None):
 
 def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=r3.wait_approval,
         command_runner=None, reader_runner=None, adapter=None):
+    if args.rejudge:
+        return rejudge(args, mount_resolver, command_runner, adapter)
     # Validate the scope before any filesystem access, including output creation.
     scope_argument(args.source_subdir)
     if args.mode == 'r4':
@@ -392,16 +423,7 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=r3.wait_appr
             reads = r3.readback(w, task, before)
             save('library-readback.json', reads)
             raw = [a for a in assets if a['kind'] == 'raw']; jpg = [a for a in assets if a['kind'] == 'jpeg']
-            lookup = {a['asset_id']: a for a in assets}
-            preview_rows = []
-            paired_ids = []
-            for p in previews:
-                a = lookup[p['asset_id']]
-                manifest = json.loads((Path(p['path']).parent / 'preview-manifest.json').read_text())
-                item = next(x for x in manifest['previews'] if x['asset_id'] == p['asset_id'])
-                paired_ids.extend(x.get('paired_jpg_asset_id') for x in manifest['previews'])
-                pair = lookup.get(item.get('paired_jpg_asset_id'))
-                preview_rows.append({'rel_path': a['rel_path'], 'width': p['width'], 'height': p['height'], 'sha256': p['sha256'], 'library_sha256': a['sha256'], 'paired_jpg': pair['rel_path'] if pair else None, 'mock': bool(p['mock'])})
+            preview_rows, paired_ids, manifest_ok, manifests = preview_evidence(previews, assets, task, w.config['preview_root'])
             save('previews.json', preview_rows)
             verification = w.verify_preview(task['task_id']); save('verify-preview.json', verification)
             metadata = []
@@ -427,8 +449,8 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=r3.wait_appr
             check('ingest', stage_map.get('ingest', {}).get('state') == 'COMPLETED' and stage_map['ingest']['succeeded'] == expected_ingest, f'Ingest must complete {expected_ingest} files')
             check('lightroom_stages', all(stage_map.get(s, {}).get('state') == 'COMPLETED' and stage_map[s]['succeeded'] == 9 for s in STAGES[1:]), 'All Lightroom and preview stages must complete nine photos')
             check('raw_and_jpg', len(raw) == len(jpg) == 9 and all(a['lr_status'] == 'EXPORTED' and a['preset_applied'] == 'test-preset' and a['lr_photo_id'] and bool(a['mock']) == (args.lightroom == 'mock') for a in raw) and all(not a['lr_photo_id'] for a in jpg), 'Only nine RAW files must be registered, preset and exported')
-            check('other_never_in_lightroom', other_never_in_lightroom(assets, previews, paired_ids, steps, adapter_calls + list(getattr(lr, 'calls', [])), readback_paths), 'Other assets must never enter Lightroom or paired previews; each Lightroom stage must succeed for nine RAW files')
-            check('previews', len(preview_rows) == 9 and all(max(p['width'], p['height']) == 1600 and p['paired_jpg'] for p in preview_rows) and verification['status'] == 'OK' and verification['mock'] == (args.lightroom == 'mock'), 'Nine 1600-pixel paired previews must independently verify')
+            check('other_never_in_lightroom', other_never_in_lightroom(assets, previews, paired_ids, steps, adapter_calls + list(getattr(lr, 'calls', [])) + manifests, readback_paths), 'Other assets must never enter Lightroom or paired previews; each Lightroom stage must succeed for nine RAW files')
+            check('previews', manifest_ok and len(preview_rows) == 9 and all(max(p['width'], p['height']) == 1600 and p['paired_jpg'] for p in preview_rows) and verification['status'] == 'OK' and verification['mock'] == (args.lightroom == 'mock'), 'Nine 1600-pixel paired previews must independently verify')
             check('readback', args.lightroom == 'mock' or (len(metadata) == 9 and missing == 0 and all(p['exposure'] == 0.5 for p in metadata)), 'Real Lightroom must independently read back nine exposures of 0.5; mock is a rehearsal')
             check('approval', len(approval_after) == 1 and approval_before == approval_after and approval_after[0]['plan_digest'] == task['plan_digest'], 'Exactly one unchanged approval')
             check('source_unchanged', compare_snapshots(before, after)['identical'], 'Source inventory must remain unchanged')
@@ -458,6 +480,177 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=r3.wait_appr
                 try: assert_clean(clean)
                 except ValueError: clean = 'Details withheld because they contain identifying information.\n'
                 (out / name).write_text(clean, encoding='utf-8'); assert_clean(out / name)
+    return result
+
+
+def tree_state(root):
+    root = Path(root)
+    entries = []
+    for path in sorted(root.rglob('*')):
+        rel = path.relative_to(root).as_posix()
+        if path.is_symlink():
+            entries.append((rel, 'symlink', os.readlink(path)))
+        elif path.is_dir():
+            entries.append((rel, 'dir'))
+        elif path.is_file():
+            entries.append((rel, 'file', path.stat().st_size, read_hash(path)))
+        else:
+            entries.append((rel, 'other'))
+    return entries
+
+
+def rejudge(args, mount_resolver, command_runner, adapter):
+    from cetacea import preview
+    from cetacea.core import digest
+    if args.mode != 'r3':
+        raise ValueError('Rejudge is only available for r3')
+    if not all((args.out, args.rejudge_home, args.rejudge_task, args.rejudge_from)) or args.preflight_only:
+        raise ValueError('Rejudge requires --out, --rejudge-home, --rejudge-task and --rejudge-from')
+    scope_argument(args.source_subdir)
+    args.source_uuid = source_uuid(args)
+    if not args.confirm_card_readonly:
+        raise ValueError('Explicit read-only confirmation required')
+    original = Path(args.rejudge_from).resolve(strict=True)
+    home = Path(args.rejudge_home).resolve(strict=True)
+    out = Path(args.out).resolve()
+    if out.exists() or out == original or out.is_relative_to(original) or original.is_relative_to(out) or out == home or out.is_relative_to(home) or home.is_relative_to(out):
+        raise ValueError('Rejudge output must be new and separate from original evidence and home')
+    mount = Path(mount_resolver(args.source_uuid)).resolve(strict=True)
+    if out == mount or out.is_relative_to(mount):
+        raise ValueError('Evidence output must be outside card')
+    mapping = {args.source_uuid: '<UUID>', args.source_uuid.upper(): '<UUID>', str(Path.home()): '<HOME>', str(home): '<HOME>', str(mount): '<CARD>', str(original): '<ORIGINAL>'}
+    result = {'mode': 'r3', 'status': 'FAIL_STOPPED', 'real_lightroom': args.lightroom == 'real', 'mock': args.lightroom == 'mock', 'scope': 'test-folder-only', 'scope_subdir': SCOPE, 'counts': {}, 'checks': {}, 'preflight_checks': [], 'failed_step': None, 'failures': [], 'notes': ['Offline re-verdict of an already completed run; no stage re-run.', 'adapter_calls_observed: false'], 'adapter_calls_observed': False, 'rejudge': True, 'rejudged_from': original.name, 'task_id': args.rejudge_task}
+    guards = []
+    def save(name, value): r3.save(out, name, value, mapping)
+    def check(name, value, reason):
+        result['checks'][name] = {'passed': bool(value), 'reason': reason}
+        if not value: result['failures'].append(reason)
+    target_base = Path(args.target_base).resolve(strict=True)
+    if out == target_base or out.is_relative_to(target_base) or target_base.is_relative_to(out):
+        raise ValueError('Rejudge output must be separate from the target')
+    out.mkdir(parents=True, exist_ok=False)
+    step = 'preflight'
+    home_before = target_before = None
+    roots = []
+    try:
+        with guard_writes([out, Path(tempfile.gettempdir())], [mount, home, original, target_base]):
+            target = Path(args.target_base).resolve(strict=True)
+            mapping[str(target)] = '<TARGET>'
+            if not target.is_dir() or target == mount or target.is_relative_to(mount) or (mount_resolver is resolve_mount_by_uuid and target.stat().st_dev == mount.stat().st_dev):
+                raise ValueError('Target must be on a different device')
+            volume_guard(args.source_uuid, mount, mount.stat().st_dev, mount_resolver)
+            if args.expect_nef != 9 or args.expect_jpg != 9: raise ValueError('invalid expected counts')
+            listing = scope_listing(mount, args.source_subdir, args.expect_nef, args.expect_jpg)
+            source = scoped_source(mount, args.source_subdir)
+            result['counts'] = {kind: sum(f['kind'] == kind for f in listing) for kind in ('nef', 'jpg', 'other')}
+            cfg = config.load(home)
+            roots = [Path(cfg['library_root']).resolve(strict=True), Path(cfg['preview_root']).resolve(strict=True)]
+            if any(not root.is_relative_to(target) or out == root or out.is_relative_to(root) or root.is_relative_to(out) for root in roots):
+                raise ValueError('Target roots or evidence output are unsafe')
+            # An immutable SQLite view cannot include uncheckpointed WAL data.
+            wal = home / 'state.sqlite3-wal'
+            if wal.exists() and wal.stat().st_size: raise ValueError('Database has an uncheckpointed WAL')
+            home_before = {name: read_hash(home / name) for name in ('state.sqlite3', 'config.json')}
+            target_before = [tree_state(root) for root in roots]
+            real = args.lightroom == 'real'
+            if real:
+                if not (Path(args.lightroom_node).is_file() and Path(args.lightroom_mcp_index).is_file() and (Path.home() / '.config/lightroom-mcp/token').is_file()):
+                    raise ValueError('Lightroom MCP prerequisites missing')
+                guard = catalog_guard(args.lightroom_test_catalog_path or '/__missing_test_catalog__.lrcat', args.lightroom_process_name, command_runner, 'rejudge')
+                guards.append(guard)
+                if guard.get('process_count') != 1 or not guard['matches_expected'] or not args.lightroom_test_catalog_path: raise ValueError('Catalog guard failed')
+                lr = adapter or RealLightroomMcpAdapter(command=[args.lightroom_node, args.lightroom_mcp_index])
+                if not lr.status().startswith('Lightroom MCP connected') or not preset_probe(lr, args.preset_name)['preset_found']: raise ValueError('MCP or preset unavailable')
+            else:
+                guards.append({'label': 'rejudge', 'matches_expected': True, 'mock': True})
+                lr = adapter or MockLightroomAdapter(size=(1600, 1067))
+            save('preflight.json', {'status': 'OK', 'counts': result['counts'], 'lightroom': 'connected' if real else 'MOCK'})
+            step = 'execution_evidence'
+            uri = 'file:' + quote(str(home / 'state.sqlite3'), safe='/') + '?mode=ro&immutable=1'
+            @contextmanager
+            def readonly(_home):
+                c = sqlite3.connect(uri, uri=True)
+                c.row_factory = sqlite3.Row
+                try: yield c
+                finally: c.close()
+            with readonly(home) as c:
+                row = c.execute('SELECT * FROM tasks WHERE task_id=?', (args.rejudge_task,)).fetchone()
+                if row is None: raise ValueError('Task not found')
+                task = dict(row); task['plan'] = json.loads(task['plan_json'])
+                assets = [dict(x) for x in c.execute('SELECT * FROM assets WHERE order_id=? AND photographer_id=? AND batch_id=?', (task['order_id'], task['photographer_id'], task['batch_id']))]
+                steps = [dict(x) for x in c.execute('SELECT * FROM task_steps WHERE task_id=?', (args.rejudge_task,))]
+                previews = [dict(x) for x in c.execute('SELECT * FROM previews WHERE task_id=?', (args.rejudge_task,))]
+                approvals = [dict(x) for x in c.execute('SELECT * FROM approvals WHERE task_id=?', (args.rejudge_task,))]
+            before = json.loads((original / 'inventory-before.json').read_text())
+            approval_original = json.loads((original / 'approval.json').read_text())['after']
+            class ReadOnlyView:
+                home = Path(args.rejudge_home)
+                config = cfg
+                adapter = lr
+                def get_task(self, task_id): return task
+                def list_assets(self, task_id=None): return assets
+            view = ReadOnlyView()
+            reads = r3.readback(view, task, before)
+            after = snapshot_tree(source)
+            volume_guard(args.source_uuid, mount, mount.stat().st_dev, mount_resolver)
+            rows, pairs, manifest_ok, manifests = preview_evidence(previews, assets, task, cfg['preview_root'])
+            old_connect = db.connect
+            try:
+                db.connect = readonly
+                verification = preview.verify(view, task['task_id'])
+            finally:
+                db.connect = old_connect
+            raw = [a for a in assets if a['kind'] == 'raw']; jpg = [a for a in assets if a['kind'] == 'jpeg']
+            metadata, readback_paths = [], []
+            missing = 0
+            if real:
+                independent = RealLightroomMcpAdapter(command=[args.lightroom_node, args.lightroom_mcp_index])
+                for a in raw:
+                    path = str(safe(cfg['library_root'], a['dest_rel_path']))
+                    readback_paths.append(path)
+                    response = independent.call_tool('get_photo_metadata', {'photo_ids': [path], 'sections': ['developSettings']})
+                    missing += len(response.get('missing', []))
+                    metadata.extend({'filename': Path(path).name, 'fileFormat': p.get('fileFormat'), 'dimensions': p.get('dimensions'), 'exposure': p.get('developSettings', {}).get('exposure')} for p in response.get('photos', []))
+            compact_steps = [{k: s[k] for k in ('run', 'stage', 'state', 'succeeded', 'failed', 'skipped', 'started_at', 'ended_at')} for s in steps]
+            compact_assets = [{k: a[k] for k in ('rel_path', 'kind', 'status', 'lr_status', 'preset_applied', 'mock')} | {'has_lr_photo_id': bool(a['lr_photo_id'])} for a in assets]
+            save('database.json', {'task': {k: task[k] for k in ('task_id', 'state', 'run_count', 'error', 'plan_digest')}, 'task_steps': compact_steps, 'assets': compact_assets})
+            save('library-readback.json', reads); save('previews.json', rows); save('verify-preview.json', verification)
+            save('lightroom-readback.json', {'mock': not real, 'photos': metadata, 'missing_count': missing}); save('inventory-after.json', after)
+            stage_map = {s['stage']: s for s in steps}; count = len(listing)
+            check('task_completed', task['state'] == 'COMPLETED', 'Task must complete')
+            check('verified_library', digest(task['plan']) == task['plan_digest'] and len(reads) == count and all(x['ok'] for x in reads), f'All {count} destination hashes must match source')
+            check('ingest', stage_map.get('ingest', {}).get('state') == 'COMPLETED' and stage_map['ingest']['succeeded'] == count, f'Ingest must complete {count} files')
+            check('lightroom_stages', all(stage_map.get(s, {}).get('state') == 'COMPLETED' and stage_map[s]['succeeded'] == 9 for s in STAGES[1:]), 'All Lightroom and preview stages must complete nine photos')
+            check('raw_and_jpg', len(raw) == len(jpg) == 9 and all(a['lr_status'] == 'EXPORTED' and a['preset_applied'] == 'test-preset' and a['lr_photo_id'] and bool(a['mock']) == (not real) for a in raw) and all(not a['lr_photo_id'] for a in jpg), 'Only nine RAW files must be registered, preset and exported')
+            check('other_never_in_lightroom', other_never_in_lightroom(assets, previews, pairs, steps, manifests, readback_paths), 'Other assets must never enter Lightroom or paired previews; each Lightroom stage must succeed for nine RAW files')
+            check('previews', manifest_ok and len(rows) == 9 and all(max(p['width'], p['height']) == 1600 and p['paired_jpg'] for p in rows) and verification['status'] == 'OK' and verification['mock'] == (not real), 'Nine 1600-pixel paired previews must independently verify')
+            check('readback', not real or (len(metadata) == 9 and missing == 0 and all(p['exposure'] == 0.5 for p in metadata)), 'Real Lightroom must independently read back nine exposures of 0.5; mock is a rehearsal')
+            check('approval', len(approvals) == 1 and approvals[0]['revoked_at'] is None and approvals[0]['plan_digest'] == task['plan_digest'] and desensitize(approvals, mapping) == approval_original, 'Exactly one unchanged approval')
+            check('source_unchanged', compare_snapshots(before, after)['identical'], 'Source inventory must remain unchanged')
+            if real:
+                guards.append(catalog_guard(args.lightroom_test_catalog_path, args.lightroom_process_name, command_runner, 'after_rejudge'))
+            check('catalog_guard', all(g['matches_expected'] and g.get('process_count', 1) == 1 for g in guards), 'All catalog guards must pass; mock is simulated')
+            result['lightroom_stage_summary'] = compact_steps
+    except Exception as exc:
+        result['failed_step'] = step
+        result['failures'].append(step + ': ' + type(exc).__name__ + ' — 步骤执行失败；请检查本地环境')
+    finally:
+        if home_before is not None:
+            try: unchanged = home_before == {name: read_hash(home / name) for name in home_before}
+            except Exception: unchanged = False
+            check('rejudge_home_unchanged', unchanged, 'Home database and config must remain unchanged')
+        if target_before is not None:
+            try: unchanged = target_before == [tree_state(root) for root in roots]
+            except Exception: unchanged = False
+            check('rejudge_target_unchanged', unchanged, 'Target trees must remain unchanged')
+        if result['failed_step'] == 'execution_evidence': result['status'] = 'FAIL'
+        elif result['failed_step'] is None:
+            result['status'] = ('PASS' if args.lightroom == 'real' else 'PASS_MOCK_NOT_REAL_LIGHTROOM') if all(c['passed'] for c in result['checks'].values()) else 'FAIL'
+        save('catalog-guard.json', guards)
+        r3.save_result(out, result, mapping)
+        for name, content in [('README.md', f"# R6 {result['status']}\n\nOffline re-verdict; no stage re-run. MOCK is not real Lightroom verification.\n"), ('console.txt', '\n'.join(result['failures']) + '\n')]:
+            clean = desensitize(content, mapping); assert_clean(clean)
+            (out / name).write_text(clean, encoding='utf-8'); assert_clean(out / name)
     return result
 
 

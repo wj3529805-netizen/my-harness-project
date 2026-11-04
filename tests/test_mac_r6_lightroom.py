@@ -455,3 +455,86 @@ def test_real_adapter_pipeline_under_write_guard(tmp_path):
     assert all(row['state'] == 'COMPLETED' for row in steps)
     assert 'import_photos' in calls and 'export_photos' in calls
     assert w.verify_preview(task['task_id'])['status'] == 'OK'
+
+class NestedMock(r6.MockLightroomAdapter):
+    def export_jpeg(self, photo_refs, dest_dir, max_edge=1600, quality=85):
+        results = []
+        for ref in photo_refs:
+            directory = Path(dest_dir) / ref.asset_id
+            directory.mkdir()
+            results.extend(super().export_jpeg([ref], directory, max_edge, quality))
+        return results
+
+
+@pytest.fixture
+def completed_nested(tmp_path, monkeypatch):
+    args, mount, _ = make_run(tmp_path)
+    (mount / r6.SCOPE / 'NC_FLLST.DAT').write_bytes(b'camera list')
+    homes = []
+    original = r6.tempfile.mkdtemp
+    def capture(*a, **kw):
+        path = original(*a, **kw); homes.append(path); return path
+    monkeypatch.setattr(r6.tempfile, 'mkdtemp', capture)
+    result = r6.run(args, mount_resolver=lambda _: mount, approval_waiter=approve, adapter=NestedMock(size=(1600, 1067)))
+    assert result['status'] == 'PASS_MOCK_NOT_REAL_LIGHTROOM', result
+    assert all(item['passed'] for item in result['checks'].values())
+    task = r6.json.loads((Path(args.out) / 'plan.json').read_text())['task_id']
+    args.rejudge = True
+    args.rejudge_home = homes[0]
+    args.rejudge_task = task
+    args.rejudge_from = args.out
+    args.out = str(tmp_path / 'rejudge')
+    return args, mount
+
+
+def test_nested_rejudge_readonly(completed_nested, monkeypatch):
+    args, mount = completed_nested
+    class Spy(NestedMock):
+        def register(self, *a, **k): raise AssertionError('register called')
+        def apply_preset(self, *a, **k): raise AssertionError('preset called')
+        def export_jpeg(self, *a, **k): raise AssertionError('export called')
+    import sqlite3
+    with sqlite3.connect(Path(args.rejudge_home) / 'state.sqlite3') as c:
+        count = c.execute('SELECT count(*) FROM tasks').fetchone()[0]
+    result = r6.run(args, mount_resolver=lambda _: mount, adapter=Spy())
+    assert result['status'] == 'PASS_MOCK_NOT_REAL_LIGHTROOM', result
+    assert result['rejudge'] and not result['adapter_calls_observed']
+    assert all(item['passed'] for item in result['checks'].values())
+    with sqlite3.connect(Path(args.rejudge_home) / 'state.sqlite3') as c:
+        assert c.execute('SELECT count(*) FROM tasks').fetchone()[0] == count
+    assert_evidence_clean(args.out)
+
+
+@pytest.mark.parametrize('mutation,check', [('library', 'verified_library'), ('source', 'source_unchanged'), ('approval', 'approval')])
+def test_rejudge_detects_changes(completed_nested, mutation, check):
+    args, mount = completed_nested
+    if mutation == 'library':
+        cfg = r6.config.load(Path(args.rejudge_home))
+        file = next(p for p in Path(cfg['library_root']).rglob('*') if p.is_file())
+        file.write_bytes(b'changed')
+    elif mutation == 'source':
+        (mount / r6.SCOPE / '0.NEF').write_bytes(b'changed')
+    else:
+        import sqlite3
+        with sqlite3.connect(Path(args.rejudge_home) / 'state.sqlite3') as c:
+            c.execute('DELETE FROM approvals')
+        c.close()
+    result = r6.run(args, mount_resolver=lambda _: mount)
+    assert result['status'] == 'FAIL', result
+    assert not result['checks'][check]['passed']
+
+
+@pytest.mark.parametrize('same', [True, False])
+def test_rejudge_rejects_existing_output(completed_nested, same):
+    args, mount = completed_nested
+    if same: args.out = args.rejudge_from
+    else: Path(args.out).mkdir()
+    with pytest.raises(ValueError, match='output'):
+        r6.run(args, mount_resolver=lambda _: mount)
+
+
+def test_preview_outside_run_is_check_failure(tmp_path):
+    task = {'order_id': 'r3', 'photographer_id': 'tester', 'batch_id': 'batch', 'task_id': 'task'}
+    previews = [{'run': 1, 'path': str(tmp_path / 'outside.jpg'), 'asset_id': 'asset'}]
+    rows, pairs, valid, manifests = r6.preview_evidence(previews, [], task, tmp_path)
+    assert not valid and not rows and not pairs and not manifests
