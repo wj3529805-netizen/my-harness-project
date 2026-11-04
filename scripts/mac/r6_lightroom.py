@@ -54,6 +54,9 @@ def parser():
     p.add_argument('--expect-jpg', type=int, default=9)
     p.add_argument('--target-base', default='/Volumes/Cetacea Studio')
     p.add_argument('--out')
+    homes = p.add_mutually_exclusive_group()
+    homes.add_argument('--home-dir')
+    homes.add_argument('--home-on-target', action='store_true')
     p.add_argument('--rejudge', action='store_true')
     p.add_argument('--rejudge-home')
     p.add_argument('--rejudge-task')
@@ -69,6 +72,34 @@ def parser():
     p.add_argument('--preflight-only', action='store_true')
     p.add_argument('--reader-note', default='Reader changed from USB to built-in SD reader')
     return p
+
+
+def validate_home_dir(value, mount, out, target_base, target):
+    path = Path(value)
+    if not path.is_absolute() or path.is_symlink():
+        raise ValueError('Home must be absolute and not a symlink')
+    resolved = path.resolve()
+    if resolved.is_relative_to(mount) or resolved.is_relative_to(out.resolve()):
+        raise ValueError('Home must be outside the card and evidence directory')
+    # Cover the planned roots and roots of other runs on the target volume.
+    roots = [target / 'library', target / 'preview']
+    if resolved.is_relative_to(target_base):
+        parts = resolved.relative_to(target_base).parts
+        if len(parts) >= 2 and parts[0].startswith('Cetacea-R6-Test-') and parts[1] in ('library', 'preview'):
+            raise ValueError('Home must be outside library and preview roots')
+    if any(resolved.is_relative_to(root.resolve()) for root in roots):
+        raise ValueError('Home must be outside library and preview roots')
+    if path.exists():
+        if not path.is_dir() or any(path.iterdir()):
+            raise ValueError('Existing home must be an empty directory')
+        ancestor = path
+    else:
+        if not path.parent.is_dir():
+            raise ValueError('Home parent must be an existing directory')
+        ancestor = path.parent
+    if ancestor.stat().st_dev == mount.stat().st_dev:
+        raise ValueError('Home must be on a different device from the card')
+    return resolved
 
 
 def source_uuid(args, environ=None):
@@ -207,6 +238,10 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=r3.wait_appr
               'mock': args.lightroom == 'mock', 'scope': 'test-folder-only', 'scope_subdir': SCOPE,
               'counts': {}, 'checks': {}, 'preflight_checks': [], 'failed_step': None, 'failures': [], 'notes': [],
               'reader_changed_from_usb': True, 'volume_uuid_sha256_prefix': uuid_prefix(args.source_uuid)}
+    location = 'custom' if args.home_dir else 'target' if args.home_on_target else 'tmp'
+    result.update(home_persistent=location != 'tmp', home_location=location, home='<RUN_HOME>')
+    if location == 'tmp':
+        result['notes'].append('The temporary home <RUN_HOME> may be purged on reboot.')
     guards, messages = [], []
     created = False
     execution_started = False
@@ -265,6 +300,17 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=r3.wait_appr
                         (mount_resolver is resolve_mount_by_uuid and target_base.stat().st_dev == mount.stat().st_dev))
         attempt('target_on_different_device', '目标卷必须与源卡位于不同设备', different_device, card_ok and target_ok)
         attempt('evidence_outside_card', '证据目录必须位于源卡之外', lambda: not out.resolve().is_relative_to(mount), card_ok)
+        target = target_base / ('Cetacea-R6-Test-' + stamp) if target_ok else None
+        custom_home = None
+        if args.home_dir:
+            def check_home():
+                nonlocal custom_home
+                custom_home = validate_home_dir(args.home_dir, mount, out, target_base, target)
+                mapping[str(custom_home)] = '<RUN_HOME>'
+                return True
+            attempt('home_dir_safe', 'home 必须使用绝对路径，位于卡和证据目录之外及不同设备；不能位于 library 或 preview 内，且必须为空目录或有已存在的父目录，不能是符号链接', check_home, card_ok and target_ok)
+        else:
+            record('home_dir_safe', True, '', skipped=True)
         source = None
         listing = None
         def list_scope():
@@ -346,10 +392,19 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=r3.wait_appr
             # Scanner may only discard legitimate metadata; do not silently drop an ordinary file.
             if set(before['files']) != {f['rel_path'] for f in listing}: raise ValueError('Scope changed or invalid metadata')
             save('inventory-before.json', before)
-            target = target_base / ('Cetacea-R6-Test-' + stamp)
+            if args.home_dir:
+                custom_home = validate_home_dir(args.home_dir, mount, out, target_base, target)
             target.mkdir(exist_ok=False)
-            home = Path(tempfile.mkdtemp(prefix='cetacea-r6-'))
-            mapping[str(target)] = '<TARGET>'; mapping[str(home)] = '<HOME>'
+            if args.home_on_target:
+                home = target / 'home'
+                home.mkdir(exist_ok=False)
+            elif custom_home is not None:
+                home = custom_home
+                if not home.exists():
+                    home.mkdir(exist_ok=False)
+            else:
+                home = Path(tempfile.mkdtemp(prefix='cetacea-r6-'))
+            mapping[str(target)] = '<TARGET>'; mapping[str(home)] = '<RUN_HOME>'
             w = Workbench.init(home, target / 'library', target / 'preview')
             w.config['lightroom'] = {'adapter': 'mock' if args.lightroom == 'mock' else 'real_mcp', 'command': command}
             w.config['preview'] = {'max_edge': 1600, 'quality': 85}
@@ -475,7 +530,8 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=r3.wait_appr
         if created:
             save('catalog-guard.json', guards)
             r3.save_result(out, result, mapping)
-            for name, content in [('README.md', f"# R6 {result['status']}\n\nMode: {args.lightroom}; scope: {SCOPE}. Reader changed from USB. Mock is not real Lightroom verification.\n"), ('console.txt', '\n'.join(messages) + '\n')]:
+            home_note = 'The temporary home <RUN_HOME> may be purged on reboot.' if location == 'tmp' else f'Run home: <RUN_HOME> ({location}).'
+            for name, content in [('README.md', f"# R6 {result['status']}\n\nMode: {args.lightroom}; scope: {SCOPE}. Reader changed from USB. Mock is not real Lightroom verification.\n\n{home_note}\n"), ('console.txt', '\n'.join(messages) + '\n')]:
                 clean = desensitize(content, mapping)
                 try: assert_clean(clean)
                 except ValueError: clean = 'Details withheld because they contain identifying information.\n'
@@ -518,7 +574,7 @@ def rejudge(args, mount_resolver, command_runner, adapter):
     mount = Path(mount_resolver(args.source_uuid)).resolve(strict=True)
     if out == mount or out.is_relative_to(mount):
         raise ValueError('Evidence output must be outside card')
-    mapping = {args.source_uuid: '<UUID>', args.source_uuid.upper(): '<UUID>', str(Path.home()): '<HOME>', str(home): '<HOME>', str(mount): '<CARD>', str(original): '<ORIGINAL>'}
+    mapping = {args.source_uuid: '<UUID>', args.source_uuid.upper(): '<UUID>', str(Path.home()): '<HOME>', str(home): '<RUN_HOME>', str(mount): '<CARD>', str(original): '<ORIGINAL>'}
     result = {'mode': 'r3', 'status': 'FAIL_STOPPED', 'real_lightroom': args.lightroom == 'real', 'mock': args.lightroom == 'mock', 'scope': 'test-folder-only', 'scope_subdir': SCOPE, 'counts': {}, 'checks': {}, 'preflight_checks': [], 'failed_step': None, 'failures': [], 'notes': ['Offline re-verdict of an already completed run; no stage re-run.', 'adapter_calls_observed: false'], 'adapter_calls_observed': False, 'rejudge': True, 'rejudged_from': original.name, 'task_id': args.rejudge_task}
     guards = []
     def save(name, value): r3.save(out, name, value, mapping)

@@ -29,6 +29,7 @@ export CETACEA_SOURCE_UUID='<CARD_UUID>'
 - `target_volume_present`：目标卷未挂载或路径不存在；接上盘并确认 `--target-base`，脚本不会创建该路径。
 - `target_on_different_device`：目标必须与卡位于不同设备；更换目标卷。
 - `evidence_outside_card`：证据目录必须在卡外；修改 `--out`。
+- `home_dir_safe`：自定义 home 必须为绝对路径，位于卡和证据目录外、与卡不同设备，不能位于 library 或 preview 中；已有目录须为空且不能为符号链接，新目录的父目录须已存在。未使用 `--home-dir` 时跳过。
 - `scope_listing_9nef_9jpg`：测试文件夹必须恰有 9 个 NEF 和 9 个 JPG，允许额外最多 1 个 `NC_FLLST.DAT`，按名字和大小写精确放行；其他任何多余文件、目录或符号链接仍 `FAIL_STOPPED`。预检 counts 包含 `nef`、`jpg` 和 `other`。
 - `node_binary_exists`、`mcp_index_exists`：运行时文件缺失；分别使用 `--lightroom-node`、`--lightroom-mcp-index` 指定正确文件。
 - `bridge_token_exists`：bridge token 不存在；配置并启动 bridge，检查 token 文件。预检只检查文件是否存在，不读取内容。
@@ -39,10 +40,10 @@ export CETACEA_SOURCE_UUID='<CARD_UUID>'
 
 MCP index 默认按顺序查找 `<REPO>/.lightroom-runtime/node_modules/@mskalski/lightroom-mcp/dist/index.js`，然后查找 `<REPO 的同级目录>/cetacea-workbench/.lightroom-runtime/node_modules/@mskalski/lightroom-mcp/dist/index.js`；都不存在时保留第一个路径并报告缺失。Node 默认仍为 `/opt/homebrew/bin/node`。
 
-将上面命令中的 `<HOME>` 换成本机主目录。预检成功后，用新的目录运行：
+将上面命令中的 `<HOME>` 换成本机主目录。正式运行建议使用 `--home-on-target`，将任务数据库持久保存在目标运行目录的 `home/`；也可用 `--home-dir` 指定符合预检要求的目录。默认临时 home 可能在重启后被系统清理。预检成功后，用新的目录运行：
 
 ```sh
-.venv/bin/python scripts/mac/r6_lightroom.py --mode r3 --confirm-card-readonly --out <REPO>/evidence/mac-r6/r3-NEW --lightroom-test-catalog-path '<HOME>/Documents/ChatGPT/AI工作台/cetacea-workbench/acceptance-data/catalog/Cetacea-Phase1-Test-20261102/Cetacea-Phase1-Test-20261102.lrcat'
+.venv/bin/python scripts/mac/r6_lightroom.py --mode r3 --confirm-card-readonly --home-on-target --out <REPO>/evidence/mac-r6/r3-NEW --lightroom-test-catalog-path '<HOME>/Documents/ChatGPT/AI工作台/cetacea-workbench/acceptance-data/catalog/Cetacea-Phase1-Test-20261102/Cetacea-Phase1-Test-20261102.lrcat'
 ```
 
 脚本按预检清单计划全部文件（有 DAT 时 19 个，无 DAT 时 18 个）后打印一行，其中包含 task ID、plan digest 和完整批准命令。检查后在**另一个终端**进入 `<REPO>`，执行该行给出的命令（形式如下，使用实际打印出的 home、task ID 和 digest）：
@@ -69,14 +70,16 @@ MCP index 默认按顺序查找 `<REPO>/.lightroom-runtime/node_modules/@mskalsk
 
 ## r3-1 离线重新判定
 
-r3-1 实际任务已完成，但真实 Lightroom 将每张预览放在 `run-N/<asset_id>/` 下，旧版证据循环错误地在该子目录寻找位于 `run-N/` 的 `preview-manifest.json`，导致 `execution_evidence` 报错。修复后可对原任务重新判定，无需重新导入、批准或执行任何阶段。先保留原证据和目标卷，使用原任务 ID 及原运行打印的临时 home；该 home 位于 `$TMPDIR`，macOS 可能清理它，请尽快执行。卡仍须挂载；脚本只读地重新读取并计算测试卡文件夹的哈希，并与原 `inventory-before.json` 比较。真实 Lightroom 只调用只读的预设查询和元数据读取；仍须打开唯一的测试 catalog 并连接 MCP。
+r3-1 实际任务完成后，旧版证据循环查错了 `preview-manifest.json` 的位置，导致 `execution_evidence` 报错。重启后 macOS 清理了 `$TMPDIR`，任务 home 和 r3-1 数据库丢失，因此 r3-1 无法重新判定。
 
-在 `<REPO>` 中执行，将 `<HOME>` 换成本机主目录、`<TMP_HOME>` 换成原运行的临时 home、`<TASK_ID>` 换成原任务 ID，并将两个证据目录替换为实际原目录和全新目录：
+今后使用 `--home-on-target` 的运行可保留目标运行目录中的 `home/`，并用 `--rejudge-home <target run dir>/home` 重新判定，无需重新导入、批准或执行阶段。卡仍须挂载；脚本只读地重新读取并计算测试卡文件夹的哈希，并与原 `inventory-before.json` 比较。真实 Lightroom 只调用只读的预设查询和元数据读取；仍须打开唯一的测试 catalog 并连接 MCP。
+
+在 `<REPO>` 中执行，将路径及任务 ID 替换为实际值，并使用新的证据目录：
 
 ```sh
 cd <REPO>
 export CETACEA_SOURCE_UUID='<CARD_UUID>'
-.venv/bin/python scripts/mac/r6_lightroom.py --mode r3 --rejudge --rejudge-home '<TMP_HOME>' --rejudge-task '<TASK_ID>' --rejudge-from '<REPO>/evidence/mac-r6/r3-1' --out '<REPO>/evidence/mac-r6/r3-1-rejudge' --confirm-card-readonly --lightroom real --lightroom-test-catalog-path '<HOME>/Documents/ChatGPT/AI工作台/cetacea-workbench/acceptance-data/catalog/Cetacea-Phase1-Test-20261102/Cetacea-Phase1-Test-20261102.lrcat' --target-base '/Volumes/Cetacea Studio'
+.venv/bin/python scripts/mac/r6_lightroom.py --mode r3 --rejudge --rejudge-home '<target run dir>/home' --rejudge-task '<TASK_ID>' --rejudge-from '<REPO>/evidence/mac-r6/r3-NEW' --out '<REPO>/evidence/mac-r6/r3-NEW-rejudge' --confirm-card-readonly --lightroom real --lightroom-test-catalog-path '<HOME>/Documents/ChatGPT/AI工作台/cetacea-workbench/acceptance-data/catalog/Cetacea-Phase1-Test-20261102/Cetacea-Phase1-Test-20261102.lrcat' --target-base '/Volumes/Cetacea Studio'
 ```
 
 重新判定不修改原证据、home 数据库或目标文件，并检查 home 的数据库和配置以及目标库和预览树前后未变。它无法观察原运行的内存适配器调用日志，结果明确记录 `adapter_calls_observed: false`；其他文件、数据库、manifest、阶段和读回证据仍参与判定。模拟结果仍标为 `PASS_MOCK_NOT_REAL_LIGHTROOM`。若数据库仍有未检查点的 WAL，脚本会停止，以免只读快照遗漏尚未合并的数据；不要在重新判定期间打开或改写该 home。

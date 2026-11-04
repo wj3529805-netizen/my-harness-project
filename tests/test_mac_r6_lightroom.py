@@ -199,6 +199,95 @@ def approve(w, task, timeout, interval):
     w.approve(task['task_id'], task['plan_digest'])
 
 
+def separate_card_device(monkeypatch, mount):
+    original = Path.stat
+    def stat(path, *args, **kwargs):
+        value = original(path, *args, **kwargs)
+        if path == mount:
+            fields = list(value)
+            fields[2] += 1000000
+            return r6.os.stat_result(fields)
+        return value
+    monkeypatch.setattr(Path, 'stat', stat)
+
+
+def test_persistent_custom_home(tmp_path, monkeypatch, capsys):
+    args, mount, _ = make_run(tmp_path)
+    separate_card_device(monkeypatch, mount)
+    home = tmp_path / 'persistent-home'
+    home.mkdir()
+    args.home_dir = str(home)
+    result = r6.run(args, mount_resolver=lambda _: mount, approval_waiter=approve)
+    assert result['status'] == 'PASS_MOCK_NOT_REAL_LIGHTROOM', result
+    assert (home / 'state.sqlite3').is_file()
+    assert result['home_persistent'] and result['home_location'] == 'custom'
+    assert str(home) in capsys.readouterr().out
+    assert checks(args.out)['home_dir_safe']['passed']
+    assert_evidence_clean(args.out)
+    for path in Path(args.out).iterdir():
+        assert str(home) not in path.read_text()
+
+
+@pytest.mark.parametrize('case', ['nonempty', 'symlink', 'card', 'same_device', 'library', 'preview', 'evidence', 'relative', 'missing_parent'])
+def test_unsafe_custom_home_stops_before_task(tmp_path, monkeypatch, case):
+    args, mount, _ = make_run(tmp_path)
+    if case != 'same_device':
+        separate_card_device(monkeypatch, mount)
+    home = tmp_path / 'home'
+    if case == 'nonempty':
+        home.mkdir()
+        (home / 'keep').touch()
+    elif case == 'symlink':
+        home.symlink_to(tmp_path, target_is_directory=True)
+    elif case == 'card':
+        home = mount / 'home'
+    elif case in ('library', 'preview'):
+        home = Path(args.target_base) / 'Cetacea-R6-Test-old' / case
+    elif case == 'evidence':
+        home = Path(args.out)
+    elif case == 'relative':
+        home = Path('relative-home')
+    elif case == 'missing_parent':
+        home = tmp_path / 'missing' / 'home'
+    args.home_dir = str(home)
+    result = r6.run(args, mount_resolver=lambda _: mount, approval_waiter=approve)
+    assert result['status'] == 'FAIL_STOPPED'
+    assert result['failed_step'] == 'home_dir_safe'
+    assert not checks(args.out)['home_dir_safe']['passed']
+    assert not list(Path(args.target_base).iterdir())
+    assert not (Path(args.out) / 'plan.json').exists()
+
+
+def test_preflight_does_not_create_custom_home(tmp_path, monkeypatch):
+    args, mount, _ = make_run(tmp_path)
+    separate_card_device(monkeypatch, mount)
+    home = tmp_path / 'new-home'
+    args.home_dir = str(home)
+    args.preflight_only = True
+    result = r6.run(args, mount_resolver=lambda _: mount)
+    assert result['status'] == 'PREFLIGHT_OK_MOCK'
+    assert checks(args.out)['home_dir_safe']['passed']
+    assert not home.exists()
+
+
+def test_home_on_target(tmp_path):
+    args, mount, _ = make_run(tmp_path)
+    args.home_on_target = True
+    result = r6.run(args, mount_resolver=lambda _: mount, approval_waiter=approve)
+    assert result['status'] == 'PASS_MOCK_NOT_REAL_LIGHTROOM', result
+    target = next(Path(args.target_base).iterdir())
+    assert (target / 'home' / 'state.sqlite3').is_file()
+    assert result['home_persistent'] and result['home_location'] == 'target'
+    assert_evidence_clean(args.out)
+    for path in Path(args.out).iterdir():
+        assert str(target / 'home') not in path.read_text()
+
+
+def test_home_options_are_mutually_exclusive():
+    with pytest.raises(SystemExit):
+        r6.parser().parse_args(['--mode', 'r3', '--confirm-card-readonly', '--home-dir', '/tmp/home', '--home-on-target'])
+
+
 def test_complete_mock_run(tmp_path, monkeypatch):
     args, mount, sibling = make_run(tmp_path)
     (mount / r6.SCOPE / 'NC_FLLST.DAT').write_bytes(b'camera list')
@@ -216,6 +305,10 @@ def test_complete_mock_run(tmp_path, monkeypatch):
     lr = r6.MockLightroomAdapter(size=(1600, 1067))
     result = r6.run(args, mount_resolver=lambda _: mount, approval_waiter=approve, adapter=lr)
     assert result['status'] == 'PASS_MOCK_NOT_REAL_LIGHTROOM', result
+    assert result['home_location'] == 'tmp' and not result['home_persistent']
+    assert result['home'] == '<RUN_HOME>' and 'purged on reboot' in result['notes'][0]
+    assert 'purged on reboot' in (Path(args.out) / 'README.md').read_text()
+    assert checks(args.out)['home_dir_safe']['skipped']
     assert result['counts'] == {'nef': 9, 'jpg': 9, 'other': 1}
     assert all(result['checks'][name]['passed'] for name in ('verified_library', 'ingest', 'other_never_in_lightroom'))
     assert '19' in result['checks']['verified_library']['reason'] and '19' in result['checks']['ingest']['reason']
