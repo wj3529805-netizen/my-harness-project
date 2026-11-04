@@ -1,0 +1,5 @@
+# R6 (R3+LR) evidence notes
+
+- **r3-4: PASS** (real Lightroom Classic, test catalog only, `--home-on-target`). Ingest 19 (9 NEF, 9 JPG, 1 NC_FLLST.DAT as other); lr_register / lr_preset / lr_export / preview_verify 9 each; one approval; source unchanged; catalog guard passed. Stage times (s): ingest 0.4, lr_register 143.4, lr_preset 163.8, lr_export 104.0, preview_verify 8.6.
+- **r3-1: FAIL (runner bug, not a pipeline failure).** The task completed all stages, but the runner looked for `preview-manifest.json` in the per-asset export subfolder instead of the run dir (fixed in 21a6ad2). Its task home lived in `$TMPDIR`, which macOS purged on reboot, so it could not be re-judged; persistent home added in d1c03b6.
+- **preflight-6, preflight-7, r3-2, r3-3: FAIL_STOPPED at `mcp_connected`.** No task created, nothing written to target. The Lightroom plugin served only the first bridge client after it was started (preflight-8 PREFLIGHT_OK consumed it); resolved by quitting and reopening Lightroom Classic with the test catalog before r3-4 (no separate preflight).

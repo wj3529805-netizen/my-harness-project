@@ -1,0 +1,251 @@
+{
+  "files": {
+    "r3/tester/b_a02d975bd935/DSC_9717.NEF": {
+      "subtype": "HE_STAR",
+      "tag_0x0093_value": null,
+      "tag_0x0051_value": 14,
+      "tag_0x0093_hex": null,
+      "make": "NIKON CORPORATION",
+      "model": "NIKON Z6_3",
+      "method": "pure-python-tiff-makernote",
+      "evidence_source": "https://exiftool.org/TagNames/Nikon.html (Nikon NEFCompression Values)",
+      "evidence": [
+        "Raw IFD Compression 0x0103: 1",
+        "Raw IFD Compression 0x0103: 34713",
+        "Raw IFD Compression 0x0103: 1",
+        "Raw IFD Compression 0x0103: 6",
+        "Raw IFD Compression 0x0103: 34713",
+        "Raw strip bits/pixel: 4.9999",
+        "Raw IFD Compression 0x0103: 6",
+        "MakerNote tag 0x0051 byte offset 10 int16u: 14",
+        "corroborated by raw strip bits/pixel"
+      ],
+      "error": null,
+      "raw_strip_bits_per_pixel": 4.9999,
+      "bpp_subtype": "HE_STAR",
+      "corroborated": true
+    },
+    "r3/tester/b_a02d975bd935/DSC_9718.NEF": {
+      "subtype": "HE_STAR",
+      "tag_0x0093_value": null,
+      "tag_0x0051_value": 14,
+      "tag_0x0093_hex": null,
+      "make": "NIKON CORPORATION",
+      "model": "NIKON Z6_3",
+      "method": "pure-python-tiff-makernote",
+      "evidence_source": "https://exiftool.org/TagNames/Nikon.html (Nikon NEFCompression Values)",
+      "evidence": [
+        "Raw IFD Compression 0x0103: 1",
+        "Raw IFD Compression 0x0103: 34713",
+        "Raw IFD Compression 0x0103: 1",
+        "Raw IFD Compression 0x0103: 6",
+        "Raw IFD Compression 0x0103: 34713",
+        "Raw strip bits/pixel: 4.9999",
+        "Raw IFD Compression 0x0103: 6",
+        "MakerNote tag 0x0051 byte offset 10 int16u: 14",
+        "corroborated by raw strip bits/pixel"
+      ],
+      "error": null,
+      "raw_strip_bits_per_pixel": 4.9999,
+      "bpp_subtype": "HE_STAR",
+      "corroborated": true
+    },
+    "r3/tester/b_a02d975bd935/DSC_9719.NEF": {
+      "subtype": "HE_STAR",
+      "tag_0x0093_value": null,
+      "tag_0x0051_value": 14,
+      "tag_0x0093_hex": null,
+      "make": "NIKON CORPORATION",
+      "model": "NIKON Z6_3",
+      "method": "pure-python-tiff-makernote",
+      "evidence_source": "https://exiftool.org/TagNames/Nikon.html (Nikon NEFCompression Values)",
+      "evidence": [
+        "Raw IFD Compression 0x0103: 1",
+        "Raw IFD Compression 0x0103: 34713",
+        "Raw IFD Compression 0x0103: 1",
+        "Raw IFD Compression 0x0103: 6",
+        "Raw IFD Compression 0x0103: 34713",
+        "Raw strip bits/pixel: 4.9999",
+        "Raw IFD Compression 0x0103: 6",
+        "MakerNote tag 0x0051 byte offset 10 int16u: 14",
+        "corroborated by raw strip bits/pixel"
+      ],
+      "error": null,
+      "raw_strip_bits_per_pixel": 4.9999,
+      "bpp_subtype": "HE_STAR",
+      "corroborated": true
+    },
+    "r3/tester/b_a02d975bd935/DSC_9720.NEF": {
+      "subtype": "HE_STAR",
+      "tag_0x0093_value": null,
+      "tag_0x0051_value": 14,
+      "tag_0x0093_hex": null,
+      "make": "NIKON CORPORATION",
+      "model": "NIKON Z6_3",
+      "method": "pure-python-tiff-makernote",
+      "evidence_source": "https://exiftool.org/TagNames/Nikon.html (Nikon NEFCompression Values)",
+      "evidence": [
+        "Raw IFD Compression 0x0103: 1",
+        "Raw IFD Compression 0x0103: 34713",
+        "Raw IFD Compression 0x0103: 1",
+        "Raw IFD Compression 0x0103: 6",
+        "Raw IFD Compression 0x0103: 34713",
+        "Raw strip bits/pixel: 4.9999",
+        "Raw IFD Compression 0x0103: 6",
+        "MakerNote tag 0x0051 byte offset 10 int16u: 14",
+        "corroborated by raw strip bits/pixel"
+      ],
+      "error": null,
+      "raw_strip_bits_per_pixel": 4.9999,
+      "bpp_subtype": "HE_STAR",
+      "corroborated": true
+    },
+    "r3/tester/b_a02d975bd935/DSC_9721.NEF": {
+      "subtype": "HE_STAR",
+      "tag_0x0093_value": null,
+      "tag_0x0051_value": 14,
+      "tag_0x0093_hex": null,
+      "make": "NIKON CORPORATION",
+      "model": "NIKON Z6_3",
+      "method": "pure-python-tiff-makernote",
+      "evidence_source": "https://exiftool.org/TagNames/Nikon.html (Nikon NEFCompression Values)",
+      "evidence": [
+        "Raw IFD Compression 0x0103: 1",
+        "Raw IFD Compression 0x0103: 34713",
+        "Raw IFD Compression 0x0103: 1",
+        "Raw IFD Compression 0x0103: 6",
+        "Raw IFD Compression 0x0103: 34713",
+        "Raw strip bits/pixel: 4.9999",
+        "Raw IFD Compression 0x0103: 6",
+        "MakerNote tag 0x0051 byte offset 10 int16u: 14",
+        "corroborated by raw strip bits/pixel"
+      ],
+      "error": null,
+      "raw_strip_bits_per_pixel": 4.9999,
+      "bpp_subtype": "HE_STAR",
+      "corroborated": true
+    },
+    "r3/tester/b_a02d975bd935/DSC_9722.NEF": {
+      "subtype": "HE_STAR",
+      "tag_0x0093_value": null,
+      "tag_0x0051_value": 14,
+      "tag_0x0093_hex": null,
+      "make": "NIKON CORPORATION",
+      "model": "NIKON Z6_3",
+      "method": "pure-python-tiff-makernote",
+      "evidence_source": "https://exiftool.org/TagNames/Nikon.html (Nikon NEFCompression Values)",
+      "evidence": [
+        "Raw IFD Compression 0x0103: 1",
+        "Raw IFD Compression 0x0103: 34713",
+        "Raw IFD Compression 0x0103: 1",
+        "Raw IFD Compression 0x0103: 6",
+        "Raw IFD Compression 0x0103: 34713",
+        "Raw strip bits/pixel: 4.9999",
+        "Raw IFD Compression 0x0103: 6",
+        "MakerNote tag 0x0051 byte offset 10 int16u: 14",
+        "corroborated by raw strip bits/pixel"
+      ],
+      "error": null,
+      "raw_strip_bits_per_pixel": 4.9999,
+      "bpp_subtype": "HE_STAR",
+      "corroborated": true
+    },
+    "r3/tester/b_a02d975bd935/DSC_9723.NEF": {
+      "subtype": "LOSSLESS",
+      "tag_0x0093_value": null,
+      "tag_0x0051_value": 3,
+      "tag_0x0093_hex": null,
+      "make": "NIKON CORPORATION",
+      "model": "NIKON Z6_3",
+      "method": "pure-python-tiff-makernote",
+      "evidence_source": "https://exiftool.org/TagNames/Nikon.html (Nikon NEFCompression Values)",
+      "evidence": [
+        "Raw IFD Compression 0x0103: 1",
+        "Raw IFD Compression 0x0103: 34713",
+        "Raw IFD Compression 0x0103: 1",
+        "Raw IFD Compression 0x0103: 6",
+        "Raw IFD Compression 0x0103: 34713",
+        "Raw strip bits/pixel: 8.4203",
+        "Raw IFD Compression 0x0103: 6",
+        "MakerNote tag 0x0051 byte offset 10 int16u: 3"
+      ],
+      "error": null,
+      "raw_strip_bits_per_pixel": 8.4203,
+      "bpp_subtype": null,
+      "corroborated": false
+    },
+    "r3/tester/b_a02d975bd935/DSC_9724.NEF": {
+      "subtype": "HE_STAR",
+      "tag_0x0093_value": null,
+      "tag_0x0051_value": 14,
+      "tag_0x0093_hex": null,
+      "make": "NIKON CORPORATION",
+      "model": "NIKON Z6_3",
+      "method": "pure-python-tiff-makernote",
+      "evidence_source": "https://exiftool.org/TagNames/Nikon.html (Nikon NEFCompression Values)",
+      "evidence": [
+        "Raw IFD Compression 0x0103: 1",
+        "Raw IFD Compression 0x0103: 34713",
+        "Raw IFD Compression 0x0103: 1",
+        "Raw IFD Compression 0x0103: 6",
+        "Raw IFD Compression 0x0103: 34713",
+        "Raw strip bits/pixel: 4.9999",
+        "Raw IFD Compression 0x0103: 6",
+        "MakerNote tag 0x0051 byte offset 10 int16u: 14",
+        "corroborated by raw strip bits/pixel"
+      ],
+      "error": null,
+      "raw_strip_bits_per_pixel": 4.9999,
+      "bpp_subtype": "HE_STAR",
+      "corroborated": true
+    },
+    "r3/tester/b_a02d975bd935/DSC_9725.NEF": {
+      "subtype": "HE",
+      "tag_0x0093_value": null,
+      "tag_0x0051_value": 13,
+      "tag_0x0093_hex": null,
+      "make": "NIKON CORPORATION",
+      "model": "NIKON Z6_3",
+      "method": "pure-python-tiff-makernote",
+      "evidence_source": "https://exiftool.org/TagNames/Nikon.html (Nikon NEFCompression Values)",
+      "evidence": [
+        "Raw IFD Compression 0x0103: 1",
+        "Raw IFD Compression 0x0103: 34713",
+        "Raw IFD Compression 0x0103: 1",
+        "Raw IFD Compression 0x0103: 6",
+        "Raw IFD Compression 0x0103: 34713",
+        "Raw strip bits/pixel: 3.0",
+        "Raw IFD Compression 0x0103: 6",
+        "MakerNote tag 0x0051 byte offset 10 int16u: 13",
+        "corroborated by raw strip bits/pixel"
+      ],
+      "error": null,
+      "raw_strip_bits_per_pixel": 3.0,
+      "bpp_subtype": "HE",
+      "corroborated": true
+    }
+  },
+  "counts": {
+    "HE_STAR": 7,
+    "LOSSLESS": 1,
+    "HE": 1
+  },
+  "raw_values": {},
+  "files_by_subtype": {
+    "HE": [
+      "r3/tester/b_a02d975bd935/DSC_9725.NEF"
+    ],
+    "HE_STAR": [
+      "r3/tester/b_a02d975bd935/DSC_9717.NEF",
+      "r3/tester/b_a02d975bd935/DSC_9718.NEF",
+      "r3/tester/b_a02d975bd935/DSC_9719.NEF",
+      "r3/tester/b_a02d975bd935/DSC_9720.NEF",
+      "r3/tester/b_a02d975bd935/DSC_9721.NEF",
+      "r3/tester/b_a02d975bd935/DSC_9722.NEF",
+      "r3/tester/b_a02d975bd935/DSC_9724.NEF"
+    ],
+    "LOSSLESS": [
+      "r3/tester/b_a02d975bd935/DSC_9723.NEF"
+    ]
+  }
+}

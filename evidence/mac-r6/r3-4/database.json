@@ -1,0 +1,234 @@
+{
+  "task": {
+    "task_id": "tsk_4849d45daafb4807a527c0c13a6fac55",
+    "state": "COMPLETED",
+    "run_count": 1,
+    "error": null,
+    "plan_digest": "a3c36ca27c6f241ce6eec378bc8e8700dbad6df81b8a12f7f1436d9a9487cfbc"
+  },
+  "task_steps": [
+    {
+      "run": 1,
+      "stage": "ingest",
+      "state": "COMPLETED",
+      "succeeded": 19,
+      "failed": 0,
+      "skipped": 0,
+      "started_at": "2026-11-04T15:00:31.155366+00:00",
+      "ended_at": "2026-11-04T15:00:31.518177+00:00"
+    },
+    {
+      "run": 1,
+      "stage": "lr_register",
+      "state": "COMPLETED",
+      "succeeded": 9,
+      "failed": 0,
+      "skipped": 0,
+      "started_at": "2026-11-04T15:00:31.519409+00:00",
+      "ended_at": "2026-11-04T15:02:54.921428+00:00"
+    },
+    {
+      "run": 1,
+      "stage": "lr_preset",
+      "state": "COMPLETED",
+      "succeeded": 9,
+      "failed": 0,
+      "skipped": 0,
+      "started_at": "2026-11-04T15:02:54.922268+00:00",
+      "ended_at": "2026-11-04T15:05:38.720119+00:00"
+    },
+    {
+      "run": 1,
+      "stage": "lr_export",
+      "state": "COMPLETED",
+      "succeeded": 9,
+      "failed": 0,
+      "skipped": 0,
+      "started_at": "2026-11-04T15:05:38.720890+00:00",
+      "ended_at": "2026-11-04T15:07:22.708446+00:00"
+    },
+    {
+      "run": 1,
+      "stage": "preview_verify",
+      "state": "COMPLETED",
+      "succeeded": 9,
+      "failed": 0,
+      "skipped": 0,
+      "started_at": "2026-11-04T15:07:22.709094+00:00",
+      "ended_at": "2026-11-04T15:07:31.317234+00:00"
+    }
+  ],
+  "assets": [
+    {
+      "rel_path": "DSC_9717.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_9717.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "EXPORTED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_9718.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_9718.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "EXPORTED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_9719.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_9719.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "EXPORTED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_9720.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_9720.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "EXPORTED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_9721.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_9721.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "EXPORTED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_9722.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_9722.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "EXPORTED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_9723.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_9723.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "EXPORTED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_9724.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_9724.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "EXPORTED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_9725.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_9725.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "EXPORTED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "NC_FLLST.DAT",
+      "kind": "other",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    }
+  ]
+}

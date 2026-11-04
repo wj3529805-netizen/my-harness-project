@@ -1,0 +1,23 @@
+[
+  {
+    "label": "preflight",
+    "pid": "9211",
+    "open_lrcat_count": 1,
+    "matches_expected": true,
+    "process_count": 1
+  },
+  {
+    "label": "before_execute",
+    "pid": "9211",
+    "open_lrcat_count": 1,
+    "matches_expected": true,
+    "process_count": 1
+  },
+  {
+    "label": "after_execute",
+    "pid": "9211",
+    "open_lrcat_count": 1,
+    "matches_expected": true,
+    "process_count": 1
+  }
+]

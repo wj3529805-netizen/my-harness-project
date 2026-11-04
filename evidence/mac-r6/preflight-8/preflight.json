@@ -1,0 +1,81 @@
+{
+  "status": "OK",
+  "checks": [
+    {
+      "name": "card_mounted",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "target_volume_present",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "target_on_different_device",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "evidence_outside_card",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "home_dir_safe",
+      "passed": true,
+      "hint": "",
+      "skipped": true
+    },
+    {
+      "name": "scope_listing_9nef_9jpg",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "node_binary_exists",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "mcp_index_exists",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "bridge_token_exists",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "lightroom_single_process",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "catalog_guard_matches_test_catalog",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "mcp_connected",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "preset_found",
+      "passed": true,
+      "hint": ""
+    }
+  ],
+  "counts": {
+    "nef": 9,
+    "jpg": 9,
+    "other": 1
+  },
+  "preset": {
+    "preset_found": true,
+    "matching_count": 1
+  },
+  "lightroom": "connected"
+}

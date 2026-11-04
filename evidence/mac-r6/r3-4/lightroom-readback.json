@@ -1,0 +1,60 @@
+{
+  "mock": false,
+  "photos": [
+    {
+      "filename": "DSC_9717.NEF",
+      "fileFormat": "RAW",
+      "dimensions": "6048 x 4032",
+      "exposure": 0.5
+    },
+    {
+      "filename": "DSC_9718.NEF",
+      "fileFormat": "RAW",
+      "dimensions": "6048 x 4032",
+      "exposure": 0.5
+    },
+    {
+      "filename": "DSC_9719.NEF",
+      "fileFormat": "RAW",
+      "dimensions": "6048 x 4032",
+      "exposure": 0.5
+    },
+    {
+      "filename": "DSC_9720.NEF",
+      "fileFormat": "RAW",
+      "dimensions": "6048 x 4032",
+      "exposure": 0.5
+    },
+    {
+      "filename": "DSC_9721.NEF",
+      "fileFormat": "RAW",
+      "dimensions": "6048 x 4032",
+      "exposure": 0.5
+    },
+    {
+      "filename": "DSC_9722.NEF",
+      "fileFormat": "RAW",
+      "dimensions": "6048 x 4032",
+      "exposure": 0.5
+    },
+    {
+      "filename": "DSC_9723.NEF",
+      "fileFormat": "RAW",
+      "dimensions": "6048 x 4032",
+      "exposure": 0.5
+    },
+    {
+      "filename": "DSC_9724.NEF",
+      "fileFormat": "RAW",
+      "dimensions": "6048 x 4032",
+      "exposure": 0.5
+    },
+    {
+      "filename": "DSC_9725.NEF",
+      "fileFormat": "RAW",
+      "dimensions": "6048 x 4032",
+      "exposure": 0.5
+    }
+  ],
+  "missing_count": 0
+}

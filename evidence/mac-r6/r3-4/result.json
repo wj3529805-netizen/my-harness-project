@@ -1,0 +1,192 @@
+{
+  "mode": "r3",
+  "status": "PASS",
+  "real_lightroom": true,
+  "mock": false,
+  "scope": "test-folder-only",
+  "scope_subdir": "DCIM/142NZ6_3",
+  "counts": {
+    "nef": 9,
+    "jpg": 9,
+    "other": 1
+  },
+  "checks": {
+    "task_completed": {
+      "passed": true,
+      "reason": "Task must complete"
+    },
+    "verified_library": {
+      "passed": true,
+      "reason": "All 19 destination hashes must match source"
+    },
+    "ingest": {
+      "passed": true,
+      "reason": "Ingest must complete 19 files"
+    },
+    "lightroom_stages": {
+      "passed": true,
+      "reason": "All Lightroom and preview stages must complete nine photos"
+    },
+    "raw_and_jpg": {
+      "passed": true,
+      "reason": "Only nine RAW files must be registered, preset and exported"
+    },
+    "other_never_in_lightroom": {
+      "passed": true,
+      "reason": "Other assets must never enter Lightroom or paired previews; each Lightroom stage must succeed for nine RAW files"
+    },
+    "previews": {
+      "passed": true,
+      "reason": "Nine 1600-pixel paired previews must independently verify"
+    },
+    "readback": {
+      "passed": true,
+      "reason": "Real Lightroom must independently read back nine exposures of 0.5; mock is a rehearsal"
+    },
+    "approval": {
+      "passed": true,
+      "reason": "Exactly one unchanged approval"
+    },
+    "source_unchanged": {
+      "passed": true,
+      "reason": "Source inventory must remain unchanged"
+    },
+    "catalog_guard": {
+      "passed": true,
+      "reason": "All catalog guards must pass; mock is simulated"
+    }
+  },
+  "preflight_checks": [
+    {
+      "name": "card_mounted",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "target_volume_present",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "target_on_different_device",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "evidence_outside_card",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "home_dir_safe",
+      "passed": true,
+      "hint": "",
+      "skipped": true
+    },
+    {
+      "name": "scope_listing_9nef_9jpg",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "node_binary_exists",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "mcp_index_exists",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "bridge_token_exists",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "lightroom_single_process",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "catalog_guard_matches_test_catalog",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "mcp_connected",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "preset_found",
+      "passed": true,
+      "hint": ""
+    }
+  ],
+  "failed_step": null,
+  "failures": [],
+  "notes": [],
+  "reader_changed_from_usb": true,
+  "volume_uuid_sha256_prefix": "e8a48e01f632f7d9",
+  "home_persistent": true,
+  "home_location": "target",
+  "home": "<RUN_HOME>",
+  "nef_subtypes": {
+    "HE_STAR": 7,
+    "LOSSLESS": 1,
+    "HE": 1
+  },
+  "lightroom_stage_summary": [
+    {
+      "run": 1,
+      "stage": "ingest",
+      "state": "COMPLETED",
+      "succeeded": 19,
+      "failed": 0,
+      "skipped": 0,
+      "started_at": "2026-11-04T15:00:31.155366+00:00",
+      "ended_at": "2026-11-04T15:00:31.518177+00:00"
+    },
+    {
+      "run": 1,
+      "stage": "lr_register",
+      "state": "COMPLETED",
+      "succeeded": 9,
+      "failed": 0,
+      "skipped": 0,
+      "started_at": "2026-11-04T15:00:31.519409+00:00",
+      "ended_at": "2026-11-04T15:02:54.921428+00:00"
+    },
+    {
+      "run": 1,
+      "stage": "lr_preset",
+      "state": "COMPLETED",
+      "succeeded": 9,
+      "failed": 0,
+      "skipped": 0,
+      "started_at": "2026-11-04T15:02:54.922268+00:00",
+      "ended_at": "2026-11-04T15:05:38.720119+00:00"
+    },
+    {
+      "run": 1,
+      "stage": "lr_export",
+      "state": "COMPLETED",
+      "succeeded": 9,
+      "failed": 0,
+      "skipped": 0,
+      "started_at": "2026-11-04T15:05:38.720890+00:00",
+      "ended_at": "2026-11-04T15:07:22.708446+00:00"
+    },
+    {
+      "run": 1,
+      "stage": "preview_verify",
+      "state": "COMPLETED",
+      "succeeded": 9,
+      "failed": 0,
+      "skipped": 0,
+      "started_at": "2026-11-04T15:07:22.709094+00:00",
+      "ended_at": "2026-11-04T15:07:31.317234+00:00"
+    }
+  ]
+}

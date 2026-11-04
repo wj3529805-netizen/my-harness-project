@@ -1,0 +1,57 @@
+[
+  {
+    "run": 1,
+    "stage": "ingest",
+    "state": "COMPLETED",
+    "succeeded": 19,
+    "failed": 0,
+    "skipped": 0,
+    "started_at": "2026-11-04T15:00:31.155366+00:00",
+    "ended_at": "2026-11-04T15:00:31.518177+00:00",
+    "elapsed_seconds": 0.362811
+  },
+  {
+    "run": 1,
+    "stage": "lr_register",
+    "state": "COMPLETED",
+    "succeeded": 9,
+    "failed": 0,
+    "skipped": 0,
+    "started_at": "2026-11-04T15:00:31.519409+00:00",
+    "ended_at": "2026-11-04T15:02:54.921428+00:00",
+    "elapsed_seconds": 143.402019
+  },
+  {
+    "run": 1,
+    "stage": "lr_preset",
+    "state": "COMPLETED",
+    "succeeded": 9,
+    "failed": 0,
+    "skipped": 0,
+    "started_at": "2026-11-04T15:02:54.922268+00:00",
+    "ended_at": "2026-11-04T15:05:38.720119+00:00",
+    "elapsed_seconds": 163.797851
+  },
+  {
+    "run": 1,
+    "stage": "lr_export",
+    "state": "COMPLETED",
+    "succeeded": 9,
+    "failed": 0,
+    "skipped": 0,
+    "started_at": "2026-11-04T15:05:38.720890+00:00",
+    "ended_at": "2026-11-04T15:07:22.708446+00:00",
+    "elapsed_seconds": 103.987556
+  },
+  {
+    "run": 1,
+    "stage": "preview_verify",
+    "state": "COMPLETED",
+    "succeeded": 9,
+    "failed": 0,
+    "skipped": 0,
+    "started_at": "2026-11-04T15:07:22.709094+00:00",
+    "ended_at": "2026-11-04T15:07:31.317234+00:00",
+    "elapsed_seconds": 8.60814
+  }
+]

@@ -1,0 +1,1 @@
+mcp_connected: 无法连接 MCP，请检查 Lightroom、bridge 和 token
