@@ -90,15 +90,32 @@ def scope_listing(mount, subdir=SCOPE, expect_nef=9, expect_jpg=9):
                 # validate these candidates before any task is created.
                 continue
             suffix = Path(entry.name).suffix.lower()
-            if suffix not in ('.nef', '.jpg', '.jpeg'):
+            if entry.name == 'NC_FLLST.DAT':
+                kind = 'other'
+            elif suffix in ('.nef', '.jpg', '.jpeg'):
+                kind = 'nef' if suffix == '.nef' else 'jpg'
+            else:
                 unexpected.append(entry.name)
                 continue
             files.append({'rel_path': entry.name, 'size': entry.stat(follow_symlinks=False).st_size,
-                          'kind': 'nef' if suffix == '.nef' else 'jpg'})
-    counts = {kind: sum(f['kind'] == kind for f in files) for kind in ('nef', 'jpg')}
-    if unexpected or counts != {'nef': expect_nef, 'jpg': expect_jpg}:
-        raise ValueError('Scope mismatch: expected exactly the requested NEF and JPG counts and no other files')
+                          'kind': kind})
+    counts = {kind: sum(f['kind'] == kind for f in files) for kind in ('nef', 'jpg', 'other')}
+    if unexpected or counts['nef'] != expect_nef or counts['jpg'] != expect_jpg or counts['other'] > 1:
+        raise ValueError('Scope mismatch: expected requested NEF and JPG counts and optional NC_FLLST.DAT')
     return sorted(files, key=lambda f: f['rel_path'])
+
+
+def other_never_in_lightroom(assets, previews, paired_ids, steps, adapter_calls, readback_paths):
+    others = [a for a in assets if a['kind'] == 'other']
+    identifiers = {a['asset_id'] for a in others}
+    references = identifiers | {a['rel_path'] for a in others} | {a['dest_rel_path'] for a in others if a['dest_rel_path']}
+    evidence = json.dumps([adapter_calls, readback_paths, [s['detail_json'] for s in steps if s['stage'].startswith('lr_')]])
+    return (all(not a['lr_photo_id'] and not a['lr_status'] and not a['preset_applied'] for a in others)
+            and all(p['asset_id'] not in identifiers for p in previews)
+            and not identifiers.intersection(paired_ids)
+            and all(ref not in evidence for ref in references)
+            and all(any(s['stage'] == stage and s['state'] == 'COMPLETED' and s['succeeded'] == 9 for s in steps)
+                    for stage in ('lr_register', 'lr_preset', 'lr_export')))
 
 
 def catalog_guard(expected, process_name='Adobe Lightroom Classic', runner=None, label='preflight'):
@@ -227,9 +244,9 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=r3.wait_appr
             listing = scope_listing(mount, args.source_subdir, args.expect_nef, args.expect_jpg)
             source = scoped_source(mount, args.source_subdir)
             mapping[str(source)] = '<CARD>/' + SCOPE
-            result['counts'] = {'nef': 9, 'jpg': 9}
+            result['counts'] = {kind: sum(f['kind'] == kind for f in listing) for kind in ('nef', 'jpg', 'other')}
             return True
-        attempt('scope_listing_9nef_9jpg', '检查测试文件夹是否恰有 9 个 NEF 和 9 个 JPG，且无其他文件', list_scope, card_ok)
+        attempt('scope_listing_9nef_9jpg', '检查测试文件夹是否恰有 9 个 NEF 和 9 个 JPG，可选一个精确命名的 NC_FLLST.DAT，不能有其他文件', list_scope, card_ok)
         real = args.lightroom == 'real'
         node_ok, _ = attempt('node_binary_exists', 'Node 不存在，请用 --lightroom-node 指定运行时', lambda: Path(args.lightroom_node).is_file()) if real else (record('node_binary_exists', True, ''), None)
         index_ok, _ = attempt('mcp_index_exists', 'MCP index.js 不存在，请用 --lightroom-mcp-index 指定', lambda: Path(args.lightroom_mcp_index).is_file()) if real else (record('mcp_index_exists', True, ''), None)
@@ -323,6 +340,13 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=r3.wait_appr
                 raise RuntimeError('Expected exactly one valid approval')
             step = 'lightroom_process_catalog_guard'
             volume_check(); catalog('before_execute')
+            adapter_calls = []
+            for method in ('register', 'apply_preset', 'export_jpeg'):
+                original = getattr(lr, method)
+                def observe(files, *a, _original=original, _method=method, **kw):
+                    adapter_calls.append([_method, [(f.asset_id, f.rel_path, str(f.abs_path)) for f in files]])
+                    return _original(files, *a, **kw)
+                setattr(lr, method, observe)
             with guard_writes([target, home, Path(tempfile.gettempdir())], [mount]):
                 step = 'execute'
                 execution_started = True
@@ -370,20 +394,24 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=r3.wait_appr
             raw = [a for a in assets if a['kind'] == 'raw']; jpg = [a for a in assets if a['kind'] == 'jpeg']
             lookup = {a['asset_id']: a for a in assets}
             preview_rows = []
+            paired_ids = []
             for p in previews:
                 a = lookup[p['asset_id']]
                 manifest = json.loads((Path(p['path']).parent / 'preview-manifest.json').read_text())
                 item = next(x for x in manifest['previews'] if x['asset_id'] == p['asset_id'])
+                paired_ids.extend(x.get('paired_jpg_asset_id') for x in manifest['previews'])
                 pair = lookup.get(item.get('paired_jpg_asset_id'))
                 preview_rows.append({'rel_path': a['rel_path'], 'width': p['width'], 'height': p['height'], 'sha256': p['sha256'], 'library_sha256': a['sha256'], 'paired_jpg': pair['rel_path'] if pair else None, 'mock': bool(p['mock'])})
             save('previews.json', preview_rows)
             verification = w.verify_preview(task['task_id']); save('verify-preview.json', verification)
             metadata = []
             missing = 0
+            readback_paths = []
             if args.lightroom == 'real':
                 independent = RealLightroomMcpAdapter(command=command)
                 for a in raw:
                     path = str(safe(w.config['library_root'], a['dest_rel_path']))
+                    readback_paths.append(path)
                     response = independent.call_tool('get_photo_metadata', {'photo_ids': [path], 'sections': ['developSettings']})
                     missing += len(response.get('missing', []))
                     for photo in response.get('photos', []):
@@ -393,11 +421,13 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=r3.wait_appr
             subtype = r3.subtype_report(Path(w.config['library_root']), lib_inventory)
             save('nef-subtype-report.json', subtype); result['nef_subtypes'] = subtype['counts']
             stage_map = {s['stage']: s for s in steps}
+            expected_ingest = len(listing)
             check('task_completed', finished['state'] == 'COMPLETED', 'Task must complete')
-            check('verified_library', len(reads) == 18 and all(x['ok'] for x in reads), 'All 18 destination hashes must match source')
-            check('ingest', stage_map.get('ingest', {}).get('state') == 'COMPLETED' and stage_map['ingest']['succeeded'] == 18, 'Ingest must complete 18 files')
+            check('verified_library', len(reads) == expected_ingest and all(x['ok'] for x in reads), f'All {expected_ingest} destination hashes must match source')
+            check('ingest', stage_map.get('ingest', {}).get('state') == 'COMPLETED' and stage_map['ingest']['succeeded'] == expected_ingest, f'Ingest must complete {expected_ingest} files')
             check('lightroom_stages', all(stage_map.get(s, {}).get('state') == 'COMPLETED' and stage_map[s]['succeeded'] == 9 for s in STAGES[1:]), 'All Lightroom and preview stages must complete nine photos')
             check('raw_and_jpg', len(raw) == len(jpg) == 9 and all(a['lr_status'] == 'EXPORTED' and a['preset_applied'] == 'test-preset' and a['lr_photo_id'] and bool(a['mock']) == (args.lightroom == 'mock') for a in raw) and all(not a['lr_photo_id'] for a in jpg), 'Only nine RAW files must be registered, preset and exported')
+            check('other_never_in_lightroom', other_never_in_lightroom(assets, previews, paired_ids, steps, adapter_calls + list(getattr(lr, 'calls', [])), readback_paths), 'Other assets must never enter Lightroom or paired previews; each Lightroom stage must succeed for nine RAW files')
             check('previews', len(preview_rows) == 9 and all(max(p['width'], p['height']) == 1600 and p['paired_jpg'] for p in preview_rows) and verification['status'] == 'OK' and verification['mock'] == (args.lightroom == 'mock'), 'Nine 1600-pixel paired previews must independently verify')
             check('readback', args.lightroom == 'mock' or (len(metadata) == 9 and missing == 0 and all(p['exposure'] == 0.5 for p in metadata)), 'Real Lightroom must independently read back nine exposures of 0.5; mock is a rehearsal')
             check('approval', len(approval_after) == 1 and approval_before == approval_after and approval_after[0]['plan_digest'] == task['plan_digest'], 'Exactly one unchanged approval')

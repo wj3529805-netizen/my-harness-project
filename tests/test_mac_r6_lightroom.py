@@ -60,6 +60,25 @@ def test_scope_listing_and_extra_file(tmp_path, monkeypatch):
         r6.scope_listing(tmp_path)
 
 
+def test_scope_listing_skips_apple_metadata(tmp_path):
+    source = tmp_path / r6.SCOPE
+    source.mkdir(parents=True)
+    for i in range(9):
+        (source / f'{i}.NEF').write_bytes(b'raw')
+        (source / f'{i}.JPG').write_bytes(b'jpg')
+    for name in ('NC_FLLST.DAT', '.DS_Store', '._0.NEF'):
+        (source / name).write_bytes(b'metadata')
+
+    names = {item['rel_path'] for item in r6.scope_listing(tmp_path)}
+    assert len(names) == 19
+    assert 'NC_FLLST.DAT' in names
+    assert '.DS_Store' not in names and '._0.NEF' not in names
+
+    (source / 'extra.TXT').write_bytes(b'extra')
+    with pytest.raises(ValueError, match='Scope mismatch'):
+        r6.scope_listing(tmp_path)
+
+
 @pytest.mark.parametrize('pids,catalogs,expected', [
     ('', [], False), ('1\n2\n', [], False),
     ('1', ['/test.lrcat', '/other.lrcat'], False),
@@ -182,6 +201,7 @@ def approve(w, task, timeout, interval):
 
 def test_complete_mock_run(tmp_path, monkeypatch):
     args, mount, sibling = make_run(tmp_path)
+    (mount / r6.SCOPE / 'NC_FLLST.DAT').write_bytes(b'camera list')
     original = r6.os.scandir
     def checked(path):
         assert not Path(path).is_relative_to(sibling)
@@ -193,8 +213,13 @@ def test_complete_mock_run(tmp_path, monkeypatch):
             assert not Path(path).is_relative_to(sibling)
         return original_open(path, *args, **kwargs)
     monkeypatch.setattr(r6.os, 'open', checked_open)
-    result = r6.run(args, mount_resolver=lambda _: mount, approval_waiter=approve)
+    lr = r6.MockLightroomAdapter(size=(1600, 1067))
+    result = r6.run(args, mount_resolver=lambda _: mount, approval_waiter=approve, adapter=lr)
     assert result['status'] == 'PASS_MOCK_NOT_REAL_LIGHTROOM', result
+    assert result['counts'] == {'nef': 9, 'jpg': 9, 'other': 1}
+    assert all(result['checks'][name]['passed'] for name in ('verified_library', 'ingest', 'other_never_in_lightroom'))
+    assert '19' in result['checks']['verified_library']['reason'] and '19' in result['checks']['ingest']['reason']
+    assert {s['stage']: s['succeeded'] for s in result['lightroom_stage_summary']} == dict(ingest=19, lr_register=9, lr_preset=9, lr_export=9, preview_verify=9)
     expected = {'preflight.json', 'catalog-guard.json', 'reader.json', 'inventory-before.json', 'inventory-after.json', 'plan.json', 'approval.json', 'database.json', 'stage-timing.json', 'previews.json', 'verify-preview.json', 'lightroom-readback.json', 'nef-subtype-report.json', 'library-readback.json', 'result.json', 'README.md', 'console.txt'}
     assert {p.name for p in Path(args.out).iterdir()} == expected
     approval = r6.json.loads((Path(args.out) / 'approval.json').read_text())
@@ -202,21 +227,40 @@ def test_complete_mock_run(tmp_path, monkeypatch):
     assert approval['count'] == 1 and approval['before'] == approval['after']
     assert approval['after'][0]['plan_digest'] == plan['plan_digest']
     assert plan['plan']['stages'] == r6.STAGES
+    dat = next(f for f in plan['plan']['files'] if f['rel_path'] == 'NC_FLLST.DAT')
+    assert dat['kind'] == 'other' and all(dat['asset_id'] not in call for call in lr.calls)
+    for name in ('inventory-before.json', 'inventory-after.json', 'library-readback.json'):
+        assert 'NC_FLLST.DAT' in (Path(args.out) / name).read_text()
     for path in Path(args.out).iterdir():
         r6.assert_clean(path)
         assert 'fake-private-uuid' not in path.read_text()
 
 
-@pytest.mark.parametrize('mutation', ['missing', 'extra'])
+@pytest.mark.parametrize('mutation', ['missing', 'extra', 'other_dat', 'lowercase', 'two_dat', 'duplicate_case', 'directory', 'symlink'])
 def test_scope_mismatch_stops_before_task(tmp_path, mutation):
     args, mount, _ = make_run(tmp_path)
     source = mount / r6.SCOPE
     if mutation == 'missing':
         (source / '0.NEF').unlink()
-    else:
+    elif mutation == 'extra':
         (source / 'extra.TXT').write_bytes(b'x')
+    elif mutation == 'other_dat':
+        (source / 'other.DAT').write_bytes(b'x')
+    elif mutation == 'lowercase':
+        (source / 'nc_fllst.dat').write_bytes(b'x')
+    elif mutation == 'two_dat':
+        (source / 'NC_FLLST.DAT').write_bytes(b'x')
+        (source / 'other.DAT').write_bytes(b'x')
+    elif mutation == 'duplicate_case':
+        (source / 'NC_FLLST.DAT').write_bytes(b'x')
+        (source / 'nc_fllst.dat').write_bytes(b'x')
+    elif mutation == 'directory':
+        (source / 'NC_FLLST.DAT').mkdir()
+    else:
+        (source / 'NC_FLLST.DAT').symlink_to(source / '0.NEF')
     result = r6.run(args, mount_resolver=lambda _: mount, approval_waiter=approve)
     assert result['status'] == 'FAIL_STOPPED'
+    assert not checks(args.out)['scope_listing_9nef_9jpg']['passed']
     assert not list(Path(args.target_base).iterdir())
     assert not (Path(args.out) / 'plan.json').exists()
     assert (Path(args.out) / 'result.json').exists()
@@ -272,8 +316,11 @@ def test_r4_rejected(tmp_path, capsys, monkeypatch):
     assert '已推迟' in capsys.readouterr().err
 
 
-def test_preflight_does_not_read_source_contents(tmp_path, monkeypatch):
+@pytest.mark.parametrize('with_dat', [False, True])
+def test_preflight_does_not_read_source_contents(tmp_path, monkeypatch, with_dat):
     args, mount, _ = make_run(tmp_path)
+    if with_dat:
+        (mount / r6.SCOPE / 'NC_FLLST.DAT').write_bytes(b'camera list')
     args.preflight_only = True
     original_open = r6.os.open
     def checked(path, *a, **kw):
@@ -283,8 +330,29 @@ def test_preflight_does_not_read_source_contents(tmp_path, monkeypatch):
     monkeypatch.setattr(r6.os, 'open', checked)
     result = r6.run(args, mount_resolver=lambda _: mount)
     assert result['status'] == 'PREFLIGHT_OK_MOCK'
+    assert result['counts'] == {'nef': 9, 'jpg': 9, 'other': int(with_dat)}
+    assert r6.json.loads((Path(args.out) / 'preflight.json').read_text())['counts'] == result['counts']
     assert not list(Path(args.target_base).iterdir())
     assert not (Path(args.out) / 'plan.json').exists()
+
+
+def test_other_registered_fails_acceptance(tmp_path, monkeypatch):
+    args, mount, _ = make_run(tmp_path)
+    (mount / r6.SCOPE / 'NC_FLLST.DAT').write_bytes(b'camera list')
+    original = r6.Workbench.list_assets
+    def tampered(w, *a, **kw):
+        assets = original(w, *a, **kw)
+        # Affect only the evidence read after the pipeline has completed.
+        if any(asset['lr_status'] == 'EXPORTED' for asset in assets):
+            for asset in assets:
+                if asset['kind'] == 'other':
+                    asset['lr_photo_id'] = 'fake-registered'
+                    asset['lr_status'] = 'REGISTERED'
+        return assets
+    monkeypatch.setattr(r6.Workbench, 'list_assets', tampered)
+    result = r6.run(args, mount_resolver=lambda _: mount, approval_waiter=approve)
+    assert result['status'] == 'FAIL', result
+    assert not result['checks']['other_never_in_lightroom']['passed']
 
 
 @pytest.mark.parametrize('function', ['readback', 'subtype_report'])
