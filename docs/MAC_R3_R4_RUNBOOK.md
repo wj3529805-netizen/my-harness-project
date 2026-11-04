@@ -1,5 +1,7 @@
 # Mac R3 / R4 测试文件夹验证
 
+真实 Lightroom 的 R3+LR 已准备但尚未在 Mac 运行（NOT_RUN）；R4+LR 已推迟（NOT_RUN）。见 [R6 手册](MAC_R6_RUNBOOK.md)。
+
 ## HE / HE★ 判别依据
 
 MakerNote `0x0051` 偏移 10 的值：13 为 HE，14 为 HE★，3 为 Lossless；已用有标签的公开 Z8/Z9 样片核对。原始 strip 的恒定码率可独立佐证：HE 为 3.0 bpp，HE★ 为 5.0 bpp。两项冲突时标记 UNKNOWN，仅有码率时不分类。

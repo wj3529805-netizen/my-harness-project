@@ -18,6 +18,10 @@
 
 R3 214716 的 HE 帧是 DSC_9725.NEF；其[清点](../evidence/mac-r3/run-20261103-214716/inventory-before.json)与目的地读回 SHA-256 均为 `d77f05b50d569de25ce56c435bf7c8d3b40abc250d0a3acee4c376645e941f7e`，与 [samples/Nikon-Z6III-HE-DSC_9725.NEF](../samples/README.md) 所记哈希一致。
 
+## R6：真实 Lightroom 下的 R3/R4
+
+R3+LR 已准备，尚未在 Mac 运行，状态 **NOT_RUN**；R4+LR 已推迟，状态 **NOT_RUN**。见 [R6 手册](MAC_R6_RUNBOOK.md)。
+
 ## NOT_COVERED / 局限
 
 - R3 吞吐量只有 55 张冷读的约 **97 MB/s** 可作为速度数据。45 张的 788 MB/s 和 9 张的 758 MB/s 按缓存已热的重复读取假设处理，**不能作为速度证据**；并未验证缓存状态。
