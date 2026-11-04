@@ -103,6 +103,79 @@ def make_run(tmp_path):
     return args, mount, sibling
 
 
+def configure_runtime(args, tmp_path, monkeypatch):
+    args.lightroom_node = str(tmp_path / 'node')
+    args.lightroom_mcp_index = str(tmp_path / 'index.js')
+    Path(args.lightroom_node).touch()
+    Path(args.lightroom_mcp_index).touch()
+    home = tmp_path / 'fake-home'
+    token = home / '.config/lightroom-mcp/token'
+    token.parent.mkdir(parents=True)
+    token.touch()
+    monkeypatch.setattr(Path, 'home', lambda: home)
+
+
+def assert_evidence_clean(out):
+    for path in Path(out).iterdir():
+        r6.assert_clean(path)
+
+
+def checks(out):
+    return {item['name']: item for item in r6.json.loads((Path(out) / 'preflight.json').read_text())['checks']}
+
+
+def test_missing_target_reports_safe_failure(tmp_path):
+    args, mount, _ = make_run(tmp_path)
+    args.preflight_only = True
+    args.target_base = str(tmp_path / 'missing-target')
+    result = r6.run(args, mount_resolver=lambda _: mount)
+    assert result['status'] == 'FAIL_STOPPED'
+    assert result['failed_step'] == 'target_volume_present'
+    assert not checks(args.out)['target_volume_present']['passed']
+    assert any('target_volume_present: FileNotFoundError' in x for x in result['failures'])
+    assert str(tmp_path) not in str(result['failures'])
+    assert not Path(args.target_base).exists()
+    assert r6.json.loads((Path(args.out) / 'catalog-guard.json').read_text())
+    assert_evidence_clean(args.out)
+
+
+def test_multiple_runtime_failures_and_missing_card(tmp_path, monkeypatch):
+    args, _, _ = make_run(tmp_path)
+    args.lightroom = 'real'
+    args.lightroom_test_catalog_path = '/test.lrcat'
+    args.lightroom_node = str(tmp_path / 'missing-node')
+    args.lightroom_mcp_index = str(tmp_path / 'missing-index')
+    monkeypatch.setattr(Path, 'home', lambda: tmp_path / 'empty-home')
+    def missing(_):
+        raise FileNotFoundError('private path ' + str(tmp_path))
+    def runner(cmd):
+        return '1' if cmd[0] == 'pgrep' else 'n/test.lrcat'
+    result = r6.run(args, mount_resolver=missing, command_runner=runner)
+    items = checks(args.out)
+    assert result['status'] == 'FAIL_STOPPED'
+    for name in ('card_mounted', 'node_binary_exists', 'mcp_index_exists', 'bridge_token_exists'):
+        assert not items[name]['passed'] and any(x.startswith(name + ':') for x in result['failures'])
+    for name in ('scope_listing_9nef_9jpg', 'target_on_different_device', 'evidence_outside_card', 'mcp_connected', 'preset_found'):
+        assert items[name]['skipped']
+    assert str(tmp_path) not in str(result['failures'])
+    assert r6.json.loads((Path(args.out) / 'catalog-guard.json').read_text())
+    assert_evidence_clean(args.out)
+
+
+def test_default_index_candidates(tmp_path):
+    repo = tmp_path / 'my-harness-project'
+    sibling = tmp_path / 'cetacea-workbench'
+    suffix = '.lightroom-runtime/node_modules/@mskalski/lightroom-mcp/dist/index.js'
+    first, second = repo / suffix, sibling / suffix
+    assert r6.default_mcp_index(repo) == str(first)
+    second.parent.mkdir(parents=True)
+    second.touch()
+    assert r6.default_mcp_index(repo) == str(second)
+    first.parent.mkdir(parents=True)
+    first.touch()
+    assert r6.default_mcp_index(repo) == str(first)
+
+
 def approve(w, task, timeout, interval):
     w.approve(task['task_id'], task['plan_digest'])
 
@@ -149,16 +222,20 @@ def test_scope_mismatch_stops_before_task(tmp_path, mutation):
     assert (Path(args.out) / 'result.json').exists()
 
 
-def test_preset_missing_stops(tmp_path):
+def test_preset_missing_stops(tmp_path, monkeypatch):
     args, mount, _ = make_run(tmp_path)
     args.lightroom = 'real'
     args.lightroom_test_catalog_path = '/test.lrcat'
+    configure_runtime(args, tmp_path, monkeypatch)
     class Adapter:
         def status(self): return 'Lightroom MCP connected'
         def call_tool(self, *_): return {'count': 1, 'presets': [{'name': 'private preset'}]}
     def runner(cmd): return '1' if cmd[0] == 'pgrep' else 'n/test.lrcat'
     result = r6.run(args, mount_resolver=lambda _: mount, command_runner=runner, adapter=Adapter())
     assert result['status'] == 'FAIL_STOPPED'
+    assert not checks(args.out)['preset_found']['passed']
+    assert any(x.startswith('preset_found:') for x in result['failures'])
+    assert_evidence_clean(args.out)
     assert 'private preset' not in (Path(args.out) / 'preflight.json').read_text()
     assert not list(Path(args.target_base).iterdir())
 
@@ -218,7 +295,7 @@ def test_evidence_exception_after_execute_is_fail(tmp_path, monkeypatch, functio
     monkeypatch.setattr(r6.r3, function, fail)
     result = r6.run(args, mount_resolver=lambda _: mount, approval_waiter=approve)
     assert result['status'] == 'FAIL'
-    assert any('injected evidence failure' in failure for failure in result['failures'])
+    assert any('execution_evidence: RuntimeError' in failure for failure in result['failures'])
     assert r6.json.loads((Path(args.out) / 'result.json').read_text())['status'] == 'FAIL'
 
 
@@ -229,7 +306,7 @@ def test_execute_exception_is_fail(tmp_path, monkeypatch):
     monkeypatch.setattr(r6.Workbench, 'execute', fail)
     result = r6.run(args, mount_resolver=lambda _: mount, approval_waiter=approve)
     assert result['status'] == 'FAIL'
-    assert any('injected execute failure' in failure for failure in result['failures'])
+    assert any('execute: RuntimeError' in failure for failure in result['failures'])
 
 
 @pytest.mark.parametrize('failed_guard', ['preflight', 'before_execute', 'after_execute'])
@@ -237,6 +314,7 @@ def test_catalog_guard_failure_at_each_stage(tmp_path, monkeypatch, failed_guard
     args, mount, _ = make_run(tmp_path)
     args.lightroom = 'real'
     args.lightroom_test_catalog_path = '/test.lrcat'
+    configure_runtime(args, tmp_path, monkeypatch)
     class Adapter(r6.MockLightroomAdapter):
         def status(self): return 'Lightroom MCP connected'
         def call_tool(self, name, arguments):
@@ -248,7 +326,7 @@ def test_catalog_guard_failure_at_each_stage(tmp_path, monkeypatch, failed_guard
     monkeypatch.setattr(r6, 'RealLightroomMcpAdapter', Readback)
     monkeypatch.setattr(r6, 'reader_info', lambda *a: {})
     monkeypatch.setattr(r6, 'catalog_guard', lambda expected, process, runner, label: {
-        'label': label, 'matches_expected': label != failed_guard})
+        'label': label, 'process_count': 1, 'matches_expected': label != failed_guard})
     execute_calls = []
     execute = r6.Workbench.execute
     def track_execute(w, *a, **kw):

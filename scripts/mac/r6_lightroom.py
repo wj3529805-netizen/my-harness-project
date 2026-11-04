@@ -34,6 +34,13 @@ def scope_argument(value):
     return value
 
 
+def default_mcp_index(repo=None):
+    repo = Path(repo) if repo is not None else Path(__file__).resolve().parents[2]
+    suffix = '.lightroom-runtime/node_modules/@mskalski/lightroom-mcp/dist/index.js'
+    candidates = [repo / suffix, repo.parent / 'cetacea-workbench' / suffix]
+    return str(next((path for path in candidates if path.exists()), candidates[0]))
+
+
 def parser():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--mode', choices=('r3', 'r4'), required=True)
@@ -46,7 +53,7 @@ def parser():
     p.add_argument('--out')
     p.add_argument('--lightroom', choices=('real', 'mock'), default='real')
     p.add_argument('--lightroom-node', default='/opt/homebrew/bin/node')
-    p.add_argument('--lightroom-mcp-index', default=str(Path(__file__).resolve().parents[2] / '.lightroom-runtime/node_modules/@mskalski/lightroom-mcp/dist/index.js'))
+    p.add_argument('--lightroom-mcp-index', default=default_mcp_index())
     p.add_argument('--lightroom-test-catalog-path')
     p.add_argument('--lightroom-process-name', default='Adobe Lightroom Classic')
     p.add_argument('--preset-name', default='Cetacea Phase1 Test +0.50')
@@ -105,7 +112,7 @@ def catalog_guard(expected, process_name='Adobe Lightroom Classic', runner=None,
             raise
         pids = []
     record = {'label': label, 'pid': pids[0] if len(pids) == 1 else None,
-              'open_lrcat_count': 0, 'matches_expected': False}
+              'open_lrcat_count': 0, 'matches_expected': False, 'process_count': len(pids)}
     if len(pids) == 1:
         lines = runner(['lsof', '-p', pids[0], '-Fn']).splitlines()
         catalogs = {line[1:] for line in lines if line.startswith('n') and line.endswith('.lrcat')}
@@ -150,7 +157,7 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=r3.wait_appr
     mapping = {args.source_uuid: '<UUID>', args.source_uuid.upper(): '<UUID>', str(Path.home()): '<HOME>'}
     result = {'mode': args.mode, 'status': 'FAIL_STOPPED', 'real_lightroom': args.lightroom == 'real',
               'mock': args.lightroom == 'mock', 'scope': 'test-folder-only', 'scope_subdir': SCOPE,
-              'counts': {}, 'checks': {}, 'failures': [], 'notes': [],
+              'counts': {}, 'checks': {}, 'preflight_checks': [], 'failed_step': None, 'failures': [], 'notes': [],
               'reader_changed_from_usb': True, 'volume_uuid_sha256_prefix': uuid_prefix(args.source_uuid)}
     guards, messages = [], []
     created = False
@@ -160,63 +167,133 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=r3.wait_appr
         result['checks'][name] = {'passed': bool(value), 'reason': reason}
         if not value: result['failures'].append(reason)
     try:
-        mount = Path(mount_resolver(args.source_uuid)).resolve(strict=True)
-        if out.resolve().is_relative_to(mount): raise ValueError('Evidence output must be outside card')
+        # Resolve the card before creating evidence so a known card is never written.
+        step = 'card_mount'
+        mount = None
+        mount_error = None
+        try:
+            mount = Path(mount_resolver(args.source_uuid)).resolve(strict=True)
+        except Exception as exc:
+            mount_error = exc
+        step = 'evidence_output'
+        if mount is not None and out.resolve().is_relative_to(mount):
+            raise ValueError('Evidence output must be outside card')
         out.mkdir(parents=True, exist_ok=False); created = True
-        mapping[str(mount)] = '<CARD>'
+        checks = []
+        def record(name, passed, hint, exc=None, skipped=False):
+            item = {'name': name, 'passed': bool(passed), 'hint': hint if not passed else ''}
+            if skipped:
+                item['skipped'] = True
+            elif not passed:
+                failure = name + ': ' + (type(exc).__name__ + ' — ' if exc else '') + hint
+                result['failures'].append(failure)
+                messages.append(failure)
+                if result['failed_step'] is None:
+                    result['failed_step'] = name
+            checks.append(item)
+            return bool(passed)
+        def attempt(name, hint, fn, dependencies=True):
+            if not dependencies:
+                return record(name, False, '前置检查未通过，已跳过', skipped=True), None
+            try:
+                value = fn()
+                return record(name, bool(value), hint), value
+            except Exception as exc:
+                return record(name, False, hint, exc), None
+        card_ok = record('card_mounted', mount is not None, '无法解析卡的挂载点，请检查 UUID 和卡是否已挂载', mount_error)
+        if card_ok:
+            mapping[str(mount)] = '<CARD>'
+        target_base = None
+        def resolve_target():
+            nonlocal target_base
+            target_base = Path(args.target_base).resolve(strict=True)
+            if not target_base.is_dir():
+                raise NotADirectoryError()
+            mapping[str(target_base)] = '<TARGET>'
+            return True
+        target_ok, _ = attempt('target_volume_present', '目标卷未挂载，请接上并确认路径（--target-base）', resolve_target)
+        def different_device():
+            return not (target_base == mount or target_base.is_relative_to(mount) or
+                        (mount_resolver is resolve_mount_by_uuid and target_base.stat().st_dev == mount.stat().st_dev))
+        attempt('target_on_different_device', '目标卷必须与源卡位于不同设备', different_device, card_ok and target_ok)
+        attempt('evidence_outside_card', '证据目录必须位于源卡之外', lambda: not out.resolve().is_relative_to(mount), card_ok)
+        source = None
+        listing = None
+        def list_scope():
+            nonlocal source, listing
+            if args.expect_nef != 9 or args.expect_jpg != 9:
+                raise ValueError('invalid expected counts')
+            volume_guard(args.source_uuid, mount, mount.stat().st_dev, mount_resolver)
+            listing = scope_listing(mount, args.source_subdir, args.expect_nef, args.expect_jpg)
+            source = scoped_source(mount, args.source_subdir)
+            mapping[str(source)] = '<CARD>/' + SCOPE
+            result['counts'] = {'nef': 9, 'jpg': 9}
+            return True
+        attempt('scope_listing_9nef_9jpg', '检查测试文件夹是否恰有 9 个 NEF 和 9 个 JPG，且无其他文件', list_scope, card_ok)
+        real = args.lightroom == 'real'
+        node_ok, _ = attempt('node_binary_exists', 'Node 不存在，请用 --lightroom-node 指定运行时', lambda: Path(args.lightroom_node).is_file()) if real else (record('node_binary_exists', True, ''), None)
+        index_ok, _ = attempt('mcp_index_exists', 'MCP index.js 不存在，请用 --lightroom-mcp-index 指定', lambda: Path(args.lightroom_mcp_index).is_file()) if real else (record('mcp_index_exists', True, ''), None)
+        token_ok, _ = attempt('bridge_token_exists', 'bridge token 不存在，请启动并配置 Lightroom MCP bridge', lambda: (Path.home() / '.config/lightroom-mcp/token').is_file()) if real else (record('bridge_token_exists', True, ''), None)
+        guard = None
+        try:
+            if real:
+                expected = args.lightroom_test_catalog_path or '/__missing_test_catalog__.lrcat'
+                guard = catalog_guard(expected, args.lightroom_process_name, command_runner, 'preflight')
+                if not args.lightroom_test_catalog_path:
+                    guard['matches_expected'] = False
+            else:
+                guard = {'label': 'preflight', 'pid': None, 'open_lrcat_count': None, 'matches_expected': True, 'mock': True}
+            guards.append(guard)
+            process_ok = record('lightroom_single_process', guard.get('process_count', 1 if guard.get('matches_expected') else 0) == 1, '请启动且只运行一个 Lightroom Classic 进程')
+            record('catalog_guard_matches_test_catalog', guard['matches_expected'], '请在 Lightroom 中只打开指定的测试 catalog', skipped=not process_ok)
+        except Exception as exc:
+            guards.append({'label': 'preflight', 'matches_expected': False, 'skipped': True})
+            record('lightroom_single_process', False, '无法检查 Lightroom 进程，请确认 Lightroom 已启动', exc)
+            record('catalog_guard_matches_test_catalog', False, '前置检查未通过，已跳过', skipped=True)
+            process_ok = False
+        command = [args.lightroom_node, args.lightroom_mcp_index]
+        lr = adapter or (MockLightroomAdapter(size=(1600, 1067)) if not real else RealLightroomMcpAdapter(command=command))
+        connected, _ = attempt('mcp_connected', '无法连接 MCP，请检查 Lightroom、bridge 和 token', lambda: lr.status().startswith('Lightroom MCP connected'), node_ok and index_ok and token_ok and process_ok and bool(guard and guard['matches_expected'])) if real else (record('mcp_connected', True, ''), None)
+        probe = None
+        def check_preset():
+            nonlocal probe
+            probe = preset_probe(lr, args.preset_name)
+            return probe['preset_found']
+        if real:
+            attempt('preset_found', '未找到指定预设，请在 Lightroom 中创建或指定预设', check_preset, connected)
+        else:
+            probe = {'preset_found': True, 'matching_count': 1, 'mock': True}
+            record('preset_found', True, '')
+        result['preflight_checks'] = checks
+        save('preflight.json', {'status': 'FAIL_STOPPED' if result['failures'] else 'OK', 'checks': checks,
+                                'counts': result['counts'], 'preset': probe,
+                                'lightroom': 'MOCK' if not real else ('connected' if connected else 'unavailable')})
+        if result['failures']:
+            return result
+        step = 'reader_info'
+        reader = reader_info(mount, reader_runner) if real else {'mock': True}
+        reader.update(reader_changed_from_usb=True, note=args.reader_note, volume_uuid_sha256_prefix=uuid_prefix(args.source_uuid))
+        save('reader.json', reader)
         device = mount.stat().st_dev
-        # Reject symlinks before resolving the scope; it must never alias a sibling.
-        for component in (mount / 'DCIM', mount / args.source_subdir):
-            if component.is_symlink():
-                raise ValueError('Scope path must not contain symlinks')
-        source = scoped_source(mount, args.source_subdir)
-        mapping[str(source)] = '<CARD>/' + SCOPE
-        target_base = Path(args.target_base).resolve(strict=True)
-        if target_base == mount or target_base.is_relative_to(mount) or (mount_resolver is resolve_mount_by_uuid and target_base.stat().st_dev == device):
-            raise ValueError('Target must be on a different device from the card')
-        mapping[str(target_base)] = '<TARGET>'
         def volume_check(): volume_guard(args.source_uuid, mount, device, mount_resolver)
         def catalog(label):
-            if args.lightroom == 'mock':
-                record = {'label': label, 'pid': None, 'open_lrcat_count': None, 'matches_expected': True, 'mock': True}
+            if not real:
+                record_guard = {'label': label, 'pid': None, 'open_lrcat_count': None, 'matches_expected': True, 'mock': True}
             else:
-                record = catalog_guard(args.lightroom_test_catalog_path, args.lightroom_process_name, command_runner, label)
-            guards.append(record)
-            if not record['matches_expected']:
+                record_guard = catalog_guard(args.lightroom_test_catalog_path, args.lightroom_process_name, command_runner, label)
+            guards.append(record_guard)
+            if not record_guard['matches_expected']:
                 if label != 'after_execute':
                     raise RuntimeError('请在 Lightroom 里只打开测试 catalog')
                 check('catalog_guard', False, 'All catalog guards must pass; mock is simulated')
                 result['status'] = 'FAIL'
-        if args.lightroom == 'real' and not args.lightroom_test_catalog_path:
-            raise ValueError('Real Lightroom requires an absolute test catalog path')
-        if args.expect_nef != 9 or args.expect_jpg != 9:
-            raise ValueError('This acceptance requires exactly 9 NEF and 9 JPG')
-        volume_check()
-        listing = scope_listing(mount, args.source_subdir, args.expect_nef, args.expect_jpg)
-        result['counts'] = {'nef': 9, 'jpg': 9}
-        catalog('preflight')
-        command = [args.lightroom_node, args.lightroom_mcp_index]
-        lr = adapter or (MockLightroomAdapter(size=(1600, 1067)) if args.lightroom == 'mock' else RealLightroomMcpAdapter(command=command))
-        if args.lightroom == 'real':
-            if not lr.status().startswith('Lightroom MCP connected'):
-                raise RuntimeError('检查 Lightroom、MCP bridge 和 token 文件是否存在')
-            probe = preset_probe(lr, args.preset_name)
-            if not probe['preset_found']:
-                save('preflight.json', {'status': 'FAIL_STOPPED', 'preset': probe})
-                raise RuntimeError('Required preset not found')
-            reader = reader_info(mount, reader_runner)
-        else:
-            probe = {'preset_found': True, 'matching_count': 1, 'mock': True}
-            reader = {'mock': True}
-        reader.update(reader_changed_from_usb=True, note=args.reader_note, volume_uuid_sha256_prefix=uuid_prefix(args.source_uuid))
-        save('reader.json', reader)
-        save('preflight.json', {'status': 'OK', 'counts': result['counts'], 'preset': probe,
-                                'lightroom': 'MOCK' if args.lightroom == 'mock' else 'connected',
-                                'token_exists': (Path.home() / '.config/lightroom-mcp/token').exists() if args.lightroom == 'real' else None})
+        step = 'preflight_complete'
         if args.preflight_only:
             result['status'] = 'PREFLIGHT_OK_MOCK' if args.lightroom == 'mock' else 'PREFLIGHT_OK'
         else:
+            step = 'volume_guard'
             volume_check()
+            step = 'scope_inventory'
             before = snapshot_tree(source)
             # Scanner may only discard legitimate metadata; do not silently drop an ordinary file.
             if set(before['files']) != {f['rel_path'] for f in listing}: raise ValueError('Scope changed or invalid metadata')
@@ -239,18 +316,23 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=r3.wait_appr
             prompt = 'python -m cetacea.cli --home ' + shlex.quote(str(home)) + ' approve ' + shlex.quote(task['task_id']) + ' ' + shlex.quote(task['plan_digest'])
             print(f"task_id={task['task_id']} plan_digest={task['plan_digest']} approval: {prompt}", flush=True)
             messages.append('Approval command printed (paths omitted from evidence).')
+            step = 'approval'
             approval_waiter(w, task, args.approval_timeout, args.approval_interval)
             approval_before = r3.approvals(w, task['task_id'])
             if len(approval_before) != 1 or approval_before[0]['plan_digest'] != task['plan_digest'] or approval_before[0]['revoked_at'] is not None:
                 raise RuntimeError('Expected exactly one valid approval')
+            step = 'lightroom_process_catalog_guard'
             volume_check(); catalog('before_execute')
             with guard_writes([target, home, Path(tempfile.gettempdir())], [mount]):
+                step = 'execute'
                 execution_started = True
                 finished = w.execute(task['task_id'])
             if finished['state'] != 'COMPLETED':
                 result['status'] = 'FAIL'
                 result['failures'].append('Pipeline failed: ' + str(finished.get('error') or finished['state']))
+            step = 'lightroom_process_catalog_guard'
             catalog('after_execute'); volume_check()
+            step = 'execution_evidence'
             assets = w.list_assets(task_id=task['task_id'])
             with db.connect(home) as c:
                 steps = [dict(x) for x in c.execute('SELECT * FROM task_steps WHERE task_id=?', (task['task_id'],))]
@@ -333,8 +415,10 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=r3.wait_appr
             assert_clean(detail)
         except ValueError:
             detail = 'Details withheld for privacy'
-        result['failures'].append(type(exc).__name__ + ': ' + detail)
-        messages.append(type(exc).__name__ + ': ' + detail)
+        result['failed_step'] = step
+        message = step + ': ' + type(exc).__name__ + ' — 步骤执行失败；请检查本地环境'
+        result['failures'].append(message)
+        messages.append(message)
     finally:
         if created:
             save('catalog-guard.json', guards)

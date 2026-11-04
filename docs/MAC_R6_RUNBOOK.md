@@ -23,6 +23,22 @@ export CETACEA_SOURCE_UUID='<CARD_UUID>'
 .venv/bin/python scripts/mac/r6_lightroom.py --mode r3 --confirm-card-readonly --preflight-only --out <REPO>/evidence/mac-r6/preflight-NEW --lightroom-test-catalog-path '<HOME>/Documents/ChatGPT/AI工作台/cetacea-workbench/acceptance-data/catalog/Cetacea-Phase1-Test-20261102/Cetacea-Phase1-Test-20261102.lrcat'
 ```
 
+预检结果写入 `preflight.json` 的 `checks`，并复制到 `result.json` 的 `preflight_checks`。各项 `passed` 为布尔值；`skipped: true` 表示前置条件未通过，修复前置条件后重新预检。失败项汇总在 `result.json` 的 `failures` 和 `console.txt`，`failed_step` 标出首个失败项。`catalog-guard.json` 保留预检记录。mock 模式的 Lightroom 检查是模拟结果，不能作为实机验证。
+
+- `card_mounted`：无法根据 UUID 解析卡挂载点；检查 UUID、读卡器和挂载状态。
+- `target_volume_present`：目标卷未挂载或路径不存在；接上盘并确认 `--target-base`，脚本不会创建该路径。
+- `target_on_different_device`：目标必须与卡位于不同设备；更换目标卷。
+- `evidence_outside_card`：证据目录必须在卡外；修改 `--out`。
+- `scope_listing_9nef_9jpg`：测试文件夹必须恰有 9 个 NEF 和 9 个 JPG，且没有其他文件；检查卡和文件夹。
+- `node_binary_exists`、`mcp_index_exists`：运行时文件缺失；分别使用 `--lightroom-node`、`--lightroom-mcp-index` 指定正确文件。
+- `bridge_token_exists`：bridge token 不存在；配置并启动 bridge，检查 token 文件。预检只检查文件是否存在，不读取内容。
+- `lightroom_single_process`：启动 Lightroom Classic 并确保只有一个进程。
+- `catalog_guard_matches_test_catalog`：仅打开指定的测试 catalog，检查 `--lightroom-test-catalog-path`。
+- `mcp_connected`：检查 Lightroom、bridge 是否运行以及 token 配置。
+- `preset_found`：在 Lightroom 中创建所需预设或使用 `--preset-name` 指定现有预设。
+
+MCP index 默认按顺序查找 `<REPO>/.lightroom-runtime/node_modules/@mskalski/lightroom-mcp/dist/index.js`，然后查找 `<REPO 的同级目录>/cetacea-workbench/.lightroom-runtime/node_modules/@mskalski/lightroom-mcp/dist/index.js`；都不存在时保留第一个路径并报告缺失。Node 默认仍为 `/opt/homebrew/bin/node`。
+
 将上面命令中的 `<HOME>` 换成本机主目录。预检成功后，用新的目录运行：
 
 ```sh
@@ -41,7 +57,7 @@ export CETACEA_SOURCE_UUID='<CARD_UUID>'
 
 `PASS` 表示真实 Lightroom 的任务五阶段完成：18 个目标文件重新读回且哈希与卡一致；9 个 RAW 登记、套预设和导出，独立读回曝光均为 0.5；9 个 1600 像素最大边的预览与 JPG 配对并独立校验通过；批准恰一条且未变化，卡前后清点一致，三次 catalog 检查通过。各项检查及原因见 `result.json`。`PASS_MOCK_NOT_REAL_LIGHTROOM` 只表示模拟排练，绝不是实机通过。`PREFLIGHT_OK` 只表示预检通过；`FAIL_STOPPED` 表示安全检查或执行前步骤停止；`FAIL` 表示执行或验收判据失败。
 
-若缺少 UUID、无法解析卡挂载点或无法创建证据目录，脚本会在确认输出位置不在卡上之前退出，此时可能没有 `result.json`；请保存终端错误，检查 UUID、挂载和输出目录。其他失败时保留输出目录及目标卷现场，查看 `result.json`、`console.txt`、数据库和阶段证据；处理权限、bridge、预设或 Lightroom 提示后，使用全新的输出目录重跑。不要手动改库文件或 catalog 来掩盖失败。证据在 `--out` 指定目录；预览图片留在目标卷，不要提交。提交证据前运行隐私检查，不提交 UUID、个人路径或 token。
+若缺少 UUID、证据目录位于已解析的卡内或无法创建证据目录，可能没有 `result.json`；请保存终端错误并检查 UUID 和输出目录。其他失败时保留输出目录及目标卷现场，查看 `result.json`、`console.txt`、数据库和阶段证据；处理权限、bridge、预设或 Lightroom 提示后，使用全新的输出目录重跑。不要手动改库文件或 catalog 来掩盖失败。证据在 `--out` 指定目录；预览图片留在目标卷，不要提交。提交证据前运行隐私检查，不提交 UUID、个人路径或 token。
 
 ## R4+LR（已推迟，未准备为可运行）
 
