@@ -98,3 +98,5 @@ export CETACEA_SOURCE_UUID='<CARD_UUID>'
 `--lr-sample all` 为默认值。当前 workbench API 无法安全地按资产限制已批准计划中的 Lightroom 阶段，因此暂不支持数字采样；指定数字会在读取卡之前拒绝。MOCK 仅供演练，不代表真实 Lightroom 或 macOS 验证。正式运行需按本手册既有流程选择 real、测试 catalog 并完成一次审批。
 
 审批等待默认 1800 秒，整个运行的默认上限为 14400 秒，可用 `--max-runtime-s` 调整。`throughput.json` 记录各阶段耗时、数量和吞吐量、导入字节数、总耗时和运行进程峰值 RSS；macOS 的 RSS 单位为字节，Linux 为 KiB。数据库没有逐文件导入耗时，故不提供该指标。
+
+连接暂时中断时，逐张照片最多尝试四次（默认等待 2、4、8 秒）；重试前检查已完成的操作。`lr-retries.json` 记录脱敏事件及分阶段计数，README 和 result.json 汇总重试次数。重试后所有检查通过仍可通过；失败时应检查完整证据及未能评估的检查。

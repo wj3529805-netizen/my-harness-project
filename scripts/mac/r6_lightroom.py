@@ -543,7 +543,7 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=r3.wait_appr
                 for a in raw:
                     path = str(safe(w.config['library_root'], a['dest_rel_path']))
                     readback_paths.append(path)
-                    response = independent.call_tool('get_photo_metadata', {'photo_ids': [path], 'sections': ['developSettings']})
+                    response = independent.readback(a['asset_id'], path)
                     missing += len(response.get('missing', []))
                     for photo in response.get('photos', []):
                         metadata.append({'filename': Path(path).name, 'fileFormat': photo.get('fileFormat'), 'dimensions': photo.get('dimensions'), 'exposure': photo.get('developSettings', {}).get('exposure')})
@@ -589,13 +589,60 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=r3.wait_appr
         signal.setitimer(signal.ITIMER_REAL, 0)
         signal.signal(signal.SIGALRM, old_handler)
         if created:
-            if args.mode == 'large':
+            if execution_started:
+                if 'w' in locals() and 'task' in locals():
+                    try:
+                        with db.connect(home) as c:
+                            steps = [dict(x) for x in c.execute('SELECT * FROM task_steps WHERE task_id=?', (task['task_id'],))]
+                        if 'timing' not in locals():
+                            timing = [dict(row, elapsed_seconds=(datetime.fromisoformat(row['ended_at']) - datetime.fromisoformat(row['started_at'])).total_seconds()) for row in steps if row['ended_at'] and row['started_at']]
+                        stage_map = {row['stage']: row for row in steps}
+                        if 'task_completed' not in result['checks']:
+                            check('task_completed', w.get_task(task['task_id'])['state'] == 'COMPLETED', 'Task must complete')
+                        if 'ingest' not in result['checks']:
+                            ingest = stage_map.get('ingest', {})
+                            check('ingest', ingest.get('state') == 'COMPLETED' and ingest.get('succeeded') == len(listing), 'Ingest must complete all files')
+                        if 'lightroom_stages' not in result['checks']:
+                            check('lightroom_stages', all(stage_map.get(stage, {}).get('state') == 'COMPLETED' and stage_map[stage]['succeeded'] == result['counts']['nef'] for stage in STAGES[1:]), 'All Lightroom and preview stages must complete')
+                        if 'verified_library' not in result['checks'] and 'before' in locals():
+                            reads = r3.readback(w, task, before)
+                            if not (out / 'library-readback.json').exists(): save('library-readback.json', reads)
+                            check('verified_library', len(reads) == len(listing) and all(x['ok'] for x in reads), 'All destination hashes must match source')
+                    except Exception:
+                        pass
+                if 'before' in locals() and 'source_unchanged' not in result['checks']:
+                    try:
+                        after = snapshot_tree(source); volume_check(); save('inventory-after.json', after)
+                        check('source_unchanged', compare_snapshots(before, after)['identical'], 'Source inventory must remain unchanged')
+                    except Exception:
+                        if not (out / 'inventory-after.json').exists():
+                            save('inventory-after.json', {'error': 'Source inventory could not be evaluated'})
+                        check('source_unchanged', False, 'Source inventory could not be evaluated')
+                if not (out / 'nef-subtype-report.json').exists() and 'task' in locals() and 'w' in locals():
+                    try:
+                        lib_inventory = {'files': {f['dest_rel_path']: {} for f in task['plan']['files'] if f['kind'] == 'raw'}}
+                        subtype = r3.subtype_report(Path(w.config['library_root']), lib_inventory)
+                        save('nef-subtype-report.json', subtype); result['nef_subtypes'] = subtype['counts']
+                    except Exception:
+                        save('nef-subtype-report.json', {'counts': {}, 'error': 'Could not evaluate subtype report'})
+                if not (out / 'stage-timing.json').exists():
+                    save('stage-timing.json', locals().get('timing', []))
+                for name in ('task_completed', 'verified_library', 'ingest', 'lightroom_stages', 'raw_and_jpg', 'other_never_in_lightroom', 'unpaired_jpg_never_in_lightroom', 'previews', 'readback', 'approval', 'source_unchanged', 'catalog_guard'):
+                    if name not in result['checks']:
+                        check(name, False, 'Could not evaluate after execution failure')
+            events = list(getattr(locals().get('lr'), 'retry_events', [])) + list(getattr(locals().get('independent'), 'retry_events', []))
+            by_stage = {}
+            for event in events:
+                by_stage[event['stage']] = by_stage.get(event['stage'], 0) + 1
+            result['retries'] = {'total': len(events), 'by_stage': by_stage, 'photos_with_retries': len({e['asset_id'] for e in events})}
+            save('lr-retries.json', {'events': events, 'summary': result['retries']})
+            if args.mode == 'large' or execution_started:
                 stage_stats = {}
                 for row in locals().get('timing', []):
                     elapsed = row['elapsed_seconds']
-                    items = row['succeeded'] + row['failed'] + row['skipped']
-                    stage_stats[row['stage']] = {'elapsed_s': elapsed, 'items': items,
-                        'items_per_s': items / elapsed if elapsed > 0 else None,
+                    items = row['succeeded']
+                    stage_stats[row['stage']] = {'elapsed_s': elapsed, 'items': items, 'failed': row['failed'],
+                        'items_per_s': items / elapsed if elapsed > 0 and items else None,
                         's_per_item': elapsed / items if items else None}
                 ingest_step = next((row for row in locals().get('steps', []) if row['stage'] == 'ingest'), None)
                 ingest_events = json.loads(ingest_step['detail_json']) if ingest_step else []
@@ -613,7 +660,7 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=r3.wait_appr
             save('catalog-guard.json', guards)
             r3.save_result(out, result, mapping)
             home_note = 'The temporary home <RUN_HOME> may be purged on reboot.' if location == 'tmp' else f'Run home: <RUN_HOME> ({location}).'
-            for name, content in [('README.md', f"# R6 {result['status']}\n\nMode: {args.lightroom}; scope: {expected_scope}. Reader changed from USB. Mock is not real Lightroom verification.\n\n{home_note}\n"), ('console.txt', '\n'.join(messages) + '\n')]:
+            for name, content in [('README.md', f"# R6 {result['status']}\n\nMode: {args.lightroom}; scope: {expected_scope}. Reader changed from USB. Mock is not real Lightroom verification.\n\nRetries: {result['retries']['total']}.\n\n{home_note}\n"), ('console.txt', '\n'.join(messages) + '\n')]:
                 clean = desensitize(content, mapping)
                 try: assert_clean(clean)
                 except ValueError: clean = 'Details withheld because they contain identifying information.\n'

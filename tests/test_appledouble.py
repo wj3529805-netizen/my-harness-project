@@ -87,7 +87,8 @@ def test_export_selection(tmp_path, metadata, success):
     out.mkdir()
     def call(name, args):
         directory = Path(args['destination'])
-        (directory/'X.jpg').write_bytes(b'jpeg')
+        from PIL import Image
+        Image.new('RGB', (4, 4)).save(directory/'X.jpg')
         (directory/'._X.jpg').write_bytes(metadata)
         (directory/'.DS_Store').write_bytes(b'system')
         return {'success': True, 'exported': 1, 'complete': True, 'destination': str(directory)}

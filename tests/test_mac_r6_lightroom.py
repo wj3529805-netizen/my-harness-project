@@ -313,7 +313,7 @@ def test_complete_mock_run(tmp_path, monkeypatch):
     assert all(result['checks'][name]['passed'] for name in ('verified_library', 'ingest', 'other_never_in_lightroom'))
     assert '19' in result['checks']['verified_library']['reason'] and '19' in result['checks']['ingest']['reason']
     assert {s['stage']: s['succeeded'] for s in result['lightroom_stage_summary']} == dict(ingest=19, lr_register=9, lr_preset=9, lr_export=9, preview_verify=9)
-    expected = {'preflight.json', 'catalog-guard.json', 'reader.json', 'inventory-before.json', 'inventory-after.json', 'plan.json', 'approval.json', 'database.json', 'stage-timing.json', 'previews.json', 'verify-preview.json', 'lightroom-readback.json', 'nef-subtype-report.json', 'library-readback.json', 'result.json', 'README.md', 'console.txt'}
+    expected = {'preflight.json', 'catalog-guard.json', 'reader.json', 'inventory-before.json', 'inventory-after.json', 'plan.json', 'approval.json', 'database.json', 'stage-timing.json', 'previews.json', 'verify-preview.json', 'lightroom-readback.json', 'nef-subtype-report.json', 'library-readback.json', 'result.json', 'README.md', 'console.txt', 'lr-retries.json', 'throughput.json'}
     assert {p.name for p in Path(args.out).iterdir()} == expected
     approval = r6.json.loads((Path(args.out) / 'approval.json').read_text())
     plan = r6.json.loads((Path(args.out) / 'plan.json').read_text())
@@ -484,6 +484,8 @@ def test_catalog_guard_failure_at_each_stage(tmp_path, monkeypatch, failed_guard
         def __init__(self, **kwargs): pass
         def call_tool(self, name, arguments):
             return {'photos': [{'developSettings': {'exposure': 0.5}}], 'missing': []}
+        def readback(self, asset_id, path):
+            return self.call_tool('get_photo_metadata', {})
     monkeypatch.setattr(r6, 'RealLightroomMcpAdapter', Readback)
     monkeypatch.setattr(r6, 'reader_info', lambda *a: {})
     monkeypatch.setattr(r6, 'catalog_guard', lambda expected, process, runner, label: {
@@ -687,3 +689,26 @@ def test_large_sampling_rejected_before_io(tmp_path):
     with pytest.raises(ValueError, match='sampling is not supported'):
         r6.run(args, mount_resolver=lambda _: mount)
     assert not Path(args.out).exists()
+
+
+def test_mock_transient_retry_passes(tmp_path):
+    args, mount = make_large_run(tmp_path)
+    lr = r6.MockLightroomAdapter(size=(1600, 1067), transient_failures={'lr_preset': 1})
+    result = r6.run(args, mount_resolver=lambda _: mount, approval_waiter=approve, adapter=lr)
+    assert result['status'] == 'PASS_MOCK_NOT_REAL_LIGHTROOM'
+    assert result['retries'] == {'total': 1, 'by_stage': {'lr_preset': 1}, 'photos_with_retries': 1}
+    assert r6.json.loads((Path(args.out) / 'lr-retries.json').read_text())['summary'] == result['retries']
+
+
+def test_mock_retry_exhaustion_evidence(tmp_path):
+    args, mount = make_large_run(tmp_path)
+    lr = r6.MockLightroomAdapter(size=(1600, 1067), transient_failures={'lr_register': 4})
+    result = r6.run(args, mount_resolver=lambda _: mount, approval_waiter=approve, adapter=lr)
+    assert result['status'] == 'FAIL'
+    assert result['retries']['total'] == 3
+    assert result['checks']['source_unchanged']['passed']
+    for name in ('nef-subtype-report.json', 'inventory-after.json', 'throughput.json', 'stage-timing.json'):
+        assert (Path(args.out) / name).is_file()
+    stage = result['throughput']['stages']['lr_register']
+    assert stage['items'] == 11 and stage['failed'] == 1
+    assert stage['s_per_item'] == stage['elapsed_s'] / 11

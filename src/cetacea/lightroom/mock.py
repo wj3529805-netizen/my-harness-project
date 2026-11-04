@@ -5,12 +5,37 @@ from .base import LightroomAdapter, RegisterResult, PresetResult, ExportResult
 
 class MockLightroomAdapter(LightroomAdapter):
     mock = True
-    def __init__(self, failures=None, size=(1200, 800)):
+    def __init__(self, failures=None, size=(1200, 800), transient_failures=None):
         self.failures = failures or {}
         self.size = size
         self.files = {}
         self.ids = {}
         self.calls = []
+        self.transient_failures = dict(transient_failures or {})
+        self.retry_events = []
+        from .real_mcp import RealLightroomMcpAdapter
+        self._retry_engine = RealLightroomMcpAdapter(test_command=['mock'], backoff_base=0)
+        self._retry_engine.retry_events = self.retry_events
+        for method, stage in [('register', 'lr_register'), ('apply_preset', 'lr_preset'), ('export_jpeg', 'lr_export')]:
+            original = getattr(self, method)
+            def wrapped(files, *args, _original=original, _stage=stage, **kwargs):
+                results = []
+                for f in files:
+                    def operation():
+                        key = (_stage, f.asset_id)
+                        remaining = self.transient_failures.get(key, self.transient_failures.get(_stage, 0))
+                        if remaining:
+                            if key in self.transient_failures: self.transient_failures[key] = remaining - 1
+                            else: self.transient_failures[_stage] = remaining - 1
+                            raise ConnectionResetError('MOCK ECONNRESET')
+                        return _original([f], *args, **kwargs)[0]
+                    try:
+                        results.append(self._retry_engine._retry(_stage, f.asset_id, operation))
+                    except Exception as exc:
+                        cls = {'lr_register': RegisterResult, 'lr_preset': PresetResult, 'lr_export': ExportResult}[_stage]
+                        results.append(cls(f.asset_id, error='MOCK ' + str(exc), mock=True))
+                return results
+            setattr(self, method, wrapped)
     def status(self): return 'MOCK — not real Lightroom'
     def _fail(self, stage, f):
         self.calls.append((stage, f.asset_id))

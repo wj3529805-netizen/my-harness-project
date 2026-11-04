@@ -198,3 +198,50 @@ def test_export_retry_without_hardlinks_preserves_previous_run(env, monkeypatch,
     previews = Path(w.config['preview_root'])
     assert not list(previews.rglob('*.part'))
     assert not list(previews.rglob('*.cetacea-lock'))
+
+
+def test_real_retry_idempotency_and_nontransient(tmp_path):
+    adapter = RealLightroomMcpAdapter(test_command=['mock'], sleep=lambda _: None)
+    photo = VerifiedFile('asset-test', tmp_path / 'test.NEF', '0' * 64, 1)
+    state = {'imported': False, 'applied': False, 'imports': 0, 'applies': 0}
+    def call(name, args):
+        if name == 'get_photo_metadata':
+            if args.get('sections'):
+                return {'photos': [{'developSettings': {'exposure': 0.5 if state['applied'] else 0}}], 'missing': []}
+            return {'photos': [{'path': str(photo.abs_path), 'id': 'photo', 'isVirtualCopy': False}] if state['imported'] else [], 'missing': [] if state['imported'] else [str(photo.abs_path)]}
+        if name == 'import_photos':
+            state['imports'] += 1; state['imported'] = True
+            raise RuntimeError('read ECONNRESET')
+        if name == 'apply_develop_preset':
+            state['applies'] += 1; state['applied'] = True
+            raise RuntimeError("Request 'tools/call' timed out")
+        raise AssertionError(name)
+    adapter.call_tool = call
+    assert adapter.register([photo])[0].error is None
+    assert adapter.apply_preset([photo], {'lightroom_name': 'test'})[0].error is None
+    assert state['imports'] == state['applies'] == 1
+    assert [e['outcome'] for e in adapter.retry_events] == ['already_completed', 'already_completed']
+    adapter.call_tool = lambda *a: (_ for _ in ()).throw(ValueError('bad response'))
+    assert adapter.register([photo])[0].error == 'bad response'
+    assert len(adapter.retry_events) == 2
+
+
+def test_real_export_retry_recovers_completed_file_and_readback(tmp_path):
+    from PIL import Image
+    adapter = RealLightroomMcpAdapter(test_command=['mock'], sleep=lambda _: None)
+    photo = VerifiedFile('asset-export', tmp_path / 'test.NEF', '0' * 64, 1)
+    calls = []
+    def call(name, args):
+        calls.append(name)
+        if name == 'export_photos':
+            Image.new('RGB', (4, 4)).save(Path(args['destination']) / 'test.jpg')
+            raise BrokenPipeError('broken pipe')
+        if calls.count('get_photo_metadata') == 1:
+            raise RuntimeError('Lightroom plugin not connected')
+        return {'photos': [], 'missing': []}
+    adapter.call_tool = call
+    result = adapter.export_jpeg([photo], tmp_path, 1600, 85)[0]
+    assert result.error is None and result.output_path.is_file()
+    assert calls.count('export_photos') == 1
+    assert adapter.readback(photo.asset_id, photo.abs_path)['missing'] == []
+    assert [event['outcome'] for event in adapter.retry_events] == ['already_completed', 'succeeded']
