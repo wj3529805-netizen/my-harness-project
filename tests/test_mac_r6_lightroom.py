@@ -712,3 +712,26 @@ def test_mock_retry_exhaustion_evidence(tmp_path):
     stage = result['throughput']['stages']['lr_register']
     assert stage['items'] == 11 and stage['failed'] == 1
     assert stage['s_per_item'] == stage['elapsed_s'] / 11
+
+
+def test_retry_runner_flags_and_mock_activation(monkeypatch):
+    base = ['--mode', 'r3', '--confirm-card-readonly']
+    args = r6.parser().parse_args(base)
+    assert args.lr_activate_on_retry and args.lr_retry_max_sleep == 180
+    args = r6.parser().parse_args(base + ['--no-lr-activate-on-retry', '--lr-retry-max-sleep', '45'])
+    assert not args.lr_activate_on_retry and args.lr_retry_max_sleep == 45
+    for value in ('601', '-1', 'nan'):
+        with pytest.raises(SystemExit):
+            r6.parser().parse_args(base + ['--lr-retry-max-sleep', value])
+    monkeypatch.setattr(r6.sys, 'platform', 'darwin')
+    invoked = []
+    monkeypatch.setattr(r6.subprocess, 'run', lambda *a, **kw: invoked.append((a, kw)))
+    args.lightroom = 'mock'
+    args.lr_activate_on_retry = True
+    assert r6.real_adapter(args).activate_hook is None
+    assert not invoked
+    args.lightroom = 'real'
+    hook = r6.real_adapter(args).activate_hook
+    hook()
+    assert invoked == [((['osascript', '-e', 'tell application "Adobe Lightroom Classic" to activate'],),
+                         {'timeout': 10, 'check': True, 'capture_output': True})]

@@ -14,7 +14,7 @@ class MockLightroomAdapter(LightroomAdapter):
         self.transient_failures = dict(transient_failures or {})
         self.retry_events = []
         from .real_mcp import RealLightroomMcpAdapter
-        self._retry_engine = RealLightroomMcpAdapter(test_command=['mock'], backoff_base=0)
+        self._retry_engine = RealLightroomMcpAdapter(test_command=['mock'], backoff_schedule=[0] * 3)
         self._retry_engine.retry_events = self.retry_events
         for method, stage in [('register', 'lr_register'), ('apply_preset', 'lr_preset'), ('export_jpeg', 'lr_export')]:
             original = getattr(self, method)

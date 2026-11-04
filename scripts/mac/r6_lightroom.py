@@ -47,6 +47,26 @@ def default_mcp_index(repo=None):
     return str(next((path for path in candidates if path.exists()), candidates[0]))
 
 
+def retry_sleep_argument(value):
+    try:
+        number = float(value)
+        if not 0 <= number <= 600:
+            raise ValueError
+    except ValueError:
+        raise argparse.ArgumentTypeError('retry sleep must be between 0 and 600 seconds')
+    return number
+
+
+def real_adapter(args):
+    hook = None
+    if args.lightroom == 'real' and sys.platform == 'darwin' and args.lr_activate_on_retry:
+        def hook():
+            script = 'tell application ' + json.dumps(args.lightroom_process_name, ensure_ascii=False) + ' to activate'
+            subprocess.run(['osascript', '-e', script], timeout=10, check=True, capture_output=True)
+    return RealLightroomMcpAdapter(command=[args.lightroom_node, args.lightroom_mcp_index],
+                                   max_retry_sleep=args.lr_retry_max_sleep, activate_hook=hook)
+
+
 def parser():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--mode', choices=('r3', 'r4', 'large'), required=True)
@@ -69,6 +89,8 @@ def parser():
     p.add_argument('--lightroom-mcp-index', default=default_mcp_index())
     p.add_argument('--lightroom-test-catalog-path')
     p.add_argument('--lightroom-process-name', default='Adobe Lightroom Classic')
+    p.add_argument('--lr-activate-on-retry', action=argparse.BooleanOptionalAction, default=True)
+    p.add_argument('--lr-retry-max-sleep', type=retry_sleep_argument, default=180)
     p.add_argument('--preset-name', default='Cetacea Phase1 Test +0.50')
     p.add_argument('--lr-sample', default='all')
     p.add_argument('--max-runtime-s', type=float, default=14400)
@@ -398,7 +420,7 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=r3.wait_appr
             record('catalog_guard_matches_test_catalog', False, '前置检查未通过，已跳过', skipped=True)
             process_ok = False
         command = [args.lightroom_node, args.lightroom_mcp_index]
-        lr = adapter or (MockLightroomAdapter(size=(1600, 1067)) if not real else RealLightroomMcpAdapter(command=command))
+        lr = adapter or (MockLightroomAdapter(size=(1600, 1067)) if not real else real_adapter(args))
         connected, _ = attempt('mcp_connected', '无法连接 MCP，请检查 Lightroom、bridge 和 token', lambda: lr.status().startswith('Lightroom MCP connected'), node_ok and index_ok and token_ok and process_ok and bool(guard and guard['matches_expected'])) if real else (record('mcp_connected', True, ''), None)
         probe = None
         def check_preset():
@@ -539,7 +561,7 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=r3.wait_appr
             missing = 0
             readback_paths = []
             if args.lightroom == 'real':
-                independent = RealLightroomMcpAdapter(command=command)
+                independent = real_adapter(args)
                 for a in raw:
                     path = str(safe(w.config['library_root'], a['dest_rel_path']))
                     readback_paths.append(path)
@@ -744,7 +766,7 @@ def rejudge(args, mount_resolver, command_runner, adapter):
                 guard = catalog_guard(args.lightroom_test_catalog_path or '/__missing_test_catalog__.lrcat', args.lightroom_process_name, command_runner, 'rejudge')
                 guards.append(guard)
                 if guard.get('process_count') != 1 or not guard['matches_expected'] or not args.lightroom_test_catalog_path: raise ValueError('Catalog guard failed')
-                lr = adapter or RealLightroomMcpAdapter(command=[args.lightroom_node, args.lightroom_mcp_index])
+                lr = adapter or real_adapter(args)
                 if not lr.status().startswith('Lightroom MCP connected') or not preset_probe(lr, args.preset_name)['preset_found']: raise ValueError('MCP or preset unavailable')
             else:
                 guards.append({'label': 'rejudge', 'matches_expected': True, 'mock': True})
@@ -789,7 +811,7 @@ def rejudge(args, mount_resolver, command_runner, adapter):
             metadata, readback_paths = [], []
             missing = 0
             if real:
-                independent = RealLightroomMcpAdapter(command=[args.lightroom_node, args.lightroom_mcp_index])
+                independent = real_adapter(args)
                 for a in raw:
                     path = str(safe(cfg['library_root'], a['dest_rel_path']))
                     readback_paths.append(path)

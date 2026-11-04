@@ -3,6 +3,7 @@ import json
 import sys
 import time
 import re
+import math
 from PIL import Image
 from pathlib import Path
 from mcp.client.session import ClientSession
@@ -14,15 +15,18 @@ from ..appledouble import is_ignorable_macos_metadata
 class RealLightroomMcpAdapter(LightroomAdapter):
     ALLOWED_TOOLS = frozenset({'import_photos', 'get_photo_metadata', 'apply_develop_preset', 'export_photos', 'list_develop_presets', 'search_photos'})
 
-    def __init__(self, command=None, test_command=None, max_attempts=4, backoff_base=2, max_retry_sleep=14, sleep=time.sleep):
+    def __init__(self, command=None, test_command=None, backoff_schedule=None, max_retry_sleep=180, sleep=time.sleep, activate_hook=None):
         if sys.platform != 'darwin' and not (test_command or command):
             raise RuntimeError('requires macOS Lightroom Classic; explicit test command required')
         self.command = test_command or command or ['npx', '-y', '@mskalski/lightroom-mcp@0.26.0']
         self.testing = bool(test_command) or sys.platform != 'darwin'
-        if max_attempts < 1 or backoff_base < 0 or max_retry_sleep < 0:
+        schedule = list([2, 4, 8, 16, 30, 30, 30, 60] if backoff_schedule is None else backoff_schedule)
+        if (not math.isfinite(max_retry_sleep) or not 0 <= max_retry_sleep <= 600
+                or any(not math.isfinite(delay) or delay < 0 for delay in schedule)):
             raise ValueError('invalid retry configuration')
-        self.max_attempts, self.backoff_base = max_attempts, backoff_base
-        self.max_retry_sleep, self.sleep = max_retry_sleep, sleep
+        self.backoff_schedule = schedule
+        self.max_attempts = len(schedule) + 1
+        self.max_retry_sleep, self.sleep, self.activate_hook = max_retry_sleep, sleep, activate_hook
         self.retry_events = []
 
     def status(self):
@@ -147,15 +151,21 @@ class RealLightroomMcpAdapter(LightroomAdapter):
                         pending['idempotency_check'] = 'error'
                 if not self._transient(exc) or attempt >= self.max_attempts:
                     raise
-                delay = min(self.backoff_base * (2 ** (attempt - 1)), max(0, self.max_retry_sleep - slept))
+                delay = min(self.backoff_schedule[attempt - 1], max(0, self.max_retry_sleep - slept))
                 # Error text may contain private paths or identifiers. Record a safe class and category only.
                 pending = {'stage': stage, 'asset_id': asset_id, 'attempt': attempt,
                            'error_class': type(exc).__name__, 'error_msg': 'transient Lightroom connection error',
-                           'backoff_s': delay, 'outcome': 'pending',
+                           'backoff_s': delay, 'cumulative_sleep_s': slept + delay, 'activate': 'skipped', 'outcome': 'pending',
                            'idempotency_check': 'pending' if idempotency else 'not_applicable'}
                 self.retry_events.append(pending)
                 self.sleep(delay)
                 slept += delay
+                if attempt >= 2 and self.activate_hook is not None:
+                    try:
+                        self.activate_hook()
+                        pending['activate'] = 'ok'
+                    except Exception:
+                        pending['activate'] = 'error'
         raise AssertionError('unreachable')
 
     def readback(self, asset_id, path):

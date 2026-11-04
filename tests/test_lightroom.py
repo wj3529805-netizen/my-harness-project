@@ -245,3 +245,55 @@ def test_real_export_retry_recovers_completed_file_and_readback(tmp_path):
     assert calls.count('export_photos') == 1
     assert adapter.readback(photo.asset_id, photo.abs_path)['missing'] == []
     assert [event['outcome'] for event in adapter.retry_events] == ['already_completed', 'succeeded']
+
+
+def test_retry_extended_outage_and_activation():
+    sleeps, activations, calls = [], [], []
+    adapter = RealLightroomMcpAdapter(test_command=['mock'], sleep=sleeps.append,
+                                      activate_hook=lambda: activations.append(True))
+    def operation():
+        calls.append(True)
+        if len(calls) <= 6:
+            raise ConnectionResetError('offline')
+        return 'recovered'
+    assert adapter._retry('readback', 'asset', operation) == 'recovered'
+    assert sleeps == [2, 4, 8, 16, 30, 30]
+    assert len(activations) == 5
+    assert [e['activate'] for e in adapter.retry_events] == ['skipped'] + ['ok'] * 5
+    assert [e['cumulative_sleep_s'] for e in adapter.retry_events] == [2, 6, 14, 30, 60, 90]
+
+
+def test_retry_activation_error_and_sleep_cap():
+    sleeps = []
+    def activate():
+        raise RuntimeError('activation failed')
+    adapter = RealLightroomMcpAdapter(test_command=['mock'], backoff_schedule=[2, 4, 8],
+                                      max_retry_sleep=3, sleep=sleeps.append, activate_hook=activate)
+    calls = iter([False, False, False, True])
+    def operation():
+        if not next(calls):
+            raise ConnectionResetError('offline')
+        return 'ok'
+    assert adapter._retry('readback', 'asset', operation) == 'ok'
+    assert sleeps == [2, 1, 0]
+    assert [e['activate'] for e in adapter.retry_events] == ['skipped', 'error', 'error']
+    assert [e['cumulative_sleep_s'] for e in adapter.retry_events] == [2, 3, 3]
+
+
+@pytest.mark.parametrize('budget', [-1, 601, float('nan')])
+def test_retry_invalid_budget(budget):
+    with pytest.raises(ValueError):
+        RealLightroomMcpAdapter(test_command=['mock'], max_retry_sleep=budget)
+
+
+def test_retry_persistent_outage_exhausts_nine_attempts():
+    sleeps, calls = [], []
+    adapter = RealLightroomMcpAdapter(test_command=['mock'], sleep=sleeps.append)
+    def operation():
+        calls.append(True)
+        raise ConnectionResetError('offline')
+    with pytest.raises(ConnectionResetError):
+        adapter._retry('readback', 'asset', operation)
+    assert len(calls) == 9
+    assert sleeps == [2, 4, 8, 16, 30, 30, 30, 60]
+    assert len(adapter.retry_events) == 8
