@@ -1,0 +1,35 @@
+[
+  {
+    "run": 1,
+    "stage": "ingest",
+    "state": "COMPLETED",
+    "succeeded": 241,
+    "failed": 0,
+    "skipped": 0,
+    "started_at": "2026-11-04T15:36:09.431544+00:00",
+    "ended_at": "2026-11-04T15:36:12.398595+00:00",
+    "elapsed_seconds": 2.967051
+  },
+  {
+    "run": 1,
+    "stage": "lr_register",
+    "state": "COMPLETED",
+    "succeeded": 120,
+    "failed": 0,
+    "skipped": 0,
+    "started_at": "2026-11-04T15:36:12.401693+00:00",
+    "ended_at": "2026-11-04T16:07:03.447520+00:00",
+    "elapsed_seconds": 1851.045827
+  },
+  {
+    "run": 1,
+    "stage": "lr_preset",
+    "state": "FAILED",
+    "succeeded": 100,
+    "failed": 20,
+    "skipped": 0,
+    "started_at": "2026-11-04T16:07:03.448763+00:00",
+    "ended_at": "2026-11-04T16:40:32.547033+00:00",
+    "elapsed_seconds": 2009.09827
+  }
+]

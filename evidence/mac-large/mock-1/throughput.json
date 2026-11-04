@@ -1,0 +1,42 @@
+{
+  "stages": {
+    "ingest": {
+      "elapsed_s": 2.506906,
+      "items": 241,
+      "items_per_s": 96.13443822783942,
+      "s_per_item": 0.01040209958506224,
+      "bytes": 1482139854,
+      "mb_per_s": 591.2227478812529
+    },
+    "lr_register": {
+      "elapsed_s": 0.592075,
+      "items": 120,
+      "items_per_s": 202.67702571464764,
+      "s_per_item": 0.004933958333333334
+    },
+    "lr_preset": {
+      "elapsed_s": 0.588932,
+      "items": 120,
+      "items_per_s": 203.75866823334442,
+      "s_per_item": 0.004907766666666666
+    },
+    "lr_export": {
+      "elapsed_s": 1.114128,
+      "items": 120,
+      "items_per_s": 107.70755245357805,
+      "s_per_item": 0.0092844
+    },
+    "preview_verify": {
+      "elapsed_s": 0.146448,
+      "items": 120,
+      "items_per_s": 819.403474270731,
+      "s_per_item": 0.0012204
+    }
+  },
+  "total_wall_s": 51.51818600000024,
+  "peak_rss": 97927168,
+  "peak_rss_unit": "bytes",
+  "notes": [
+    "Per-file ingest timing is unavailable in the database."
+  ]
+}

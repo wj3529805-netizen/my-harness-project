@@ -1,0 +1,2212 @@
+{
+  "task": {
+    "task_id": "tsk_169c8a5367a342968ac9c209e592bb28",
+    "state": "FAILED",
+    "run_count": 1,
+    "error": "lr_preset: 20 failed",
+    "plan_digest": "fe26e0a56d321ca5b5db6e09d96b7a3b98217f51fb344e616cae159dc11c4e16"
+  },
+  "task_steps": [
+    {
+      "run": 1,
+      "stage": "ingest",
+      "state": "COMPLETED",
+      "succeeded": 241,
+      "failed": 0,
+      "skipped": 0,
+      "started_at": "2026-11-04T15:36:09.431544+00:00",
+      "ended_at": "2026-11-04T15:36:12.398595+00:00"
+    },
+    {
+      "run": 1,
+      "stage": "lr_register",
+      "state": "COMPLETED",
+      "succeeded": 120,
+      "failed": 0,
+      "skipped": 0,
+      "started_at": "2026-11-04T15:36:12.401693+00:00",
+      "ended_at": "2026-11-04T16:07:03.447520+00:00"
+    },
+    {
+      "run": 1,
+      "stage": "lr_preset",
+      "state": "FAILED",
+      "succeeded": 100,
+      "failed": 20,
+      "skipped": 0,
+      "started_at": "2026-11-04T16:07:03.448763+00:00",
+      "ended_at": "2026-11-04T16:40:32.547033+00:00"
+    }
+  ],
+  "assets": [
+    {
+      "rel_path": "DSC_0438.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0438.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0439.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0439.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0440.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0440.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0441.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0441.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0442.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0442.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0443.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0443.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0444.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0444.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0445.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0445.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0446.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0446.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0447.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0447.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0448.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0448.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0449.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0449.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0450.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0450.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0451.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0451.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0452.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0452.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0453.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0453.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0454.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0454.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0455.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0455.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0456.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0456.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0457.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0457.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0458.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0458.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0459.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0459.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0460.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0460.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0461.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0461.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0462.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0462.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0463.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0463.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0464.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0464.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0465.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0465.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0466.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0466.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0467.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0467.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0468.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0468.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0469.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0469.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0470.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0470.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0471.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0471.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0472.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0472.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0473.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0473.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0474.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0474.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0475.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0475.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0476.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0476.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0477.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0477.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0478.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0478.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0479.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0479.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0480.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0480.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "REGISTERED",
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0481.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0481.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "REGISTERED",
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0482.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0482.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "REGISTERED",
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0483.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0483.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0484.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0484.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "REGISTERED",
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0485.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0485.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "REGISTERED",
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0486.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0486.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "REGISTERED",
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0487.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0487.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "REGISTERED",
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0488.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0488.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "REGISTERED",
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0489.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0489.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0490.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0490.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0491.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0491.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0492.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0492.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0493.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0493.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0494.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0494.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0495.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0495.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0496.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0496.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0497.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0497.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0498.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0498.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0499.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0499.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0500.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0500.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0501.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0501.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0502.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0502.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0503.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0503.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0504.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0504.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0505.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0505.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0506.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0506.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0507.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0507.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0508.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0508.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0509.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0509.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0510.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0510.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0511.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0511.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0512.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0512.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0513.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0513.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0514.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0514.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0515.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0515.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0516.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0516.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0517.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0517.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0518.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0518.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0519.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0519.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0520.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0520.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0521.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0521.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0522.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0522.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0523.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0523.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0524.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0524.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0525.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0525.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0526.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0526.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0527.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0527.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0528.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0528.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0529.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0529.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0530.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0530.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0531.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0531.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0532.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0532.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0533.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0533.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0534.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0534.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0535.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0535.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0536.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0536.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0537.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0537.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0538.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0538.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0539.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0539.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0540.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0540.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0541.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0541.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0542.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0542.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0543.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0543.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0544.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0544.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0545.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0545.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "PRESET_APPLIED",
+      "preset_applied": "test-preset",
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0546.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0546.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "REGISTERED",
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0547.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0547.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "REGISTERED",
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0548.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0548.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "REGISTERED",
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0549.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0549.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "REGISTERED",
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0550.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0550.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "REGISTERED",
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0551.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0551.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "REGISTERED",
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0552.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0552.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "REGISTERED",
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0553.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0553.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "REGISTERED",
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0554.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0554.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "REGISTERED",
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0555.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0555.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "REGISTERED",
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0556.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0556.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "REGISTERED",
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0557.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    },
+    {
+      "rel_path": "DSC_0557.NEF",
+      "kind": "raw",
+      "status": "VERIFIED",
+      "lr_status": "REGISTERED",
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": true
+    },
+    {
+      "rel_path": "DSC_0558.JPG",
+      "kind": "jpeg",
+      "status": "VERIFIED",
+      "lr_status": null,
+      "preset_applied": null,
+      "mock": 0,
+      "has_lr_photo_id": false
+    }
+  ]
+}

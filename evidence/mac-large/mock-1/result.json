@@ -1,0 +1,241 @@
+{
+  "mode": "large",
+  "status": "PASS_MOCK_NOT_REAL_LIGHTROOM",
+  "real_lightroom": false,
+  "mock": true,
+  "scope": "test-folder-only",
+  "scope_subdir": "DCIM/143NZ6_3",
+  "counts": {
+    "nef": 120,
+    "jpg": 121,
+    "other": 0
+  },
+  "checks": {
+    "task_completed": {
+      "passed": true,
+      "reason": "Task must complete"
+    },
+    "verified_library": {
+      "passed": true,
+      "reason": "All 241 destination hashes must match source"
+    },
+    "ingest": {
+      "passed": true,
+      "reason": "Ingest must complete 241 files"
+    },
+    "lightroom_stages": {
+      "passed": true,
+      "reason": "All Lightroom and preview stages must complete 120 photos"
+    },
+    "raw_and_jpg": {
+      "passed": true,
+      "reason": "Only 120 RAW files must be registered, preset and exported"
+    },
+    "other_never_in_lightroom": {
+      "passed": true,
+      "reason": "Other assets must never enter Lightroom or paired previews; each Lightroom stage must succeed for nine RAW files"
+    },
+    "unpaired_jpg_never_in_lightroom": {
+      "passed": true,
+      "reason": "Unpaired JPEGs must never enter Lightroom"
+    },
+    "previews": {
+      "passed": true,
+      "reason": "120 1600-pixel previews must independently verify"
+    },
+    "readback": {
+      "passed": true,
+      "reason": "Real Lightroom must independently read back 120 exposures of 0.5; mock is a rehearsal"
+    },
+    "approval": {
+      "passed": true,
+      "reason": "Exactly one unchanged approval"
+    },
+    "source_unchanged": {
+      "passed": true,
+      "reason": "Source inventory must remain unchanged"
+    },
+    "catalog_guard": {
+      "passed": true,
+      "reason": "All catalog guards must pass; mock is simulated"
+    }
+  },
+  "preflight_checks": [
+    {
+      "name": "card_mounted",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "target_volume_present",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "target_on_different_device",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "evidence_outside_card",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "home_dir_safe",
+      "passed": true,
+      "hint": "",
+      "skipped": true
+    },
+    {
+      "name": "scope_listing_expected_counts",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "node_binary_exists",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "mcp_index_exists",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "bridge_token_exists",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "lightroom_single_process",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "catalog_guard_matches_test_catalog",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "mcp_connected",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "preset_found",
+      "passed": true,
+      "hint": ""
+    }
+  ],
+  "failed_step": null,
+  "failures": [],
+  "notes": [],
+  "reader_changed_from_usb": true,
+  "volume_uuid_sha256_prefix": "e8a48e01f632f7d9",
+  "home_persistent": true,
+  "home_location": "target",
+  "home": "<RUN_HOME>",
+  "lr_scope": {
+    "mode": "all",
+    "count": 120,
+    "total_raw": 120
+  },
+  "nef_subtypes": {
+    "HE": 120
+  },
+  "lightroom_stage_summary": [
+    {
+      "run": 1,
+      "stage": "ingest",
+      "state": "COMPLETED",
+      "succeeded": 241,
+      "failed": 0,
+      "skipped": 0,
+      "started_at": "2026-11-04T15:27:50.364174+00:00",
+      "ended_at": "2026-11-04T15:27:52.871080+00:00"
+    },
+    {
+      "run": 1,
+      "stage": "lr_register",
+      "state": "COMPLETED",
+      "succeeded": 120,
+      "failed": 0,
+      "skipped": 0,
+      "started_at": "2026-11-04T15:27:52.873800+00:00",
+      "ended_at": "2026-11-04T15:27:53.465875+00:00"
+    },
+    {
+      "run": 1,
+      "stage": "lr_preset",
+      "state": "COMPLETED",
+      "succeeded": 120,
+      "failed": 0,
+      "skipped": 0,
+      "started_at": "2026-11-04T15:27:53.466389+00:00",
+      "ended_at": "2026-11-04T15:27:54.055321+00:00"
+    },
+    {
+      "run": 1,
+      "stage": "lr_export",
+      "state": "COMPLETED",
+      "succeeded": 120,
+      "failed": 0,
+      "skipped": 0,
+      "started_at": "2026-11-04T15:27:54.055910+00:00",
+      "ended_at": "2026-11-04T15:27:55.170038+00:00"
+    },
+    {
+      "run": 1,
+      "stage": "preview_verify",
+      "state": "COMPLETED",
+      "succeeded": 120,
+      "failed": 0,
+      "skipped": 0,
+      "started_at": "2026-11-04T15:27:55.170460+00:00",
+      "ended_at": "2026-11-04T15:27:55.316908+00:00"
+    }
+  ],
+  "throughput": {
+    "stages": {
+      "ingest": {
+        "elapsed_s": 2.506906,
+        "items": 241,
+        "items_per_s": 96.13443822783942,
+        "s_per_item": 0.01040209958506224,
+        "bytes": 1482139854,
+        "mb_per_s": 591.2227478812529
+      },
+      "lr_register": {
+        "elapsed_s": 0.592075,
+        "items": 120,
+        "items_per_s": 202.67702571464764,
+        "s_per_item": 0.004933958333333334
+      },
+      "lr_preset": {
+        "elapsed_s": 0.588932,
+        "items": 120,
+        "items_per_s": 203.75866823334442,
+        "s_per_item": 0.004907766666666666
+      },
+      "lr_export": {
+        "elapsed_s": 1.114128,
+        "items": 120,
+        "items_per_s": 107.70755245357805,
+        "s_per_item": 0.0092844
+      },
+      "preview_verify": {
+        "elapsed_s": 0.146448,
+        "items": 120,
+        "items_per_s": 819.403474270731,
+        "s_per_item": 0.0012204
+      }
+    },
+    "total_wall_s": 51.51818600000024,
+    "peak_rss": 97927168,
+    "peak_rss_unit": "bytes",
+    "notes": [
+      "Per-file ingest timing is unavailable in the database."
+    ]
+  }
+}

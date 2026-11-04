@@ -1,0 +1,6 @@
+{
+  "mock": true,
+  "reader_changed_from_usb": true,
+  "note": "Reader changed from USB to built-in SD reader",
+  "volume_uuid_sha256_prefix": "e8a48e01f632f7d9"
+}

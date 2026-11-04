@@ -1,0 +1,23 @@
+[
+  {
+    "label": "preflight",
+    "pid": null,
+    "open_lrcat_count": null,
+    "matches_expected": true,
+    "mock": true
+  },
+  {
+    "label": "before_execute",
+    "pid": null,
+    "open_lrcat_count": null,
+    "matches_expected": true,
+    "mock": true
+  },
+  {
+    "label": "after_execute",
+    "pid": null,
+    "open_lrcat_count": null,
+    "matches_expected": true,
+    "mock": true
+  }
+]

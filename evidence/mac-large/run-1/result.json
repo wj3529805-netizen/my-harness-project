@@ -1,0 +1,149 @@
+{
+  "mode": "large",
+  "status": "FAIL",
+  "real_lightroom": true,
+  "mock": false,
+  "scope": "test-folder-only",
+  "scope_subdir": "DCIM/143NZ6_3",
+  "counts": {
+    "nef": 120,
+    "jpg": 121,
+    "other": 0
+  },
+  "checks": {},
+  "preflight_checks": [
+    {
+      "name": "card_mounted",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "target_volume_present",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "target_on_different_device",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "evidence_outside_card",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "home_dir_safe",
+      "passed": true,
+      "hint": "",
+      "skipped": true
+    },
+    {
+      "name": "scope_listing_expected_counts",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "node_binary_exists",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "mcp_index_exists",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "bridge_token_exists",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "lightroom_single_process",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "catalog_guard_matches_test_catalog",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "mcp_connected",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "preset_found",
+      "passed": true,
+      "hint": ""
+    }
+  ],
+  "failed_step": "execution_evidence",
+  "failures": [
+    "Pipeline failed: lr_preset: 20 failed",
+    "lr_preset: 20 failed",
+    "lr_preset ast_02131df269a1492506cd5399: Lightroom plugin not connected. Bring Lightroom to the front or click 'Start Server' in Plug-in Manager.",
+    "lr_preset ast_f20b3f4e08dac7e1b834fb35: Lightroom plugin not connected. Bring Lightroom to the front or click 'Start Server' in Plug-in Manager.",
+    "lr_preset ast_f9ab0624144d927c2f35ee1b: Lightroom plugin not connected. Bring Lightroom to the front or click 'Start Server' in Plug-in Manager.",
+    "lr_preset ast_ee5b6f3ef4f136744ea196b3: Request 'tools/call' timed out",
+    "lr_preset ast_c1f6773ca1845f124e4299d5: Lightroom plugin not connected. Bring Lightroom to the front or click 'Start Server' in Plug-in Manager.",
+    "lr_preset ast_6ac6b56e6c63ef35c2fb83cf: Lightroom plugin not connected. Bring Lightroom to the front or click 'Start Server' in Plug-in Manager.",
+    "lr_preset ast_624eb5800c460e9bd1308894: Lightroom plugin not connected. Bring Lightroom to the front or click 'Start Server' in Plug-in Manager.",
+    "lr_preset ast_2ae679ab7c647950151c95db: Lightroom plugin not connected. Bring Lightroom to the front or click 'Start Server' in Plug-in Manager.",
+    "lr_preset ast_dcf4eb86b78fa21ac81c331c: Request 'tools/call' timed out",
+    "lr_preset ast_cca4a869ef48ba6ab807891c: Lightroom plugin not connected. Bring Lightroom to the front or click 'Start Server' in Plug-in Manager.",
+    "lr_preset ast_af185f59e355024fc870c478: Lightroom plugin not connected. Bring Lightroom to the front or click 'Start Server' in Plug-in Manager.",
+    "lr_preset ast_359d4eb81249d4789c75b196: Lightroom plugin not connected. Bring Lightroom to the front or click 'Start Server' in Plug-in Manager.",
+    "lr_preset ast_513b2ce89c845b4a5043f873: Lightroom plugin not connected. Bring Lightroom to the front or click 'Start Server' in Plug-in Manager.",
+    "lr_preset ast_a46f6f1333a7d585430cd2cd: Lightroom plugin not connected. Bring Lightroom to the front or click 'Start Server' in Plug-in Manager.",
+    "lr_preset ast_89d5777d25a3903b2f236c69: Lightroom plugin not connected. Bring Lightroom to the front or click 'Start Server' in Plug-in Manager.",
+    "lr_preset ast_86f5187f7033fbd611e2909c: Lightroom plugin not connected. Bring Lightroom to the front or click 'Start Server' in Plug-in Manager.",
+    "lr_preset ast_9a4a88519ebcc6281454ca15: Request 'tools/call' timed out",
+    "lr_preset ast_6b6b0804e2bdf05facf54475: Lightroom plugin not connected. Bring Lightroom to the front or click 'Start Server' in Plug-in Manager.",
+    "lr_preset ast_c2bd196783bd6d619dbe4d89: Lightroom plugin not connected. Bring Lightroom to the front or click 'Start Server' in Plug-in Manager.",
+    "lr_preset ast_8cd69cf642eaf26550c119d9: Lightroom plugin not connected. Bring Lightroom to the front or click 'Start Server' in Plug-in Manager.",
+    "execution_evidence: RuntimeError — 步骤执行失败；请检查本地环境"
+  ],
+  "notes": [],
+  "reader_changed_from_usb": true,
+  "volume_uuid_sha256_prefix": "e8a48e01f632f7d9",
+  "home_persistent": true,
+  "home_location": "target",
+  "home": "<RUN_HOME>",
+  "lr_scope": {
+    "mode": "all",
+    "count": 120,
+    "total_raw": 120
+  },
+  "throughput": {
+    "stages": {
+      "ingest": {
+        "elapsed_s": 2.967051,
+        "items": 241,
+        "items_per_s": 81.22543225579876,
+        "s_per_item": 0.012311414937759337,
+        "bytes": 1482139854,
+        "mb_per_s": 499.532988816168
+      },
+      "lr_register": {
+        "elapsed_s": 1851.045827,
+        "items": 120,
+        "items_per_s": 0.0648282167030325,
+        "s_per_item": 15.425381891666666
+      },
+      "lr_preset": {
+        "elapsed_s": 2009.09827,
+        "items": 120,
+        "items_per_s": 0.059728287954774854,
+        "s_per_item": 16.742485583333334
+      }
+    },
+    "total_wall_s": 3965.2881867080005,
+    "peak_rss": 86884352,
+    "peak_rss_unit": "bytes",
+    "notes": [
+      "Per-file ingest timing is unavailable in the database."
+    ]
+  }
+}

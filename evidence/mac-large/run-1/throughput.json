@@ -1,0 +1,30 @@
+{
+  "stages": {
+    "ingest": {
+      "elapsed_s": 2.967051,
+      "items": 241,
+      "items_per_s": 81.22543225579876,
+      "s_per_item": 0.012311414937759337,
+      "bytes": 1482139854,
+      "mb_per_s": 499.532988816168
+    },
+    "lr_register": {
+      "elapsed_s": 1851.045827,
+      "items": 120,
+      "items_per_s": 0.0648282167030325,
+      "s_per_item": 15.425381891666666
+    },
+    "lr_preset": {
+      "elapsed_s": 2009.09827,
+      "items": 120,
+      "items_per_s": 0.059728287954774854,
+      "s_per_item": 16.742485583333334
+    }
+  },
+  "total_wall_s": 3965.2881867080005,
+  "peak_rss": 86884352,
+  "peak_rss_unit": "bytes",
+  "notes": [
+    "Per-file ingest timing is unavailable in the database."
+  ]
+}
