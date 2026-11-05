@@ -1,0 +1,8 @@
+{
+  "task_id": "tsk_dab8388f4be54e9694dc69b408059d6e",
+  "plan_digest": "396bbbdf359426b62aba4e45253e8b2f8c1a6995d3a7ce2dca19b36572e6b324",
+  "approved_by": "cli",
+  "scopes": "[\"admin\", \"approve\", \"cancel\", \"execute\", \"lightroom\", \"plan\", \"read\"]",
+  "granted_at": "2026-11-05T02:32:40.099038+00:00",
+  "revoked_at": null
+}
