@@ -218,7 +218,7 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approva
     mapping = {str(Path.home()): '<HOME>', args.source_uuid: '<UUID>'}
     throttle = {'throttled': args.throttle_mbps is not None, 'throttle_mbps': args.throttle_mbps, 'throttle_note': THROTTLE_NOTE if args.throttle_mbps is not None else None}
     hold_fields = dict(hold_mid_file=args.hold_mid_file, hold_engaged=False, hold_released_by=None, hold_result=None, part_size_at_hold_start=None, part_size_at_removal=None, hold_timeout=args.pull_timeout if args.hold_mid_file else None, hold_note=HOLD_NOTE if args.hold_mid_file else None, child_terminated_by_parent=False, part_in_progress_at_interruption=False, parts_after_failure=None, first_failed_file=None, first_failed_error_class=None, failed_file_count=0, held_file_rel=None, held_file_failed_first=False, child_exit_code=None, later_files_failed_because_card_absent=None, simulated_by_test=bool(args.test_only_gone_flag_file))
-    result = {**scope(args), **hold_fields, 'status': 'FAIL_STOPPED', 'scenario': args.scenario, **throttle, 'inter_file_delay': args.inter_file_delay, 'part_in_progress_at_interruption': False, 'part_sizes_at_interruption': []}
+    result = {**scope(args), **hold_fields, 'status': 'FAIL_STOPPED', 'scenario': args.scenario, **throttle, 'inter_file_delay': args.inter_file_delay, 'part_in_progress_at_interruption': False, 'part_sizes_at_interruption': [], 'part_sizes_at_pull_detection': [], 'part_evidence_source': None, 'source_st_dev_before': None, 'source_st_dev_after_reinsert': None, 'source_st_dev_changed': None}
     proc = None
     exception_class = None
     plan_evidence = None
@@ -230,7 +230,9 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approva
         if args.max_files is not None and args.max_files < 1: raise ValueError('max-files must be positive')
         if (not all(math.isfinite(x) for x in (args.inter_file_delay, args.poll_interval, args.pull_timeout, args.reinsert_timeout)) or args.inter_file_delay < 0 or args.poll_interval <= 0 or args.pull_timeout <= 0 or args.reinsert_timeout <= 0 or (args.throttle_mbps is not None and (not math.isfinite(args.throttle_mbps) or args.throttle_mbps <= 0))): raise ValueError('Invalid timing or throttle')
         mount, device, source, target, home, mapping = prepare(args, mount_resolver, 'R4')
-        def check(): guard(args, mount_resolver, mount, device)
+        result['source_st_dev_before'] = device
+        guard_device = device
+        def check(): guard(args, mount_resolver, mount, guard_device)
         check(); before = snapshot_tree(source); check(); save(out, 'pre-inventory.json', before, mapping)
         w = Workbench.init(home, target / 'library', target / 'preview')
         task = plan(w, source, args.max_files); check()
@@ -287,9 +289,14 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approva
                     print('NOW PULL THE CARD (eject physically)', flush=True)
                     marker(out, 'PULL_NOW', task['task_id'], max(observed.values()), held=args.hold_mid_file)
                     deadline = time.monotonic() + args.pull_timeout
+                    last_present_parts = None
+                    pull_parts = None
                     while time.monotonic() < deadline:
                         try: check()
-                        except Exception: break
+                        except Exception:
+                            if not args.hold_mid_file and proc.poll() != 0:
+                                pull_parts = files_state(w, task)['parts']
+                            break
                         if proc.poll() is not None:
                             if not args.hold_mid_file: raise RuntimeError('Child exited before card removal was observed')
                             hs = update_hold()
@@ -302,10 +309,24 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approva
                                 else: raise RuntimeError('Child failed while card was present: ' + log.read_text(errors='replace'))
                                 break
                             no_interruption('HOLD_TIMEOUT' if hs.get('released_by') == 'timeout' else 'NOT_ENGAGED')
+                        if not args.hold_mid_file:
+                            last_present_parts = files_state(w, task)['parts']
                         time.sleep(min(args.poll_interval, .1))
                     else:
                         if args.hold_mid_file: no_interruption('HOLD_TIMEOUT')
                         raise TimeoutError('Card removal not observed')
+                    if not args.hold_mid_file:
+                        result['part_sizes_at_pull_detection'] = pull_parts or []
+                        expected = {f'{n}.part': f['size'] for n, f in enumerate(task['plan']['files'])}
+                        def has_partial(parts):
+                            return any(0 < x['size'] < expected.get(Path(x['path']).name, 0) for x in (parts or []))
+                        if proc.poll() == 0:
+                            evidence_parts, evidence_source = [], None
+                        elif has_partial(pull_parts) or not has_partial(last_present_parts) and pull_parts:
+                            evidence_parts, evidence_source = pull_parts, 'captured_after_removal'
+                        else:
+                            evidence_parts, evidence_source = last_present_parts or [], 'last_seen_before_removal'
+                        result['part_evidence_source'] = evidence_source
                     if args.hold_mid_file: release('card-removed')
                     captured = files_state(w, task)
                     if args.hold_mid_file: result['hold_result'] = 'HELD_AND_REMOVED'
@@ -320,7 +341,8 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approva
                     size = result['part_size_at_removal']
                     result['part_in_progress_at_interruption'] = size is not None and 0 < size < task['plan']['files'][0]['size']
                 else:
-                    result.update(part_in_progress_at_interruption=any(0 < x['size'] < expected_sizes.get(Path(x['path']).name, 0) for x in captured['parts']), part_sizes_at_interruption=captured['parts'])
+                    parts = evidence_parts if args.scenario == 'unplug' else captured['parts']
+                    result.update(part_in_progress_at_interruption=any(0 < x['size'] < expected_sizes.get(Path(x['path']).name, 0) for x in parts), part_sizes_at_interruption=parts)
                 interruption = {**state(w, task['task_id']), 'child_exit_code': proc.returncode, 'child_output': log.read_text(errors='replace')}
                 if args.hold_mid_file: result.update(failure_evidence(task, interruption))
                 save(out, 'interruption-state.json', interruption, mapping)
@@ -328,12 +350,15 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approva
                 if args.scenario == 'unplug':
                     print('REINSERT THE SAME CARD', flush=True)
                     marker(out, 'REINSERT_NOW', task['task_id'], max((x['size'] for x in captured['parts']), default=0))
+                    guard_device = None
                     deadline = time.monotonic() + args.reinsert_timeout
                     while time.monotonic() < deadline:
                         try:
                             check(); break
                         except Exception: time.sleep(args.poll_interval)
                     else: raise TimeoutError('Same card must return at the original mountpoint')
+                    result['source_st_dev_after_reinsert'] = mount.stat().st_dev
+                    result['source_st_dev_changed'] = result['source_st_dev_after_reinsert'] != device
                 check(); after_interrupt = snapshot_tree(source); check()
                 compare = compare_snapshots(before, after_interrupt)
                 save(out, 'reinsert-inventory-compare.json', compare, mapping)
@@ -362,6 +387,8 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approva
                 unexpected = [p for p in extras if not (Path(p).parent.name == '.cetacea' and Path(p).name.startswith('import-manifest-run') and p.endswith('.json'))]
                 result.update(status='PASS' if finished['state'] == 'COMPLETED' and all(x['ok'] for x in reads) and not captured['half_final'] and not remaining['parts'] and not locks and not unexpected and comparison['identical'] and compare['identical'] else 'FAIL',
                               final_state=finished['state'], approvals=len(approvals(w, task['task_id'])), remaining_parts=remaining['parts'], locks=locks, additional_library_files=extras, unplanned_files=unexpected)
+                if args.scenario == 'unplug' and not args.hold_mid_file and result['status'] == 'PASS' and not result['part_in_progress_at_interruption']:
+                    result.update(status='FAIL_UNVERIFIED_INTERRUPTION', notes=['No partial file was observed at removal.'])
                 if args.hold_mid_file and result['status'] == 'PASS':
                     verdict, reasons = hold_verdict(result, bool(args.test_only_gone_flag_file))
                     result['status'] = verdict

@@ -54,3 +54,5 @@ diskutil info /Volumes/NAME | grep UUID
 证据文件采用不覆盖写入；重复运行前请用 `--out` 指定新的证据目录。`--lightroom real` 当前会明确拒绝运行，尚未实现真实测试 catalog 守卫。
 
 `result.json`、`plan.json` 和 README 记录暂停释放时的 `part_size_at_removal`（子进程在恢复读取前记录）、`part_in_progress_at_interruption`，以及失败后的 `parts_after_failure`。`hold-state.json` 保存暂停时间和大小。`held_file_rel`、`first_failed_file`、`first_failed_error_class`、`failed_file_count`、`held_file_failed_first` 和 `child_exit_code` 用于核对首个文件确实在中途失败；`simulated_by_test` 标记仅供测试的模拟。拔卡后后续文件可能在打开时报告 ENOENT，因为卡已不在；相关情况记录在 `later_files_failed_because_card_absent`。恢复成功但中断证据不足时结果为 `FAIL_UNVERIFIED_INTERRUPTION`。
+
+接近自然复制速度的拔卡测试可使用轻度限速（例如 `--throttle-mbps 30`，不加 `--hold-mid-file`），在 `PULL_NOW` 后拔卡；脚本轮询记录拔卡前后的 `.part` 大小，只有观察到未完成的临时文件才能验证文件复制中断。重新插入后仍须由卷 UUID 确认同一张卡且恢复到原挂载路径；macOS 重新挂载时 `st_dev` 可能变化，结果中的前后设备号及变化标记仅用于诊断。

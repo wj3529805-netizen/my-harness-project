@@ -231,3 +231,106 @@ def test_throttled_copy_exposes_multiple_chunk_sizes(tmp_path, monkeypatch):
     worker.join()
     assert result[0]['status'] == 'VERIFIED'
     assert 1024 * 1024 in sizes and 2 * 1024 * 1024 in sizes
+
+
+def test_r4_reinsert_changed_device_and_deleted_part(tmp_path, monkeypatch):
+    import time
+    card, folder, out, args = make_throttled_run(tmp_path, 'unplug')
+    args.poll_interval = .005
+    missing = threading.Event()
+    child = []
+    original_launch = r4.subprocess.Popen
+    original_prepare = r4.prepare
+    original_state = r4.files_state
+    def prepare(*a):
+        mount, device, source, target, home, mapping = original_prepare(*a)
+        return mount, device + 1, source, target, home, mapping
+    def guard(args, resolver, mount, device):
+        from r_common import volume_guard
+        assert device == (None if (out / 'REINSERT_NOW').exists() else mount.stat().st_dev + 1)
+        volume_guard(args.source_uuid, mount, None, resolver)
+    def launch(*a, **kw):
+        proc = original_launch(*a, **kw); child.append(proc); return proc
+    def files_state(w, task):
+        state = original_state(w, task)
+        if missing.is_set(): state['parts'] = []
+        return state
+    monkeypatch.setattr(r4, 'prepare', prepare)
+    monkeypatch.setattr(r4, 'guard', guard)
+    monkeypatch.setattr(r4.subprocess, 'Popen', launch)
+    monkeypatch.setattr(r4, 'files_state', files_state)
+    def resolver(_):
+        if missing.is_set(): raise RuntimeError('removed')
+        return card
+    def simulate():
+        deadline = time.monotonic() + 15
+        while not (out / 'PULL_NOW').exists() and time.monotonic() < deadline: time.sleep(.005)
+        time.sleep(.1)
+        missing.set(); child[0].kill()
+        while not (out / 'REINSERT_NOW').exists() and time.monotonic() < deadline: time.sleep(.005)
+        missing.clear()
+    worker = threading.Thread(target=simulate); worker.start()
+    try: result = r4.run(args, resolver, approve, expire_lease)
+    finally: worker.join(timeout=16)
+    assert result['status'] == 'PASS', result
+    assert result['source_st_dev_changed'] is True
+    assert result['source_st_dev_before'] != result['source_st_dev_after_reinsert']
+    assert result['part_in_progress_at_interruption']
+    assert result['part_evidence_source'] == 'last_seen_before_removal'
+    assert result['part_sizes_at_pull_detection'] == []
+    assert json.loads((out / 'result.json').read_text())['source_st_dev_changed'] is True
+
+
+@pytest.mark.parametrize('mismatch', ['uuid', 'path'])
+def test_r4_reinsert_rejects_wrong_identity(tmp_path, mismatch):
+    import time
+    card, folder, out, args = make_throttled_run(tmp_path, 'unplug')
+    args.reinsert_timeout = .3; args.poll_interval = .005
+    other = tmp_path / 'other'; other.mkdir()
+    removed = threading.Event()
+    def resolver(uuid):
+        assert uuid == 'fake'
+        if removed.is_set():
+            if mismatch == 'uuid': raise RuntimeError('UUID not found')
+            return other
+        return card
+    def simulate():
+        deadline = time.monotonic() + 15
+        while not (out / 'PULL_NOW').exists() and time.monotonic() < deadline: time.sleep(.005)
+        removed.set()
+    worker = threading.Thread(target=simulate); worker.start()
+    try: result = r4.run(args, resolver, approve, expire_lease)
+    finally: worker.join(timeout=16)
+    assert result['status'] == 'FAIL_STOPPED'
+    assert 'Same card must return at the original mountpoint' in result['traceback']
+
+
+def test_r4_unplug_without_partial_is_not_pass(tmp_path, monkeypatch):
+    import time
+    card, folder, out, args = make_throttled_run(tmp_path, 'unplug')
+    args.poll_interval = .005
+    missing = threading.Event(); child = []
+    original_launch = r4.subprocess.Popen
+    original_state = r4.files_state
+    def launch(*a, **kw):
+        proc = original_launch(*a, **kw); child.append(proc); return proc
+    def files_state(w, task):
+        value = original_state(w, task)
+        if (out / 'PULL_NOW').exists(): value['parts'] = []
+        return value
+    monkeypatch.setattr(r4.subprocess, 'Popen', launch)
+    monkeypatch.setattr(r4, 'files_state', files_state)
+    def resolver(_):
+        if missing.is_set(): raise RuntimeError('removed')
+        return card
+    def simulate():
+        deadline = time.monotonic() + 15
+        while not (out / 'PULL_NOW').exists() and time.monotonic() < deadline: time.sleep(.005)
+        time.sleep(.1); missing.set(); child[0].kill()
+        while not (out / 'REINSERT_NOW').exists() and time.monotonic() < deadline: time.sleep(.005)
+        missing.clear()
+    worker = threading.Thread(target=simulate); worker.start()
+    try: result = r4.run(args, resolver, approve, expire_lease)
+    finally: worker.join(timeout=16)
+    assert result['status'] == 'FAIL_UNVERIFIED_INTERRUPTION', result
+    assert not result['part_in_progress_at_interruption']
