@@ -1,0 +1,47 @@
+{
+  "stages": {
+    "ingest": {
+      "elapsed_s": 2.740813,
+      "items": 241,
+      "failed": 0,
+      "items_per_s": 87.93011416685486,
+      "s_per_item": 0.011372668049792532,
+      "bytes": 1482139854,
+      "mb_per_s": 540.7665003048365
+    },
+    "lr_register": {
+      "elapsed_s": 1842.197493,
+      "items": 120,
+      "failed": 0,
+      "items_per_s": 0.06513959575777145,
+      "s_per_item": 15.351645775
+    },
+    "lr_preset": {
+      "elapsed_s": 2221.836939,
+      "items": 120,
+      "failed": 0,
+      "items_per_s": 0.054009364005807456,
+      "s_per_item": 18.515307824999997
+    },
+    "lr_export": {
+      "elapsed_s": 1348.64546,
+      "items": 120,
+      "failed": 0,
+      "items_per_s": 0.08897816628545208,
+      "s_per_item": 11.238712166666666
+    },
+    "preview_verify": {
+      "elapsed_s": 9.873635,
+      "items": 120,
+      "failed": 0,
+      "items_per_s": 12.153578697207259,
+      "s_per_item": 0.08228029166666667
+    }
+  },
+  "total_wall_s": 5732.537291290999,
+  "peak_rss": 98205696,
+  "peak_rss_unit": "bytes",
+  "notes": [
+    "Per-file ingest timing is unavailable in the database."
+  ]
+}

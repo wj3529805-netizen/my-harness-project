@@ -1,0 +1,251 @@
+{
+  "mode": "large",
+  "status": "PASS",
+  "real_lightroom": true,
+  "mock": false,
+  "scope": "test-folder-only",
+  "scope_subdir": "DCIM/143NZ6_3",
+  "counts": {
+    "nef": 120,
+    "jpg": 121,
+    "other": 0
+  },
+  "checks": {
+    "task_completed": {
+      "passed": true,
+      "reason": "Task must complete"
+    },
+    "verified_library": {
+      "passed": true,
+      "reason": "All 241 destination hashes must match source"
+    },
+    "ingest": {
+      "passed": true,
+      "reason": "Ingest must complete 241 files"
+    },
+    "lightroom_stages": {
+      "passed": true,
+      "reason": "All Lightroom and preview stages must complete 120 photos"
+    },
+    "raw_and_jpg": {
+      "passed": true,
+      "reason": "Only 120 RAW files must be registered, preset and exported"
+    },
+    "other_never_in_lightroom": {
+      "passed": true,
+      "reason": "Other assets must never enter Lightroom or paired previews; each Lightroom stage must succeed for nine RAW files"
+    },
+    "unpaired_jpg_never_in_lightroom": {
+      "passed": true,
+      "reason": "Unpaired JPEGs must never enter Lightroom"
+    },
+    "previews": {
+      "passed": true,
+      "reason": "120 1600-pixel previews must independently verify"
+    },
+    "readback": {
+      "passed": true,
+      "reason": "Real Lightroom must independently read back 120 exposures of 0.5; mock is a rehearsal"
+    },
+    "approval": {
+      "passed": true,
+      "reason": "Exactly one unchanged approval"
+    },
+    "source_unchanged": {
+      "passed": true,
+      "reason": "Source inventory must remain unchanged"
+    },
+    "catalog_guard": {
+      "passed": true,
+      "reason": "All catalog guards must pass; mock is simulated"
+    }
+  },
+  "preflight_checks": [
+    {
+      "name": "card_mounted",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "target_volume_present",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "target_on_different_device",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "evidence_outside_card",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "home_dir_safe",
+      "passed": true,
+      "hint": "",
+      "skipped": true
+    },
+    {
+      "name": "scope_listing_expected_counts",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "node_binary_exists",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "mcp_index_exists",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "bridge_token_exists",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "lightroom_single_process",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "catalog_guard_matches_test_catalog",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "mcp_connected",
+      "passed": true,
+      "hint": ""
+    },
+    {
+      "name": "preset_found",
+      "passed": true,
+      "hint": ""
+    }
+  ],
+  "failed_step": null,
+  "failures": [],
+  "notes": [],
+  "reader_changed_from_usb": true,
+  "volume_uuid_sha256_prefix": "e8a48e01f632f7d9",
+  "home_persistent": true,
+  "home_location": "target",
+  "home": "<RUN_HOME>",
+  "lr_scope": {
+    "mode": "all",
+    "count": 120,
+    "total_raw": 120
+  },
+  "nef_subtypes": {
+    "HE": 120
+  },
+  "lightroom_stage_summary": [
+    {
+      "run": 1,
+      "stage": "ingest",
+      "state": "COMPLETED",
+      "succeeded": 241,
+      "failed": 0,
+      "skipped": 0,
+      "started_at": "2026-11-04T22:40:05.503821+00:00",
+      "ended_at": "2026-11-04T22:40:08.244634+00:00"
+    },
+    {
+      "run": 1,
+      "stage": "lr_register",
+      "state": "COMPLETED",
+      "succeeded": 120,
+      "failed": 0,
+      "skipped": 0,
+      "started_at": "2026-11-04T22:40:08.247120+00:00",
+      "ended_at": "2026-11-04T23:10:50.444613+00:00"
+    },
+    {
+      "run": 1,
+      "stage": "lr_preset",
+      "state": "COMPLETED",
+      "succeeded": 120,
+      "failed": 0,
+      "skipped": 0,
+      "started_at": "2026-11-04T23:10:50.445447+00:00",
+      "ended_at": "2026-11-04T23:47:52.282386+00:00"
+    },
+    {
+      "run": 1,
+      "stage": "lr_export",
+      "state": "COMPLETED",
+      "succeeded": 120,
+      "failed": 0,
+      "skipped": 0,
+      "started_at": "2026-11-04T23:47:52.284296+00:00",
+      "ended_at": "2026-11-05T00:10:20.929756+00:00"
+    },
+    {
+      "run": 1,
+      "stage": "preview_verify",
+      "state": "COMPLETED",
+      "succeeded": 120,
+      "failed": 0,
+      "skipped": 0,
+      "started_at": "2026-11-05T00:10:20.930362+00:00",
+      "ended_at": "2026-11-05T00:10:30.803997+00:00"
+    }
+  ],
+  "retries": {
+    "total": 0,
+    "by_stage": {},
+    "photos_with_retries": 0
+  },
+  "throughput": {
+    "stages": {
+      "ingest": {
+        "elapsed_s": 2.740813,
+        "items": 241,
+        "failed": 0,
+        "items_per_s": 87.93011416685486,
+        "s_per_item": 0.011372668049792532,
+        "bytes": 1482139854,
+        "mb_per_s": 540.7665003048365
+      },
+      "lr_register": {
+        "elapsed_s": 1842.197493,
+        "items": 120,
+        "failed": 0,
+        "items_per_s": 0.06513959575777145,
+        "s_per_item": 15.351645775
+      },
+      "lr_preset": {
+        "elapsed_s": 2221.836939,
+        "items": 120,
+        "failed": 0,
+        "items_per_s": 0.054009364005807456,
+        "s_per_item": 18.515307824999997
+      },
+      "lr_export": {
+        "elapsed_s": 1348.64546,
+        "items": 120,
+        "failed": 0,
+        "items_per_s": 0.08897816628545208,
+        "s_per_item": 11.238712166666666
+      },
+      "preview_verify": {
+        "elapsed_s": 9.873635,
+        "items": 120,
+        "failed": 0,
+        "items_per_s": 12.153578697207259,
+        "s_per_item": 0.08228029166666667
+      }
+    },
+    "total_wall_s": 5732.537291290999,
+    "peak_rss": 98205696,
+    "peak_rss_unit": "bytes",
+    "notes": [
+      "Per-file ingest timing is unavailable in the database."
+    ]
+  }
+}

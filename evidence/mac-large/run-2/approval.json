@@ -1,0 +1,23 @@
+{
+  "before": [
+    {
+      "task_id": "tsk_dc5644af952e46ffa7bc127a6e953b9f",
+      "plan_digest": "24ea5687c55b7e1a5fa96c31f2698f055f1fc80e22c949af50980a45393c8b8d",
+      "approved_by": "cli",
+      "scopes": "[\"admin\", \"approve\", \"cancel\", \"execute\", \"lightroom\", \"plan\", \"read\"]",
+      "granted_at": "2026-11-04T22:40:02.600837+00:00",
+      "revoked_at": null
+    }
+  ],
+  "after": [
+    {
+      "task_id": "tsk_dc5644af952e46ffa7bc127a6e953b9f",
+      "plan_digest": "24ea5687c55b7e1a5fa96c31f2698f055f1fc80e22c949af50980a45393c8b8d",
+      "approved_by": "cli",
+      "scopes": "[\"admin\", \"approve\", \"cancel\", \"execute\", \"lightroom\", \"plan\", \"read\"]",
+      "granted_at": "2026-11-04T22:40:02.600837+00:00",
+      "revoked_at": null
+    }
+  ],
+  "count": 1
+}

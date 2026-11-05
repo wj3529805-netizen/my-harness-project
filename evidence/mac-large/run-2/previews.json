@@ -1,0 +1,1082 @@
+[
+  {
+    "rel_path": "DSC_0438.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "8e1a9d0b0df313d327f222712588ee03934176cca9048c9d62d5f85d01f3ceb0",
+    "library_sha256": "e4662c4b8cd1add0197ba2c1d2617f3c219d12f7dd019cd8bb200b8f3f854f52",
+    "paired_jpg": "DSC_0438.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0439.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "8a0aaf64a81afbe7b0638cf9c9626618cf99aa14910d84e6dd4cabee870357d1",
+    "library_sha256": "5e6b59f361b26de7f6990d91b0f0616bb3ca979c544842e9fe0086b59d32266f",
+    "paired_jpg": "DSC_0439.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0440.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "73b14f4713e8f02eba44eba82cd0aa82523aa4af5dd8c6768b2d31fe94d40896",
+    "library_sha256": "0bd14f4ed229a83a09121ab4c1a63791e00047ac655299f08de12efcb3700381",
+    "paired_jpg": "DSC_0440.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0441.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "33e0af8c3b51b50c7c71727be98f476e6be670c141298827edcf9df74c503bb5",
+    "library_sha256": "d1961de0cf0c9c86b22aeee8869d9d5b37fae52999dc33c7552d11f17b0980d1",
+    "paired_jpg": "DSC_0441.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0442.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "4b9d24a0a958aeaa01929fac2690ecce8c165ac261d2bbd451efe54bdc132e4c",
+    "library_sha256": "5eb8db11c5af4b9df6de13ab7ddcec3ab588051233750957fd9fa5bdedc8a509",
+    "paired_jpg": "DSC_0442.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0443.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "7ee5708f9129e3534220b16fcb5eb9b82f3040b5a0b9b7436e293486c8eafa52",
+    "library_sha256": "7a0cd2bc37502ebc59516e1963dd320cbb09574c3c36ea54c7582c69fa27f996",
+    "paired_jpg": "DSC_0443.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0444.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "29aedb045d04d357c62e806ab7019a1549ae76470a95f301d8ac03277aa2e0cb",
+    "library_sha256": "5a465a01b583a445ca143bb7532a740dde116b1afd581770620eb35a8bbc61a8",
+    "paired_jpg": "DSC_0444.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0445.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "6dd72a091872281df1ccf268d38a94798a01e5255eeddea4c40c661178b8840a",
+    "library_sha256": "9ec92257c400f7dabf4c7702b6cfe727c15c257857cf8b0b8489719ad7651623",
+    "paired_jpg": "DSC_0445.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0446.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "1afdbb255928531d3c00e5390548b9134f29869b9a93de0b953e9c699afedc7b",
+    "library_sha256": "66a31dba8732b3d53cbfc4789f0f2af81aec45ab3dccdbde7c036432d01e91cd",
+    "paired_jpg": "DSC_0446.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0447.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "86ab2af63d9835e6d7650f947db22e73227d0083a9577e21ea5659232bf2efdc",
+    "library_sha256": "9ff145f4c41abc83b89af49a30e394232c4b384a67058d6ba2dafc3502b8a2bf",
+    "paired_jpg": "DSC_0447.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0448.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "442dcac2b962e28086f356720591692dfe343b550465290df275d5c46a189f06",
+    "library_sha256": "d8491e99fa2312d2984deb9bd0c05aef0d02d0fac9f399bd7414f3b330b3de20",
+    "paired_jpg": "DSC_0448.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0449.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "5a340faac9d6d1b1a0f86b2a56965ad95329a858ef2dc8e72f1c81b814de3e42",
+    "library_sha256": "e1f2c46f6aee576d72417daf0f5afff6c196e66da97cbbad457bd4937bb40853",
+    "paired_jpg": "DSC_0449.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0450.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "de83851fecc38c2cd8f8489e315990a069a5280fc0e8734e4e218db61b9742b0",
+    "library_sha256": "14d310cc1e9883843755f42387015a33f05959a42d0d0df71bf32be93ba3e46c",
+    "paired_jpg": "DSC_0450.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0451.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "398567c7e2fbae8e35b0c78b6e307170ac6b157ee0ebb8e5f0036b2ea183e660",
+    "library_sha256": "7ce71f1474ace2db57aafa9915d80815968e442ede1b6f89616c4ef28deb4a93",
+    "paired_jpg": "DSC_0451.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0452.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "77e371ca6266af3b6583e5172da3d46a392999ff1cd45f7a5c7f8831430580cf",
+    "library_sha256": "0b3fd85d95e2c8fe80b28ad8663a4d7c6a4d8ef4970d0e316d6316583bcd2080",
+    "paired_jpg": "DSC_0452.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0453.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "94318bdc4d829426f87d212854c35f42b5561efd27e943e69b71035b3b4755d1",
+    "library_sha256": "94b3bbb265bc12add0be3ef74eb4485ac0e97e761f737eddb48b2f87eb7e14c3",
+    "paired_jpg": "DSC_0453.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0454.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "3a9712f7ca2084d1e3000f353a2edffec1b73c84502a5f054d31c44f67d8df74",
+    "library_sha256": "061858a1b5d619b50cefe78f714955110479db6e11be3dced0094de5069d3774",
+    "paired_jpg": "DSC_0454.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0455.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "2d487905fa3cc644e7bb51033b8a9f12c8023ece84b4827452d5351969506ade",
+    "library_sha256": "8bcf8b71dd313209bb8678ed482222379f39bdef61d4ff8fe782ce0b868aa485",
+    "paired_jpg": "DSC_0455.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0456.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "3cc51bebbce000e0fb9f10000811272d72eaa033111f19ddd5c9f5324d88eadb",
+    "library_sha256": "984208e757ef62ae56db0be5f3f7efd50c8acb940dbbfc0eec381b025ed53a4f",
+    "paired_jpg": "DSC_0456.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0457.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "6d465af210a49cdc6a2717a6a043a3f0bf608044e74bd0e3fd94808a17d181ba",
+    "library_sha256": "6ffedb629e3ecd389f2c9dac1584fb70fbdfdc8460b116a3086fa9603203f5ff",
+    "paired_jpg": "DSC_0457.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0458.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "59c2658add0d0cdb1b4152169abb67ad301e9ff8c339c0729f3efcccb4f1a166",
+    "library_sha256": "c0e1fdc5eee453c7a9686cbe1b207024b2851b838b139bb44d2d99cfa40e7d48",
+    "paired_jpg": "DSC_0458.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0459.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "7a02bafd72ba680c6e6acd2a4d9ea5ed43422c7a548846776b06c924f3d0854e",
+    "library_sha256": "097a9f4c1687d49cb538c916ac0d14f3bd87e54570abc5e8f9f5fbd80c2271cc",
+    "paired_jpg": "DSC_0459.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0460.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "15c45cc4bbbefe5018aefee2a60af3fb5e88cee00d7303a4a6f9fdcbf1a657a3",
+    "library_sha256": "b162a6242c9d9c3e961a12f5393bf6991aa1fb3be2fded2ca638a1f0022be304",
+    "paired_jpg": "DSC_0460.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0461.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "bea6ff72f326b3931763e547db23f5741e27f1aa2098be3b6570f3f7993f8ef1",
+    "library_sha256": "7cd8a283a1ce2c2aa551f5399f68632cd9945d4bc97c9bb09df2162e0ed9ede5",
+    "paired_jpg": "DSC_0461.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0462.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "3e3d7e1ce743deef52e250e85ec870ae4a4af823f1292d53c0e09b4c8a8eda38",
+    "library_sha256": "7a6340038d17ec3c9ed75532a14174950084fb2ad63114c4583e6cc301c879c3",
+    "paired_jpg": "DSC_0462.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0463.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "3331a9c139dac7f900d7f824f25129f1d1c24cf365b06feeb9dc0a33d13e7584",
+    "library_sha256": "f4f5eca05dd00958b00cfabb332d6c281db56b4aa7b795f8e107d472263485cf",
+    "paired_jpg": "DSC_0463.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0464.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "226149c32e5ec79091bc89b854dd1e98a4ded1390a2ced0d707f833e6fa39150",
+    "library_sha256": "706e6571971f526846b27a5bef99e7160e6b08ced7354adffb38f959bbcfd697",
+    "paired_jpg": "DSC_0464.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0465.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "a0f8d9e11a39cd2d1a288f424df60d38d6d0dbe35cba1b66b026945b218d8f0d",
+    "library_sha256": "796a1cda40ce88a23a5749b7e0c288dba1c68a1ecbbccb074316fddf7168fffe",
+    "paired_jpg": "DSC_0465.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0466.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "a38213a0af260a1d82a7f55f1301ab9a335835ae06ddf16389cc9dad67bf17e2",
+    "library_sha256": "c571adb351983424818b81f8a659ee944ea6494e98eae112a956ee14bd83c3e1",
+    "paired_jpg": "DSC_0466.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0467.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "9713d97720e1451e5c66218e4a2c3b42a98e34d13c897347ef0a83a506b3b68d",
+    "library_sha256": "a3aa0647aac89fd90268d4f8599d10694c44a2477e7875832fddb039dbc92f20",
+    "paired_jpg": "DSC_0467.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0468.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "161795323f1f4a31225799144ed2b2624a6d66eb81c46c4fb9980d96905f787b",
+    "library_sha256": "1ce31f4a5beea7fd1baea68613ca9b7188e12841820c612e92d4bae2937e2b89",
+    "paired_jpg": "DSC_0468.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0469.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "fd240091566776736cfb22da139146ee4d72916b78cff2b05ed0428250abff1b",
+    "library_sha256": "179a4fcef088a1bc0465689080401df6db0d5244cc7776f4d21e20a7b2449bed",
+    "paired_jpg": "DSC_0469.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0470.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "ee3474e1b581934865917afefca83b320206b3953d612642735c4eb6bde7f819",
+    "library_sha256": "5f04ffec44783946246b4b22c2ed0bb967f7aab4492610cd9dcf809999035a5d",
+    "paired_jpg": "DSC_0470.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0471.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "5a678439e4a4492cf3474c89d904a93c5b6ebc7351153f4041f890d599691806",
+    "library_sha256": "3228e5498735af86e42047d8171fbffc5f67111b0e4e0b2ae592105c2b72ff9b",
+    "paired_jpg": "DSC_0471.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0472.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "24a00f47f3a83154e5b4e04b7ad853efde256ac576cccb9244261c82a074bba2",
+    "library_sha256": "12beef89f607ec044dff5a7a2dbd543d0f736fc21f167cffa68119714b97c0bc",
+    "paired_jpg": "DSC_0472.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0473.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "4ea54f7b7ebdf0d277d776cdd9bfd778111a7035d3f54227d893b3e3132b3e64",
+    "library_sha256": "3d4e5e6eaf2abe8d4e3eadb957467fc266709a2967a8b01298fb394c6f431aa8",
+    "paired_jpg": "DSC_0473.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0474.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "4188fca217da40b95f63984bb91fb8412467ecbd3bdfb8c3f82065a714b3df6a",
+    "library_sha256": "74e603ac6c73c18fc4d06b8413312ff7ed70285a2e0562ee21d5741b7757ef0c",
+    "paired_jpg": "DSC_0474.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0475.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "43403e2843e1745bf6679ad915992cec1096dad98657292a522471e6be0b09e1",
+    "library_sha256": "ec3e14f750cd996d74b8f9bac0d1f26359424957a6e8c0e42d8e43a0d85e76cd",
+    "paired_jpg": "DSC_0475.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0476.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "c5539f1633300d676a3865e2f77b006c0aaea766075fc519e58cf16c19b87523",
+    "library_sha256": "af3b248e440f75f3538469a9d3e40261dcc05d48743a58384339e6ee1223c15c",
+    "paired_jpg": "DSC_0476.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0477.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "90af116a428f366925977912da9170752789e2e72b09badb7f68258a8254e55b",
+    "library_sha256": "e412af8d34cabe6e809dc01cde566cd9e04f3e7dbd5f3b8d00001365c87c3964",
+    "paired_jpg": "DSC_0477.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0478.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "3e315b2b789394888199f5216a169e57338507e9748f60ca06f371924fecfd89",
+    "library_sha256": "b607ce53f6d6759e4e6b2fd626bdbf32c7e9be012c33a3b7b7fbd0b2dc1f939b",
+    "paired_jpg": "DSC_0478.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0479.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "3263e9e2d09d4cb828ae68b52f6d7dfd6c0e88f3496c0c89bab082d426d7b8bd",
+    "library_sha256": "d020188e91e3147a8cb5aaede017b7149206d3674df7b4703fe65e345fd7e311",
+    "paired_jpg": "DSC_0479.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0480.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "9b78f6f44883e501508c2010d0af6cd6bfffa2c8ca02238847a8384783838240",
+    "library_sha256": "d81507d412aa2fcad29836856dde8f92c525a8849e8b5b8d93e94b985b53b1e6",
+    "paired_jpg": "DSC_0480.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0481.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "923e2d7329fe6c1fee5f0223adcf5f6007b387a2df2d062a8e96e90b6749582f",
+    "library_sha256": "8d1ef0d19aa3b84ba0cc31c1a7b5232753e5f4f41beb8bbc9f62ae4b22870a6e",
+    "paired_jpg": "DSC_0481.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0482.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "3407641099a856fb6fd25815df7524ec97da68b2a78baa2a029251d19caaf70f",
+    "library_sha256": "77d496ebe5a66b320a2761197a21e1f78fa696cb11e915e32947256e1842a573",
+    "paired_jpg": "DSC_0482.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0483.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "da01357b90b7470fd60c6a64e55b1a153040792a2affe1028117645285a6ff53",
+    "library_sha256": "b18bad0df0624094973606f7efa6f39542cc05211f3d23881f6f86824b04a702",
+    "paired_jpg": "DSC_0483.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0484.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "f3ab7a4dab9e1d19284a92330c09b736d9bac303de95b44c8c5d80e4f4b4cc43",
+    "library_sha256": "21e832bdcd53eeaed7fb82786faee83f4a46ec54da62cad3cff0f86344865395",
+    "paired_jpg": "DSC_0484.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0485.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "6119aa3adf9f29557e848e6d9c48caeab38e9ba8645bafe0f1619c64f1a821bc",
+    "library_sha256": "d9a94eaf422d997ff317d48ba7f8167280eab2ebc5580f03c746eefe76425213",
+    "paired_jpg": "DSC_0485.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0486.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "3a504c27a3d97dc4ab51c82d01f185fe3a1b5ab96d44eff9a4f98894e60d2018",
+    "library_sha256": "be3f006593d22589db1f153512b64e35ac5609277acb42843f1edd84463f73a8",
+    "paired_jpg": "DSC_0486.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0487.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "3e9c6d4d64bc2b54ee329a55481dd91e3b20147e154f1c526bceb9d3e63911d7",
+    "library_sha256": "3f33f2ffc4af61e40131586bc45ba2c00774ef0cb35c78c226719bff02792b81",
+    "paired_jpg": "DSC_0487.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0488.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "c73c819ce07dcd51f4cb4a408e161123911878a20054bdef3c6895cdf6e0c6d3",
+    "library_sha256": "f489d8cbc2e61a51fe489dda341a940f94bf6b6deefeb7914c125c98afc6d7fc",
+    "paired_jpg": "DSC_0488.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0489.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "0d0ca34794b215594215781eaf4a3b21077e29e817f48ff2338dbb4aa44f3d77",
+    "library_sha256": "8e2fffcd63625c5981315c7fa8237a88167c67b58064bc0910adbc1ae295c4ac",
+    "paired_jpg": "DSC_0489.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0490.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "eb3b90b7743aaff25ad901fbcbab19eefc0d8f31ee87b219070b6a8d45e0e153",
+    "library_sha256": "3110190f27ce6dff3d544d6ecc5be083c1885ec9e8965ed3dd34b760b7bbe77b",
+    "paired_jpg": "DSC_0490.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0491.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "904afd461290b9880d1a656162596e02cb2737df3ccfa5c6fdf5f8995982458e",
+    "library_sha256": "f878372ac702c460c383596ce77c1fb15001902be29d10ccfc48cd63f7965066",
+    "paired_jpg": "DSC_0491.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0492.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "3a1fbc67c615d3afa728b17d1c84652f639ce91aec9f77319de09a024ab73834",
+    "library_sha256": "a031229fbd67366062d2883575894087583b4f9ddae33e64ef4bc9eed4d5a4a1",
+    "paired_jpg": "DSC_0492.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0493.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "504e6d8d08f65736ac91fe0866632c4ade128e215056df6fd463fb55594084a2",
+    "library_sha256": "219f0db16fbf812af3211c7f5bbd89b1dc72988587d8009c276021a7b3f54f76",
+    "paired_jpg": "DSC_0493.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0494.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "1d247896f6457c81bcf5184c0f5e87425630dba6c6e50b89a3c6fb7f1d06f96a",
+    "library_sha256": "7fc6914a3eeb480e898648c6b2f0742e4810b8ee038dbd9eb647e576ebbc6570",
+    "paired_jpg": "DSC_0494.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0495.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "2ce16be5f8de76d07ca8f6d1a54099f160fe28dbc744190d29699b096406434f",
+    "library_sha256": "07c72ec1fc17becc5a11b0c9f5284a211427b5d238306687c56089cfc0d2c7ef",
+    "paired_jpg": "DSC_0495.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0496.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "0c1d8eb0ab403b71db16f47cbaa0e6021250f95714dc489bcf9756f167d29ba2",
+    "library_sha256": "9187bbeab8a9c2845b3cd4cdd2cd2ff970bc48224240e1174f26217b7232089d",
+    "paired_jpg": "DSC_0496.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0497.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "29f0be365fd619c47df13346a1359e631dd16d13f78a0594aedf3a3a5c0acac6",
+    "library_sha256": "258e8c51efd8335663a66786a3d9a9d0d68f95778b2386fc13eb926005188853",
+    "paired_jpg": "DSC_0497.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0498.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "af1d662849fec36dc83f29a03f2976626e0c86fc6d33c4377121b4fc5c5068db",
+    "library_sha256": "f42e13655ec7598384f8d1cfaf4251b002624e848a46426f9e9555d90e86bcc0",
+    "paired_jpg": "DSC_0498.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0499.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "c7d2e4ecb7d8175fc87ea4b8ce4232ec303a3df6ae9132a968eec9f7a0c81b72",
+    "library_sha256": "74ce8191c0d662497e521e88db29037c3f2ffc1eb02bc5302eec6be091eadbd8",
+    "paired_jpg": "DSC_0499.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0500.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "30dd14c2cda521f9aaa72e42ea12f5d18f834bc27c193a77961b5f3586080ecf",
+    "library_sha256": "7fac3f8aa9d83f3b91767e8d6ef35d3098c68093fd796bf6be5e922a4eda0b85",
+    "paired_jpg": "DSC_0500.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0501.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "867019426e400048a95a2c8c71fb00dfe9fd94a7eca64aeae02650fb553aba1b",
+    "library_sha256": "3e45f4f55dd51f0a1cf072bcbcbab537334e36f96d429bb53b456a75fbb4f6ea",
+    "paired_jpg": "DSC_0501.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0502.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "99a95ee53d74549192da971d697a0fa9004c4a1892274123e6ff96832f8dc4d3",
+    "library_sha256": "d763e55d3273c0cd16f18c20233f8f0170898ebe19b6222524d8aad58a54b13b",
+    "paired_jpg": "DSC_0502.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0503.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "4cdc62ab69c8f9bce8762126db51f3b605c9a2c53cdbe8291161be30850b2249",
+    "library_sha256": "3afc85fb1285bd616dea8a9db7fed7cbf804a89e33293d7f4d2615600f6a263a",
+    "paired_jpg": "DSC_0503.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0504.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "004b5c59f7830a09e61c37c08dcbf5c003868816a4fccf172623bbffff460b4b",
+    "library_sha256": "e6d2f0362c9bcff7aa12da72390e3df93c388031ef332f454dfc614c81594856",
+    "paired_jpg": "DSC_0504.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0505.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "be3aa53967fa26c820f9a66bc673969ad7027586bf987be3058641fe071b8cc0",
+    "library_sha256": "c6c705f828c268dd68afb8ac420d0b2016857c8b1d3a904acd97e5589e9d08e9",
+    "paired_jpg": "DSC_0505.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0506.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "1fcc289f9b984390af073b41e16f231f47fd8b6f16025597f5d7a1e9ed0ac72d",
+    "library_sha256": "db100f1d649a4a6850a3c0d4b320896273b1e692d821382588e83fba6fbdf1cc",
+    "paired_jpg": "DSC_0506.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0507.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "351c8015ae0d2492d8b43b926f572160ca1c877361c5505c42e4d1b90533c843",
+    "library_sha256": "ef7b1b712feb278026ae36006e5755240b05c9f9802174a4eed4b14e8c08d0c2",
+    "paired_jpg": "DSC_0507.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0508.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "7a5f98e2307801105c8c937c23f6a5a1b50c03415a2edf7bf936578a9fba1c72",
+    "library_sha256": "d825f8548a96a0da63bc1fbb9ea71b7d07b147050999a2ef40828472102ac99d",
+    "paired_jpg": "DSC_0508.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0509.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "65a05ba8d3299e06edda7d005ee3f5f38aefeb7fec1ece961c588844c53779b6",
+    "library_sha256": "ed0f7450edf24d377568506899c03e507ba789fb60d579cf9422ed138730c859",
+    "paired_jpg": "DSC_0509.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0510.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "0b4f918430f1c41288a6ef9df64f22bc2bff525383a099c030a58613425f6325",
+    "library_sha256": "bae361c7166ed66afc219b96fe0594d1379fca3286f56d51b8522111cfad8293",
+    "paired_jpg": "DSC_0510.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0511.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "7d684ba6beba740714974c33961d40cbe7f61f78d17e8964cede8e5b580ebbe9",
+    "library_sha256": "64a16b585302107cd604f231f3dc0f8089ea903f0cdfbf074a42ea80765a032c",
+    "paired_jpg": "DSC_0511.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0512.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "beccd6d8d4af6770a247592d7990d49f332f3b4b59ab838c3d99ff77a66d14d1",
+    "library_sha256": "7493ebaae003b1177ad25ea8aa5494d440ba1cef603e05a7ad459b5775cb482d",
+    "paired_jpg": "DSC_0512.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0513.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "6473842aad017fa97fadcae8357e182b19665e05928e07a773dc6fecff549772",
+    "library_sha256": "3db218fdb03bcbd16730cff4ece745756ecf9337af9d02fdf8e95fd7d54c74f2",
+    "paired_jpg": "DSC_0513.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0514.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "77c15bc21878209ce4e3beff5fa19f96c2628c02b426c6c5d9b2222b43cd9e8b",
+    "library_sha256": "f02cd57a9c05a86838b79d88dd2fd03e3c6c66533fe12bcaf790158ebc8ceb40",
+    "paired_jpg": "DSC_0514.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0515.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "6a6ebdf34db7add311e32b1ec8f4c1a4540756b604bd4642b1293c879ef7bee3",
+    "library_sha256": "b5846f38ee02e437f2b6c164fe0d8c99df752a6d719f2a5c0bf3992ae99029a2",
+    "paired_jpg": "DSC_0515.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0516.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "3dbf97d5f73e1783de3eac87601affb86624691257214c4d79b1531355f98549",
+    "library_sha256": "631b8a380657d2783e2645537217c9f271f934d23e282054f81dc4f6e8e8acdb",
+    "paired_jpg": "DSC_0516.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0517.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "970b23d9b04ccd4de70c06255d4497d61d5c7713f613d1fe845ab4b2b4783572",
+    "library_sha256": "c75d7cdaa734e590db1b008cd431da3d2ab800db1bc0c89917fd3e8197583794",
+    "paired_jpg": "DSC_0517.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0518.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "e59e85f09715dfcae2c1ce374c22417bad1830a2fdfa0a640a6658c25557264c",
+    "library_sha256": "be09b18c7ea3d22ceec0bab983803eca84b5aab14a029cd34001ea2fcb4e5ab3",
+    "paired_jpg": "DSC_0518.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0519.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "5927f720f6e5ba4c3ae524027ffb455d55922e758cbb5c828ab6cce786b986d3",
+    "library_sha256": "f6811e2fcbb59613877d81ce3fe26d8ed20bc4b4c2e38ee8a3497f0b39b521ed",
+    "paired_jpg": "DSC_0519.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0520.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "1a7139105bee82ef302f40936df9bbc74993744bb4e76898f9048a41a37d3339",
+    "library_sha256": "a50879b754a6f1258286dec522646b9c63932b85e7fe592bd5421f9ca4a6dd1b",
+    "paired_jpg": "DSC_0520.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0521.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "5ffe32b1960451f40ecc35e95b9e47b2ccb3946b5158b0ada546dc998cdd16f0",
+    "library_sha256": "e38f49ccce304577cfbae5b9d8ee97508eb3127753dcf52a831439e5a90f35b2",
+    "paired_jpg": "DSC_0521.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0522.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "64c0bd1e5c15b34c745522354540321089e45129c9584dd5807b9af0d14e064c",
+    "library_sha256": "9707c7f46b71a8f38e0ca2b8814622503521e068b08f3b37f8dec98b5a4ad0f9",
+    "paired_jpg": "DSC_0522.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0523.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "60231a964c715eaaedef7eae100964586c7ed003d7f5d5dc6fa12d44afa3a845",
+    "library_sha256": "6300139ed1a2834a9c9d190f156cd5a52f583bc164c8cddaaad4f7da290f12fb",
+    "paired_jpg": "DSC_0523.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0524.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "b9ca18493c1274db4f3dab750daf8295c93073170ebedda3f804ea28271e6340",
+    "library_sha256": "66d1cea599c59220597f801028801760793ae9ea88da47f9febd09284f9636ae",
+    "paired_jpg": "DSC_0524.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0525.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "2325980c84798dd0355c1b7ebf47360cf6629d61c0c3fec0c9aa0d863fe9282a",
+    "library_sha256": "99fdf524ff068e4516cc63308013d8ceeccead432b62f6ff1d03ccf1ff6f90e8",
+    "paired_jpg": "DSC_0525.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0526.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "7c8817cb26acda2798b28ebba3ad8bc8188b8bfc506010d2754a12aa5847b518",
+    "library_sha256": "3e77fd8b827e60a80cefbc0f1d244c8eaa6c021c6a57002c73a579f1372fd996",
+    "paired_jpg": "DSC_0526.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0527.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "9c592758bbaec3b71f6742502b9acf648d97f80244686da185cf88e19678d923",
+    "library_sha256": "b92e82e655e0a9f256d26bba2e0fbaac153f4a2579aae07d4d0d6305837c284c",
+    "paired_jpg": "DSC_0527.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0528.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "e50c00cfc7116dcb4a2919e408a8077634287f202aee93de75285c4dc38ea22a",
+    "library_sha256": "a6e1ba9c92303b9200753e7ed4b74bc0aad4abf3c002baca051c7705ed6559ec",
+    "paired_jpg": "DSC_0528.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0529.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "71fdd6bdacde2a298261f05f3d1ad64dfcb6e4ded5cd2efbca25d87ca1473470",
+    "library_sha256": "0d62f393e088c99023f10e05976acce24899eb5effd79f5c23d68ef968ba3a04",
+    "paired_jpg": "DSC_0529.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0530.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "d4c65701a4db2a737f2720b3c133283073a10057a8b734d42cd0c93719d98acd",
+    "library_sha256": "840011964664cc8fbad311aa0caba3a4faaf3c19315ac95aa52a4c1353017d4f",
+    "paired_jpg": "DSC_0530.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0531.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "2ac711266ffbbec1d665f86eba535aa0808f31c445885295bdab091ae02ac13d",
+    "library_sha256": "3f189a3fb28b25cbde1fac472b401dd9c9b2a8f9effca6c626fe40647b40bf0e",
+    "paired_jpg": "DSC_0531.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0532.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "2346dfcfc7af292ff5cbef17c38805ede0fe0560cdc23ef51b67145be6d4f443",
+    "library_sha256": "642cc4a9d10f8098fd5d8a50ac248f6c0b449802bee3429b9acd3027aaa31f94",
+    "paired_jpg": "DSC_0532.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0533.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "b78cd0d45360a12d2495ca15d4d9eb236dd021e6729c789c915f7afd168fb775",
+    "library_sha256": "372061df879f28ceb003ab9fe9478a92c0c5a3bb0e1775cb3a3544697e21a885",
+    "paired_jpg": "DSC_0533.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0534.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "064e64c1954a272ba2cad86ebf748d3d0f47a2bdaef08e2e74ba2b9da1754ab0",
+    "library_sha256": "b4ce7ba39abca71b3aec7d50de08932eda976ee20586bc71597d779b3aae0fdb",
+    "paired_jpg": "DSC_0534.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0535.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "af46a334a905094301e3fcdbe684419e14ed584f25e799fefaa9289f3064c6ba",
+    "library_sha256": "8115f6ffec0139099339edf6d2bf0686b74cf218861c0b707610db2109469bbd",
+    "paired_jpg": "DSC_0535.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0536.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "40eca52fb5d0fb580ea5444ba2cb9e7cbdf3186fda0811452a1125cdf05471c0",
+    "library_sha256": "41604e706e9cb80e4697a7270aec46f2ec3784bbb71d73d8dcc719fb9feec1aa",
+    "paired_jpg": "DSC_0536.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0537.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "00e31581538d970283f9bb224ae660e348109910706d0ccbadfa5e39982a5425",
+    "library_sha256": "c1b6b63083611ee5a2bca355bcd45fa07938483f28541c014eaa72c95e511bd3",
+    "paired_jpg": "DSC_0537.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0538.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "e0bdc1bfb5b550b6992a387826583cddf0d97de4d198d2151f4e1abdecc452a0",
+    "library_sha256": "26b0779a0ef7216db7c9cc1854fcdf2a0bc461edba4f2aab4f2e25530a7afe38",
+    "paired_jpg": "DSC_0538.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0539.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "4f80dea9081d3673becf16e646ba6190658504a9a41e0f25e2ce2f350534e348",
+    "library_sha256": "83cba3582243606cdd00b297854d39170bebf31c203fa7315f73b85742d776f2",
+    "paired_jpg": "DSC_0539.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0540.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "b6faa7661acb218a454fb86277d77d346a98009abc339eacfb4b939fa54afca0",
+    "library_sha256": "1d16872d897b64be329919454d87aba7f52ebc1a93451cc401577f663d52b6b0",
+    "paired_jpg": "DSC_0540.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0541.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "80e2ec87e1a3f9098f2c0583762fb91f6800c9b67f8995351daf3e4d266e0b06",
+    "library_sha256": "867d336d8fea0031fb6d2507ad563c204188b50549c4151f01c54350090313be",
+    "paired_jpg": "DSC_0541.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0542.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "bfba7651929441e9ae9d757c64d614effaff87ebb78fc6c25d80dc7e57708174",
+    "library_sha256": "a6cb9a098daf3974c75614d50b27a1384825c705faba7425438ac09d59d8dcb9",
+    "paired_jpg": "DSC_0542.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0543.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "5a8730b43648b6c7d01c49e1c79ecb88e900dcd95aaa0b00b3188cea0c7d6222",
+    "library_sha256": "39bd04ba2694768a71cc6ce2280f9db934720bb1710bfbf23472f9fd0caf6793",
+    "paired_jpg": "DSC_0543.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0544.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "07f5d6530008a760c6e6a66d58f089f5dbb5dcccd5c55c66fccc3e4d9c30c11a",
+    "library_sha256": "d202e6d07e507b514877dd68a0f65af9bccbaef4eaf986f523bedcfae0ba84b7",
+    "paired_jpg": "DSC_0544.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0545.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "427ddd4d0661dd913c3fec23856037a6742e9572ff54d104e66c124ae29cb302",
+    "library_sha256": "9dde36b85d2fd7f6ae3d8eb2957a71663ff913a816854ec413109dd7db2811fe",
+    "paired_jpg": "DSC_0545.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0546.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "f801c60f27d0ce388e48251517cc703a9fb6c2e213ac60e0787e78b1160b1b13",
+    "library_sha256": "d56286584f7cf1dc3083df324264d02c2fce5665cc7a0d37d7260aa80347c8ab",
+    "paired_jpg": "DSC_0546.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0547.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "f3e6287501ea9572396315ecb38eb31394e049bd494df2a0ade2f64871e2e8de",
+    "library_sha256": "7f09ae1f58b206782ab79e60010ce696881791799a947f5a67c5709f7094afba",
+    "paired_jpg": "DSC_0547.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0548.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "9ea00956c90712e6be2250d2690cabdd92b9f49fbdcd7d2242e1bbbefa8e0312",
+    "library_sha256": "66c4f65c2821e81fbe0f2c5a79fd3de07c778a9e0e0e950c897c2c4243daf270",
+    "paired_jpg": "DSC_0548.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0549.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "2f05a44112e187e7a3f606793b5ab0d7a280b2969d7d62e3c231042931dd3949",
+    "library_sha256": "269b73772b207b317aac7220cd918129839dc1e5b5c622ff814d79010630bb16",
+    "paired_jpg": "DSC_0549.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0550.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "0d21a29f193d0740bb389c981f8f2bddf4f95eb4e5685fd48952abf2e217a43c",
+    "library_sha256": "bb254fd6e9f9c4eff590013b8b4d51159193e1b8998bb63d0234b84b5988a352",
+    "paired_jpg": "DSC_0550.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0551.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "c38dfa642429e851f0f08b4f784fda993e629c732919f641ab97d9a03bce402a",
+    "library_sha256": "e204225e9097306743c15d40f69861c593480604a6758dae4303c48c78d9cfed",
+    "paired_jpg": "DSC_0551.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0552.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "e3d0b7f9693d8000744fba0388892849b37de7aa2da5815a652e2f907f3c10c9",
+    "library_sha256": "17c70fd1389e962628c89b03393bd6b8ddedb867a7da15421e90d6c98b46bd80",
+    "paired_jpg": "DSC_0552.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0553.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "618815c1f1c66da668860729246fcf04d16f95146e0da88d228892511cd7ccdf",
+    "library_sha256": "857573c27528178c22a67cacf9ba180aeaab0b9db8ca9b214c839525af1965c5",
+    "paired_jpg": "DSC_0553.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0554.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "6daee486a2cf9ab9a510882e923779df9f6d5da2b0838542b50b6944faa79f9d",
+    "library_sha256": "13b3300deb529ee3d27e18b7055021746deefaae562f0e79e86f11651261cc7e",
+    "paired_jpg": "DSC_0554.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0555.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "20cc67c9841e31934fb0f4d06227a63d937bec455a95a298c7550dca67afa3b1",
+    "library_sha256": "0261676b24f93b5b4004c172274945f171ecb09c6c2d82c4148ef57b63b50042",
+    "paired_jpg": "DSC_0555.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0556.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "f65f389501ebe268f0e860917373211d1785ddfd4b219af2c2ea9a917e988727",
+    "library_sha256": "ece439a19bc9459e2660fba4ab918ba1e326449f468af2b43ac05185d749a61b",
+    "paired_jpg": "DSC_0556.JPG",
+    "mock": false
+  },
+  {
+    "rel_path": "DSC_0557.NEF",
+    "width": 1600,
+    "height": 1067,
+    "sha256": "355dbdea6cd093372eb956f0c2a73edb592dfa806070a0e52ed6c808d1c61e26",
+    "library_sha256": "f8b253ee208b42dfbc613c8612e7076e0963cab7640415964e382ec977d86aed",
+    "paired_jpg": "DSC_0557.JPG",
+    "mock": false
+  }
+]

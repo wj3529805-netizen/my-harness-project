@@ -1,0 +1,12 @@
+{
+  "status": "OK",
+  "mock": false,
+  "marker": "Lightroom MCP connected (real read-only preset probe; catalog identity unverified)",
+  "run": 1,
+  "missing": [],
+  "failed": [],
+  "orphans": [],
+  "size_violations": [],
+  "expected_count": 120,
+  "mapped_count": 120
+}
