@@ -54,7 +54,71 @@ def test_scoped_import_and_privacy(tmp_path, monkeypatch):
     assert saved['scope'] == 'test-folder-only'
     assert saved['mock'] is False and saved['real_lightroom'] is False
     assert saved['lightroom'] == 'NOT_RUN (ingest-only)'
+    assert saved['max_files'] is None and saved['planned_file_count'] == 2
+    assert saved['source_protocol'] is None
     assert 'Ingest-only run; no Lightroom stage (neither mock nor real) was executed.' in saved['notes']
+
+
+def test_r3_max_files_parser():
+    args = r3.parser().parse_args(['--source-uuid', 'fake', '--source-subdir', 'test',
+                                   '--confirm-card-readonly', '--max-files', '12'])
+    assert args.max_files == 12
+
+
+def test_r3_bounded_import_and_transport_evidence(tmp_path, monkeypatch):
+    from types import SimpleNamespace
+    card = tmp_path / 'card'; folder = card / 'test'; folder.mkdir(parents=True)
+    (folder / 'one.NEF').write_bytes(fixtures.fixture(13))
+    (folder / 'two.NEF').write_bytes(fixtures.fixture(14) + b'padding')
+    target = tmp_path / 'target'; target.mkdir(); out = tmp_path / 'out'
+    source_uuid = '12345678-1234-abCD-1234-123456789012'
+    args = r3.parser().parse_args(['--source-uuid', source_uuid, '--source-subdir', 'test',
+                                   '--target-base', str(target), '--out', str(out),
+                                   '--confirm-card-readonly', '--max-files', '1'])
+    # Enough space for one file plus the required margin, but not both files.
+    monkeypatch.setattr(r3.shutil, 'disk_usage', lambda _: SimpleNamespace(free=(folder / 'one.NEF').stat().st_size * 1.3))
+    queried = []
+    def info_reader(uuid):
+        queried.append(uuid)
+        return {'Protocol': 'USB', 'FilesystemType': 'exfat', 'MountPoint': str(card)}
+    result = r3.run(args, lambda _: card, approve, volume_info_reader=info_reader)
+    assert result['status'] == 'PASS', result
+    assert queried == [source_uuid]
+    planned = json.loads((out / 'plan.json').read_text())
+    inventory = json.loads((out / 'inventory-before.json').read_text())
+    reads = json.loads((out / 'readback.json').read_text())
+    saved = json.loads((out / 'result.json').read_text())
+    timing = json.loads((out / 'timing.json').read_text())
+    assert planned['max_files'] == saved['max_files'] == 1
+    assert len(planned['plan']['files']) == saved['planned_file_count'] == len(reads) == 1
+    assert len(inventory['files']) == 2 and reads[0]['ok']
+    assert len(list(target.rglob('*.NEF'))) == 1
+    assert json.loads((out / 'source-compare.json').read_text())['identical']
+    assert saved['source_protocol'] == 'USB' and saved['source_fs'] == 'exfat'
+    assert saved['volume_uuid_sha256_prefix'] == r3.uuid_prefix(source_uuid)
+    assert saved['planned_bytes'] == planned['plan']['total_bytes']
+    assert timing['mb_per_s'] == pytest.approx(saved['planned_bytes'] / timing['ingest_wall_seconds'] / 1_000_000)
+    assert 'max_files: 1' in (out / 'README.md').read_text()
+    assert any('Bounded run' in note and 'whole selected source folder' in note for note in saved['notes'])
+    for path in out.iterdir():
+        assert_clean(path)
+        assert source_uuid.lower() not in path.read_text().lower()
+        assert str(card) not in path.read_text()
+
+
+@pytest.mark.parametrize('limit', ['0', '-1'])
+def test_r3_rejects_nonpositive_max_files_before_prepare(tmp_path, monkeypatch, limit):
+    card = tmp_path / 'card'; card.mkdir(); out = tmp_path / 'out'
+    args = r3.parser().parse_args(['--source-uuid', 'fake', '--source-subdir', 'test',
+                                   '--out', str(out), '--confirm-card-readonly', '--max-files', limit])
+    def forbidden(*args):
+        pytest.fail('Invalid max-files must be rejected before preparing a target')
+    monkeypatch.setattr(r3, 'prepare', forbidden)
+    result = r3.run(args, lambda _: card)
+    assert result['status'] == 'FAIL_STOPPED'
+    assert 'ValueError: max-files must be positive' in result['traceback']
+    assert not (out / 'plan.json').exists()
+    for path in out.iterdir(): assert_clean(path)
 
 
 @pytest.mark.parametrize('runner', [r3, r4])

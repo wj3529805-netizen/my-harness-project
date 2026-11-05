@@ -36,6 +36,37 @@ def test_resolve():
     with pytest.raises(RuntimeError): common.resolve_mount_by_uuid('no', diskutil_runner=runner)
 
 
+@pytest.mark.parametrize('protocol', ['USB', 'Secure Digital'])
+def test_volume_info_protocol_and_evidence_privacy(protocol):
+    uuid = '12345678-1234-abCD-1234-123456789012'
+    mount = '/Volumes/NIKON Z6_3'
+    def runner(args):
+        if args[1] == 'list':
+            return plistlib.dumps({'AllDisksAndPartitions': [{'DeviceIdentifier': 'disk1',
+                'Partitions': [{'DeviceIdentifier': 'disk1s1'}]}]})
+        if args[-1] == 'disk1':
+            return plistlib.dumps({'DeviceIdentifier': 'disk1'})
+        return plistlib.dumps({'VolumeUUID': uuid, 'MountPoint': mount,
+            'FilesystemType': 'exfat', 'BusProtocol': protocol, 'DeviceIdentifier': 'disk1s1'})
+    info = common.volume_info_by_uuid(uuid.lower(), 'EXFAT', runner)
+    assert info == {'Protocol': protocol, 'FilesystemType': 'exfat', 'MountPoint': mount}
+    assert uuid not in str(info)
+    clean = common.desensitize(info, {mount: '<CARD>'})
+    common.assert_clean(clean)
+    assert clean['MountPoint'] == '<CARD>' and clean['Protocol'] == protocol
+    with pytest.raises(ValueError): common.assert_clean(info)
+
+
+def test_volume_info_missing_protocol_is_not_inferred():
+    def runner(args):
+        if args[1] == 'list':
+            return plistlib.dumps({'disks': [{'DeviceIdentifier': 'disk1s1'}]})
+        return plistlib.dumps({'VolumeUUID': 'abc', 'MountPoint': '/test', 'FilesystemType': 'exfat'})
+    assert common.volume_info_by_uuid('abc', diskutil_runner=runner)['Protocol'] is None
+    with pytest.raises(RuntimeError, match='found 0'):
+        common.volume_info_by_uuid('abc', 'apfs', runner)
+
+
 def test_guard(tmp_path):
     card = tmp_path / 'card'; card.mkdir(); (card / 'input').write_text('safe')
     target = tmp_path / 'target'; target.mkdir()

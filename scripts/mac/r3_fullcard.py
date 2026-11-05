@@ -23,7 +23,8 @@ from cetacea import db
 from cetacea.core import Workbench, digest
 from cetacea.ingest.pathsafe import read_hash, safe
 from r_common import (assert_clean, compare_snapshots, desensitize, guard_writes,
-                      resolve_mount_by_uuid, scoped_source, snapshot_tree, uuid_prefix, volume_guard)
+                      resolve_mount_by_uuid, scoped_source, snapshot_tree, uuid_prefix,
+                      volume_guard, volume_info_by_uuid)
 from nef_subtype import classify_file
 
 SCOPE_NOTE = 'The card contains other content deliberately not listed, hashed or recorded.'
@@ -44,6 +45,7 @@ def parser():
     p.add_argument('--approval-timeout', type=float, default=1800)
     p.add_argument('--poll-interval', type=float, default=1)
     p.add_argument('--allow-missing-subtype', action='store_true')
+    p.add_argument('--max-files', type=int, help='Limit planned/ingested NEF files (positive; inventory still covers the selected folder)')
     return p
 
 
@@ -148,30 +150,49 @@ def scope(args):
             'out_of_scope_content_not_listed': True, 'privacy_note': SCOPE_NOTE}
 
 
-def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approval):
+def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approval, volume_info_reader=None):
     mount_for_output = Path(mount_resolver(args.source_uuid)).resolve(strict=True)
     out = Path(args.out).resolve()
     if out == mount_for_output or out.is_relative_to(mount_for_output):
         raise ValueError('Evidence output must be outside the source card')
     out.mkdir(parents=True, exist_ok=True)
     mapping = {str(Path.home()): '<HOME>', args.source_uuid: '<UUID>'}
-    result = {**scope(args), 'status': 'FAIL_STOPPED', 'mock': False, 'lightroom': 'NOT_RUN (ingest-only)', 'real_lightroom': False}
+    notes = ['Single test folder, single run; MB/s depends on reader and target.',
+             'Ingest-only run; no Lightroom stage (neither mock nor real) was executed.']
+    if args.max_files is not None:
+        notes.append(f'Bounded run: ingest plans at most {args.max_files} NEF file(s); inventory and subtype coverage describe the whole selected source folder.')
+    result = {**scope(args), 'status': 'FAIL_STOPPED', 'mock': False, 'lightroom': 'NOT_RUN (ingest-only)', 'real_lightroom': False,
+              'max_files': args.max_files, 'source_protocol': None, 'source_fs': None,
+              'volume_uuid_sha256_prefix': uuid_prefix(args.source_uuid), 'notes': notes}
     exception_class = None
     try:
+        if args.max_files is not None and args.max_files < 1: raise ValueError('max-files must be positive')
         if args.lightroom == 'real':
             raise ValueError('Real Lightroom is not supported by this ingest-only runner')
         mount, device, source, target, home, mapping = prepare(args, mount_resolver, 'R3')
         def check(): guard(args, mount_resolver, mount, device)
+        if volume_info_reader is None and mount_resolver is resolve_mount_by_uuid:
+            volume_info_reader = volume_info_by_uuid
+        if volume_info_reader is not None:
+            info = volume_info_reader(args.source_uuid)
+            if Path(info['MountPoint']).resolve(strict=True) != mount:
+                raise RuntimeError('Source metadata mount does not match the resolved card')
+            result.update(source_protocol=info.get('Protocol'), source_fs=info.get('FilesystemType'))
+            if result['source_protocol'] is None:
+                notes.append('Source protocol was not reported by the volume info reader.')
+        else:
+            notes.append('Source protocol was not queried: a custom mount resolver was supplied without a volume info reader.')
         check(); before = snapshot_tree(source); check()
         save(out, 'inventory-before.json', before, mapping)
         report = subtype_report(source, before); check(); save(out, 'subtype-report.json', report, mapping)
-        total = sum(v['size'] for k, v in before['files'].items() if k.lower().endswith('.nef'))
-        if args.min_free_factor < 1 or shutil.disk_usage(target).free < total * args.min_free_factor: raise RuntimeError('Insufficient target free space')
         w = Workbench.init(home, target / 'library', target / 'preview')
-        task = plan(w, source); check()
+        task = plan(w, source, max_files=args.max_files); check()
+        total = task['plan']['total_bytes']
+        result.update(planned_file_count=len(task['plan']['files']), planned_bytes=total)
+        if args.min_free_factor < 1 or shutil.disk_usage(target).free < total * args.min_free_factor: raise RuntimeError('Insufficient target free space')
         for f in task['plan']['files']:
             if before['files'].get(f['rel_path'], {}).get('sha256') != f['sha256']: raise RuntimeError('Inventory and plan differ')
-        save(out, 'plan.json', task, mapping)
+        save(out, 'plan.json', {**task, 'max_files': args.max_files}, mapping)
         print(f"Files: {len(task['plan']['files'])}; bytes: {task['plan']['total_bytes']}; task: {task['task_id']}; digest: {task['plan_digest']}", flush=True)
         print('python -m cetacea.cli --home ' + shlex.quote(str(home)) + ' approve ' + shlex.quote(task['task_id']) + ' ' + shlex.quote(task['plan_digest']), flush=True)
         approval = approval_waiter(w, task, args.approval_timeout, args.poll_interval)
@@ -196,13 +217,13 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approva
         coverage = {k: 'COVERED' if report['counts'].get(k, 0) else 'NOT_COVERED' for k in ('HE', 'HE_STAR')}
         ok = finished['state'] == 'COMPLETED' and ingest_seconds > 0 and all(r['ok'] for r in reads) and comparison['identical']
         status = 'FAIL' if not ok else 'PARTIAL_NOT_COVERED' if 'NOT_COVERED' in coverage.values() else 'PASS'
-        result.update(status=status, coverage=coverage, counts=report['counts'], volume_uuid_sha256_prefix=uuid_prefix(args.source_uuid),
-                      notes=['Single test folder, single run; MB/s depends on reader and target.', 'Ingest-only run; no Lightroom stage (neither mock nor real) was executed.'])
+        result.update(status=status, coverage=coverage, counts=report['counts'])
     except Exception as exc:
         exception_class = type(exc).__name__
         result['traceback'] = traceback.format_exc()
     save_result(out, result, mapping, exception_class)
-    summary = desensitize(f"# R3 {result['status']}\n\nscope: test-folder-only\nsource_subdir: {args.source_subdir}\nout_of_scope_content_not_listed: true\n{SCOPE_NOTE}\n", mapping)
+    limit_summary = f'max_files: {args.max_files}\n' if args.max_files is not None else ''
+    summary = desensitize(f"# R3 {result['status']}\n\nscope: test-folder-only\nsource_subdir: {args.source_subdir}\n{limit_summary}out_of_scope_content_not_listed: true\n{SCOPE_NOTE}\n", mapping)
     assert_clean(summary)
     with (out / 'README.md').open('x', encoding='utf-8') as stream: stream.write(summary)
     assert_clean(out / 'README.md')

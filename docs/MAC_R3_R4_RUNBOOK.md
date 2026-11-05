@@ -27,6 +27,18 @@ diskutil info /Volumes/NAME | grep UUID
 
 查看终端打印的文件数、字节数、任务 ID 和摘要，在另一个终端运行脚本打印的完整 `python -m cetacea.cli --home ... approve ...` 命令。审批必须由人执行，切勿复制真实路径或 UUID 到证据仓库。R3 除插卡、运行及审批外无需操作；当前运行仅执行导入，不执行任何 Lightroom 阶段（包括模拟和真实阶段）。
 
+### 另一张卡 / USB 读卡器的限量 R3
+
+使用另一张卡和 USB 读卡器时，必须按 Volume UUID 选择源卡；两张卷都名为 `NIKON Z6_3` 时不能仅凭卷名判断。先在本机用只读的 `diskutil list` 找到各卷的设备标识，再分别运行 `diskutil info -plist <DEVICE_IDENTIFIER>`，核对 `VolumeUUID`、`MountPoint` 和 `BusProtocol`（文本版 `diskutil info` 显示为 `Protocol`）。不要把 USB 卡 UUID 与内建 SD 插槽中卡的 UUID 混淆，也不要提交这些原始输出。
+
+由人确认源卡与 Studio 目标 UUID 后，使用新的证据目录运行：
+
+```sh
+.venv/bin/python scripts/mac/r3_fullcard.py --source-uuid '<USB_CARD_UUID>' --source-subdir DCIM/142NZ6_3 --max-files 12 --target-volume-uuid '<STUDIO_UUID>' --out 'evidence/mac-r3/other-card-<YYYYMMDD-HHMM>' --confirm-card-readonly
+```
+
+`--max-files 12` 将计划和导入限制为最多 12 个 NEF；清点和源卡前后对比仍可覆盖整个指定文件夹。卡全程只读，Studio 保持连接，此项不做目标盘拔出测试。结果记录实际读取的 `source_protocol` 与 `max_files`；这些字段和本地合成测试本身不构成另一张实体卡 / USB 读卡器通过的证据，须等待人工实体运行及读回核验。
+
 拔卡恢复（运行时保持目标卷连接）：
 
 ```sh

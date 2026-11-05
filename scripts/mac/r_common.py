@@ -26,7 +26,14 @@ def uuid_prefix(value):
     return hashlib.sha256(value.upper().encode()).hexdigest()[:16]
 
 
-def resolve_mount_by_uuid(uuid, expected_fs=None, diskutil_runner=None):
+def volume_info_by_uuid(uuid, expected_fs=None, diskutil_runner=None):
+    """Return selected diskutil fields for exactly one mounted volume.
+
+    UUIDs and other device identifiers are excluded. The returned MountPoint
+    still requires desensitizing to <CARD> before writing evidence. Protocol
+    comes from diskutil's BusProtocol plist key (shown as Protocol in its text
+    output); absent BusProtocol or FilesystemType values remain None.
+    """
     if diskutil_runner is None:
         if sys.platform != 'darwin':
             raise RuntimeError('diskutil volume resolution requires macOS')
@@ -50,10 +57,16 @@ def resolve_mount_by_uuid(uuid, expected_fs=None, diskutil_runner=None):
         if (str(info.get('VolumeUUID', '')).upper() == uuid.upper()
                 and info.get('MountPoint') and (expected_fs is None or
                 str(info.get('FilesystemType', '')).lower() == expected_fs.lower())):
-            matches.append(Path(info['MountPoint']))
+            matches.append({'Protocol': info.get('BusProtocol'),
+                            'FilesystemType': info.get('FilesystemType'),
+                            'MountPoint': info['MountPoint']})
     if len(matches) != 1:
         raise RuntimeError(f'Expected exactly one mounted volume matching UUID; found {len(matches)}')
     return matches[0]
+
+
+def resolve_mount_by_uuid(uuid, expected_fs=None, diskutil_runner=None):
+    return Path(volume_info_by_uuid(uuid, expected_fs, diskutil_runner)['MountPoint'])
 
 
 def volume_guard(uuid, mount, device=None, resolver=resolve_mount_by_uuid):
