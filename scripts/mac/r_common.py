@@ -2,6 +2,7 @@
 
 Import from R3/R4 scripts; diskutil resolution is available on macOS only.
 """
+import errno
 import hashlib
 import json
 import os
@@ -120,11 +121,19 @@ def compare_snapshots(before, after):
 def guard_writes(allowed_root, protected_roots):
     """Reject mutations on protected roots and target-volume paths outside allowed roots.
 
+    The first allowed root identifies the destination device. Additional roots
+    (for example the local workbench home) are exceptions, not guarded devices.
+    Keep the destination volume's path boundary even if it becomes unmounted;
+    an allowed destination path must not fall back onto its parent device.
     Paths using directory descriptors are rejected because their base is ambiguous.
     """
     allowed = [Path(p).resolve() for p in (allowed_root if isinstance(allowed_root, (list, tuple)) else [allowed_root])]
     protected = [Path(p).resolve() for p in protected_roots]
-    target_devices = {p.stat().st_dev for p in allowed if p.exists()}
+    destination = allowed[0]
+    target_device = destination.stat().st_dev
+    target_volume = destination
+    while target_volume != target_volume.parent and target_volume.parent.stat().st_dev == target_device:
+        target_volume = target_volume.parent
     names = ['open', 'link', 'rename', 'replace', 'mkdir', 'unlink', 'remove', 'chmod', 'truncate']
     originals = {n: getattr(os, n) for n in names}
     def check(path):
@@ -133,7 +142,10 @@ def guard_writes(allowed_root, protected_roots):
         if any(p == r or p.is_relative_to(r) for r in protected): raise PermissionError('Protected source')
         parent = p
         while not parent.exists() and parent != parent.parent: parent = parent.parent
-        if parent.stat().st_dev in target_devices and not any(p == r or p.is_relative_to(r) for r in allowed):
+        device = parent.stat().st_dev
+        if (p == destination or p.is_relative_to(destination)) and device != target_device:
+            raise OSError(errno.ENODEV, 'Destination device changed or disappeared')
+        if (device == target_device or p == target_volume or p.is_relative_to(target_volume)) and not any(p == r or p.is_relative_to(r) for r in allowed):
             raise PermissionError('Write outside allowed test roots')
     def wrapper(name):
         def call(*args, **kwargs):

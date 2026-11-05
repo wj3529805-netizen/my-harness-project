@@ -33,7 +33,7 @@ diskutil info /Volumes/NAME | grep UUID
 .venv/bin/python -u scripts/mac/r4_unplug.py --source-uuid '<CARD_UUID>' --source-subdir 'DCIM/142NZ6_3' --target-base "$PWD/acceptance-data/r4-target" --confirm-card-readonly --scenario unplug --throttle-mbps 3 --hold-mid-file --max-files 8 --pull-timeout 600 --reinsert-timeout 1800 --out evidence/mac-r4/run-<ts>
 ```
 
-审批后，测试脚本会人为在首个文件的复制中途暂停；只有暂停已经生效时才显示 `NOW PULL THE CARD`。拔卡或 600 秒超时后继续读取；拔卡后的读取错误是真实的。出现 `REINSERT THE SAME CARD` 后重新插入同一张卡，必须恢复到原挂载点。`HOLD_TIMEOUT` 表示没有及时拔卡，没有伪造中断；请使用新的 `--out` 重新运行。首个文件不超过 1 MiB 时不会暂停。`--hold-mid-file` 需要限速，只适用于拔卡场景，`--pull-timeout` 最多 3000 秒。
+审批后，测试脚本会人为在首个文件的复制中途暂停；只有暂停已经生效时才显示 `NOW PULL THE CARD`。拔卡或 600 秒超时后继续读取；拔卡后的读取错误是真实的。出现 `REINSERT THE SAME CARD` 后重新插入同一张卡，必须恢复到原挂载点。`HOLD_TIMEOUT` 表示没有及时拔卡，没有伪造中断；请使用新的 `--out` 重新运行。首个文件不超过 1 MiB 时不会暂停。`--hold-mid-file` 需要 `--throttle-mbps`，支持 `unplug` 和 `target-unplug` 场景，`--pull-timeout` 最多 3000 秒。
 
 限速由测试脚本人为施加，吞吐量不能代表产品速度。执行租约每个文件开始时更新为 300 秒；较长的暂停可能使租约在子进程仍运行时到期。脚本只在中断后子进程退出时调用恢复，FAILED/PAUSED 任务仍按原流程恢复。恢复默认最多等待 1200 秒。
 
@@ -57,4 +57,8 @@ diskutil info /Volumes/NAME | grep UUID
 
 接近自然复制速度的拔卡测试可使用轻度限速（例如 `--throttle-mbps 30`，不加 `--hold-mid-file`），在 `PULL_NOW` 后拔卡；脚本轮询记录拔卡前后的 `.part` 大小，只有观察到未完成的临时文件才能验证文件复制中断。重新插入后仍须由卷 UUID 确认同一张卡且恢复到原挂载路径；macOS 重新挂载时 `st_dev` 可能变化，结果中的前后设备号及变化标记仅用于诊断。
 
-目标盘断开测试使用 `--scenario target-unplug --throttle-mbps 30 --target-volume-uuid '<TARGET_UUID>'`（其余源卡与只读确认参数同上）。提示 `NOW UNPLUG THE TARGET VOLUME` 时拔目标盘，提示 `RECONNECT THE SAME TARGET VOLUME` 时请接回目标盘；源卡全程保持挂载。此测试模拟目标卷消失，不是拔源卡，也不测试 Mac 交流电源断电。
+目标盘断开测试使用 `--scenario target-unplug --throttle-mbps 3 --hold-mid-file --target-volume-uuid '<TARGET_UUID>'`（其余源卡与只读确认参数同上）；`home` 和证据目录必须位于目标卷之外。hold 会在首个文件仍为部分 `.part` 时暂停，监测目标卷的 UUID、挂载状态和设备号是否消失或变化，源卡全程保持挂载。只有已观察到增长的 `.part`、子进程仍存活、提示当下仍有 `0 < size < expected` 的 `.part`，且所选 hold 已生效，才写入 `TARGET_UNPLUG_NOW` 并显示 `NOW UNPLUG THE TARGET VOLUME`。看到此提示后拔目标盘，看到 `TARGET_REINSERT_NOW` / `RECONNECT THE SAME TARGET VOLUME` 后接回同一目标卷。可省略 hold 并使用轻度限速，但提示仍须满足存活与部分文件检查。
+
+提示前子进程失败时结果为 `FAIL_STOPPED`，证据保留 `child.log` 输出、任务错误和首个 FAILED 文件错误；不会发出目标盘拔出或接回标记，也不会进入拔盘后的恢复重试流程。即使恢复重试为 `COMPLETED`，缺少 `part_in_progress_at_interruption` 仍不能 PASS；hold 场景还须通过 `hold_verdict` 的中断核验。此测试验证目标卷断开，不测试 Mac 交流电源断电。
+
+目标卷断开后可能无法读取 `.part` 大小；hold 仅在暂停开始大小与提示前实时大小一致、且因目标消失释放时，使用已保存的暂停证据，标记 `part_evidence_source=held_at_cue_before_target_removal`。缺少此证据或暂停已超时仍不能 PASS。

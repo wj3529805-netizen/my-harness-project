@@ -39,5 +39,9 @@ for name in CETACEA_MOCK_SCRIPT CETACEA_MOCK_LOG CETACEA_REQUEST_LEDGER CETACEA_
 done
 if [ "$mode" = deepseek ]; then child_env+=("DEEPSEEK_API_KEY=$DEEPSEEK_API_KEY"); fi
 # Filter before output: no raw stderr file, request headers or credential values.
-env -i "${child_env[@]}" node --import "$TSX" "$FX/cetacea-session-driver.ts" "$FX/cetacea-combined.patch.yml" \
-  2> >("$CETACEA_PYTHON" -m cetacea.harness_guard filter-stderr >&2)
+# A pipe works where sandboxed macOS rejects process-substitution /dev/fd paths.
+# fd 3 preserves JSONL stdout; pipefail retains the runner's exit status.
+{
+  env -i "${child_env[@]}" node --import "$TSX" "$FX/cetacea-session-driver.ts" "$FX/cetacea-combined.patch.yml" \
+    2>&1 1>&3 3>&- | "$CETACEA_PYTHON" -m cetacea.harness_guard filter-stderr >&2
+} 3>&1

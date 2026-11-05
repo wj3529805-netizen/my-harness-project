@@ -391,13 +391,11 @@ def test_target_unplug_recovery_and_identity(tmp_path, monkeypatch, mode):
     for path in out.iterdir(): assert_clean(path)
 
 
-def test_target_unplug_rejects_hold_and_home_on_target(tmp_path, monkeypatch):
+@pytest.mark.parametrize('hold', [False, True])
+def test_target_unplug_rejects_home_on_target(tmp_path, hold):
     card, folder, out, args = make_throttled_run(tmp_path, 'target-unplug')
     args.target_volume_uuid = 'target-uuid'
-    args.hold_mid_file = True
+    args.hold_mid_file = hold
     resolver = lambda uuid: card if uuid == 'fake' else Path(args.target_base)
-    result = r4.run(args, resolver, approve)
-    assert result['status'] == 'FAIL_STOPPED' and 'not supported' in result['traceback']
-    args.out = str(tmp_path / 'out2'); args.hold_mid_file = False
     result = r4.run(args, resolver, approve)
     assert result['status'] == 'FAIL_STOPPED' and 'Home must be outside the target device' in result['traceback']

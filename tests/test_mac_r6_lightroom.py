@@ -330,7 +330,7 @@ def test_complete_mock_run(tmp_path, monkeypatch):
 
 
 @pytest.mark.parametrize('mutation', ['missing', 'extra', 'other_dat', 'lowercase', 'two_dat', 'duplicate_case', 'directory', 'symlink'])
-def test_scope_mismatch_stops_before_task(tmp_path, mutation):
+def test_scope_mismatch_stops_before_task(tmp_path, monkeypatch, mutation):
     args, mount, _ = make_run(tmp_path)
     source = mount / r6.SCOPE
     if mutation == 'missing':
@@ -346,7 +346,24 @@ def test_scope_mismatch_stops_before_task(tmp_path, mutation):
         (source / 'other.DAT').write_bytes(b'x')
     elif mutation == 'duplicate_case':
         (source / 'NC_FLLST.DAT').write_bytes(b'x')
-        (source / 'nc_fllst.dat').write_bytes(b'x')
+        # Case-insensitive Mac filesystems cannot store both names. Model the
+        # second directory entry so the same invalid listing is tested there.
+        from contextlib import contextmanager
+        original_scandir = r6.os.scandir
+        class LowercaseEntry:
+            name = 'nc_fllst.dat'
+            def __init__(self, entry): self.entry = entry
+            def __getattr__(self, name): return getattr(self.entry, name)
+        @contextmanager
+        def duplicate_case_entries(path):
+            with original_scandir(path) as entries:
+                if Path(path) == source:
+                    listing = list(entries)
+                    original = next(entry for entry in listing if entry.name == 'NC_FLLST.DAT')
+                    yield iter([*listing, LowercaseEntry(original)])
+                else:
+                    yield entries
+        monkeypatch.setattr(r6.os, 'scandir', duplicate_case_entries)
     elif mutation == 'directory':
         (source / 'NC_FLLST.DAT').mkdir()
     else:

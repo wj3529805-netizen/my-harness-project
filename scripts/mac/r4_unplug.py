@@ -44,12 +44,13 @@ def parser():
 
 
 THROTTLE_NOTE = 'Source reads were deliberately slowed by this test script (test-induced throttle); throughput figures from this run say nothing about product speed.'
-HOLD_NOTE = 'Mid-file pause was deliberately induced by this test script (test-induced hold); the source read error after removal is the genuine one.'
+HOLD_NOTE = 'Mid-file pause was deliberately induced by this test script (test-induced hold); the read or device error after removal is the genuine one.'
 
 
 class Hold:
-    def __init__(self, home, watch_dir, timeout, probe):
+    def __init__(self, home, watch_dir, timeout, probe, removal_reason='card-removed'):
         self.home, self.watch_dir, self.timeout, self.probe = Path(home), Path(watch_dir), timeout, probe
+        self.removal_reason = removal_reason
         self.state = dict(engaged=False, part_size_at_hold_start=None, started_at=None, released_at=None, released_by='never-engaged', part_size_at_release=None)
         self.write()
 
@@ -61,7 +62,7 @@ class Hold:
     def part_size(self):
         for part in self.watch_dir.glob('*.part'):
             try: return part.stat().st_size
-            except FileNotFoundError: pass
+            except OSError: pass
         return None
 
     def engage(self):
@@ -69,7 +70,7 @@ class Hold:
         self.write()
         deadline = time.monotonic() + self.timeout
         while True:
-            if self.probe(): reason = 'card-removed'; break
+            if self.probe(): reason = self.removal_reason; break
             release = self.home / 'hold-release'
             if release.exists():
                 reason = 'timeout' if release.read_text(encoding='utf-8').strip() == 'timeout' else 'parent-release'
@@ -112,17 +113,20 @@ class CopierOSProxy:
         return ThrottledReader(stream, self.mbps, hold)
 
 
-def child(home, task_id, target, mount, delay, throttle_mbps, hold_mid_file=False, hold_timeout=600, watch_dir=None, test_only_gone_flag_file=None):
+def child(home, task_id, target, mount, delay, throttle_mbps, hold_mid_file=False, hold_timeout=600, watch_dir=None, test_only_gone_flag_file=None, target_mount=None, target_uuid=None):
     if throttle_mbps is not None:
         import cetacea.ingest.copier as copier
         hold = None
         if hold_mid_file:
-            device = os.stat(mount).st_dev
+            watched_mount = Path(target_mount or mount)
+            device = watched_mount.stat().st_dev
             def gone():
                 if test_only_gone_flag_file: return Path(test_only_gone_flag_file).exists()
-                try: return not os.path.ismount(mount) or os.stat(mount).st_dev != device
-                except OSError: return True
-            hold = Hold(home, watch_dir, hold_timeout, gone)
+                try:
+                    if target_uuid and Path(resolve_mount_by_uuid(target_uuid)).resolve(strict=True) != watched_mount.resolve(): return True
+                    return not os.path.ismount(watched_mount) or watched_mount.stat().st_dev != device
+                except (OSError, RuntimeError): return True
+            hold = Hold(home, watch_dir, hold_timeout, gone, 'target-removed' if target_mount else 'card-removed')
         copier.os = CopierOSProxy(throttle_mbps, hold)
     def hook(stage, rel):
         if stage == 'after_commit' and delay: time.sleep(delay)
@@ -133,13 +137,20 @@ def child(home, task_id, target, mount, delay, throttle_mbps, hold_mid_file=Fals
     return 0 if result['state'] == 'COMPLETED' else 1
 
 
-def files_state(w, task):
+def part_sizes(w, task):
+    """Inspect only live temporary files; published-file hashes can delay a cue."""
     library = Path(w.config['library_root'])
     tmp = library / '.cetacea-tmp' / task['task_id']
     parts = []
     for p in sorted(tmp.glob('*.part')):
         try: parts.append({'path': str(p.relative_to(library)), 'size': p.stat().st_size})
         except FileNotFoundError: pass
+    return parts
+
+
+def files_state(w, task):
+    library = Path(w.config['library_root'])
+    parts = part_sizes(w, task)
     published = []
     for f in task['plan']['files']:
         path = library / f['dest_rel_path']
@@ -159,16 +170,26 @@ def observe_copy(proc, w, task, interval, hold_file=None):
     last = {}
     deadline = time.monotonic() + 120
     while proc.poll() is None and (not hold_file or time.monotonic() < deadline):
-        current = {x['path']: x['size'] for x in files_state(w, task)['parts']}
+        current = {x['path']: x['size'] for x in part_sizes(w, task)}
         if hold_file:
             try:
-                if json.loads(hold_file.read_text())['engaged']: return current
+                hs = json.loads(hold_file.read_text())
+                if hs['engaged'] and hs.get('released_by') is None and any(size > 0 for size in current.values()): return current
             except FileNotFoundError: pass
             time.sleep(min(interval, .1)); continue
         if any(size > 0 and size > last.get(path, size) for path, size in current.items()): return current
         last = current
         time.sleep(min(interval, .1))
     return False
+
+
+def live_partial(proc, w, task):
+    """Recheck the current .part and child immediately before a physical cue."""
+    if proc.poll() is not None: return {}
+    expected = {f'{n}.part': item['size'] for n, item in enumerate(task['plan']['files'])}
+    current = {x['path']: x['size'] for x in part_sizes(w, task)
+               if 0 < x['size'] < expected.get(Path(x['path']).name, 0)}
+    return current if proc.poll() is None else {}
 
 
 DEVICE_ERRORS = {'ENXIO', 'EIO', 'ENODEV', 'ENOENT', 'ESTALE', 'EBADF'}
@@ -242,7 +263,6 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approva
     log = None
     try:
         if args.scenario == 'target-unplug':
-            if args.hold_mid_file: raise ValueError('--hold-mid-file is not supported with --scenario target-unplug')
             if not args.target_volume_uuid: raise ValueError('--scenario target-unplug requires --target-volume-uuid')
             target_mount = Path(mount_resolver(args.target_volume_uuid)).resolve(strict=True)
             target_device = target_st_dev(target_mount)
@@ -253,7 +273,7 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approva
             if out == target_mount or out.is_relative_to(target_mount) or out.stat().st_dev == target_device:
                 raise ValueError('Evidence output must be outside the target device')
         if args.hold_mid_file and args.throttle_mbps is None: raise ValueError('--hold-mid-file requires --throttle-mbps')
-        if args.hold_mid_file and args.scenario != 'unplug': raise ValueError('--hold-mid-file requires --scenario unplug')
+        if args.hold_mid_file and args.scenario not in ('unplug', 'target-unplug'): raise ValueError('--hold-mid-file requires --scenario unplug or target-unplug')
         if args.hold_mid_file and args.pull_timeout > 3000: raise ValueError('--pull-timeout must be <= 3000 with --hold-mid-file')
         if args.max_files is not None and args.max_files < 1: raise ValueError('max-files must be positive')
         if (not all(math.isfinite(x) for x in (args.inter_file_delay, args.poll_interval, args.pull_timeout, args.reinsert_timeout)) or args.inter_file_delay < 0 or args.poll_interval <= 0 or args.pull_timeout <= 0 or args.reinsert_timeout <= 0 or (args.throttle_mbps is not None and (not math.isfinite(args.throttle_mbps) or args.throttle_mbps <= 0))): raise ValueError('Invalid timing or throttle')
@@ -279,8 +299,17 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approva
         approval = approval_waiter(w, task, args.approval_timeout, args.poll_interval)
         save(out, 'approval.json', approval, mapping); check()
         log = home / 'child.log'
+        def child_output():
+            output = log.read_text(errors='replace')
+            try: assert_clean(desensitize(output, mapping))
+            except ValueError:
+                classes = re.findall(r'^([A-Za-z_][A-Za-z0-9_]*(?:Error|Exception)):', output, re.M)
+                return ', '.join(dict.fromkeys(classes)) + ': child output withheld: contained identifying path; raw child.log retained in local home'
+            return output
         with log.open('w') as stream:
             child_args = {'home': str(home), 'task_id': task['task_id'], 'target': str(target), 'mount': str(mount), 'delay': args.inter_file_delay, 'throttle_mbps': args.throttle_mbps, 'hold_mid_file': args.hold_mid_file, 'hold_timeout': args.pull_timeout, 'watch_dir': str(Path(w.config['library_root']) / watched_rel), 'test_only_gone_flag_file': args.test_only_gone_flag_file}
+            if args.scenario == 'target-unplug':
+                child_args.update(target_mount=str(target_mount), target_uuid=args.target_volume_uuid)
             proc = subprocess.Popen([sys.executable, str(Path(__file__).resolve()), '--child', json.dumps(child_args)], stdout=stream, stderr=subprocess.STDOUT)
             def hold_state():
                 try: return json.loads((home / 'hold-state.json').read_text(encoding='utf-8'))
@@ -290,6 +319,13 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approva
                 result.update(hold_engaged=hs.get('engaged', False), hold_released_by=hs.get('released_by', 'never-engaged'), part_size_at_hold_start=hs.get('part_size_at_hold_start'))
                 return hs
             def release(reason): (home / 'hold-release').write_text(reason, encoding='utf-8')
+            def child_stopped(reason):
+                update_hold()
+                interruption = {**state(w, task['task_id']), 'child_exit_code': proc.poll(), 'child_output': child_output()}
+                result.update(failure_evidence(task, interruption))
+                first = next((a for f in task['plan']['files'] for a in interruption['assets']
+                              if a['asset_id'] == f['asset_id'] and a['status'] == 'FAILED'), {})
+                raise RuntimeError(f"{reason}; child_exit_code={proc.returncode}; task.error={interruption['task'].get('error')}; first FAILED asset={first.get('rel_path')}: {first.get('error')}; child.log={interruption['child_output']}")
             def no_interruption(reason):
                 if proc.poll() is None:
                     release('timeout')
@@ -302,24 +338,36 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approva
                         except subprocess.TimeoutExpired: proc.kill(); proc.wait()
                 update_hold()
                 if proc.returncode and not result['child_terminated_by_parent']:
-                    raise RuntimeError('Child failed while card was present: ' + log.read_text(errors='replace'))
-                result.update(status='INTERRUPTION_NOT_ACHIEVED', hold_result=reason, notes=['card was not removed within --pull-timeout; no interruption occurred; nothing faked' if reason == 'HOLD_TIMEOUT' else 'Hold did not engage before the child finished or within 120 seconds.'])
-                save(out, 'interruption-state.json', {**state(w, task['task_id']), 'child_exit_code': proc.returncode, 'child_output': log.read_text(errors='replace')}, mapping)
+                    child_stopped('Child failed while ' + ('target' if args.scenario == 'target-unplug' else 'card') + ' was present')
+                result.update(status='INTERRUPTION_NOT_ACHIEVED', hold_result=reason, notes=['Volume was not removed within --pull-timeout; no interruption occurred; nothing faked' if reason == 'HOLD_TIMEOUT' else 'Hold did not engage before the child finished or within 120 seconds.'])
+                save(out, 'interruption-state.json', {**state(w, task['task_id']), 'child_exit_code': proc.returncode, 'child_output': child_output()}, mapping)
                 save(out, 'after-interruption-files.json', files_state(w, task), mapping)
                 raise NoInterruption()
             observed = observe_copy(proc, w, task, args.poll_interval, home / 'hold-state.json' if args.hold_mid_file else None)
+            if proc.poll() is not None:
+                child_stopped('Child exited before a valid physical cue' if args.scenario != 'kill-process' else 'Child exited before interruption')
             if not observed:
                 if args.hold_mid_file:
                     hs = update_hold()
                     no_interruption('HOLD_TIMEOUT' if hs.get('released_by') == 'timeout' else 'NOT_ENGAGED')
-                proc.wait(); result.update(status='INTERRUPTION_NOT_ACHIEVED', notes=['Copy completed before progress was observed; try --throttle-mbps 3.'])
+                proc.wait(); child_stopped('Child exited before a valid physical cue')
             else:
+                if args.scenario in ('unplug', 'target-unplug'):
+                    if args.hold_mid_file:
+                        hs = update_hold()
+                        if hs.get('released_by') == 'timeout': no_interruption('HOLD_TIMEOUT')
+                        if not hs.get('engaged') or hs.get('released_by') is not None:
+                            raise RuntimeError('Hold is not active; no physical cue emitted')
+                    observed = live_partial(proc, w, task)
+                    if not observed:
+                        if proc.poll() is not None: child_stopped('Child exited before a valid physical cue')
+                        raise RuntimeError('No live partial file at cue time; no physical cue emitted')
                 if args.scenario == 'kill-process':
                     os.kill(proc.pid, signal.SIGKILL); proc.wait(timeout=30)
                     captured = files_state(w, task)
                 elif args.scenario == 'target-unplug':
+                    marker(out, 'TARGET_UNPLUG_NOW', task['task_id'], max(observed.values()), held=args.hold_mid_file)
                     print('NOW UNPLUG THE TARGET VOLUME (physically disconnect the destination disk)', flush=True)
-                    marker(out, 'TARGET_UNPLUG_NOW', task['task_id'], max(observed.values()))
                     deadline = time.monotonic() + args.pull_timeout
                     last_state = None
                     pull_parts = []
@@ -337,11 +385,15 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approva
                             except OSError:
                                 captured = last_state
                             break
-                        if proc.poll() is not None: raise RuntimeError('Child exited before target removal was observed')
+                        if proc.poll() is not None:
+                            if args.hold_mid_file and update_hold().get('released_by') == 'timeout': no_interruption('HOLD_TIMEOUT')
+                            child_stopped('Child exited before target removal was observed')
                         try: last_state = files_state(w, task)
                         except OSError: pass
                         time.sleep(min(args.poll_interval, .1))
-                    else: raise TimeoutError('Target volume removal not observed')
+                    else:
+                        if args.hold_mid_file: no_interruption('HOLD_TIMEOUT')
+                        raise TimeoutError('Target volume removal not observed')
                     if captured is None: captured = {'parts': [], 'published': [], 'half_final': False}
                     result['part_sizes_at_pull_detection'] = pull_parts
                     expected = {f'{n}.part': f['size'] for n, f in enumerate(task['plan']['files'])}
@@ -350,6 +402,9 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approva
                     if has_partial(pull_parts): evidence_parts, evidence_source = pull_parts, 'captured_after_removal'
                     else: evidence_parts, evidence_source = (last_state or {}).get('parts', []), 'last_seen_before_removal'
                     result['part_evidence_source'] = evidence_source
+                    if args.hold_mid_file:
+                        release('target-removed')
+                        result['hold_result'] = 'HELD_AND_REMOVED'
                     deadline = time.monotonic() + 120
                     while proc.poll() is None and time.monotonic() < deadline:
                         check()
@@ -361,6 +416,24 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approva
                         except subprocess.TimeoutExpired: proc.kill(); proc.wait()
                         raise TimeoutError('Child hung after target removal')
                     result['child_exit_code'] = proc.returncode
+                    if args.hold_mid_file:
+                        hs = update_hold()
+                        result['part_size_at_removal'] = hs.get('part_size_at_release')
+                        held_size = hs.get('part_size_at_hold_start')
+                        held_path = f'{watched_rel}/0.part'
+                        held_at_cue = (held_size is not None and observed.get(held_path) == held_size
+                                       and 0 < held_size < task['plan']['files'][0]['size'])
+                        if hs.get('released_by') not in ('target-removed', 'parent-release'):
+                            result['part_size_at_removal'] = None
+                        elif held_at_cue and result['part_size_at_removal'] is None:
+                            # A disconnected target cannot be stat'ed. While held, its
+                            # durable cue snapshot is the last confirmed partial size.
+                            result['part_size_at_removal'] = held_size
+                            result['part_evidence_source'] = 'held_at_cue_before_target_removal'
+                        if not held_at_cue: result['part_size_at_removal'] = None
+                        result['part_sizes_at_interruption'] = [{'path': held_path, 'size': held_size}] if held_at_cue else []
+                        try: result['parts_after_failure'] = part_sizes(w, task)
+                        except OSError: result['parts_after_failure'] = []
                     if proc.returncode == 0: raise RuntimeError('Child completed despite target removal')
                 else:
                     if args.hold_mid_file and update_hold().get('released_by') == 'timeout': no_interruption('HOLD_TIMEOUT')
@@ -384,7 +457,7 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approva
                                     try: check()
                                     except Exception: break
                                     time.sleep(min(args.poll_interval, .1))
-                                else: raise RuntimeError('Child failed while card was present: ' + log.read_text(errors='replace'))
+                                else: child_stopped('Child failed while card was present')
                                 break
                             no_interruption('HOLD_TIMEOUT' if hs.get('released_by') == 'timeout' else 'NOT_ENGAGED')
                         if not args.hold_mid_file:
@@ -421,7 +494,7 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approva
                 else:
                     parts = evidence_parts if args.scenario in ('unplug', 'target-unplug') else captured['parts']
                     result.update(part_in_progress_at_interruption=any(0 < x['size'] < expected_sizes.get(Path(x['path']).name, 0) for x in parts), part_sizes_at_interruption=parts)
-                interruption = {**state(w, task['task_id']), 'child_exit_code': proc.returncode, 'child_output': log.read_text(errors='replace')}
+                interruption = {**state(w, task['task_id']), 'child_exit_code': proc.returncode, 'child_output': child_output()}
                 if args.hold_mid_file: result.update(failure_evidence(task, interruption))
                 save(out, 'interruption-state.json', interruption, mapping)
                 save(out, 'after-interruption-files.json', captured, mapping)
@@ -496,7 +569,7 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approva
         if proc is not None and proc.poll() is None:
             proc.kill(); proc.wait()
         if proc is not None and log is not None and log.exists() and not (out / 'interruption-state.json').exists():
-            save(out, 'interruption-state.json', {**state(w, task['task_id']), 'child_exit_code': proc.returncode, 'child_output': log.read_text(errors='replace')}, mapping)
+            save(out, 'interruption-state.json', {**state(w, task['task_id']), 'child_exit_code': proc.returncode, 'child_output': child_output()}, mapping)
         exception_class = type(exc).__name__
         result['traceback'] = traceback.format_exc()
     if args.hold_mid_file and proc is not None:
