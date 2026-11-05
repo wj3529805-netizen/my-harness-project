@@ -30,7 +30,7 @@ def parser():
     t = p.add_mutually_exclusive_group(); t.add_argument('--target-volume-uuid'); t.add_argument('--target-base', default='/Volumes/Cetacea Studio')
     p.add_argument('--home'); p.add_argument('--out', default='evidence/mac-r4')
     p.add_argument('--confirm-card-readonly', action='store_true', required=True)
-    p.add_argument('--scenario', choices=['unplug', 'kill-process'], default='unplug')
+    p.add_argument('--scenario', choices=['unplug', 'kill-process', 'target-unplug'], default='unplug')
     p.add_argument('--max-files', type=int); p.add_argument('--lease-wait-timeout', type=float, default=1200)
     p.add_argument('--pull-timeout', type=float, default=600)
     p.add_argument('--reinsert-timeout', type=float, default=1800); p.add_argument('--approval-timeout', type=float, default=1800)
@@ -205,6 +205,16 @@ def failure_evidence(task, interruption):
                 later_files_failed_because_card_absent='Later files reported card-absence/device errors after removal.' if later_absent else None)
 
 
+def target_st_dev(path):
+    return path.stat().st_dev
+
+
+def target_home_device(home):
+    path = Path(home).resolve()
+    while not path.exists(): path = path.parent
+    return path.stat().st_dev
+
+
 class NoInterruption(Exception):
     pass
 
@@ -216,20 +226,43 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approva
         raise ValueError('Evidence output must be outside the source card')
     out.mkdir(parents=True, exist_ok=True)
     mapping = {str(Path.home()): '<HOME>', args.source_uuid: '<UUID>'}
+    if args.scenario == 'target-unplug' and args.target_volume_uuid:
+        mapping[args.target_volume_uuid] = '<TARGET_UUID>'
+        mapping[args.target_volume_uuid.upper()] = '<TARGET_UUID>'
     throttle = {'throttled': args.throttle_mbps is not None, 'throttle_mbps': args.throttle_mbps, 'throttle_note': THROTTLE_NOTE if args.throttle_mbps is not None else None}
     hold_fields = dict(hold_mid_file=args.hold_mid_file, hold_engaged=False, hold_released_by=None, hold_result=None, part_size_at_hold_start=None, part_size_at_removal=None, hold_timeout=args.pull_timeout if args.hold_mid_file else None, hold_note=HOLD_NOTE if args.hold_mid_file else None, child_terminated_by_parent=False, part_in_progress_at_interruption=False, parts_after_failure=None, first_failed_file=None, first_failed_error_class=None, failed_file_count=0, held_file_rel=None, held_file_failed_first=False, child_exit_code=None, later_files_failed_because_card_absent=None, simulated_by_test=bool(args.test_only_gone_flag_file))
     result = {**scope(args), **hold_fields, 'status': 'FAIL_STOPPED', 'scenario': args.scenario, **throttle, 'inter_file_delay': args.inter_file_delay, 'part_in_progress_at_interruption': False, 'part_sizes_at_interruption': [], 'part_sizes_at_pull_detection': [], 'part_evidence_source': None, 'source_st_dev_before': None, 'source_st_dev_after_reinsert': None, 'source_st_dev_changed': None}
+    if args.scenario == 'target-unplug':
+        result.update(interrupted_volume='target', source_remained_mounted=False, home_outside_target=False,
+                      target_st_dev_before=None, target_st_dev_after_reinsert=None, target_st_dev_changed=None,
+                      host_ac_power_off_tested=False, interruption_scope_note='Destination volume unplug (target gone); source card remains mounted. Host AC power-off was not tested.')
     proc = None
     exception_class = None
     plan_evidence = None
     log = None
     try:
+        if args.scenario == 'target-unplug':
+            if args.hold_mid_file: raise ValueError('--hold-mid-file is not supported with --scenario target-unplug')
+            if not args.target_volume_uuid: raise ValueError('--scenario target-unplug requires --target-volume-uuid')
+            target_mount = Path(mount_resolver(args.target_volume_uuid)).resolve(strict=True)
+            target_device = target_st_dev(target_mount)
+            result['target_st_dev_before'] = target_device
+            if target_home_device(args.home or '/tmp') == target_device:
+                raise ValueError('Home must be outside the target device')
+            result['home_outside_target'] = True
+            if out == target_mount or out.is_relative_to(target_mount) or out.stat().st_dev == target_device:
+                raise ValueError('Evidence output must be outside the target device')
         if args.hold_mid_file and args.throttle_mbps is None: raise ValueError('--hold-mid-file requires --throttle-mbps')
         if args.hold_mid_file and args.scenario != 'unplug': raise ValueError('--hold-mid-file requires --scenario unplug')
         if args.hold_mid_file and args.pull_timeout > 3000: raise ValueError('--pull-timeout must be <= 3000 with --hold-mid-file')
         if args.max_files is not None and args.max_files < 1: raise ValueError('max-files must be positive')
         if (not all(math.isfinite(x) for x in (args.inter_file_delay, args.poll_interval, args.pull_timeout, args.reinsert_timeout)) or args.inter_file_delay < 0 or args.poll_interval <= 0 or args.pull_timeout <= 0 or args.reinsert_timeout <= 0 or (args.throttle_mbps is not None and (not math.isfinite(args.throttle_mbps) or args.throttle_mbps <= 0))): raise ValueError('Invalid timing or throttle')
         mount, device, source, target, home, mapping = prepare(args, mount_resolver, 'R4')
+        if args.scenario == 'target-unplug':
+            mapping[args.target_volume_uuid] = '<TARGET_UUID>'
+            mapping[args.target_volume_uuid.upper()] = '<TARGET_UUID>'
+            if Path(mount_resolver(args.target_volume_uuid)).resolve(strict=True) != target_mount:
+                raise RuntimeError('Target mount changed during setup')
         result['source_st_dev_before'] = device
         guard_device = device
         def check(): guard(args, mount_resolver, mount, guard_device)
@@ -284,6 +317,51 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approva
                 if args.scenario == 'kill-process':
                     os.kill(proc.pid, signal.SIGKILL); proc.wait(timeout=30)
                     captured = files_state(w, task)
+                elif args.scenario == 'target-unplug':
+                    print('NOW UNPLUG THE TARGET VOLUME (physically disconnect the destination disk)', flush=True)
+                    marker(out, 'TARGET_UNPLUG_NOW', task['task_id'], max(observed.values()))
+                    deadline = time.monotonic() + args.pull_timeout
+                    last_state = None
+                    pull_parts = []
+                    def target_present():
+                        try:
+                            current = Path(mount_resolver(args.target_volume_uuid)).resolve(strict=True)
+                            return current == target_mount and target_st_dev(current) == target_device
+                        except (OSError, RuntimeError): return False
+                    while time.monotonic() < deadline:
+                        check()
+                        if not target_present():
+                            try:
+                                captured = files_state(w, task)
+                                pull_parts = captured['parts']
+                            except OSError:
+                                captured = last_state
+                            break
+                        if proc.poll() is not None: raise RuntimeError('Child exited before target removal was observed')
+                        try: last_state = files_state(w, task)
+                        except OSError: pass
+                        time.sleep(min(args.poll_interval, .1))
+                    else: raise TimeoutError('Target volume removal not observed')
+                    if captured is None: captured = {'parts': [], 'published': [], 'half_final': False}
+                    result['part_sizes_at_pull_detection'] = pull_parts
+                    expected = {f'{n}.part': f['size'] for n, f in enumerate(task['plan']['files'])}
+                    def has_partial(parts):
+                        return any(0 < x['size'] < expected.get(Path(x['path']).name, 0) for x in parts)
+                    if has_partial(pull_parts): evidence_parts, evidence_source = pull_parts, 'captured_after_removal'
+                    else: evidence_parts, evidence_source = (last_state or {}).get('parts', []), 'last_seen_before_removal'
+                    result['part_evidence_source'] = evidence_source
+                    deadline = time.monotonic() + 120
+                    while proc.poll() is None and time.monotonic() < deadline:
+                        check()
+                        time.sleep(min(args.poll_interval, .1))
+                    if proc.poll() is None:
+                        result['child_terminated_by_parent'] = True
+                        proc.terminate()
+                        try: proc.wait(timeout=10)
+                        except subprocess.TimeoutExpired: proc.kill(); proc.wait()
+                        raise TimeoutError('Child hung after target removal')
+                    result['child_exit_code'] = proc.returncode
+                    if proc.returncode == 0: raise RuntimeError('Child completed despite target removal')
                 else:
                     if args.hold_mid_file and update_hold().get('released_by') == 'timeout': no_interruption('HOLD_TIMEOUT')
                     print('NOW PULL THE CARD (eject physically)', flush=True)
@@ -341,7 +419,7 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approva
                     size = result['part_size_at_removal']
                     result['part_in_progress_at_interruption'] = size is not None and 0 < size < task['plan']['files'][0]['size']
                 else:
-                    parts = evidence_parts if args.scenario == 'unplug' else captured['parts']
+                    parts = evidence_parts if args.scenario in ('unplug', 'target-unplug') else captured['parts']
                     result.update(part_in_progress_at_interruption=any(0 < x['size'] < expected_sizes.get(Path(x['path']).name, 0) for x in parts), part_sizes_at_interruption=parts)
                 interruption = {**state(w, task['task_id']), 'child_exit_code': proc.returncode, 'child_output': log.read_text(errors='replace')}
                 if args.hold_mid_file: result.update(failure_evidence(task, interruption))
@@ -359,6 +437,22 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approva
                     else: raise TimeoutError('Same card must return at the original mountpoint')
                     result['source_st_dev_after_reinsert'] = mount.stat().st_dev
                     result['source_st_dev_changed'] = result['source_st_dev_after_reinsert'] != device
+                if args.scenario == 'target-unplug':
+                    print('RECONNECT THE SAME TARGET VOLUME', flush=True)
+                    marker(out, 'TARGET_REINSERT_NOW', task['task_id'], max((x['size'] for x in captured['parts']), default=0))
+                    deadline = time.monotonic() + args.reinsert_timeout
+                    while time.monotonic() < deadline:
+                        check()
+                        try:
+                            current = Path(mount_resolver(args.target_volume_uuid)).resolve(strict=True)
+                            if current == target_mount: break
+                        except (OSError, RuntimeError): pass
+                        time.sleep(args.poll_interval)
+                    else: raise TimeoutError('Same target UUID must return at the original mountpoint')
+                    result['target_st_dev_after_reinsert'] = target_st_dev(current)
+                    result['target_st_dev_changed'] = result['target_st_dev_after_reinsert'] != target_device
+                    after_remount = files_state(w, task)
+                    captured['half_final'] = captured['half_final'] or after_remount['half_final']
                 check(); after_interrupt = snapshot_tree(source); check()
                 compare = compare_snapshots(before, after_interrupt)
                 save(out, 'reinsert-inventory-compare.json', compare, mapping)
@@ -385,9 +479,12 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approva
                 library = Path(w.config['library_root']); allowed = {f['dest_rel_path'] for f in task['plan']['files']}
                 extras = [str(p.relative_to(library)) for p in library.rglob('*') if p.is_file() and str(p.relative_to(library)) not in allowed]
                 unexpected = [p for p in extras if not (Path(p).parent.name == '.cetacea' and Path(p).name.startswith('import-manifest-run') and p.endswith('.json'))]
-                result.update(status='PASS' if finished['state'] == 'COMPLETED' and all(x['ok'] for x in reads) and not captured['half_final'] and not remaining['parts'] and not locks and not unexpected and comparison['identical'] and compare['identical'] else 'FAIL',
+                final_approvals = approvals(w, task['task_id'])
+                approval_unchanged = final_approvals == rows
+                result.update(status='PASS' if approval_unchanged and finished['state'] == 'COMPLETED' and all(x['ok'] for x in reads) and not captured['half_final'] and not remaining['parts'] and not locks and not unexpected and comparison['identical'] and compare['identical'] else 'FAIL',
                               final_state=finished['state'], approvals=len(approvals(w, task['task_id'])), remaining_parts=remaining['parts'], locks=locks, additional_library_files=extras, unplanned_files=unexpected)
-                if args.scenario == 'unplug' and not args.hold_mid_file and result['status'] == 'PASS' and not result['part_in_progress_at_interruption']:
+                if args.scenario == 'target-unplug': result['source_remained_mounted'] = True
+                if args.scenario in ('unplug', 'target-unplug') and not args.hold_mid_file and result['status'] == 'PASS' and not result['part_in_progress_at_interruption']:
                     result.update(status='FAIL_UNVERIFIED_INTERRUPTION', notes=['No partial file was observed at removal.'])
                 if args.hold_mid_file and result['status'] == 'PASS':
                     verdict, reasons = hold_verdict(result, bool(args.test_only_gone_flag_file))
@@ -411,7 +508,7 @@ def run(args, mount_resolver=resolve_mount_by_uuid, approval_waiter=wait_approva
         save(out, 'plan.json', plan_evidence, mapping)
     save_result(out, result, mapping, exception_class)
     hold_text = '\n'.join(f'{k}: {json.dumps(result[k])}' for k in hold_fields)
-    text = desensitize(f"# R4 {result['status']}\n\nscope: test-folder-only\nsource_subdir: {args.source_subdir}\nout_of_scope_content_not_listed: true\n{SCOPE_NOTE}\nScenario: {args.scenario}. Real power-off is out of scope.\nthrottled: {str(throttle['throttled']).lower()}\nthrottle_mbps: {args.throttle_mbps if args.throttle_mbps is not None else 'null'}\n{THROTTLE_NOTE if args.throttle_mbps is not None else ''}\n{hold_text}\n", mapping)
+    text = desensitize(f"# R4 {result['status']}\n\nscope: test-folder-only\nsource_subdir: {args.source_subdir}\nout_of_scope_content_not_listed: true\n{SCOPE_NOTE}\nScenario: {args.scenario}. Destination-volume unplug means target gone, not source-card unplug; host AC power-off was not tested.\nthrottled: {str(throttle['throttled']).lower()}\nthrottle_mbps: {args.throttle_mbps if args.throttle_mbps is not None else 'null'}\n{THROTTLE_NOTE if args.throttle_mbps is not None else ''}\n{hold_text}\n", mapping)
     assert_clean(text)
     with (out / 'README.md').open('x', encoding='utf-8') as stream: stream.write(text)
     assert_clean(out / 'README.md')

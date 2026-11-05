@@ -334,3 +334,70 @@ def test_r4_unplug_without_partial_is_not_pass(tmp_path, monkeypatch):
     finally: worker.join(timeout=16)
     assert result['status'] == 'FAIL_UNVERIFIED_INTERRUPTION', result
     assert not result['part_in_progress_at_interruption']
+
+@pytest.mark.parametrize('mode', ['ok', 'uuid', 'path', 'no_partial'])
+def test_target_unplug_recovery_and_identity(tmp_path, monkeypatch, mode):
+    import time
+    import cetacea.lightroom  # Load MCP before replacing Popen with the test launcher.
+    card, folder, out, args = make_throttled_run(tmp_path, 'target-unplug')
+    target = Path(args.target_base)
+    args.target_volume_uuid = 'target-uuid'; args.reinsert_timeout = .3 if mode in ('uuid', 'path') else 10
+    args.poll_interval = .005
+    other = tmp_path / 'other'; other.mkdir()
+    missing = threading.Event(); child = []
+    original_launch, original_state = r4.subprocess.Popen, r4.files_state
+    monkeypatch.setattr(r4, 'target_home_device', lambda home: -1)
+    # Synthetic directories share a device; this overrides only the output placement check.
+    monkeypatch.setattr(r4, 'target_st_dev', lambda path: path.stat().st_dev + (1 if (out / 'TARGET_REINSERT_NOW').exists() else 0) + 10)
+    def resolver(uuid):
+        if uuid == 'fake': return card
+        assert uuid == 'target-uuid'
+        if missing.is_set():
+            if (out / 'TARGET_REINSERT_NOW').exists() and mode == 'path': return other
+            raise RuntimeError('target unavailable')
+        return target
+    def launch(*a, **kw):
+        proc = original_launch(*a, **kw); child.append(proc); return proc
+    def files_state(w, task):
+        if missing.is_set(): raise OSError('target I/O failed')
+        value = original_state(w, task)
+        if mode == 'no_partial' and (out / 'TARGET_UNPLUG_NOW').exists(): value['parts'] = []
+        return value
+    monkeypatch.setattr(r4.subprocess, 'Popen', launch)
+    monkeypatch.setattr(r4, 'files_state', files_state)
+    def simulate():
+        deadline = time.monotonic() + 15
+        while not (out / 'TARGET_UNPLUG_NOW').exists() and time.monotonic() < deadline: time.sleep(.005)
+        if not child: return
+        time.sleep(.12); missing.set(); child[0].kill(); child[0].wait()
+        for part in target.rglob('*.part'): part.unlink(missing_ok=True)
+        while not (out / 'TARGET_REINSERT_NOW').exists() and time.monotonic() < deadline: time.sleep(.005)
+        if mode in ('ok', 'no_partial'): missing.clear()
+    worker = threading.Thread(target=simulate); worker.start()
+    try: result = r4.run(args, resolver, approve, expire_lease)
+    finally: worker.join(timeout=16)
+    if mode in ('uuid', 'path'):
+        assert result['status'] == 'FAIL_STOPPED', result
+        assert 'Same target UUID must return' in result['traceback']
+    elif mode == 'no_partial':
+        assert result['status'] == 'FAIL_UNVERIFIED_INTERRUPTION', result
+    else:
+        assert result['status'] == 'PASS', result
+        assert result['target_st_dev_changed'] and result['source_remained_mounted']
+        assert result['part_in_progress_at_interruption']
+        assert result['part_evidence_source'] == 'last_seen_before_removal'
+        assert result['part_sizes_at_pull_detection'] == []
+        assert json.loads((out / 'result.json').read_text())['target_st_dev_changed']
+    for path in out.iterdir(): assert_clean(path)
+
+
+def test_target_unplug_rejects_hold_and_home_on_target(tmp_path, monkeypatch):
+    card, folder, out, args = make_throttled_run(tmp_path, 'target-unplug')
+    args.target_volume_uuid = 'target-uuid'
+    args.hold_mid_file = True
+    resolver = lambda uuid: card if uuid == 'fake' else Path(args.target_base)
+    result = r4.run(args, resolver, approve)
+    assert result['status'] == 'FAIL_STOPPED' and 'not supported' in result['traceback']
+    args.out = str(tmp_path / 'out2'); args.hold_mid_file = False
+    result = r4.run(args, resolver, approve)
+    assert result['status'] == 'FAIL_STOPPED' and 'Home must be outside the target device' in result['traceback']
