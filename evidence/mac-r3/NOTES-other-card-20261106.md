@@ -15,4 +15,4 @@ Bounded R3 ingest on a **second physical card** via **USB reader** (not the buil
 - No target-unplug; Studio was not pulled. No false write-outside-roots / guard EIO.
 - Code prep commit: `72094f3` (`--max-files` + protocol metadata)
 
-Remaining after this item: LICENSE selection still open (other-card/reader closed).
+LICENSE selection closed (2026-11-06): MIT chosen for repository source code; see root [LICENSE](../../LICENSE). Samples remain under [samples/LICENSE.txt](../../samples/LICENSE.txt). Other-card/reader closed.

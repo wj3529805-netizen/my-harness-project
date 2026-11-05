@@ -40,14 +40,14 @@ R3+LR 已准备，尚未在 Mac 运行，状态 **NOT_RUN**；R4+LR 已推迟，
 
 仓库公开，Git 历史仍含原始标识；脱敏仅影响当前树及未来克隆后的工作文件，不影响历史。修改后的计划不能重新验证原 `plan_digest`，映射保留修改前后哈希以便审计。
 
-## 已决定（2026-11-03 22:08）
+## 已决定（2026-11-03 22:08；2026-11-06 补充代码许可）
 
 1. 所有者选择公开仓库，不重写 Git 历史。
 2. 新样片许可：All rights reserved by the owner (晶 / repo owner); permission granted only for testing within this project (my-harness-project); no other use or redistribution. 中文译文见 [samples/LICENSE.txt](../samples/LICENSE.txt)；所有者同意公开内嵌机身和镜头序列号。
 3. 历史证据中旧样片的署名、SHA-256 和第三方相机序列号有意保留。
 4. 保留 harness UUID、卷名和项目文件夹名。
+5. 仓库源代码许可已选择 MIT，已添加根目录 [LICENSE](../LICENSE)；样片仍适用独立的 `samples/LICENSE.txt`。
 
 ## 待用户决定
 
 1. 合并到 phase1：见提交记录。
-2. 是否为仓库添加代码 LICENSE（目前没有）。
