@@ -1,0 +1,29 @@
+{
+  "scope": "test-folder-only",
+  "source_subdir": "DCIM/142NZ6_3",
+  "out_of_scope_content_not_listed": true,
+  "privacy_note": "The card contains other content deliberately not listed, hashed or recorded.",
+  "status": "PASS",
+  "mock": false,
+  "lightroom": "NOT_RUN (ingest-only)",
+  "real_lightroom": false,
+  "max_files": 12,
+  "source_protocol": "USB",
+  "source_fs": "exfat",
+  "volume_uuid_sha256_prefix": "58190fd4ccbea1ac",
+  "notes": [
+    "Single test folder, single run; MB/s depends on reader and target.",
+    "Ingest-only run; no Lightroom stage (neither mock nor real) was executed.",
+    "Bounded run: ingest plans at most 12 NEF file(s); inventory and subtype coverage describe the whole selected source folder."
+  ],
+  "planned_file_count": 12,
+  "planned_bytes": 216291840,
+  "coverage": {
+    "HE": "COVERED",
+    "HE_STAR": "COVERED"
+  },
+  "counts": {
+    "HE_STAR": 247,
+    "HE": 38
+  }
+}

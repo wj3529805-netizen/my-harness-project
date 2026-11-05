@@ -1,0 +1,11 @@
+{
+  "wall_seconds": 0.38496408399078064,
+  "cpu_seconds": 0.2745040000000003,
+  "ingest_wall_seconds": 0.378401,
+  "mb_per_s": 571.594261114532,
+  "method": "NEF planned bytes / ingest task step timestamp duration / 1,000,000 (decimal MB)",
+  "peak_rss_raw_before": 84705280,
+  "peak_rss_raw_after": 84770816,
+  "peak_rss_raw_unit": "bytes",
+  "peak_rss_bytes": 84770816
+}

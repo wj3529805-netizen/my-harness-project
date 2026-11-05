@@ -4,6 +4,8 @@ R5 已在 `prep/R5` 完成样片替换和当前树脱敏；所有者已确定样
 
 标签：已完成且测试通过 / 已实现但测试失败 / 仅 Mock 验证 / 真实模型小规模验证 / 待 Mac 实机验证 / 尚未开发
 
+2026-11-06 other-card/USB reader：**PASS**（有界 R3，12 NEF）。证据 `evidence/mac-r3/run-other-card-20261106-005829/`；`source_protocol=USB`；与内置 SD 同名卷靠 UUID 区分；未拔 Studio。回归 303 passed、2 skipped。LICENSE 仍待选。见 [说明](../evidence/mac-r3/NOTES-other-card-20261106.md)。
+
 2026-11-03 R2 真实 ExFAT SD 目标：**PASS_IN_SCOPE（单样本）**。原始 `2a8d669` / `evidence/mac-r2/` 因 `preview.verify` 把 AppleDouble `._*.jpg` 计为 orphan 而 FAIL_STOPPED；修复 `fdfce5a` 后，首次重跑仅在验收脚本解析 `._preview-manifest.json` 时失败（产品 verify 为 OK）。第二次重跑在真实 ExFAT SD 卡上以 **MOCK Lightroom** 完成 ENOTSUP/重试/重复/冲突检查（发布 7 次、预览复用 1 次真实 ENOTSUP）；另做独立真实 Lightroom + ExFAT 冒烟，曝光读回 0.5、JPEG 1600×1065。`NIKON001.DSC` 未变，付费 API 0 次；不代表批量或生产可靠性。见 [报告](MACOS_VALIDATION.md)、[首次重跑](../evidence/mac-r2-rerun/result.json)、[最终结果](../evidence/mac-r2-rerun2/result.json)。
 
 2026-11-03 R1 Mac 真实 AI 会话：**授权重跑有限样本 PASS**。首次第 2 次请求 TRANSPORT 失败后停止并保留原证据；用户授权重跑并批准具体计划后，真实 DeepSeek + 真实 Lightroom 五阶段完成，核验 OK/mock=false，批准仅一条，RAW/JPG/曝光独立读回通过。累计 driver count=9/13，未重置额度；回归 135 passed、2 skipped。详见 [Mac 报告](MACOS_VALIDATION.md)、[重跑证据](../evidence/mac-r1/retry-1/result.json) 和[首次失败](../evidence/mac-r1/result.json)。未进入 R2。
