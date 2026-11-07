@@ -6,7 +6,9 @@ R5 已在 `prep/R5` 完成样片替换和当前树脱敏；所有者已确定样
 
 2026-11-06 代码许可：仓库源代码采用 MIT，已添加根目录 [LICENSE](../LICENSE)；样片仍适用独立的 [samples/LICENSE.txt](../samples/LICENSE.txt)。本次许可与文档更新后运行 `.venv/bin/python -m pytest -q`：**303 passed、2 skipped**（真实模型 opt-in 未启用）。
 
-2026-11-07 纯 NEF、纯 JPG、混合拷入：核心拷贝逻辑未改，只加合成字节回归和规则说明。本环境 `.venv/bin/python -m pytest -q` 为 **295 passed、4 skipped**，无失败，未放宽断言。与 2026-11-06 的 303 之差是新增 5 个测试，以及 `tests/test_harness_integration.py`、`tests/test_harness_session_mock.py` 因未安装 `third_party-review/deepseek-harness` 在收集前跳过（两模块内 13 个测试未执行）；两个真实模型 opt-in 模块仍因无密钥跳过。这不是 Mac 或真实 Lightroom 验收。
+2026-11-07 纯 NEF、纯 JPG、混合拷入：核心拷贝逻辑未改，只加合成字节回归和规则说明。当时本环境 `.venv/bin/python -m pytest -q` 为 **295 passed、4 skipped**。与 2026-11-06 的 303 之差是新增 5 个测试，以及两个 harness 模块因未安装 `third_party-review/deepseek-harness` 在收集前跳过（模块内 13 个测试未执行）；两个真实模型 opt-in 模块仍因无密钥跳过。
+
+2026-11-07 Harness `lightroom_get_status`：`run_session.sh` 把子进程 `HOME` 换成临时目录，Lightroom 桥用 `os.homedir()` 找 token；CLI 继承操作者 `HOME`，所以同一 `real_mcp` 配置下 CLI 已连接、Harness 探针失败。失败文字 “Lightroom owns the ports… MIDI2LR” 来自 lightroom-mcp `55cd17f` 的 `STALE_LISTENER_MESSAGE`，是探针没得到应答后的端口诊断。修复只把启动脚本时的操作者家目录作为 `CETACEA_BRIDGE_HOME` 传给桥子进程的 `HOME`，不读、不复制 token。批准写入 `approvals` 后任务仍保持 `WAITING_APPROVAL`、`run_count` 0，直到 `execute`。本环境随后 `.venv/bin/python -m pytest -q` 为 **304 passed、4 skipped**，无失败。跳过仍是未安装的两个 harness 模块（13 个测试未执行）和两个无密钥的真实模型模块；这次读了固定提交 `ce7073d` 的 MCP 客户端源码，但没有把跳过的集成测试当成已通过。Linux 测试不能代替 Mac 上的桥复测。
 
 2026-11-06 other-card/USB reader：**PASS**（有界 R3，12 NEF）。证据 `evidence/mac-r3/run-other-card-20261106-005829/`；`source_protocol=USB`；与内置 SD 同名卷靠 UUID 区分；未拔 Studio。回归 303 passed、2 skipped。见 [说明](../evidence/mac-r3/NOTES-other-card-20261106.md)。
 
