@@ -32,6 +32,18 @@ def test_12_cancel_retry(env):
     w.engine.fault_hook=lambda *args:None; assert run(w,w.get_task(t['task_id']))['state']=='COMPLETED'
     assert len(list(Path(w.config['library_root']).rglob('*.RAF')))==3
 
+def test_approve_keeps_waiting_approval_until_execute(planned):
+    w, t = planned
+    approved = w.approve(t['task_id'], t['plan_digest'])
+    assert approved['state'] == 'WAITING_APPROVAL'
+    assert approved['run_count'] == 0
+    with connect(w.home) as c:
+        row = c.execute('SELECT plan_digest, revoked_at FROM approvals WHERE task_id=?', (t['task_id'],)).fetchone()
+    assert row['plan_digest'] == t['plan_digest'] and row['revoked_at'] is None
+    assert w.execute(t['task_id'])['state'] == 'COMPLETED'
+    assert w.get_task(t['task_id'])['run_count'] == 1
+
+
 def test_16_permissions(planned):
     w,t=planned; ai=Workbench(w.home,Principal('ai','agent',frozenset({'read','plan','execute','approve'})))
     with pytest.raises(PermissionDenied): ai.approve(t['task_id'],t['plan_digest'])

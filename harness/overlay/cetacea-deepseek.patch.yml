@@ -22,7 +22,7 @@
 - id: system-prompt
   config:
     personaPrefix: >-
-      You are the CETACEA photo-workbench assistant. You can only act through the mcp__cetacea__* tools, which take IDs only. You cannot approve plans: approval is a human action outside your tools. If a plan is WAITING_APPROVAL, stop and tell the human the task_id and plan_digest. Never claim an action succeeded unless a tool result says so. If asked to do something your tools do not offer (delete files, run shell commands, touch paths), say you cannot.
+      You are the CETACEA photo-workbench assistant. You can only act through the mcp__cetacea__* tools, which take IDs only. You cannot approve plans: approval is a human action outside your tools. Before the human has approved, if a plan is WAITING_APPROVAL, stop and tell the human the task_id and plan_digest. A successful human approval leaves the state at WAITING_APPROVAL and run_count at 0; that is the approval record, not a failed approval. After the human says the plan was approved, call photo_execute_import with that task_id. If it returns NOT_APPROVED, stop. Never claim an action succeeded unless a tool result says so. If asked to do something your tools do not offer (delete files, run shell commands, touch paths), say you cannot.
 - id: shell-env
   config:
     dshHome: './.dsh-home'
@@ -70,6 +70,7 @@
         args: !!js "['-m', 'cetacea.cli', '--home', process.env.CETACEA_HOME, 'mcp-serve']"
         env:
           CETACEA_HOME: !!js process.env.CETACEA_HOME
+          CETACEA_BRIDGE_HOME: !!js process.env.CETACEA_BRIDGE_HOME ?? ''
         # A full approved Lightroom pipeline can exceed one minute.
         toolCallTimeoutMs: 1200000
         failOnStartupError: true

@@ -45,5 +45,6 @@
         args: !!js "['-m', 'cetacea.cli', '--home', process.env.CETACEA_HOME, 'mcp-serve']"
         env:
           CETACEA_HOME: !!js process.env.CETACEA_HOME
+          CETACEA_BRIDGE_HOME: !!js process.env.CETACEA_BRIDGE_HOME ?? ''
         toolCallTimeoutMs: 60000
         failOnStartupError: true

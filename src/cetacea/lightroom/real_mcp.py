@@ -1,5 +1,6 @@
 import asyncio
 import json
+import os
 import sys
 import time
 import re
@@ -10,6 +11,38 @@ from mcp.client.session import ClientSession
 from mcp.client.stdio import StdioServerParameters, stdio_client
 from .base import LightroomAdapter, RegisterResult, PresetResult, ExportResult
 from ..appledouble import is_ignorable_macos_metadata
+
+
+def bridge_env(environ=None, *, testing=False):
+    """Environment for the Lightroom bridge process.
+
+    The harness session runner isolates its own HOME. The bridge token and
+    port lock live in the operator account home, so that home has to be
+    restored for this child only. The token file is never opened or copied.
+    """
+    source = os.environ if environ is None else environ
+    env = {'LIGHTROOM_MCP_TOOLSETS': 'develop'}
+    bridge = str(source.get('CETACEA_BRIDGE_HOME', '')).strip()
+    if not bridge:
+        return env
+    path = Path(bridge)
+    if not path.is_absolute() or path.is_symlink() or not path.is_dir():
+        raise ValueError('CETACEA_BRIDGE_HOME must be an existing absolute directory and not a symlink')
+    env['HOME'] = str(path)
+    if testing:
+        return env
+    token = path / '.config' / 'lightroom-mcp' / 'token'
+    try:
+        present = token.is_file() and not token.is_symlink() and token.stat().st_size > 0
+    except OSError:
+        present = False
+    if not present:
+        raise RuntimeError(
+            'Lightroom bridge token is absent from CETACEA_BRIDGE_HOME. '
+            'A harness session isolates HOME, so the bridge cannot see the plug-in token and '
+            'reports an unresponsive port. The token value was not read. Restarting Lightroom does not fix this.'
+        )
+    return env
 
 
 class RealLightroomMcpAdapter(LightroomAdapter):
@@ -84,7 +117,7 @@ class RealLightroomMcpAdapter(LightroomAdapter):
         async def invoke():
             # Upstream always includes core when develop is selected. Keep masks
             # and all out of this process; CETACEA still enforces its own allowlist.
-            params = StdioServerParameters(command=self.command[0], args=self.command[1:], env={'LIGHTROOM_MCP_TOOLSETS': 'develop'})
+            params = StdioServerParameters(command=self.command[0], args=self.command[1:], env=bridge_env(testing=self.testing))
             timeout = 310 if name in {'import_photos', 'export_photos'} else 30
             async with stdio_client(params) as streams:
                 async with ClientSession(*streams, read_timeout_seconds=timeout) as session:
