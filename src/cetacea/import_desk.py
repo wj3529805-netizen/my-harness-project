@@ -17,7 +17,7 @@ from .core import Workbench
 from . import db
 from .lightroom.base import LightroomAdapter
 from .perms import PermissionDenied
-from .tasks import InvalidTransition
+from .tasks import InvalidTransition, transition
 
 PAGE = r"""<!DOCTYPE html>
 <html lang="zh-CN">
@@ -352,6 +352,15 @@ def existing_directory(value, label):
     return path
 
 
+class _Job:
+    def __init__(self, home, task_id, digest):
+        self.home = Path(home)
+        self.task_id = task_id
+        self.digest = digest
+        self.error = None
+        self.state = None
+
+
 class ImportDesk:
     def __init__(self, host='127.0.0.1', port=0, workbench_factory=None, reveal=None):
         if host != '127.0.0.1':
@@ -359,9 +368,9 @@ class ImportDesk:
         self.host = host
         self.factory = workbench_factory or default_workbench
         self.reveal = reveal if reveal is not None else reveal_destination
-        self.lock = threading.Lock()
-        self.jobs = set()
-        self.job_errors = {}
+        self.lock = threading.RLock()
+        self.jobs = {}
+        self.done = {}
         self.home = None
         self.stopping = False
         self.csrf = __import__('secrets').token_urlsafe(32)
@@ -382,13 +391,20 @@ class ImportDesk:
             protocol_version = 'HTTP/1.1'
             def log_message(self, fmt, *args):
                 return
+            def handle(self):
+                try:
+                    super().handle()
+                except (BrokenPipeError, ConnectionResetError):
+                    return
             def do_GET(self):
                 desk._get(self)
             def do_POST(self):
                 desk._post(self)
             def handle_error(self, request, client_address):
-                if not desk.stopping:
-                    super().handle_error(request, client_address)
+                exc = sys.exception()
+                if desk.stopping or isinstance(exc, (BrokenPipeError, ConnectionResetError)):
+                    return
+                super().handle_error(request, client_address)
         return Handler
 
     def start(self):
@@ -506,7 +522,7 @@ class ImportDesk:
         path = existing_directory(home, '工作台')
         if not (path / 'config.json').is_file():
             raise ValueError('这个目录不是 CETACEA 工作台')
-        self.home = path
+        self._assign_home(path)
         return self._view(self.workbench())
 
     def _create(self, home, library, preview):
@@ -514,11 +530,20 @@ class ImportDesk:
         home_path = existing_directory(home, '状态目录')
         library_path = existing_directory(library, '照片库')
         preview_path = existing_directory(preview, '预览目录')
+        with self.lock:
+            if self.jobs:
+                raise ValueError('拷入进行中，不能切换工作台')
         if (home_path / 'config.json').exists():
             raise ValueError('工作台已存在，请改用打开')
         config.initialize(home_path, library_path, preview_path)
-        self.home = home_path
+        self._assign_home(home_path)
         return self._view(self.workbench())
+
+    def _assign_home(self, path):
+        with self.lock:
+            if self.jobs:
+                raise ValueError('拷入进行中，不能切换工作台')
+            self.home = path
 
     def _view(self, workbench):
         return {
@@ -562,8 +587,8 @@ class ImportDesk:
             'ingest_only': True, 'stages': plan['stages'],
         }
 
-    def _approved(self, task_id, digest):
-        with db.connect(self.home) as connection:
+    def _approved(self, home, task_id, digest):
+        with db.connect(home) as connection:
             return connection.execute(
                 'SELECT 1 FROM approvals WHERE task_id=? AND plan_digest=? AND revoked_at IS NULL',
                 (task_id, digest)).fetchone() is not None
@@ -573,7 +598,10 @@ class ImportDesk:
         with self.lock:
             if task_id in self.jobs:
                 return self._progress(task_id, already=True)
-            workbench = self.workbench()
+            if self.home is None:
+                raise ValueError('请先打开或新建工作台')
+            home = self.home
+            workbench = self.factory(home)
             task = workbench.get_task(task_id)
             summary = self._summary(workbench, task)
             if task['plan_digest'] != digest or summary['destination'] != destination:
@@ -585,41 +613,93 @@ class ImportDesk:
             if task['state'] == 'RUNNING':
                 return self._progress(task_id, already=True)
             if task['state'] == 'WAITING_APPROVAL':
-                if not self._approved(task_id, digest):
+                if not self._approved(home, task_id, digest):
                     workbench.approve(task_id, digest)
             elif task['state'] not in {'PAUSED', 'FAILED'}:
                 raise InvalidTransition('当前状态不能开始拷入')
-            self.jobs.add(task_id)
-            self.job_errors.pop(task_id, None)
-        threading.Thread(target=self._execute, args=(task_id, digest), daemon=True).start()
+            job = _Job(home, task_id, digest)
+            self.jobs[task_id] = job
+            self.done.pop(task_id, None)
+        threading.Thread(target=self._execute, args=(job,), daemon=True).start()
         return self._progress(task_id)
 
-    def _execute(self, task_id, digest):
+    def _execute(self, job):
         try:
-            self.factory(self.home).execute(task_id, digest)
+            self.factory(job.home).execute(job.task_id, job.digest)
         except Exception as exc:
-            self.job_errors[task_id] = str(exc)
-        finally:
-            with self.lock:
-                self.jobs.discard(task_id)
+            job.error = str(exc)
+        self._publish(job)
+
+    def _publish(self, job):
+        """Publish a terminal state before the job stops looking busy.
+
+        Progress used to read the task row and only afterwards notice that the
+        runner had left. A poll could observe RUNNING together with busy false
+        and present an unfinished import as the result.
+        """
+        try:
+            state = self.factory(job.home).get_task(job.task_id)['state']
+        except Exception as exc:
+            state = 'RUNNING'
+            job.error = job.error or str(exc)
+        if state == 'RUNNING':
+            job.error = job.error or '拷入线程已结束，任务状态没有更新'
+            self._force_failed(job)
+            state = 'FAILED'
+        job.state = state
+        with self.lock:
+            current = self.jobs.get(job.task_id)
+            if current is job:
+                self.jobs.pop(job.task_id, None)
+            self.done[job.task_id] = job
+
+    def _force_failed(self, job):
+        try:
+            workbench = self.factory(job.home)
+            with db.connect(job.home) as connection:
+                row = connection.execute('SELECT state FROM tasks WHERE task_id=?', (job.task_id,)).fetchone()
+                if row and row['state'] == 'RUNNING':
+                    transition(connection, workbench.principal, job.task_id, 'FAILED')
+                    connection.execute('UPDATE tasks SET error=? WHERE task_id=? AND error IS NULL', (job.error, job.task_id))
+        except Exception as exc:
+            job.error = job.error or str(exc)
 
     def _progress(self, task_id, already=False):
-        workbench = self.workbench()
+        with self.lock:
+            job = self.jobs.get(task_id)
+            done = self.done.get(task_id)
+            home = job.home if job is not None else done.home if done is not None else self.home
+            busy = job is not None
+            published = None if busy or done is None else done.state
+            published_error = None if busy or done is None else done.error
+        if home is None:
+            raise ValueError('请先打开或新建工作台')
+        workbench = self.factory(home)
         task = workbench.get_task(task_id)
         summary = self._summary(workbench, task)
+        if published is not None:
+            summary['state'] = published
+        elif task['state'] == 'RUNNING':
+            busy = True
         files = []
         counts = {}
         for asset in workbench.list_assets(task_id=task_id):
             counts[asset['status']] = counts.get(asset['status'], 0) + 1
             detail = '已从目标重新读回并比对 SHA-256' if asset['status'] == 'VERIFIED' else (asset.get('error') or '')
             files.append({'rel_path': asset['rel_path'], 'kind': asset['kind'], 'status': asset['status'], 'detail': detail, 'size': asset['size']})
-        return {**summary, 'counts': counts, 'files': files, 'error': task.get('error'),
-                'job_error': self.job_errors.get(task_id), 'busy': task_id in self.jobs, 'already': already}
+        error = published_error or task.get('error')
+        return {**summary, 'counts': counts, 'files': files, 'error': error,
+                'job_error': published_error, 'busy': busy, 'already': already}
 
     def _reveal(self, task_id):
-        workbench = self.workbench()
+        with self.lock:
+            if task_id in self.jobs:
+                raise ValueError('拷入尚未结束')
+            done = self.done.get(task_id)
+            home = done.home if done is not None else self.home
+        workbench = self.factory(home)
         task = workbench.get_task(task_id)
-        if task_id in self.jobs or task['state'] == 'RUNNING':
+        if task['state'] == 'RUNNING':
             raise ValueError('拷入尚未结束')
         summary = self._summary(workbench, task)
         path = Path(summary['destination'])

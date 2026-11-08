@@ -1,6 +1,7 @@
 """Import desk drives the real workbench. Fixtures are synthetic labeled bytes."""
 import json
 import threading
+import time
 from http.client import HTTPConnection
 from pathlib import Path
 from urllib.parse import urlparse
@@ -144,10 +145,8 @@ def test_three_formats_plan_approval_and_verification(desk):
     assert scans == ['card']
     status, started = client.post('/api/import', {'task_id': plan['task_id'], 'plan_digest': plan['plan_digest'], 'destination': plan['destination']})
     assert status == 200, started
-    for _ in range(50):
-        status, progress = client.post('/api/task', {'task_id': plan['task_id']})
-        if progress['state'] != 'RUNNING' and not progress['busy']:
-            break
+    progress = settle(client, plan['task_id'])
+    assert progress['busy'] is False
     assert progress['state'] == 'COMPLETED', progress
     assert progress['counts'] == {'VERIFIED': 5}
     assert all(row['detail'] == '已从目标重新读回并比对 SHA-256' for row in progress['files'])
@@ -171,6 +170,17 @@ def test_stale_digest_and_destination_do_not_copy(desk):
         assert connection.execute('SELECT count(*) FROM approvals').fetchone()[0] == 0
 
 
+def settle(client, task_id):
+    deadline = time.monotonic() + 10
+    progress = {'state': 'RUNNING', 'busy': True, 'files': []}
+    while time.monotonic() < deadline:
+        _, progress = client.post('/api/task', {'task_id': task_id})
+        if not progress['busy']:
+            return progress
+        time.sleep(0.01)
+    return progress
+
+
 def test_conflict_and_read_failure_are_visible(desk):
     app, client, roots, scans, page = desk
     prepare(client, roots)
@@ -180,10 +190,8 @@ def test_conflict_and_read_failure_are_visible(desk):
     original = b'CETACEA-SYNTHETIC-EXAMPLE-DIFFERENT-BYTES\n'
     conflict.write_bytes(original)
     client.post('/api/import', {'task_id': plan['task_id'], 'plan_digest': plan['plan_digest'], 'destination': plan['destination']})
-    for _ in range(50):
-        _, progress = client.post('/api/task', {'task_id': plan['task_id']})
-        if not progress['busy']:
-            break
+    progress = settle(client, plan['task_id'])
+    assert progress['busy'] is False
     assert progress['state'] == 'FAILED'
     shown = {row['rel_path']: row for row in progress['files']}
     assert shown['EXAMPLE_ONLY.JPG']['status'] == 'CONFLICT'
@@ -201,10 +209,8 @@ def test_conflict_and_read_failure_are_visible(desk):
     (roots/'card'/'EXTRA.NEF').write_bytes(MARKER + b'extra\n')
     _, failed_plan = client.post('/api/plan', {'source_id': 'card', 'order_id': 'order-1', 'photographer_id': 'photo-1', 'batch_label': 'batch-2'})
     client.post('/api/import', {'task_id': failed_plan['task_id'], 'plan_digest': failed_plan['plan_digest'], 'destination': failed_plan['destination']})
-    for _ in range(50):
-        _, progress = client.post('/api/task', {'task_id': failed_plan['task_id']})
-        if not progress['busy']:
-            break
+    progress = settle(client, failed_plan['task_id'])
+    assert progress['busy'] is False
     assert progress['state'] == 'FAILED'
     assert any(row['status'] == 'FAILED' and row['detail'] for row in progress['files'])
 
@@ -227,10 +233,8 @@ def test_second_click_does_not_start_another_import(desk):
     second = client.post('/api/import', {'task_id': plan['task_id'], 'plan_digest': plan['plan_digest'], 'destination': plan['destination']})
     assert second[0] == 200 and second[1]['already'] is True
     release.set()
-    for _ in range(50):
-        _, progress = client.post('/api/task', {'task_id': plan['task_id']})
-        if progress['state'] == 'COMPLETED':
-            break
+    progress = settle(client, plan['task_id'])
+    assert progress['busy'] is False
     assert progress['state'] == 'COMPLETED'
     with db.connect(roots/'home') as connection:
         assert connection.execute('SELECT count(*) FROM approvals').fetchone()[0] == 1
@@ -254,14 +258,63 @@ def test_reveal_stays_inside_library(desk):
     prepare(client, roots)
     _, plan = client.post('/api/plan', {'source_id': 'card', 'order_id': 'order-1', 'photographer_id': 'photo-1', 'batch_label': 'batch-1'})
     client.post('/api/import', {'task_id': plan['task_id'], 'plan_digest': plan['plan_digest'], 'destination': plan['destination']})
-    for _ in range(50):
-        _, progress = client.post('/api/task', {'task_id': plan['task_id']})
-        if progress['state'] == 'COMPLETED':
-            break
+    assert settle(client, plan['task_id'])['state'] == 'COMPLETED'
     status, result = client.post('/api/reveal', {'task_id': plan['task_id']})
     assert status == 200 and result['opened'] is True
     assert opened == [Path(plan['destination'])]
     assert str(opened[0]).startswith(str((roots/'library').resolve()))
+
+
+def test_settled_progress_keeps_failure_after_a_stale_running_row(desk):
+    app, client, roots, scans, page = desk
+    prepare(client, roots)
+    _, plan = client.post('/api/plan', {'source_id': 'card', 'order_id': 'order-1', 'photographer_id': 'photo-1', 'batch_label': 'batch-1'})
+    conflict = Path(plan['destination']) / 'EXAMPLE_ONLY.JPG'
+    conflict.parent.mkdir(parents=True)
+    conflict.write_bytes(b'CETACEA-SYNTHETIC-EXAMPLE-DIFFERENT-BYTES\n')
+    client.post('/api/import', {'task_id': plan['task_id'], 'plan_digest': plan['plan_digest'], 'destination': plan['destination']})
+    assert settle(client, plan['task_id'])['state'] == 'FAILED'
+    with db.connect(roots/'home') as connection:
+        connection.execute('UPDATE tasks SET state="RUNNING" WHERE task_id=?', (plan['task_id'],))
+    _, progress = client.post('/api/task', {'task_id': plan['task_id']})
+    assert progress['busy'] is False and progress['state'] == 'FAILED'
+
+
+def test_running_import_cannot_change_workbench(desk):
+    app, client, roots, scans, page = desk
+    prepare(client, roots)
+    release = threading.Event()
+    homes = []
+    def blocking(home):
+        homes.append(Path(home))
+        workbench = Workbench(home, adapter=IngestOnlyAdapter())
+        def hook(stage, rel):
+            if stage == 'before_commit':
+                release.wait(5)
+        workbench.engine.fault_hook = hook
+        return workbench
+    app.factory = blocking
+    _, plan = client.post('/api/plan', {'source_id': 'card', 'order_id': 'order-1', 'photographer_id': 'photo-1', 'batch_label': 'batch-1'})
+    for name in ('home-b', 'library-b', 'preview-b'):
+        (roots/name).mkdir()
+    assert client.post('/api/import', {'task_id': plan['task_id'], 'plan_digest': plan['plan_digest'], 'destination': plan['destination']})[0] == 200
+    status, denied = client.post('/api/workspace/create', {'home': str(roots/'home-b'), 'library': str(roots/'library-b'), 'preview': str(roots/'preview-b')})
+    assert status == 400 and '不能切换' in denied['error']
+    status, denied = client.post('/api/workspace/open', {'home': str(roots/'home')})
+    assert status == 400 and '不能切换' in denied['error']
+    again = client.post('/api/import', {'task_id': plan['task_id'], 'plan_digest': plan['plan_digest'], 'destination': plan['destination']})
+    assert again[1]['already'] is True
+    _, progress = client.post('/api/task', {'task_id': plan['task_id']})
+    assert progress['busy'] is True
+    assert progress['destination'].startswith(str((roots/'library').resolve()))
+    release.set()
+    finished = settle(client, plan['task_id'])
+    assert finished['state'] == 'COMPLETED' and finished['busy'] is False
+    assert homes and all(path.resolve() == (roots/'home').resolve() for path in homes)
+    assert list((roots/'library-b').rglob('*')) == []
+    with db.connect(roots/'home') as connection:
+        assert connection.execute('SELECT count(*) FROM approvals').fetchone()[0] == 1
+        assert connection.execute('SELECT run_count FROM tasks').fetchone()[0] == 1
 
 
 def test_new_order_and_source_round_trip(desk):

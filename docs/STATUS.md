@@ -10,7 +10,7 @@ R5 已在 `prep/R5` 完成样片替换和当前树脱敏；所有者已确定样
 
 2026-11-07 Harness `lightroom_get_status`：`run_session.sh` 把子进程 `HOME` 换成临时目录，Lightroom 桥用 `os.homedir()` 找 token；CLI 继承操作者 `HOME`，所以同一 `real_mcp` 配置下 CLI 已连接、Harness 探针失败。失败文字 “Lightroom owns the ports… MIDI2LR” 来自 lightroom-mcp `55cd17f` 的 `STALE_LISTENER_MESSAGE`，是探针没得到应答后的端口诊断。修复只把启动脚本时的操作者家目录作为 `CETACEA_BRIDGE_HOME` 传给桥子进程的 `HOME`，不读、不复制 token。批准写入 `approvals` 后任务仍保持 `WAITING_APPROVAL`、`run_count` 0，直到 `execute`。本环境随后 `.venv/bin/python -m pytest -q` 为 **304 passed、4 skipped**，无失败。跳过仍是未安装的两个 harness 模块（13 个测试未执行）和两个无密钥的真实模型模块；这次读了固定提交 `ce7073d` 的 MCP 客户端源码，但没有把跳过的集成测试当成已通过。Linux 测试不能代替 Mac 上的桥复测。
 
-2026-11-08 本机导入界面：同一分支增加只监听 127.0.0.1 的中文拷入页，复用 plan/approve/execute，仅 ingest，不调用模型或 Lightroom。本环境 `.venv/bin/python -m pytest -q` 为 **313 passed、4 skipped**，无失败；跳过项与上一次相同。Mac 双击启动器尚未在 Mac 上验收，这次 Linux 结果不能代替那一次真机界面验收。
+2026-11-08 本机导入界面：同一分支增加只监听 127.0.0.1 的中文拷入页，复用 plan/approve/execute，仅 ingest，不调用模型或 Lightroom。Mac 在 `cfee6ca` 上跑完整 pytest 为 325 passed、2 skipped、1 failed：`test_conflict_and_read_failure_are_visible` 在进度已不忙时仍读到 `RUNNING`。随后把终态先发布、再取消 busy，并把每次拷入绑在开始时的工作台；进行中拒绝切换。本环境修复后 `.venv/bin/python -m pytest -q` 为 **315 passed、4 skipped**，无失败；同一次全量里 `test_throttled_kill_observes_real_growth` 曾因临时文件只到 749568 字节而失败，单独重跑通过，没有改它的断言。这次 Linux 结果不能代替 Mac 重跑导入界面失败测试和切换工作台检查。
 
 2026-11-06 other-card/USB reader：**PASS**（有界 R3，12 NEF）。证据 `evidence/mac-r3/run-other-card-20261106-005829/`；`source_protocol=USB`；与内置 SD 同名卷靠 UUID 区分；未拔 Studio。回归 303 passed、2 skipped。见 [说明](../evidence/mac-r3/NOTES-other-card-20261106.md)。
 
