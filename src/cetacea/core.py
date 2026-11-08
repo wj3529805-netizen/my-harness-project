@@ -60,6 +60,9 @@ class Workbench:
     def list_orders(self):
         self._call('read','list_orders')
         with db.connect(self.home) as c: return [dict(r) for r in c.execute('SELECT * FROM orders')]
+    def list_photographers(self):
+        self._call('read','list_photographers')
+        with db.connect(self.home) as c: return [dict(r) for r in c.execute('SELECT * FROM photographers')]
     def scan_source(self,source_id):
         self._call('read','scan_source'); return scan(self.config['sources'][source_id]['path'])
     def _lightroom_snapshot(self, preset_id):
