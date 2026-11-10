@@ -1,8 +1,10 @@
-"""Local 0.26.0 contract fixture only; NOT real Lightroom."""
+"""MOCK local batch/0.26.0 contract fixture; NOT real Lightroom."""
 from pathlib import Path
+import os
 from PIL import Image
 from mcp.server.mcpserver import MCPServer
-server = MCPServer('fake Lightroom')
+server = MCPServer('MOCK fake Lightroom')
+registered = set()
 
 
 @server.tool()
@@ -11,8 +13,19 @@ def import_photos(source_path: str):
 
 
 @server.tool()
+def import_photos_batch(source_paths: list[str]):
+    assert 1 <= len(source_paths) <= 200
+    results = []
+    for path in source_paths:
+        status = 'existing' if path in registered else 'added'
+        registered.add(path)
+        results.append({'path': path, 'status': status})
+    return {'success': True, 'complete': True, 'results': results, 'marker': 'CETACEA-MOCK', 'mock_process_id': os.getpid()}
+
+
+@server.tool()
 def get_photo_metadata(photo_ids: list[str]):
-    return {'photos': [{'id': n + 1, 'path': p, 'isVirtualCopy': False} for n, p in enumerate(photo_ids)], 'missing': []}
+    return {'photos': [{'id': n + 1, 'path': p, 'isVirtualCopy': False} for n, p in enumerate(photo_ids)], 'missing': [], 'marker': 'CETACEA-MOCK', 'mock_process_id': os.getpid()}
 
 
 @server.tool()

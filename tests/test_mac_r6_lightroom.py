@@ -550,10 +550,6 @@ def test_real_adapter_pipeline_under_write_guard(tmp_path):
     def call(name, arguments):
         response = original_call(name, arguments)
         calls.append(name)
-        # The stateless fixture reports every photo present. Simulate a missing
-        # first readback so registration also exercises its real import call.
-        if name == 'get_photo_metadata' and calls.count(name) == 1:
-            return {'photos': [], 'missing': arguments['photo_ids']}
         return response
     w.adapter.call_tool = call
     task = w.plan_import('order', 'tester', 'card', preset_id='preset', stages=r6.STAGES)
@@ -565,7 +561,7 @@ def test_real_adapter_pipeline_under_write_guard(tmp_path):
         steps = [dict(row) for row in conn.execute('SELECT stage, state FROM task_steps WHERE task_id=? ORDER BY started_at', (task['task_id'],))]
     assert [row['stage'] for row in steps] == r6.STAGES
     assert all(row['state'] == 'COMPLETED' for row in steps)
-    assert 'import_photos' in calls and 'export_photos' in calls
+    assert 'import_photos_batch' in calls and 'export_photos' in calls
     assert w.verify_preview(task['task_id'])['status'] == 'OK'
 
 class NestedMock(r6.MockLightroomAdapter):
