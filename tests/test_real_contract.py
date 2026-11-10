@@ -30,27 +30,34 @@ def test_upstream_json_text_and_business_errors():
         RealLightroomMcpAdapter._payload(response([{'success': True}]))
 
 
-def test_single_photo_import_contract_and_retry_readback(tmp_path):
+def test_single_photo_batch_contract_and_existing_skip(tmp_path):
     adapter = fixture_adapter()
     f = verified(tmp_path)
     path = str(f.abs_path)
     present = False
     calls = []
+    additions = 0
 
     def call(name, args):
-        nonlocal present
+        nonlocal present, additions
         calls.append((name, args))
         if name == 'get_photo_metadata':
             assert args == {'photo_ids': [path]}
             return {'photos': [{'id': 7, 'path': path, 'isVirtualCopy': False}] if present else [], 'missing': [] if present else [path]}
-        assert name == 'import_photos' and args == {'source_path': path}
+        assert name == 'import_photos_batch' and args == {'source_paths': [path]}
+        status = 'existing' if present else 'added'
+        additions += not present
         present = True
-        return {'success': True, 'imported': 1, 'complete': True, 'skipped': 0}
+        return {'success': True, 'complete': True, 'results': [{'path': path, 'status': status}]}
 
     adapter.call_tool = call
-    assert adapter.register([f])[0].photo_id == path
-    assert adapter.register([f])[0].photo_id == path
-    assert sum(name == 'import_photos' for name, _ in calls) == 1
+    first = adapter.register([f])[0]
+    second = adapter.register([f])[0]
+    assert first.photo_id == second.photo_id == path
+    assert first.status == 'added' and second.status == 'existing'
+    assert additions == 1
+    assert sum(name == 'import_photos_batch' for name, _ in calls) == 2
+    assert [name for name, _ in calls] == ['import_photos_batch', 'get_photo_metadata'] * 2
 
 
 @pytest.mark.parametrize('row', [None, {'id': 7, 'path': '/wrong.NEF', 'isVirtualCopy': False}, {'id': 7, 'path': 'actual', 'isVirtualCopy': True}])
@@ -63,16 +70,16 @@ def test_registration_requires_exact_metadata_identity(tmp_path, row):
 
     def call(name, args):
         calls.append(name)
-        if name == 'import_photos':
-            return {'success': True, 'imported': 1, 'complete': True, 'skipped': 0}
+        if name == 'import_photos_batch':
+            return {'success': True, 'complete': True, 'results': [{'path': str(f.abs_path), 'status': 'added'}]}
         return {'photos': [] if row is None else [row], 'missing': [str(f.abs_path)] if row is None else []}
 
     adapter.call_tool = call
     assert adapter.register([f])[0].error
-    assert calls.count('import_photos') <= 1
+    assert calls.count('import_photos_batch') == 1
 
 
-@pytest.mark.parametrize('override', [{'success': False}, {'complete': False}, {'remaining_paths': ['pending.NEF']}, {'imported': 0}])
+@pytest.mark.parametrize('override', [{'success': False}, {'complete': False}, {'results': []}, {'results': [{'path': '/unexpected.NEF', 'status': 'added'}]}])
 def test_import_incomplete_or_absent_readback_is_not_registered(tmp_path, override):
     adapter = fixture_adapter()
     f = verified(tmp_path)
@@ -80,7 +87,8 @@ def test_import_incomplete_or_absent_readback_is_not_registered(tmp_path, overri
     def call(name, args):
         if name == 'get_photo_metadata':
             return {'photos': [], 'missing': [str(f.abs_path)]}
-        return {'success': True, 'imported': 1, 'complete': True, 'skipped': 0, **override}
+        assert name == 'import_photos_batch'
+        return {'success': True, 'complete': True, 'results': [{'path': str(f.abs_path), 'status': 'added'}], **override}
 
     adapter.call_tool = call
     result = adapter.register([f])[0]

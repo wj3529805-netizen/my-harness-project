@@ -18,6 +18,7 @@ class RegisterResult:
     photo_id: str | None = None
     error: str | None = None
     mock: bool = False
+    status: str | None = None
 
 @dataclass
 class PresetResult:

@@ -209,7 +209,8 @@ def test_real_retry_idempotency_and_nontransient(tmp_path):
             if args.get('sections'):
                 return {'photos': [{'developSettings': {'exposure': 0.5 if state['applied'] else 0}}], 'missing': []}
             return {'photos': [{'path': str(photo.abs_path), 'id': 'photo', 'isVirtualCopy': False}] if state['imported'] else [], 'missing': [] if state['imported'] else [str(photo.abs_path)]}
-        if name == 'import_photos':
+        if name == 'import_photos_batch':
+            assert args == {'source_paths': [str(photo.abs_path)]}
             state['imports'] += 1; state['imported'] = True
             raise RuntimeError('read ECONNRESET')
         if name == 'apply_develop_preset':
