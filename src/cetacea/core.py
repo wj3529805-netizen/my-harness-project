@@ -18,10 +18,10 @@ from .ingest.manifest import write
 def digest(value): return hashlib.sha256(json.dumps(value,sort_keys=True,separators=(',',':')).encode()).hexdigest()
 
 # The real adapter can initialize a session and then wait for one tool result
-# under each timeout. Registration may do metadata (30s), import (310s),
-# metadata readback (30s), and the status probe (30s) for one asset. Include both
-# waits plus 120s for local hashing and subprocess teardown before recovery can
-# treat this runner as stale. Ingest retains its shorter per-file lease.
+# under each timeout. A registration batch may import (310s), read metadata
+# (30s), and reconnect after a transport failure. Batch/retry callbacks renew
+# this lease; preset/export keep their existing per-asset renewal. Include both
+# waits plus 120s for local hashing and teardown. Ingest keeps its shorter lease.
 LIGHTROOM_ASSET_LEASE_SECONDS = 2 * (30 + 310 + 30 + 30) + 120
 
 class Workbench:
@@ -32,7 +32,7 @@ class Workbench:
         settings = self.config.get('lightroom', {})
         choice = settings.get('adapter', 'mock')
         if choice not in {'mock', 'real_mcp'}: raise ValueError('Unknown Lightroom adapter')
-        self.adapter = adapter or (MockLightroomAdapter() if choice=='mock' else RealLightroomMcpAdapter(command=settings.get('command'), test_command=settings.get('test_command')))
+        self.adapter = adapter or (MockLightroomAdapter() if choice=='mock' else RealLightroomMcpAdapter(command=settings.get('command'), test_command=settings.get('test_command'), batch_size=settings.get('batch_size', 100)))
     @classmethod
     def init(cls, home, library, preview):
         config.initialize(home,library,preview); return cls(home)
@@ -60,6 +60,9 @@ class Workbench:
     def list_orders(self):
         self._call('read','list_orders')
         with db.connect(self.home) as c: return [dict(r) for r in c.execute('SELECT * FROM orders')]
+    def list_photographers(self):
+        self._call('read','list_photographers')
+        with db.connect(self.home) as c: return [dict(r) for r in c.execute('SELECT * FROM photographers')]
     def scan_source(self,source_id):
         self._call('read','scan_source'); return scan(self.config['sources'][source_id]['path'])
     def _lightroom_snapshot(self, preset_id):
@@ -252,6 +255,92 @@ class Workbench:
         self._call('read','report',task_id)
         from .report import build
         return build(self, task_id)
+    def _register_lightroom_stage(self, t, assets):
+        """Register pending verified inputs together; retain each asset's outcome.
+
+        Registration owns its bounded transactions and one reusable connection.
+        The callback renews the task lease and prevents another batch/retry after
+        cancellation. Library bytes are still re-read before crossing the bridge.
+        """
+        from .lightroom import VerifiedFile
+        from .ingest.pathsafe import read_hash
+
+        succeeded = failed = skipped = 0
+        detail = []
+        pending = []
+
+        def before_batch():
+            with db.connect(self.home) as c:
+                state = c.execute('SELECT state FROM tasks WHERE task_id=?', (t['task_id'],)).fetchone()[0]
+                if state == 'CANCELLED':
+                    raise RuntimeError('Lightroom registration task cancelled')
+                c.execute('UPDATE tasks SET lease_until=? WHERE task_id=?',
+                          (time.time() + LIGHTROOM_ASSET_LEASE_SECONDS, t['task_id']))
+
+        def failure(asset_id, exc):
+            nonlocal failed
+            failed += 1
+            detail.append({'asset_id': asset_id, 'error': str(exc), 'mock': bool(self.adapter.mock)})
+
+        for a in assets:
+            try:
+                before_batch()
+            except RuntimeError:
+                break
+            if a['lr_photo_id']:
+                skipped += 1
+                continue
+            try:
+                path = safe(self.config['library_root'], a['dest_rel_path'])
+                if read_hash(path) != a['sha256']:
+                    raise ValueError('Library hash mismatch')
+                pending.append(VerifiedFile(a['asset_id'], path, a['sha256'], a['size'],
+                                            a['rel_path'], a['order_id'], a['photographer_id']))
+            except Exception as exc:
+                failure(a['asset_id'], exc)
+
+        if not pending:
+            return (succeeded, failed, skipped), detail
+        try:
+            before_batch()
+            if getattr(self.adapter, 'supports_batch_hook', False):
+                results = self.adapter.register(pending, before_batch=before_batch)
+            else:
+                results = self.adapter.register(pending)
+            expected = {f.asset_id for f in pending}
+            if (len(results) != len(pending)
+                    or len({r.asset_id for r in results}) != len(results)
+                    or {r.asset_id for r in results} != expected):
+                raise ValueError('adapter result mapping mismatch')
+        except Exception as exc:
+            for f in pending:
+                failure(f.asset_id, exc)
+            return (succeeded, failed, skipped), detail
+
+        for r in results:
+            try:
+                if r.error:
+                    raise ValueError(r.error)
+                if not r.photo_id:
+                    raise ValueError('missing photo_id')
+                with db.connect(self.home) as c:
+                    c.execute('UPDATE assets SET lr_photo_id=?,lr_status=?,mock=? WHERE asset_id=?',
+                              (r.photo_id, 'REGISTERED', int(self.adapter.mock), r.asset_id))
+                if r.status == 'existing':
+                    skipped += 1
+                else:
+                    succeeded += 1
+                # A successful batch already has metadata confirmation. Calling
+                # status() here would launch another bridge/preset probe per file.
+                status = 'MOCK — not real Lightroom' if self.adapter.mock else 'Lightroom registration confirmed'
+                entry = {'asset_id': r.asset_id, 'mock': bool(self.adapter.mock), 'status': status}
+                if r.status is not None:
+                    entry['registration_status'] = r.status
+                detail.append(entry)
+            except Exception as exc:
+                failure(r.asset_id, exc)
+        return (succeeded, failed, skipped), detail
+
     def _lightroom_stage(self, t, stage):
         from dataclasses import asdict
         from .lightroom import VerifiedFile
@@ -266,6 +355,8 @@ class Workbench:
         assets = [a for a in assets if a['asset_id'] in planned_ids]
         if any(a['status']!='VERIFIED' for a in assets): raise UnverifiedLightroomInput('Lightroom requires ingested VERIFIED files')
         assets, pairs = preview.expected(assets)
+        if stage == 'lr_register':
+            return self._register_lightroom_stage(t, assets)
         preset_id=t['plan']['preset_id']
         directory=None; export_run=None
         if stage=='lr_export': export_run,directory=preview.new_run(self,t)
@@ -275,7 +366,7 @@ class Workbench:
                 state=c.execute('SELECT state FROM tasks WHERE task_id=?',(t['task_id'],)).fetchone()[0]
                 c.execute('UPDATE tasks SET lease_until=? WHERE task_id=?',(time.time()+LIGHTROOM_ASSET_LEASE_SECONDS,t['task_id']))
             if state=='CANCELLED': break
-            if (stage=='lr_register' and a['lr_photo_id']) or (stage=='lr_preset' and preset_id and a['preset_applied']==preset_id):
+            if stage=='lr_preset' and preset_id and a['preset_applied']==preset_id:
                 skipped+=1; continue
             try:
                 if stage=='lr_export':
@@ -310,8 +401,7 @@ class Workbench:
                 path=safe(self.config['library_root'],a['dest_rel_path'])
                 if read_hash(path)!=a['sha256']: raise ValueError('Library hash mismatch')
                 f=VerifiedFile(a['asset_id'],path,a['sha256'],a['size'],a['rel_path'],a['order_id'],a['photographer_id'])
-                if stage=='lr_register': results=self.adapter.register([f])
-                elif stage=='lr_preset':
+                if stage=='lr_preset':
                     if not a['lr_photo_id']: raise ValueError('photo not registered')
                     if not preset_id: raise ValueError('preset_id required')
                     results=self.adapter.apply_preset([f],self.config['presets'][preset_id])
@@ -328,10 +418,7 @@ class Workbench:
                     safe(self.config['preview_root'],str(output.relative_to(self.config['preview_root'])))
                     preview.persist(self,t,export_run,r)
                 with db.connect(self.home) as c:
-                    if stage=='lr_register':
-                        if not r.photo_id: raise ValueError('missing photo_id')
-                        c.execute('UPDATE assets SET lr_photo_id=?,lr_status=?,mock=? WHERE asset_id=?',(r.photo_id,'REGISTERED',int(self.adapter.mock),a['asset_id']))
-                    elif stage=='lr_preset': c.execute('UPDATE assets SET preset_applied=?,lr_status=?,mock=? WHERE asset_id=?',(preset_id,'PRESET_APPLIED',int(self.adapter.mock),a['asset_id']))
+                    if stage=='lr_preset': c.execute('UPDATE assets SET preset_applied=?,lr_status=?,mock=? WHERE asset_id=?',(preset_id,'PRESET_APPLIED',int(self.adapter.mock),a['asset_id']))
                     else: c.execute('UPDATE assets SET lr_status=?,mock=? WHERE asset_id=?',('EXPORTED',int(self.adapter.mock),a['asset_id']))
                 succeeded+=1; detail.append({'asset_id':a['asset_id'],'mock':bool(self.adapter.mock),'status':self.adapter.status()})
             except Exception as exc:

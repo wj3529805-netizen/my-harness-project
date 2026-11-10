@@ -32,6 +32,8 @@ node_modules/.bin/tsx native/system/scripts/build.ts --host-addon-only   # 本�
 ## 真实模型使用（小规模验证）
 **已用真实 DeepSeek 小规模验证（此前 5 个场景各 1 次、17 次请求；完整计划另 1 次、8 次请求）；非可靠性保证；仅 Linux；Harness 仍为实验性/未审计**。真实模型是显式选择的付费服务。设置 `CETACEA_HOME`、可选 `CETACEA_PYTHON` 和环境变量 `DEEPSEEK_API_KEY` 后，运行 `harness/run_session.sh deepseek`，向标准输入逐行发送 `{"task":"..."}`；标准输出为事件及每轮 `turn_done` 的 JSONL，EOF 后退出。可选 `CETACEA_MODEL`（默认 `deepseek-flash`）及 `CETACEA_THINKING`（默认 `disabled`；请求的 `reasoningEffort` 固定为 `off`）。
 
+`harness/run_session.sh` 用 `env -i` 启动，并把 `HOME` 设成临时会话目录。Lightroom 桥的 token 在操作者账户的 `~/.config/lightroom-mcp/token`，不在这个临时目录。脚本在改写 `HOME` 之前把原来的 `HOME` 记入 `CETACEA_BRIDGE_HOME`，适配器只把这个目录传给 Lightroom 子进程的 `HOME`，不读取、不复制 token。未设置时可用同名环境变量指向启动插件的那个账户家目录；它必须是已存在的绝对路径，且不能是符号链接。CLI `lr-status` 直接继承终端的 `HOME`，所以同一配置下 CLI 可以显示已连接，而修之前的 Harness 会得到 “Lightroom owns the ports… MIDI2LR”。那条文字来自桥在探针失败后的端口诊断，不等于已经确认有 MIDI2LR。
+
 `CETACEA_MAX_MODEL_REQUESTS` 默认 30；`CETACEA_REQUEST_LEDGER` 可指定跨进程保存计数的 JSON 文件，未设置时仅在内存中计数。到达上限时退出码为 4；因取消与请求启动可能竞争，最多可能多发一次请求。ledger 的原子替换不提供并发进程间的锁，请勿让并发会话共用同一 ledger。`mock` 模式使用 `CETACEA_MOCK_SCRIPT`，支持原有 `steps` 或多轮 `turns` 脚本。
 
 验证使用 `deepseek-official` 的 `deepseek-flash`（目录中最便宜的支持工具调用模型），通过 Harness 的 `dsh-llm-deepseek-api-key`，禁用 thinking，`reasoningEffort=off`；限制后的工具面为 14 个 CETACEA 工具加 `create_goal`、`get_goal`、`update_goal`、`todo_write`、`list_mcp_resources`、`list_mcp_resource_templates`、`read_mcp_resource`。驱动 ledger 记录 17 次模型请求，另有一次免费的 GET `/models` 连通性检查。脱敏记录及 `request-ledger.json` 位于 `evidence/realmodel/`。用户实测：

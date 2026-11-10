@@ -52,7 +52,9 @@ MCP index 默认按顺序查找 `<REPO>/.lightroom-runtime/node_modules/@mskalsk
 .venv/bin/python -m cetacea.cli --home <PRINTED_HOME> approve <TASK_ID> <PLAN_DIGEST>
 ```
 
-默认等待批准 1800 秒；超时会停止。批准后依次执行 ingest、登记 RAW、套预设、导出和预览校验。JPG 只入库，用于配对，不登记或导出。`NC_FLLST.DAT` 同样入库并在目标端重新读回、校验 SHA-256，但绝不发送到任何 `lr_*` 阶段。此前 R3 仅 ingest 的运行只筛选 `.nef` 入库；DAT 仅出现在源文件前后清点中，R6 是首次将其入库。不要由脚本或 AI 自行批准。
+默认等待批准 1800 秒；超时会停止。批准后依次执行 ingest、登记 RAW、套预设、导出和预览校验。在本夹具的 9 对同名 NEF/JPG 上，JPG 只入库，用于配对，不登记或导出。`NC_FLLST.DAT` 同样入库并在目标端重新读回、校验 SHA-256，但绝不发送到任何 `lr_*` 阶段。此前 R3 仅 ingest 的运行只筛选 `.nef` 入库；DAT 仅出现在源文件前后清点中，R6 是首次将其入库。不要由脚本或 AI 自行批准。
+
+这是验收夹具，不是核心拷入规则。核心扫描和拷贝每一张支持的照片：纯 NEF、纯 JPG、以及混合批次里有配对和缺配对的文件都会入库，并用目标文件重新读回的 SHA-256 核对。缺 NEF 或 JPG 不会让另一张已存在的照片被跳过。r3 模式因为文件夹里 JPG 与 NEF 同名，核心预览映射才不把这些 JPG 送入 Lightroom。`--mode large` 另由 `RawLightroomWorkbench` 把没有配对 NEF 的 JPG 排除出 Lightroom，文件本身仍然拷入。不要用本脚本拷贝一份只有 JPG 的试用目录，也不要把它的数量锁或卡 UUID 套到别的卡。
 
 真实模式遇到临时 bridge 断连时最多尝试 9 次，默认依次等待 2、4、8、16、30、30、30、60 秒，总等待上限默认 180 秒；可用 `--lr-retry-max-sleep` 调整（0–600 秒），达到上限后剩余重试不再等待。从第二次重试起，macOS 默认尝试激活 Lightroom 窗口，可用 `--no-lr-activate-on-retry` 关闭；只激活，不退出或终止应用。`lr-retries.json` 和 `result.json` 记录每次等待、累计等待及激活结果；mock 模式不会激活 Lightroom。
 

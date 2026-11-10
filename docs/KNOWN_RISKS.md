@@ -1,5 +1,44 @@
 # Gate 1 validation notes
 
+## Lightroom 批量登记 — 2026-11-10：离线回归通过，真实测速待用户执行
+
+本次基于 `2ca1453`，在 `codex/lr-batch-register` 实现默认 100 张、上限 200 张的
+单批单写事务、整次登记共用 stdio 会话、批量 metadata 核对及部分失败续登。
+工作流也改为一次提交全部已验证待登记项，移除逐张状态探测。HOME 桥行为保留。
+固定版本 MIT Lua 扩展与隔离运行时准备器均纳入版本控制；未加载或修改全局插件，
+未操作真实 Lightroom / 正式 catalog / 客户照片或 DeepSeek ledger。
+安装、用法及边界见 [LIGHTROOM_BATCH.md](LIGHTROOM_BATCH.md)。
+
+测试历史如实保留：实现中间一次聚焦运行 `30 passed, 1 failed`，原因是测试夹具已迁移至
+`import_photos_batch` 而适配器仍处于旧 `import_photos` 实现。批量实现接通后，相关聚焦
+测试先后为 `146 passed`、补充异常边界后 `154 passed`；工作流相关回归 `94 passed`。
+Lua 离线测试实际执行 MOCK catalog 对象，包含 134 张单事务、去重、部分失败续登、
+取消、事务异常及进度报告异常，共 `11 passed`。这些都不代表真实 Lightroom 验收。
+
+完整命令（显式使用本工作树源码，只借用既有 Python 3.13 环境）：
+
+```sh
+PYTHONPATH="$PWD/src" PYTHONDONTWRITEBYTECODE=1 \
+  "$HOME/Documents/ChatGPT/AI工作台/my-harness-project/.venv/bin/python" -m pytest -q -rs
+```
+
+首次全量为 **374 passed, 4 skipped in 49.23s**，退出码 0。
+补充两项连接安全回归后，第二次全量为 `1 failed, 376 passed, 4 skipped in 50.58s`：
+`test_tracked_tree_is_clean` 发现新增测试说明包含本机绝对 HOME 路径（`R-HOME`）。
+随后把新增说明改用 `$HOME` / 工作树相对路径，未更改隐私规则或测试。
+将全部 15 个候选文件逐路径暂存后，隐私及批量聚焦回归 `56 passed`；
+最终全量 **377 passed, 4 skipped in 50.58s**，退出码 0。
+四个跳过为两组未安装 Harness
+依赖的集成模块及两组未启用真实模型的模块；没有为这次变更安装或调用网络/付费依赖。
+单独核对跳过原因及 HOME 回归为 `8 passed, 4 skipped`，退出码 0。
+新增的 Lua 测试在本机已有 Lua 动态库上执行，未跳过。
+
+剩余限制：用户须手动停用原插件并加载隔离替换副本；未重测真实 134 张，不能宣称已经达到
+1–2 秒/张。SDK 要求存在查询位于写锁外，并行 UI 导入相同路径可能影响 `added/existing`
+分类计数；请保持单一导入者。超时后事务可能仍在运行，连接恢复先批量核对再重试缺失路径。
+catalog 守卫仍使用 `pgrep/lsof`，没有窗口标题依赖；新增回归证明空标题不影响打开文件的判断，
+正式 catalog 同时打开时拒绝继续。
+
 ## R2 real ExFAT — 2026-11-03：PASS_IN_SCOPE（单样本），失败历史保留
 
 原始 R2（`2a8d669`，[evidence/mac-r2/](../evidence/mac-r2/result.json)）因 `preview.verify` 将 AppleDouble `._*.jpg` 计为 orphan 而 FAIL_STOPPED；修复为 `fdfce5a`。首次重跑的产品 [verify 为 OK/mock=true](../evidence/mac-r2-rerun/mock-verify-preview.json)，仅验收脚本清单读回误解析 `._preview-manifest.json` 为 UTF-8 JSON 而停止，整轮仍为 [FAIL_STOPPED](../evidence/mac-r2-rerun/result.json)。原始失败证据保留。
@@ -39,7 +78,7 @@ Stage C validation history:
 测试：Phase 1 收尾时 71 passed；Phase 2 Mock 阶段 75 passed；真实模型阶段无密钥/开关全量 90 passed、1 skipped，真实模型 opt-in 5 passed；本阶段无密钥/开关 103 passed、2 skipped（分别为 `tests/test_realmodel_optin.py`、`tests/test_realmodel_fullplan_optin.py`；Linux，Python 3.13）。开发过程中的失败与修复历史见上文。
 
 1. **Phase 1 收尾时的历史状态：未在 macOS / 真实 Lightroom 上验证**任何东西。`RealLightroomMcpAdapter` 只对假 MCP 服务器做过接口测试；lightroom-mcp 实际返回格式（import_photos 无 photo id、export_photos 无文件名）按源码阅读做的假设，当时须在 Mac 上验收清单 A13 确认；后续验收见下方 macOS 记录。
-2. 真实适配器每次调用都启动一个 MCP 子进程（简单、隔离，但慢）；大批量时需改为长连接会话。
+2. 历史逐调用启动 MCP 的登记瓶颈已在本次批量实现中修复：一次 `register()` 复用会话，瞬断才重连。预设、导出等非登记调用仍使用既有单次连接行为。
 3. Mock 适配器的“已登记”状态在进程内存里；跨进程时以数据库 assets.lr_photo_id 为准。
 4. 硬链接不可用时的回退（`.cetacea-lock` + rename）只对遵守锁的 CETACEA 写入者安全；外部写入者可能竞争。APFS 支持硬链接；exFAT 已有 R2 单样本范围通过（文件系统检查使用 MOCK Lightroom，另有真实 Lightroom 冒烟），SMB 待验证。
 5. 性能：扫描一次完整哈希，复制时再读源、读回临时文件、最终读回，共约 4 次读取；大卡（数百 GB）耗时较长，未做基准测试。
