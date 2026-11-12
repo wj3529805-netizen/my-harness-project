@@ -162,6 +162,29 @@ Linux validation: full suite on the Linux box passed (128 passed, 4 skipped). Mo
 
 崩溃恢复自动化使用真实 stdio MCP 子进程与持久化 MOCK catalog，在第二批写入部分记录后
 `os._exit(86)`，重开子进程续登记；不代表真实 Lightroom 的事务提交或回滚行为。
-真实 Lightroom 写入中途崩溃、SMB/NAS 非生产共享仍未在本任务验证。
+此前日常入口开发范围尚未验证真实 Lightroom 写入中途崩溃与 SMB/NAS 目标。
+本次 SMB/NAS 导入补测结果见 [最终验收](FINAL_ACCEPTANCE.md#2026-11-12-导片助手实测结果)。
 日常入口不重复导片助手的复制或 SHA-256 字节验证；只读扫描导入目录并核对 catalog
 精确路径登记。报告含本地绝对路径，权限为当前用户读写，不应随公开仓库提交。
+
+
+## 2026-11-12 验收文档补结果复跑
+
+本次仅补验收文档，使用用户指定的 `.venv-20261112`，未启用真实模型。
+首轮全量为 **395 passed、1 failed、4 skipped，60.23 秒**。
+既有 `tests/test_mac_r3_r4_logic.py::test_r4_reinsert_changed_device_and_deleted_part`
+返回 `FAIL_UNVERIFIED_INTERRUPTION`，原始结果中 `part_sizes_at_interruption=[]`，
+说明移除时的部分文件证据未采到，最终任务为 `COMPLETED`。
+该项单独复跑为 **1 passed，0.98 秒**，随后全量为
+**396 passed、4 skipped，60.00 秒**，退出码 0。
+保留该合成中断测试的时序敏感风险，首轮失败及两次复跑日志和临时树均留存于本机
+`Cetacea-Release-20261112/evidence/smb-20261112/`，文件前缀为
+`harness-pytest`、`harness-pytest-race-recheck`、`harness-pytest-r2`。
+
+SMB 全量、重复、取消和续导的产品 API 与 manifest 计数均通过，最终续导为
+49 copied-verified + 1 verified-existing，共 50 文件。
+首轮重复执行的附加元数据相等断言失败，缺少比较前快照，具体字段差异无法还原。
+保存完整快照后的重复补测各字段一致。续导后的附加检查发现先前完成的 1 个 JPEG
+mtime、ctime 改变，size、device、inode、mode 一致，根因待查。
+工具计数与该附加检查结果均见 [最终验收](FINAL_ACCEPTANCE.md#2026-11-12-导片助手实测结果)，
+原始失败及 before/after 证据保留在本机 `smb-20261112` 归档。

@@ -34,14 +34,55 @@ R3 214716 的 HE 帧是 DSC_9725.NEF；其[清点](../evidence/mac-r3/run-202611
 | R6 真实 LR 批量登记 | PASS（2026-11-10 已完成） | 在正式 catalog 完成 2 个客户项目，共 755 张 RAW 全部登记、无重复；仅添加精确路径，不披露客户名或客户目录 |
 | R6 中途崩溃恢复：自动化 | **PASS（fake MCP）** | 30 张、每批 10 张；第 2 批写入 4 张后 fake MCP 进程强退，首次失败记录未完成批；重跑为 14 existing + 16 added，最终 30 张各一条、无重复。此项仅代表自动化模拟 |
 | R6 中途崩溃恢复：真实 LR | **SKIPPED** | 晶正在使用 LR，需另约时段在隔离测试 catalog 跑 |
-| SMB/NAS 目标 | **SKIPPED** | 无非生产测试共享，需晶指定 |
+| SMB/NAS 目标 | **PASS（工具流程） / 附加时间戳检查 FAIL、待查** | 在授权目录 `CETACEA-SMB-Test-20261112` 完成全量、重复、中途取消与续导，计数及时间戳局限见下表 |
 | Windows | 不在 Mac 范围内 | 本次未执行 Windows 验收 |
-| 导片助手打包 / 公证 | 待补 | 保留下面占位，另行补充结果 |
+| 导片助手打包 | **PASS** | 最终 r2 app 与 ZIP 已生成，ad-hoc 签名，`codesign --verify --deep --strict -v` 退出 0，`spctl` rejected 为此签名方式的预期结果 |
+| 公证 | **不适用 / 用户决定跳过** | 自用 Mac，用户已决定采用 ad-hoc 签名 |
 
-<!-- importer-results -->
+### 2026-11-12 导片助手实测结果
 
-本次在 Mac 的 Python 3.14.8（用户指定 `.venv-20261112`）运行全量自动化：
-**396 passed、4 skipped，55.02 秒**；相较基线新增 19 项测试，定向回归为 **78 passed**。
+本机证据归档为 `Cetacea-Release-20261112/evidence/RESULTS-20261112.md`。最终候选为
+`Photo_Importer_导片助手-2.6.1-AIAPI-20261112-r2.app`，以下计数来自该轮实际运行。
+
+| 检查 | 结果 | 计数与范围 |
+| --- | --- | --- |
+| 后端完整 pytest | PASS | 298 passed、0 failed、11 skipped，另 118 subtests PASS，源码固定路径缺 Core Image helper 5 项、指定真实 RAW fixture 缺失 6 项 |
+| 顶层 Python | PASS | 36 passed、0 failed、0 skipped，另 25 subtests PASS |
+| 顶层 JavaScript | PASS | 20 passed、0 failed、0 skipped，shell 内部另含 14 项检查 |
+| phase2 混合引擎 | PASS | 1 个 Python 方法，覆盖两个混合续导方向 |
+| phase2 bridge | PASS | 24 项检查，源码与最终包内后台均通过 |
+| phase2 transport | PASS | 53 项检查 |
+| phase2 worker lifecycle | PASS | 8 项检查 |
+| 包内引擎冒烟 | PASS | 18 项检查，覆盖真实 ASAR、Worker、Python 后台与原生 IO |
+| README legacy 冻结 golden 对照 | **FAIL** | 缺原始冻结基准 `golden-provenance.json` 和 `legacy-golden.json` |
+| README Ingesto 冻结 golden 对照 | **FAIL** | 同一原始冻结基准缺口 |
+| 真实照片本地全量导入 | PASS | planned 10、copied 10、verified 10、skipped 0、errors 0，5 NEF + 5 JPG |
+| 同源同项目重复执行 | PASS | planned 10、copied 0、verified-existing 10、skipped 10、errors 0，既有目标文件元数据保持一致 |
+| 文件名范围计划 | PASS | `DSC_2650` 至 `DSC_2657`，3 对 NEF/JPG，共 6 个物理文件，仅生成计划 |
+| SMB 全量计划、批准、执行 | PASS | planned 10、copied 10、verified 10、skipped 0、errors 0，37.825 秒，3.768 MiB/s |
+| SMB 同源重复执行 | PASS | planned 10、copied 0、verified-existing 10、skipped 10、errors 0，诊断补测亦通过 |
+| SMB 执行中途取消 | PASS | planned 50、copied 1、verified 1、skipped 0、errors 0，cancelled=true，正式位置为 1 个已校验文件 |
+| SMB 取消后续导 | PASS（API 与 manifest） | planned 50、copied 49、verified-existing 1、skipped 1、errors 0，最终 50 文件 verified，manifest complete、catalog_complete=true，无重复与正式位置半截文件 |
+| SMB 附加时间戳保持检查 | **FAIL / 待查** | 续导后先前已完成的 1 个 JPEG 的 mtime、ctime 改变，size、device、inode、mode 保持一致，根因未定 |
+
+SMB 计数采用产品 API 与 schema 2 manifest，目标限定于 `CETACEA-SMB-Test-20261112`。
+首轮重复执行的附加元数据相等断言失败，缺少比较前快照，具体差异无法还原。
+诊断补测保存扫描前后与执行后快照，全部字段差值为空。续导的附加时间戳检查再次失败，
+已有 before/after 证据，作为待查局限保留。中途取消和最终续导检查均未发现 `.cetacea-copy` 残留。
+本机补测证据归档为 `Cetacea-Release-20261112/evidence/smb-20261112/SMB-RESULTS-20261112.md`。
+
+本轮生成的 legacy/Ingesto 合同对照为 23 个向量一致，参照为本轮 legacy 执行器，原始冻结 golden 的两项 FAIL 继续保留。
+首包漏打包 macOS RAW 与 USB 原生组件已在最终 r2 包中修复，两个 arm64 helper
+均存在且各自的 `codesign` 校验通过，修复与构建回归已提交至 importer PR #3，状态为未合并。
+[导片助手修复 PR #3](https://github.com/wj3529805-netizen/cetacea-photo-importer/pull/3)。
+
+本次在 Mac 的 Python 3.14.8（用户指定 `.venv-20261112`）复跑全量自动化，
+最终为 **396 passed、4 skipped，60.00 秒**，退出码 0。
+前次开发全量为 396 passed、4 skipped，55.02 秒，相较基线新增 19 项测试，定向回归为 78 passed。
+本次首轮为 395 passed、1 failed、4 skipped，R4 合成拔卡测试未捕获移除时的部分文件，
+返回 `FAIL_UNVERIFIED_INTERRUPTION`。该项单独复跑 1 passed 后，全量复跑通过，原失败证据保留。
+本机复跑日志为 `smb-20261112/harness-pytest*.{stdout.log,stderr.log,result.json}`，
+失败历史见 [已知风险](KNOWN_RISKS.md#2026-11-12-验收文档补结果复跑)。
 全量命令为：
 
 ```sh
@@ -52,7 +93,7 @@ env -u DEEPSEEK_API_KEY -u CETACEA_REALMODEL -u CETACEA_HARNESS_DIR \
 4 个跳过项为收集阶段的模块级跳过，与基线相同：真实模型相关模块未启用，
 以及缺少 Harness 依赖的相关模块；未调用真实模型。
 已有 LR 批量登记的真实历史不替代真实崩溃恢复验收，
-fake MCP 通过也不证明 SMB/NAS、Windows 或导片助手打包 / 公证通过。
+SMB/NAS 与导片助手结果采用上表对应实测记录，Windows 仍未执行。
 
 ## NOT_COVERED / 局限（原 2026-11-03 范围；新日常结果见上节）
 
