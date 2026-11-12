@@ -151,3 +151,17 @@ Linux validation: full suite on the Linux box passed (128 passed, 4 skipped). Mo
 ## R5 隐私残留 — 2026-11-03
 
 当前树已脱敏，但公开仓库的 Git 历史仍含原始标识，未重写。harness UUID、卷名、项目文件夹名，以及历史旧样片的 SHA、第三方版权文字和相机序列号仍保留；新样片内嵌机身和镜头序列号经所有者同意公开。所有者已决定保留这些标识并确定样片许可，见 [最终验收](FINAL_ACCEPTANCE.md) 和 [样片许可](../samples/LICENSE.txt)。
+
+## 日常 Lightroom 登记入口 — 2026-11-12
+
+首轮新增入口测试为 **3 failed、11 passed**：持久化 fake MCP 在主线程创建 SQLite
+连接，而 MCP SDK 在 worker thread 调用同步工具，触发 `sqlite3.ProgrammingError`。
+已将该 MOCK 连接显式允许跨线程使用，并通过锁串行访问；保留原有恢复、去重和守卫断言，
+没有弱化测试。修正后定向回归 **78 passed**；最终全量结果见
+[2026-11-12 验收](FINAL_ACCEPTANCE.md)。
+
+崩溃恢复自动化使用真实 stdio MCP 子进程与持久化 MOCK catalog，在第二批写入部分记录后
+`os._exit(86)`，重开子进程续登记；不代表真实 Lightroom 的事务提交或回滚行为。
+真实 Lightroom 写入中途崩溃、SMB/NAS 非生产共享仍未在本任务验证。
+日常入口不重复导片助手的复制或 SHA-256 字节验证；只读扫描导入目录并核对 catalog
+精确路径登记。报告含本地绝对路径，权限为当前用户读写，不应随公开仓库提交。

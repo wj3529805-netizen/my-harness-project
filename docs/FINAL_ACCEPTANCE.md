@@ -21,9 +21,40 @@ R3 214716 的 HE 帧是 DSC_9725.NEF；其[清点](../evidence/mac-r3/run-202611
 
 ## R6：真实 Lightroom 下的 R3/R4
 
-R3+LR 已准备，尚未在 Mac 运行，状态 **NOT_RUN**；R4+LR 已推迟，状态 **NOT_RUN**。见 [R6 手册](MAC_R6_RUNBOOK.md)。
+截至 2026-11-03 的原验收记录：R3+LR 已准备，尚未在 Mac 运行，状态 **NOT_RUN**；R4+LR 已推迟，状态 **NOT_RUN**。见 [R6 手册](MAC_R6_RUNBOOK.md)。2026-11-12 日常范围的更新见下一节。
 
-## NOT_COVERED / 局限
+## 2026-11-12 日常可用验收
+
+日常入口与操作步骤见 [日常流程：导片助手导入 → 一条命令登记](LIGHTROOM_BATCH.md#日常流程导片助手导入--一条命令登记)。
+以下真实 LR 历史来自晶确认的 2026-11-10 正式登记结果；本次开发未重新访问正式 catalog，
+未启动、退出或操作 Lightroom，未修改 LR Modules、偏好或现有 XMP/ACR。
+
+| 项目 | 结果 | 验收范围与限制 |
+| --- | --- | --- |
+| R6 真实 LR 批量登记 | PASS（2026-11-10 已完成） | 在正式 catalog 完成 2 个客户项目，共 755 张 RAW 全部登记、无重复；仅添加精确路径，不披露客户名或客户目录 |
+| R6 中途崩溃恢复：自动化 | **PASS（fake MCP）** | 30 张、每批 10 张；第 2 批写入 4 张后 fake MCP 进程强退，首次失败记录未完成批；重跑为 14 existing + 16 added，最终 30 张各一条、无重复。此项仅代表自动化模拟 |
+| R6 中途崩溃恢复：真实 LR | **SKIPPED** | 晶正在使用 LR，需另约时段在隔离测试 catalog 跑 |
+| SMB/NAS 目标 | **SKIPPED** | 无非生产测试共享，需晶指定 |
+| Windows | 不在 Mac 范围内 | 本次未执行 Windows 验收 |
+| 导片助手打包 / 公证 | 待补 | 保留下面占位，另行补充结果 |
+
+<!-- importer-results -->
+
+本次在 Mac 的 Python 3.14.8（用户指定 `.venv-20261112`）运行全量自动化：
+**396 passed、4 skipped，55.02 秒**；相较基线新增 19 项测试，定向回归为 **78 passed**。
+全量命令为：
+
+```sh
+env -u DEEPSEEK_API_KEY -u CETACEA_REALMODEL -u CETACEA_HARNESS_DIR \
+  .venv-20261112/bin/python -m pytest -q
+```
+
+4 个跳过项为收集阶段的模块级跳过，与基线相同：真实模型相关模块未启用，
+以及缺少 Harness 依赖的相关模块；未调用真实模型。
+已有 LR 批量登记的真实历史不替代真实崩溃恢复验收，
+fake MCP 通过也不证明 SMB/NAS、Windows 或导片助手打包 / 公证通过。
+
+## NOT_COVERED / 局限（原 2026-11-03 范围；新日常结果见上节）
 
 - R3 吞吐量只有 55 张冷读的约 **97 MB/s** 可作为速度数据。45 张的 788 MB/s 和 9 张的 758 MB/s 按缓存已热的重复读取假设处理，**不能作为速度证据**；并未验证缓存状态。
 - R3 仅运行 ingest；R3 和 R4 均未运行 Lightroom，无论 MOCK 还是真实版本。R2 文件系统检查中的 Lightroom 是明确标记的 MOCK，真实 Lightroom 冒烟独立执行。
