@@ -1,5 +1,11 @@
 # Lightroom 批量原地登记
 
+实验性原生文件夹导入另见 [LR_FAST_ADD_RESEARCH.md](LR_FAST_ADD_RESEARCH.md)：
+`lr_native_add.py` / `bench_lr_add.py --mode native` 使用上次导入设置，具有 Copy/Move、
+预设等风险，必须通过独立设置守卫；`--ui` 是人工点击回退。准备器同时注册这三个独立动作
+`native_add_folder`、`native_add_folder_ui`、`catalog_paths_present`（manifest `native_contract=1`），
+不会改变下述 `import_photos_batch` 合同，Workbench 不自动切换到原生导入。
+
 `RealLightroomMcpAdapter.register(files, *, before_batch=None)` 使用本仓新增的
 `import_photos_batch` API。默认每批 **100** 张，`batch_size` 可设为整数 **1–200**。
 一次 `register()` 共用一个 stdio MCP 子进程和会话；只在瞬断后重建连接。
@@ -202,3 +208,55 @@ Lightroom SDK 的 `findPhotoByPath` 必须在写访问之外调用，因此插�
 历史批量 API 开发 PR 要求（不适用于本次日常入口 PR）：以 `cursor/unpaired-photo-ingest-fec0` 为 base，仅推送
 `codex/lr-batch-register`；不要把本次提交直接推到 PR #1 分支，不合并 PR。
 本次日常入口 PR 使用 `codex/daily-import-lr-register-20261112`，base 为 `phase1`，不合并。
+
+## 2026-11-15：可选计时与实验 fast
+
+[研究与计时说明](LR_FAST_ADD_RESEARCH.md)区分已确认的重复桥启动成本与尚未定位的约
+120 秒间隔；本轮只有离线 MOCK 测试，未连接 Lightroom。默认日常行为仍是每批会话、
+每批读回、失败停止。`--profile` 才传 Lua 计时参数；`--fast` 才启用一次会话和末尾
+批量读回，默认仍 100 张，上限仍 200。没有新增 1000 张事务或全库扫描。
+末尾读回前每批响应均属未确认；断连停止后保守报告，恢复后重跑仍按路径去重。
+
+编排者在普通登录终端、当前克隆根目录运行以下命令。源码和报告路径占位符必须替换；
+准备器只复制本地固定版本依赖，不联网，拒绝覆盖已有 `.lightroom-runtime/batch`。
+如已有旧副本，应先由编排者按自己的保留策略安排新的工作树/归档，不能原地覆盖。
+准备后的 manifest 须含 `profile_contract: 1`，以免新 Python 向旧桥发送未知参数。
+本阶段不执行插件管理器或其它 Lightroom GUI 操作；配套插件启用由编排者另行安排。
+
+```sh
+.venv/bin/python scripts/mac/prepare_lightroom_batch.py \
+  --source-node-modules /absolute/path/to/reviewed-node_modules
+
+export CETACEA_BRIDGE_HOME="$HOME"
+export LIGHTROOM_MCP_TOOLSETS=develop
+export PYTHONDONTWRITEBYTECODE=1
+mkdir -p acceptance-data
+
+# 默认 dry-run，不连接 Lightroom，不检查当前 catalog。
+.venv/bin/python scripts/mac/bench_lr_add.py \
+  --catalog /absolute/path/to/Test-Baseline.lrcat \
+  --folder /absolute/path/to/imported-project \
+  --mode baseline --batch-size 100 --profile \
+  --report "$PWD/acceptance-data/lr-baseline-plan.json"
+
+# 人工打开独立空 TEST catalog 后执行；必须位于 ~/Pictures/Lightroom 之外。
+.venv/bin/python scripts/mac/bench_lr_add.py \
+  --catalog /absolute/path/to/Test-Baseline.lrcat \
+  --folder /absolute/path/to/imported-project \
+  --mode baseline --batch-size 100 --profile --execute \
+  --report "$PWD/acceptance-data/lr-baseline-profile.json"
+
+# 人工切换到另一份独立空 TEST catalog，保持同一组已导入文件。
+.venv/bin/python scripts/mac/bench_lr_add.py \
+  --catalog /absolute/path/to/Test-Fast.lrcat \
+  --folder /absolute/path/to/imported-project \
+  --mode fast --batch-size 100 --profile --execute \
+  --report "$PWD/acceptance-data/lr-fast-profile.json"
+```
+
+再使用另一份空测试 catalog 测 `--mode fast --batch-size 200`。
+同一 catalog 直接重跑测的是 existing，不能当作另一种模式的新增速度。
+所有报告新建且为 0600，不覆盖；报告位于输入目录外。
+脚本复用既有 catalog_guard，每批写前核对唯一打开的 catalog；fast 末尾读回前再次核对。
+`wall_seconds`、`seconds_per_photo`、counts、`profile.events`、各批 `wall_ms` 均写入同一 JSON。
+没有附加 SHA-256 扫描，也不把 catalog 路径读回称为字节验证。

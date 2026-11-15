@@ -216,3 +216,67 @@ mtime、ctime 改变，size、device、inode、mode 一致，根因待查。
 - 指定分支 `feat/plan-date-filter` 上按 12 个明确路径执行 `git add -- ...`
   被沙箱拒绝：`.git/index.lock: Operation not permitted`（退出码 128）。
   未绕过 `.git` 只读限制，未创建提交、未切换分支、未推送。
+
+## Lightroom fast Add 研究/原型 — 2026-11-15
+
+- 本轮未启动、退出、连接或脚本控制 Lightroom，未访问照片盘、Adobe 用户目录或 catalog
+  内容。`--fast` 为 opt-in；没有真实加速比或原生 Import Add 等效性能的结论。
+  克隆没有 `.lightroom-runtime`，只能核实 preparer 的 timeout 注册补丁，不能核实上游
+  dispatcher 的实际 timeout 常量与回复链。约 120 秒热点必须等待编排者采集 Lua/Python profile。
+- 首轮聚焦：`.venv/bin/python -m pytest -q tests/test_lightroom_batch.py tests/test_lightroom_batch_plugin.py tests/test_register_import_to_lr.py tests/test_bench_lr_add.py`
+  → **86 passed in 12.95s**，原始输出 `/tmp/cetacea-fast-add-focused.log`。
+- 首轮全量：`env -u DEEPSEEK_API_KEY -u CETACEA_REALMODEL PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q -rs`
+  → **455 passed、4 skipped、10 errors in 55.53s**，退出码 1，
+  `/tmp/cetacea-fast-add-full.log`。10 errors 均是既有 `tests/test_import_desk.py` 的 HTTP
+  fixture 在 `socket.bind` 遭沙箱拒绝（`PermissionError: [Errno 1] Operation not permitted`），
+  与日期过滤阶段记录的限制一致。4 skipped 为既有 Harness 依赖缺失和真实模型 opt-in。
+  未改动或弱化这些测试，不能宣称全套通过。
+- fast 的确认延后到末尾；断连/最终读回失败时，即使前面的 batch 已实际提交，仍可能全部
+  计为未确认失败。恢复后只在操作员确认同一 catalog 后重跑；不盲重试、不主动激活 LR。
+  长事务仍限制为 200 张；SDK 内部元数据/预览工作不能仅靠不调用 render API 来排除。
+- 研究文档遵守禁止联网约束，官方来源链接为后续核验入口，本轮没有联网确认当前 SDK/API
+  页面。Lua 的 `LrDate.currentTime` 只经过 MOCK harness，并非真实 SDK 运行验收。
+- 第二次全量（补充计时字段白名单测试后）：**2 failed、454 passed、4 skipped、10 errors
+  in 52.88s**，`/tmp/cetacea-fast-add-final-full.log`。2 failed 为新增 benchmark
+  安全断言捕获：catalog 守卫拒绝后，从未启动的连接仍错误记录 `bridge_close` 计时事件。
+  已改为仅对启动过的会话记录关闭事件，保留原断言；不影响 catalog 写入门槛。
+- 修正后最终全量：同一命令 → **457 passed、4 skipped、10 errors in 53.71s**，
+  退出码 1，`/tmp/cetacea-fast-add-final-r2-full.log`。没有测试失败；10 errors 仍全部是上述
+  HTTP fixture 沙箱 bind 权限错误。Lua harness 实际执行，没有因缺 Lua 而跳过。
+  新增 benchmark 对符号链接 catalog 别名也拒绝（仅 lstat，不打开 catalog 内容）。
+- 最终全量后按用户要求执行 `git add -A`，退出码 128：
+  `.git/index.lock: Operation not permitted`。沙箱将 `.git` 设为只读；未绕过限制，
+  改动保留未暂存，未创建提交，未推送。预定唯一提交信息为
+  `research(lr): profile and prototype fast in-place Lightroom add`。
+
+## Lightroom native import trigger 原型 — 2026-11-15
+
+- 原生 SDK trigger 成为主要候选；本轮只实现和离线验证，没有运行真实 Lightroom、读取真实
+  LR 偏好、访问 Adobe 用户数据/照片盘或打开 `.lrcat`，也没有真实速度结论。
+  编排者提供的 `triggerImportFromPathWithPreviousSettings` / `triggerImportUI` 参考未联网复核；
+  项目继续禁止网络调用。Lua harness 的 async/write-lock 断言不等于真实 SDK 验收。
+- `previous settings` 是否精确映射 macOS `AgImport_*` 偏好仍 **UNVERIFIED**；检查后的竞态、
+  偏好缓存及版本差异不能靠原型消除。DNG 转换偏好键 **UNKNOWN**，故必须明确传
+  `--i-checked-import-settings`，表示人工已核对原生界面；它不覆盖已知不安全偏好的拒绝。
+  不猜测键，不自动修改设置，真实测试须用隔离输入和 TEST catalog。
+- native 导入整个文件夹而非 expected 列表；扩展名保守超集/递归预检不能保证未来 LR 格式
+  或扫描后的文件夹变化。额外候选默认列出并拒绝，`--allow-extra` 才放行；拒绝符号链接。
+  隐藏/排除目录不进入期望 RAW，但其可能被原生导入的文件进入额外候选检查。
+- 触发成功不是完成。只有全部期望路径查询及末尾快照通过才记 COMPLETED；后台预览/额外
+  文件仍可能继续。超时不取消引擎，不盲重发；轮询预算不包括最终全 catalog 快照和关闭。
+  初始/末尾 `getAllPhotos` 快照可能昂贵，报告总耗时包含它们；`native_wall_seconds` 不包含。
+  `extra_adds` 是目录路径的观察增量，不能排除其它并发导入或证明引擎已结束。
+- 第一轮聚焦：**125 passed in 7.75s**，`/tmp/cetacea-native-add-focused.log`；
+  调整 deadline 请求预算与最终快照检查后聚焦：**125 passed in 7.71s**，
+  `/tmp/cetacea-native-add-focused-r2.log`。均使用 fixture plist、MOCK MCP 和 Lua harness。
+- 最终完整离线命令：
+  `env -u DEEPSEEK_API_KEY -u CETACEA_REALMODEL PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q -rs`
+  → **500 passed、4 skipped、10 errors in 52.06s**，退出码 **1**，
+  原始输出 `/tmp/cetacea-native-add-full.log`。
+  10 errors 全部仍为 `tests/test_import_desk.py` HTTP fixture 的
+  `PermissionError: [Errno 1] Operation not permitted`（`socket.bind` 沙箱限制）。
+  4 skipped 为既有 Harness 依赖未安装（2）和真实模型 opt-in（2）。
+  无测试失败；未删除、跳过或弱化上述 HTTP 测试，不能宣称全套通过。
+- 按用户指定尝试 `git add -A && git commit -m "research(lr): profile, fast batch session, native import trigger prototype"`：
+  `git add -A` 即因 `.git/index.lock: Operation not permitted` 退出 **128**，commit 未执行。
+  `.git` 在当前沙箱内只读；没有绕过限制，之前及本轮改动均保留未暂存，没有提交或推送。

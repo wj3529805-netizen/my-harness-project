@@ -404,3 +404,75 @@ def test_latest_reconciliation_clears_no_longer_present_confirmation(tmp_path, b
     assert attempts == [[str(f.abs_path) for f in files], [str(files[1].abs_path)], [str(f.abs_path) for f in files]]
     assert [name for name, _ in bridge.calls].count('get_photo_metadata') == 2
     assert bridge.present == set()
+
+
+@pytest.mark.parametrize('count,size', [(25, 10), (201, 200)])
+def test_fast_session_reuse_deferred_readback_and_rerun(tmp_path, bridge, count, size):
+    files = photos(tmp_path, count)
+    adapter = RealLightroomMcpAdapter(test_command=['MOCK'], batch_size=size)
+    guards, progress = [], []
+    results = adapter.register_fast(files, before_batch=lambda: guards.append(True), on_batch=progress.append)
+    assert all(r.status == 'added' and not r.error for r in results)
+    names = [name for name, _ in bridge.calls]
+    batches = math.ceil(count / size)
+    assert names == ['import_photos_batch'] * batches + ['get_photo_metadata'] * math.ceil(count / 100)
+    assert bridge.processes == bridge.closed_sessions == 1
+    assert len(guards) == batches + 1
+    assert len(progress) == batches and all(p['acknowledged'] and p['wall_ms'] >= 0 for p in progress)
+    repeated = adapter.register_fast(files)
+    assert all(r.status == 'existing' and not r.error for r in repeated)
+    assert len(bridge.additions) == count
+
+
+def test_fast_dropped_reply_fail_stop_no_blind_retry(tmp_path, bridge):
+    files = photos(tmp_path, 25)
+    bridge.lose_import_reply = True
+    adapter = RealLightroomMcpAdapter(test_command=['MOCK'], batch_size=10)
+    results = adapter.register_fast(files)
+    assert all(r.error and r.status == 'failed' for r in results)
+    assert len(adapter.fast_batches) == 1
+    assert [n for n, _ in bridge.calls] == ['import_photos_batch']
+    assert adapter.retry_events == []
+    repeated = adapter.register_fast(files)
+    assert [r.status for r in repeated] == ['existing'] * 10 + ['added'] * 15
+    assert len(bridge.additions) == 25
+
+
+def test_fast_partial_failure_stops_next_batch(tmp_path, bridge):
+    files = photos(tmp_path, 25)
+    bridge.failed.add(str(files[1].abs_path))
+    adapter = RealLightroomMcpAdapter(test_command=['MOCK'], batch_size=10)
+    results = adapter.register_fast(files)
+    assert len(adapter.fast_batches) == 1
+    assert sum(r.status == 'added' for r in results) == 9
+    assert all(r.error for r in results[10:])
+    assert [n for n, _ in bridge.calls] == ['import_photos_batch', 'get_photo_metadata']
+
+
+def test_fast_catalog_switch_invalidates_deferred_confirmation(tmp_path, bridge):
+    files = photos(tmp_path, 20)
+    adapter = RealLightroomMcpAdapter(test_command=['MOCK'], batch_size=10)
+    def guard():
+        if len(bridge.present) == 20:
+            raise ValueError('MOCK catalog changed before final readback')
+    results = adapter.register_fast(files, before_batch=guard)
+    assert all(r.error and r.status == 'failed' for r in results)
+    assert [n for n, _ in bridge.calls] == ['import_photos_batch'] * 2
+
+
+def test_fast_failed_final_readback_never_confirms_membership(tmp_path, bridge):
+    files = photos(tmp_path, 20)
+    bridge.transform_metadata = lambda response: dict(response, missing=['/wrong.NEF'])
+    adapter = RealLightroomMcpAdapter(test_command=['MOCK'], batch_size=10)
+    assert all(r.error for r in adapter.register_fast(files))
+
+
+def test_profile_timing_whitelist_excludes_arbitrary_payloads():
+    timing = RealLightroomMcpAdapter._safe_timing({
+        'clock': 'private arbitrary payload', 'secret': 'must not be copied',
+        'total_ms': 3.5, 'precheck_ms': float('nan'), 'write_txn_ms': -1,
+        'write_body_ms': True, 'add_ms': [0, 1.5],
+    })
+    assert timing == {'total_ms': 3.5, 'add_ms': [0, 1.5]}
+    assert RealLightroomMcpAdapter._safe_timing(None) is None
+    assert RealLightroomMcpAdapter._safe_timing({'add_ms': ['private']}) == {}

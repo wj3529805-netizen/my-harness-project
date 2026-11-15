@@ -30,12 +30,14 @@ class _McpConnection:
         self.session = None
 
     async def _lifetime(self):
+        started = time.perf_counter()
         try:
             params = StdioServerParameters(command=self.adapter.command[0], args=self.adapter.command[1:],
                                            env=bridge_env(testing=self.adapter.testing))
             async with stdio_client(params) as streams:
                 async with ClientSession(*streams, read_timeout_seconds=self.initial_timeout) as session:
                     await session.initialize()
+                    self.adapter._timed('bridge_spawn_initialize', started)
                     self.session = session
                     self.ready.set_result(None)
                     await self.stop.wait()
@@ -56,9 +58,12 @@ class _McpConnection:
                 if not task.cancelled():
                     raise
 
-    async def _invoke(self, name, arguments):
+    async def _invoke(self, name, arguments, timeout_seconds=None):
         try:
-            timeout = 310 if name in {'import_photos', 'import_photos_batch', 'export_photos'} else 30
+            timeout = 310 if name in {'import_photos', 'import_photos_batch', 'export_photos',
+                                     'native_add_folder', 'native_add_folder_ui', 'catalog_paths_present'} else 30
+            if timeout_seconds is not None:
+                timeout = min(timeout, timeout_seconds)
             if self.task is None:
                 self.initial_timeout = timeout
                 self.ready = asyncio.get_running_loop().create_future()
@@ -80,9 +85,9 @@ class _McpConnection:
                     pass  # Retain the original transport error for retry classification.
             raise
 
-    def call(self, name, arguments):
+    def call(self, name, arguments, timeout_seconds=None):
         try:
-            return self.runner.run(self._invoke(name, arguments))
+            return self.runner.run(self._invoke(name, arguments, timeout_seconds))
         except ExceptionGroup as exc:
             raise RuntimeError(self.adapter._error_summary(exc)) from exc
 
@@ -126,16 +131,20 @@ def bridge_env(environ=None, *, testing=False):
 
 
 class RealLightroomMcpAdapter(LightroomAdapter):
-    ALLOWED_TOOLS = frozenset({'import_photos', 'import_photos_batch', 'get_photo_metadata', 'apply_develop_preset', 'export_photos', 'list_develop_presets', 'search_photos'})
+    ALLOWED_TOOLS = frozenset({'import_photos', 'import_photos_batch', 'get_photo_metadata', 'apply_develop_preset', 'export_photos', 'list_develop_presets', 'search_photos',
+                               'native_add_folder', 'native_add_folder_ui', 'catalog_paths_present'})
     supports_batch_hook = True
 
-    def __init__(self, command=None, test_command=None, backoff_schedule=None, max_retry_sleep=180, sleep=time.sleep, activate_hook=None, batch_size=100):
+    def __init__(self, command=None, test_command=None, backoff_schedule=None, max_retry_sleep=180, sleep=time.sleep, activate_hook=None, batch_size=100, profile=False):
         if sys.platform != 'darwin' and not (test_command or command):
             raise RuntimeError('requires macOS Lightroom Classic; explicit test command required')
         self.command = test_command or command or ['npx', '-y', '@mskalski/lightroom-mcp@0.26.0']
         self.testing = bool(test_command) or sys.platform != 'darwin'
         if type(batch_size) is not int or not 1 <= batch_size <= 200:
             raise ValueError('batch_size must be an integer between 1 and 200')
+        self.profile = profile
+        self.profile_events = []
+        self.fast_batches = []
         self.batch_size = batch_size
         self._active_connection = None
         schedule = list([2, 4, 8, 16, 30, 30, 30, 60] if backoff_schedule is None else backoff_schedule)
@@ -191,7 +200,10 @@ class RealLightroomMcpAdapter(LightroomAdapter):
             raise RuntimeError(str(payload))
         return payload
 
-    def call_tool(self, name, arguments):
+    def call_tool(self, name, arguments, *, timeout_seconds=None):
+        if timeout_seconds is not None and (type(timeout_seconds) not in (int, float)
+                or not math.isfinite(timeout_seconds) or timeout_seconds <= 0):
+            raise ValueError('Tool timeout must be finite and positive')
         if name not in self.ALLOWED_TOOLS:
             raise ValueError('Forbidden Lightroom tool: ' + name)
         if name == 'export_photos' and arguments.get('on_existing') != 'skip':
@@ -200,12 +212,69 @@ class RealLightroomMcpAdapter(LightroomAdapter):
             raise ValueError('copy_to forbidden')
         if name == 'import_photos_batch':
             paths = arguments.get('source_paths')
-            if set(arguments) != {'source_paths'} or not isinstance(paths, list) or not 1 <= len(paths) <= 200:
+            if (not {'source_paths'} <= set(arguments) <= {'source_paths', 'profile'}
+                    or ('profile' in arguments and type(arguments['profile']) is not bool)
+                    or not isinstance(paths, list) or not 1 <= len(paths) <= 200):
                 raise ValueError('batch import accepts only 1..200 source_paths')
             if any(not isinstance(p, str) or not Path(p).is_absolute() or '\x00' in p for p in paths) or len(set(paths)) != len(paths):
                 raise ValueError('batch source_paths must be unique absolute file paths')
-        with self._connection():
-            return self._active_connection.call(name, arguments)
+        if name in {'native_add_folder', 'native_add_folder_ui', 'catalog_paths_present'}:
+            native = name != 'catalog_paths_present'
+            key = 'expected_files' if native else 'paths'
+            required = {key, 'folder_path'} if native else {key}
+            paths = arguments.get(key)
+            limit = 2000 if native else 500
+            def normalized(path):
+                return (isinstance(path, str) and path.startswith('/') and '\x00' not in path
+                        and str(Path(path)) == path and '..' not in Path(path).parts)
+            if (not required <= set(arguments) <= {key, 'folder_path'}
+                    or not isinstance(paths, list) or not 1 <= len(paths) <= limit
+                    or any(not normalized(path) for path in paths) or len(set(paths)) != len(paths)):
+                raise ValueError('Invalid native path arguments')
+            if 'folder_path' in arguments:
+                folder = arguments['folder_path']
+                if not normalized(folder) or (native and any(
+                        not Path(path).is_relative_to(folder) or path == folder for path in paths)):
+                    raise ValueError('Invalid native folder containment')
+        started = time.perf_counter()
+        payload, error = None, None
+        try:
+            with self._connection():
+                payload = (self._active_connection.call(name, arguments) if timeout_seconds is None else
+                           self._active_connection.call(name, arguments, timeout_seconds))
+                return payload
+        except Exception as exc:
+            error = type(exc).__name__
+            raise
+        finally:
+            self._timed('tool_call', started, tool=name,
+                        count=len(arguments.get('source_paths', arguments.get('photo_ids',
+                                  arguments.get('expected_files', arguments.get('paths', []))))),
+                        error_class=error,
+                        lua_timing=self._safe_timing(payload.get('timing')) if payload and self.profile else None)
+
+    @staticmethod
+    def _safe_timing(value):
+        # Profiling must not copy arbitrary bridge payloads into local reports.
+        if not isinstance(value, dict):
+            return None
+        valid = lambda n: type(n) in (int, float) and math.isfinite(n) and n >= 0
+        result = {key: value[key] for key in ('total_ms', 'precheck_ms', 'write_txn_ms', 'write_body_ms')
+                  if key in value and valid(value[key])}
+        if value.get('clock') in ('LrDate.currentTime', 'MOCK'):
+            result['clock'] = value['clock']
+        adds = value.get('add_ms')
+        if isinstance(adds, list) and len(adds) <= 200 and all(valid(n) for n in adds):
+            result['add_ms'] = list(adds)
+        return result
+
+    def _timed(self, phase, started, **details):
+        if self.profile:
+            self.profile_events.append(dict(phase=phase, elapsed_ms=(time.perf_counter() - started) * 1000,
+                                            **details))
+
+    def _batch_arguments(self, paths):
+        return {'source_paths': paths, **({'profile': True} if self.profile else {})}
 
     @contextmanager
     def _connection(self):
@@ -217,7 +286,13 @@ class RealLightroomMcpAdapter(LightroomAdapter):
             yield
         finally:
             self._active_connection = None
-            connection.close()
+            started = time.perf_counter()
+            opened = connection.task is not None
+            try:
+                connection.close()
+            finally:
+                if opened:
+                    self._timed('bridge_close', started)
 
     @staticmethod
     def _require_success(result):
@@ -310,6 +385,13 @@ class RealLightroomMcpAdapter(LightroomAdapter):
         return files[0]
 
     def _lookup_many(self, paths):
+        started = time.perf_counter()
+        try:
+            return self._lookup_many_impl(paths)
+        finally:
+            self._timed('readback', started, count=len(paths))
+
+    def _lookup_many_impl(self, paths):
         """Check catalog membership in bounded metadata calls, never per photo."""
         present = set()
         for start in range(0, len(paths), 100):
@@ -409,7 +491,7 @@ class RealLightroomMcpAdapter(LightroomAdapter):
 
                     def operation():
                         guard()
-                        imported = self.call_tool('import_photos_batch', {'source_paths': pending_paths})
+                        imported = self.call_tool('import_photos_batch', self._batch_arguments(pending_paths))
                         outcomes.update(self._import_outcomes(imported, pending_paths))
                         present = self._lookup_many(batch_paths)
                         for path in batch_paths:
@@ -442,6 +524,60 @@ class RealLightroomMcpAdapter(LightroomAdapter):
         except Exception as exc:
             results.extend(RegisterResult(f.asset_id, error=self._error_summary(exc), status='failed') for f in files[len(results):])
         return results
+
+    def register_fast(self, files, *, before_batch=None, on_batch=None):
+        """Experimental fail-stop add; one session, deferred bounded readback.
+
+        No retries or activation. A lost reply remains unconfirmed until an
+        operator reruns. Only final identity readback can publish success.
+        on_batch receives telemetry only, never confirmed membership.
+        """
+        files = list(files)
+        self.fast_batches = []
+        paths = [str(f.abs_path) for f in files]
+        if (len({f.asset_id for f in files}) != len(files) or len(set(paths)) != len(paths)
+                or any(not Path(path).is_absolute() or '\x00' in path for path in paths)):
+            return [RegisterResult(f.asset_id, error='invalid unique absolute paths', status='failed') for f in files]
+        outcomes, present = {}, set()
+        failure = 'not attempted'
+        try:
+            with self._connection():
+                for start in range(0, len(files), self.batch_size):
+                    chunk = paths[start:start + self.batch_size]
+                    started = time.perf_counter()
+                    record = dict(index=len(self.fast_batches) + 1, size=len(chunk))
+                    self.fast_batches.append(record)
+                    try:
+                        if before_batch:
+                            before_batch()
+                        response = self.call_tool('import_photos_batch', self._batch_arguments(chunk))
+                        rows = self._import_outcomes(response, chunk)
+                        outcomes.update(rows)
+                        record['acknowledged'] = True
+                        if any(row['status'] == 'failed' for row in rows.values()):
+                            failure = 'batch reported failed paths'
+                            break
+                    finally:
+                        record['wall_ms'] = (time.perf_counter() - started) * 1000
+                        if on_batch:
+                            on_batch(dict(record))
+                # Guard also fences deferred readback against a catalog switch.
+                if outcomes:
+                    if before_batch:
+                        before_batch()
+                    started = time.perf_counter()
+                    try:
+                        present = self._lookup_many(list(outcomes))
+                    finally:
+                        self._timed('final_readback', started)
+        except Exception as exc:
+            failure = self._error_summary(exc)
+            # If any readback chunk fails, publish no partially verified set.
+            present = set()
+        return [RegisterResult(f.asset_id, path if path in present and outcomes[path]['status'] != 'failed' else None,
+                               status=outcomes[path]['status'] if path in present else 'failed',
+                               error=(outcomes[path].get('error') if path in present else failure))
+                for f, path in zip(files, paths)]
 
     def apply_preset(self, photo_refs, preset):
         results = []
