@@ -135,3 +135,60 @@ def test_mcp_individual_stages_use_approved_runner(env):
             await call(s, 'lightroom_apply_preset', {'task_id': t['task_id'], 'preset_id': 'unknown'}, 'NOT_FOUND')
             assert (await call(s, 'photo_verify_preview', {'task_id': t['task_id']}))['status'] == 'OK'
     run(scenario())
+
+
+def test_capture_filter_mcp_plan_scan_defaults_and_validation(env):
+    from test_capture_filter import photo, mtime_file, snapshot
+    w, card = env
+    photo(card/'one.NEF', '2026:11:14 23:59:59')
+    photo(card/'two.NEF', '2026:11:15 00:00:00')
+    mtime_file(card/'fallback', '2026-11-14T15:59:59Z')
+    w.add_source('default', card, capture_filter={'date': ['2026-11-14']})
+    before = snapshot(card)
+    request = dict(order_id='order', photographer_id='p', source_id='card', stages=['ingest'])
+    async def scenario():
+        async with client(w.home) as s:
+            listing = await s.list_tools()
+            for tool in listing.tools:
+                if tool.name in {'photo_plan_import', 'photo_scan_source'}:
+                    props = tool.input_schema['properties']
+                    assert {'dates', 'time_from', 'time_to'} <= props.keys()
+                    assert 'tz' not in props and 'capture_filter' not in props
+            preview = await call(s, 'photo_scan_source', {'source_id': 'card', 'dates': ['2026-11-14']})
+            assert preview['capture_filter']['matched'] == 2
+            assert preview['capture_filter']['mtime_fallback_matched'] == 1
+            one = await call(s, 'photo_plan_import', {**request, 'dates': ['2026-11-14']})
+            assert one['plan']['capture_filter'] == preview['capture_filter']
+            two = await call(s, 'photo_plan_import', {**request, 'dates': ['2026-11-15'], 'time_from': '2026-11-15', 'time_to': '2026-11-16'})
+            assert two['plan']['capture_filter']['matched'] == 1
+            assert two['batch_id'] != one['batch_id']
+            assert two['idempotency_key'] != one['idempotency_key']
+            default = await call(s, 'photo_plan_import', {**request, 'source_id': 'default'})
+            assert default['plan']['capture_filter']['spec']['date'] == ['2026-11-14']
+            override = await call(s, 'photo_plan_import', {**request, 'source_id': 'default', 'dates': ['2026-11-15']})
+            assert override['plan']['capture_filter']['matched'] == 1
+            for args in ({'dates': ['2026-02-30']}, {'dates': []}, {'dates': ['../escape']},
+                         {'time_from': '2026-11-15', 'time_to': '2026-11-14'}):
+                await call(s, 'photo_plan_import', {**request, **args}, error='INVALID_ARGUMENT')
+                await call(s, 'photo_scan_source', {'source_id': 'card', **args}, error='INVALID_ARGUMENT')
+            empty = await call(s, 'photo_scan_source', {'source_id': 'card', 'dates': ['2026-11-16']})
+            assert empty['capture_filter']['matched'] == 0
+            await call(s, 'photo_plan_import', {**request, 'dates': ['2026-11-16']}, error='INVALID_ARGUMENT')
+            await call(s, 'photo_scan_source', {'source_id': '../card', 'dates': ['2026-11-14']}, error='INVALID_ARGUMENT')
+    run(scenario())
+    assert snapshot(card) == before
+
+
+def test_capture_filter_mcp_uses_config_timezone(env):
+    from test_capture_filter import mtime_file
+    from cetacea import config
+    w, card = env
+    w.config['capture_timezone'] = 'UTC'
+    config.save(w.home, w.config)
+    mtime_file(card/'fallback', '2026-11-14T16:00:00Z')
+    async def scenario():
+        async with client(w.home) as s:
+            result = await call(s, 'photo_scan_source', {'source_id': 'card', 'dates': ['2026-11-14']})
+            assert result['capture_filter']['spec']['tz'] == 'UTC'
+            assert result['files'][0]['capture_time'] == '2026-11-14T16:00:00+00:00'
+    run(scenario())

@@ -188,3 +188,31 @@ SMB 全量、重复、取消和续导的产品 API 与 manifest 计数均通过�
 mtime、ctime 改变，size、device、inode、mode 一致，根因待查。
 工具计数与该附加检查结果均见 [最终验收](FINAL_ACCEPTANCE.md#2026-11-12-导片助手实测结果)，
 原始失败及 before/after 证据保留在本机 `smb-20261112` 归档。
+
+## 拍摄日期过滤 — 2026-11-15
+
+- 无偏移的相机时间假定为本地 `Asia/Shanghai`（可用 config.json 的
+  `capture_timezone` 或 CLI `--tz` 调整），不校正相机时钟误差。EXIF 有
+  OffsetTimeOriginal 时按其偏移转换。SubSecTimeOriginal 当前忽略。
+- EXIF 优先级为 DateTimeOriginal → 缺失时 DateTimeDigitized → 二者均缺失时
+  IFD0 DateTime。损坏、不支持或超出有界解析范围的元数据返回 None。
+  同目录同主干的伴随文件可继承 RAW/JPEG 的 EXIF；其余退回 mtime。
+  **mtime 可能是复制/下载时间，不一定是拍摄时间**；须检查回退计数和最多
+  50 条复核路径。CR3/RAF 等非 classic-TIFF 格式目前通常走 mtime 回退。
+- 使用 zoneinfo 的本地时间规则；未携带偏移的 DST 重复小时按 Python 默认
+  fold=0 解释，不存在的本地小时不额外校正。需消除歧义时请传带偏移的范围。
+- 本次使用临时目录合成文件与仓库样片验证；未访问 /Volumes、实体相机卡、
+  NAS 或真实 Lightroom，未做整卡吞吐验收。
+- 首轮现有回归 `/tmp/cetacea-datefilter-initial-tests.log`：67 passed、10 errors。
+  10 项均在 import desk 测试 fixture 启动本机 HTTP 服务时被当前沙箱阻止，
+  `socket.bind` 返回 `PermissionError: [Errno 1] Operation not permitted`。
+  未跳过、删除或弱化既有测试；日期专项首轮为 47 passed。
+- 最终全套：`env -u DEEPSEEK_API_KEY -u CETACEA_REALMODEL .venv/bin/python -m pytest -q`
+  → **439 passed、4 skipped、10 errors，49.10 秒，退出码 1**。
+  原始输出 `/tmp/cetacea-datefilter-full-final-tests.log`。10 项仍全部是上述
+  HTTP 服务 fixture 的 `socket.bind` 权限错误；新增日期筛选 51 项及 MCP
+  相关测试通过。4 项为既有 Harness 依赖/真实模型 opt-in 模块跳过。
+  未为规避限制修改 import_desk 或测试；当前环境不能宣称全套通过。
+- 指定分支 `feat/plan-date-filter` 上按 12 个明确路径执行 `git add -- ...`
+  被沙箱拒绝：`.git/index.lock: Operation not permitted`（退出码 128）。
+  未绕过 `.git` 只读限制，未创建提交、未切换分支、未推送。

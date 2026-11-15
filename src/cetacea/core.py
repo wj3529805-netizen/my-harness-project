@@ -12,6 +12,7 @@ from .perms import HUMAN, PermissionDenied, NotApproved
 from .tasks import transition, InvalidTransition
 from .ingest.pathsafe import identifier, disjoint, safe
 from .ingest.scanner import scan
+from .ingest.capture_time import normalize_filter, DEFAULT_TIMEZONE
 from .ingest.copier import CopyEngine, publish_no_overwrite
 from .ingest.manifest import write
 
@@ -42,12 +43,15 @@ class Workbench:
     def _admin(self,action):
         self._call('admin',action)
         if self.principal.actor_type!='human': raise PermissionDenied('human only')
-    def add_source(self,source_id,path,label=None,kind='card'):
+    def add_source(self,source_id,path,label=None,kind='card',capture_filter=None,tz=None):
         self._admin('add_source'); identifier(source_id)
+        spec=self._normalize_capture_filter(capture_filter,tz)
         if kind not in {'card','folder'}: raise ValueError('kind')
         if Path(path).is_symlink() or not Path(path).is_dir(): raise ValueError('source directory required')
         for root in ['library_root','preview_root']: disjoint(path,self.config[root])
-        self.config['sources'][source_id]={'path':str(Path(path).resolve()),'label':label or source_id,'kind':kind}; config.save(self.home,self.config)
+        self.config['sources'][source_id]={'path':str(Path(path).resolve()),'label':label or source_id,'kind':kind}
+        if spec is not None: self.config['sources'][source_id]['capture_filter']=spec
+        config.save(self.home,self.config)
     def list_sources(self): self._call('read','list_sources'); return self.config['sources']
     def add_preset(self,preset_id,label=None,lightroom_uuid=None,lightroom_name=None):
         self._admin('add_preset'); identifier(preset_id)
@@ -63,8 +67,18 @@ class Workbench:
     def list_photographers(self):
         self._call('read','list_photographers')
         with db.connect(self.home) as c: return [dict(r) for r in c.execute('SELECT * FROM photographers')]
-    def scan_source(self,source_id):
-        self._call('read','scan_source'); return scan(self.config['sources'][source_id]['path'])
+    def _normalize_capture_filter(self, spec, tz):
+        zone=tz
+        if zone is None and isinstance(spec,dict): zone=spec.get('tz')
+        if zone is None: zone=self.config.get('capture_timezone',DEFAULT_TIMEZONE)
+        return normalize_filter(spec,zone)
+    def _capture_filter(self, source_id, capture_filter, tz):
+        spec=self.config['sources'][source_id].get('capture_filter') if capture_filter is None else capture_filter
+        return self._normalize_capture_filter(spec,tz)
+    def scan_source(self,source_id,capture_filter=None,tz=None):
+        self._call('read','scan_source')
+        spec=self._capture_filter(source_id,capture_filter,tz)
+        return scan(self.config['sources'][source_id]['path'], capture_filter=spec)
     def _lightroom_snapshot(self, preset_id):
         cfg=self.config.get('preview',{})
         return {'preset':self.config['presets'].get(preset_id), 'export':{'max_edge':cfg.get('max_edge',1600), 'quality':cfg.get('quality',85), 'preview_root':self.config['preview_root'], 'library_root':self.config['library_root']}}
@@ -73,12 +87,23 @@ class Workbench:
         if digest(plan)!=t['plan_digest']: raise PermissionDenied('plan changed after approval')
         if 'lightroom' in plan and plan['lightroom']!=self._lightroom_snapshot(plan['preset_id']):
             raise PermissionDenied('preset/export settings changed after approval')
-    def plan_import(self,order_id,photographer_id,source_id,batch_label=None,preset_id=None,stages=None,scan_result=None):
+    def plan_import(self,order_id,photographer_id,source_id,batch_label=None,preset_id=None,stages=None,scan_result=None,capture_filter=None,tz=None):
         self._call('plan','plan_import'); identifier(order_id); identifier(photographer_id)
         stages=['ingest'] if stages is None else stages
         if not stages or any(s not in {'ingest','lr_register','lr_preset','lr_export','preview_verify'} for s in stages): raise ValueError('stages')
         if preset_id is not None: self.config['presets'][preset_id]
-        result=scan_result or self.scan_source(source_id); batch=identifier(batch_label or 'b_'+result['digest'][:12])
+        spec=self._capture_filter(source_id,capture_filter,tz)
+        if scan_result is not None:
+            result=scan_result
+        elif capture_filter is None and tz is None:
+            result=self.scan_source(source_id)
+        else:
+            result=self.scan_source(source_id,capture_filter=spec if spec is not None else {})
+        if (spec is not None or capture_filter is not None or tz is not None) and result.get('capture_filter', {}).get('spec') != spec:
+            raise ValueError('scan result does not match capture filter')
+        if 'capture_filter' in result and not result['files']:
+            raise ValueError('no files match capture filter')
+        batch=identifier(batch_label or 'b_'+result['digest'][:12])
         if len(batch)>64: raise ValueError('batch too long')
         source=self.config['sources'][source_id]['path']; disjoint(source,self.config['library_root'])
         base=f'{order_id}/{photographer_id}/{batch}'
@@ -86,8 +111,11 @@ class Workbench:
         for f in result['files']:
             item=dict(f); item['dest_rel_path']=f'{base}/{f["rel_path"]}'; safe(self.config['library_root'],item['dest_rel_path'])
             item['asset_id']='ast_'+hashlib.sha256('\0'.join([order_id,photographer_id,batch,f['rel_path'],f['sha256']]).encode()).hexdigest()[:24]; files.append(item)
-        key=digest([order_id,photographer_id,source_id,batch,result['digest'],preset_id,stages])
+        key_parts=[order_id,photographer_id,source_id,batch,result['digest'],preset_id,stages]
+        if 'capture_filter' in result: key_parts.append(result['capture_filter']['spec'])
+        key=digest(key_parts)
         plan={'files':files,'total_bytes':sum(f['size'] for f in files),'destination':base,'stages':stages,'preset_id':preset_id,'scan_digest':result['digest']}
+        if 'capture_filter' in result: plan['capture_filter']=result['capture_filter']
         if any(s.startswith('lr_') or s=='preview_verify' for s in stages): plan['lightroom']=self._lightroom_snapshot(preset_id)
         task_id='tsk_'+uuid.uuid4().hex
         with db.connect(self.home) as c:

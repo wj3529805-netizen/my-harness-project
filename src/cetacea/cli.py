@@ -10,14 +10,20 @@ def main(argv=None):
         q=sub.add_parser(name); q.add_argument('--home',default=argparse.SUPPRESS); q.add_argument('--json',action='store_true',default=argparse.SUPPRESS)
         for arg in args: q.add_argument(arg)
         return q
+    def capture_args(parser):
+        parser.add_argument('--date', dest='dates', action='append', help='Local shooting date YYYY-MM-DD; repeatable')
+        parser.add_argument('--from', dest='time_from', help='Inclusive ISO datetime or date')
+        parser.add_argument('--to', dest='time_to', help='Exclusive ISO datetime or date')
+        parser.add_argument('--tz', help='Capture timezone (default: config capture_timezone / Asia/Shanghai)')
     q=command('init'); q.add_argument('--library',required=True); q.add_argument('--preview',required=True)
     for group, actions in [('source',{'add':['source_id','path'],'list':[]}),('order',{'create':['order_id','title'],'list':[]}),('photographer',{'add':['photographer_id','name']}),('preset',{'add':['preset_id','label']}),('task',{'show':['task_id'],'list':[]})]:
         q=command(group); ss=q.add_subparsers(dest='action',required=True)
         for action,args in actions.items():
             s=ss.add_parser(action); s.add_argument('--json',action='store_true',default=argparse.SUPPRESS); s.add_argument('--home',default=argparse.SUPPRESS)
             for a in args: s.add_argument(a)
-    command('scan',['source_id'])
-    q=command('plan',['order_id','photographer_id','source_id']); q.add_argument('--batch-label'); q.add_argument('--preset-id'); q.add_argument('--stages',nargs='+')
+            if (group,action)==('source','add'): capture_args(s)
+    capture_args(command('scan',['source_id']))
+    q=command('plan',['order_id','photographer_id','source_id']); q.add_argument('--batch-label'); q.add_argument('--preset-id'); q.add_argument('--stages',nargs='+'); capture_args(q)
     command('approve',['task_id','plan_digest'])
     for name in ['execute','cancel','retry']: command(name,['task_id'])
     q=command('assets'); q.add_argument('--task-id'); q.add_argument('--batch-id')
@@ -27,6 +33,9 @@ def main(argv=None):
     command('verify-preview',['task_id'])
     command('report',['task_id'])
     a=p.parse_args(argv); v=vars(a); home=v.pop('home'); output_json=v.pop('json'); cmd=v.pop('command'); action=v.pop('action',None)
+    if 'dates' in v:
+        spec={key:v.pop(arg) for key,arg in [('date','dates'),('from','time_from'),('to','time_to')]}
+        if any(value is not None for value in spec.values()): v['capture_filter']={key:value for key,value in spec.items() if value is not None}
     if not home: p.error('--home or CETACEA_HOME required')
     if cmd=='mcp-serve':
         from .mcp_server import main as serve

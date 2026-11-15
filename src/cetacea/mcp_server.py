@@ -39,6 +39,10 @@ def create_server(home, actor='ai:mcp', scopes=None):
             payload = {'code': code, 'message': str(exc)}
             return CallToolResult(is_error=True, content=[TextContent(type='text', text=json.dumps(payload))], structured_content=payload)
 
+    def capture_args(dates, time_from, time_to):
+        values={'date': dates, 'from': time_from, 'to': time_to}
+        return {key:value for key,value in values.items() if value is not None} if any(value is not None for value in values.values()) else None
+
     @server.tool()
     def photo_list_orders():
         """List registered orders available for planning."""
@@ -48,13 +52,13 @@ def create_server(home, actor='ai:mcp', scopes=None):
         """List registered read-only photo sources."""
         return call('list_sources')
     @server.tool()
-    def photo_scan_source(source_id: str):
-        """Scan a registered source and report its files and digest."""
-        return call('scan_source', source_id=source_id)
+    def photo_scan_source(source_id: str, dates: list[str] | None = None, time_from: str | None = None, time_to: str | None = None):
+        """Read-only scan of a registered source. Optional local dates (YYYY-MM-DD) AND inclusive time_from / exclusive time_to (ISO datetime or date) filter before hashing. Uses configured capture_timezone, EXIF then companion then mtime; reports counts and digest. Omitted filters use the source default."""
+        return call('scan_source', source_id=source_id, capture_filter=capture_args(dates, time_from, time_to))
     @server.tool()
-    def photo_plan_import(order_id: str, photographer_id: str, source_id: str, batch_label: str | None = None, preset_id: str | None = None, stages: list[str] | None = None):
-        """Plan import, Lightroom registration, preset, preview export and verification as one plan by default: ingest, lr_register, lr_preset, lr_export, preview_verify. Provide preset_id, or stages=['ingest'] for ingest only. One human approval is needed; AI cannot approve. Stop at WAITING_APPROVAL and report task_id and plan_digest to the human."""
-        return call('plan_import', order_id=order_id, photographer_id=photographer_id, source_id=source_id, batch_label=batch_label, preset_id=preset_id, stages=stages)
+    def photo_plan_import(order_id: str, photographer_id: str, source_id: str, batch_label: str | None = None, preset_id: str | None = None, stages: list[str] | None = None, dates: list[str] | None = None, time_from: str | None = None, time_to: str | None = None):
+        """Filter by optional local dates (YYYY-MM-DD) AND inclusive time_from / exclusive time_to (ISO datetime or date), using configured capture_timezone and EXIF/companion/mtime before hashing. Omitted filters use the source default; supplied filters replace it. Plan import, Lightroom registration, preset, preview export and verification as one plan by default: ingest, lr_register, lr_preset, lr_export, preview_verify. Provide preset_id, or stages=['ingest'] for ingest only. One human approval is needed; AI cannot approve. Stop at WAITING_APPROVAL and report task_id and plan_digest to the human."""
+        return call('plan_import', order_id=order_id, photographer_id=photographer_id, source_id=source_id, batch_label=batch_label, preset_id=preset_id, stages=stages, capture_filter=capture_args(dates, time_from, time_to))
     @server.tool()
     def photo_execute_import(task_id: str):
         """Run the whole approved pipeline end to end, all stages in the plan, skipping completed stages for resumability. Returns NOT_APPROVED when unapproved."""
