@@ -90,12 +90,30 @@ function import(name)
     if name == 'LrFileUtils' then return {exists = function(path) return kinds[path] or 'file' end} end
     if name == 'LrPathUtils' then return {extension = function(path) return path:match('%.([^%.]+)$') or '' end} end
     if name == 'LrTasks' then return {pcall = pcall} end
+    if name == 'LrDate' then
+        local tick = 0
+        return {currentTime = function() tick = tick + 0.001; return tick end}
+    end
     error('Forbidden MOCK module ' .. name)
 end
 '''
 
 
 @pytest.mark.parametrize('case', [
+    r'''
+    local plain = handler.importPhotosBatch({source_paths={'/plain.NEF'}})
+    assert(plain.timing == nil)
+    local response = handler.importPhotosBatch({source_paths={'/a.NEF','/b.NEF','/plain.NEF'}, profile=true})
+    local t = response.timing
+    assert(response.added == 2 and response.existing == 1)
+    assert(t.clock == 'LrDate.currentTime' and #t.add_ms == 2)
+    assert(t.total_ms >= t.precheck_ms + t.write_txn_ms)
+    assert(t.write_txn_ms >= t.write_body_ms and t.write_body_ms >= t.add_ms[1] + t.add_ms[2])
+    assert(t.add_ms[1] > 0)
+    local repeated = handler.importPhotosBatch({source_paths={'/a.NEF'},profile=true})
+    assert(repeated.timing.write_txn_ms == 0 and #repeated.timing.add_ms == 0)
+    assert(not pcall(handler.importPhotosBatch,{source_paths={'/a.NEF'},profile='bad'}))
+    ''',
     r'''
     stored['/existing.NEF'] = photo('/existing.NEF')
     failures['/bad.NEF'] = true
@@ -156,6 +174,67 @@ def test_lua_batch_transaction_and_resume(case):
     run_lua(LUA_STUB + '\nlocal handler = dofile(' + handler_path + ')\n' + case)
 
 
+def test_lua_native_trigger_async_readback_validation_and_no_write_lock():
+    handler_path = json.dumps(str(ROOT / 'integrations/lightroom/HandlerCetaceaBatch.lua'))
+    stub = LUA_STUB.replace("return {pcall = pcall}", "return {pcall = pcall, canYield=function() return yieldable end}")
+    run_lua('local yieldable = true\n' + stub + r'''
+    kinds['/input'] = 'directory'
+    local triggers, ui = 0, 0
+    function catalog:triggerImportFromPathWithPreviousSettings(path)
+        assert(not writer and yieldable and path == '/input'); triggers = triggers + 1
+    end
+    function catalog:triggerImportUI(path)
+        assert(not writer and yieldable and path == '/input'); ui = ui + 1
+    end
+    function catalog:getAllPhotos()
+        assert(not writer)
+        local rows = {}; for _, value in pairs(stored) do rows[#rows+1] = value end
+        return rows
+    end
+    local handler = dofile(''' + handler_path + r''')
+    local args = {folder_path='/input', expected_files={'/input/a.NEF','/input/nested/b.NEF'}}
+    local response = handler.nativeAddFolder(args)
+    assert(response.success and response.triggered and type(response.started_at) == 'number')
+    assert(triggers == 1 and writes == 0 and adds == 0 and stored['/input/a.NEF'] == nil)
+    local absent = handler.catalogPathsPresent({paths=args.expected_files})
+    assert(#absent.present == 0 and #absent.missing == 2 and absent.folder_paths == nil)
+    -- Simulated asynchronous arrival, never a claim about real LR timing.
+    stored['/input/a.NEF'] = photo('/input/a.NEF')
+    stored['/input/extra.JPG'] = photo('/input/extra.JPG')
+    stored['/input-other/x.NEF'] = photo('/input-other/x.NEF')
+    local read = handler.catalogPathsPresent({paths=args.expected_files,folder_path='/input'})
+    assert(#read.present == 1 and #read.missing == 1 and #read.folder_paths == 2)
+    assert(read.present[1] == '/input/a.NEF')
+    handler.nativeAddFolderUI(args)
+    assert(ui == 1 and triggers == 1 and writes == 0)
+    handler.nativeAddFolder(args) -- trigger rerun; never calls addPhoto directly
+    assert(triggers == 2 and adds == 0)
+    yieldable = false
+    assert(not pcall(handler.nativeAddFolder,args))
+    yieldable = true
+    for _, invalid in ipairs({
+        {folder_path='relative',expected_files={'/input/a.NEF'}},
+        {folder_path='/missing-directory',expected_files={'/missing-directory/a.NEF'}},
+        {folder_path='/input',expected_files={'/input-other/a.NEF'}},
+        {folder_path='/input',expected_files={'/input/../a.NEF'}},
+        {folder_path='/input',expected_files={'/input/a.XMP'}},
+        {folder_path='/input',expected_files={'/input/a.NEF'},copy_to='/elsewhere'},
+        {folder_path='/input',expected_files={}},
+        {folder_path='/input',expected_files={'/input/a.NEF','/input/a.NEF'}},
+        {folder_path='/input',expected_files={'/input//a.NEF'}},
+    }) do assert(not pcall(handler.nativeAddFolder,invalid)) end
+    kinds['/input/no.NEF'] = 'directory'
+    assert(not pcall(handler.nativeAddFolder,{folder_path='/input',expected_files={'/input/no.NEF'}}))
+    local many = {}; for n=1,2001 do many[n]='/input/' .. n .. '.NEF' end
+    assert(not pcall(handler.nativeAddFolder,{folder_path='/input',expected_files=many}))
+    local maximum = {}; for n=1,2000 do maximum[n]='/input/' .. n .. '.NEF' end
+    assert(handler.nativeAddFolder({folder_path='/input',expected_files=maximum}).triggered)
+    assert(not pcall(handler.catalogPathsPresent,{paths=maximum}))
+    assert(not pcall(handler.catalogPathsPresent,{paths={'/a.NEF'},unexpected=true}))
+    assert(writes == 0 and adds == 0)
+    ''')
+
+
 def upstream_fixture(tmp_path, monkeypatch):
     """Minimal original patch anchors, not a fake claim of upstream provenance."""
     source = tmp_path / 'original-node_modules'
@@ -191,6 +270,14 @@ def test_stager_copies_without_mutating_source_and_refuses_overwrite(tmp_path, m
     assert 'import_photos_batch: LONG_RUNNING_TIMEOUT_MS' in (staged / 'dist/index.js').read_text()
     assert 'import_photos_batch = HandlerCetaceaBatch.importPhotosBatch' in (staged / 'LightroomMCP.lrplugin/PluginInfoProvider.lua').read_text()
     assert 'import_photos_batch = true' in (staged / 'LightroomMCP.lrplugin/PluginInfoProvider.lua').read_text()
+    for action, handler in [('native_add_folder', 'nativeAddFolder'),
+                            ('native_add_folder_ui', 'nativeAddFolderUI'),
+                            ('catalog_paths_present', 'catalogPathsPresent')]:
+        assert f'{action} = HandlerCetaceaBatch.{handler}' in (staged / 'LightroomMCP.lrplugin/PluginInfoProvider.lua').read_text()
+        assert f'{action} = true' in (staged / 'LightroomMCP.lrplugin/PluginInfoProvider.lua').read_text()
+        assert f'{action}: LONG_RUNNING_TIMEOUT_MS' in (staged / 'dist/index.js').read_text()
+    manifest = json.loads((root / '.lightroom-runtime/batch/cetacea-batch-runtime.json').read_text())
+    assert manifest['native_contract'] == 1
     assert (staged / 'LICENSE').read_bytes() == (package / 'LICENSE').read_bytes()
     with pytest.raises(FileExistsError):
         prepare_module.prepare(source, root=root)
@@ -200,7 +287,14 @@ def test_stager_copies_without_mutating_source_and_refuses_overwrite(tmp_path, m
         script = f'''import {{TOOL_CONTRACTS}} from {json.dumps(module_path)};
           const c=TOOL_CONTRACTS.find(t=>t.name==='import_photos_batch');
           if(c.inputSchema.properties.source_paths.maxItems!==200 || c.inputSchema.additionalProperties!==false
-             || Object.keys(c.inputSchema.properties).join(',')!=='source_paths') throw Error('unsafe schema');'''
+             || Object.keys(c.inputSchema.properties).sort().join(',')!=='profile,source_paths'
+             || c.inputSchema.properties.profile.type!=='boolean') throw Error('unsafe schema');
+          for (const name of ['native_add_folder','native_add_folder_ui','catalog_paths_present']) {{
+            const schema=TOOL_CONTRACTS.find(t=>t.name===name).inputSchema;
+            const key=name==='catalog_paths_present'?'paths':'expected_files';
+            if(schema.additionalProperties!==false || schema.properties[key].maxItems!==(key==='paths'?500:2000)
+               || schema.properties[key].minItems!==1) throw Error('unsafe native schema');
+          }}'''
         subprocess.run([node, '--input-type=module', '-e', script], check=True, capture_output=True, text=True)
 
 

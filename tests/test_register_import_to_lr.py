@@ -286,3 +286,40 @@ def test_daily_missing_runtime_stops_before_catalog_probe(daily, tmp_path, monke
     assert result['counts']['added'] == 0
     assert 'prepare_lightroom_batch.py' in result['error']
     assert 'prepare_lightroom_batch.py' in capsys.readouterr().err
+
+
+@pytest.mark.parametrize('fast', [False, True])
+def test_profile_json_and_real_stdio_session_reuse(daily, tmp_path, fast):
+    folder = make_photos(tmp_path, count=25)
+    state, report = tmp_path / 'MOCK-state.sqlite', tmp_path / 'profile.json'
+    instance = adapter(state)
+    opts = ['--execute', '--profile'] + (['--fast'] if fast else [])
+    assert daily.main(arguments(folder, report, *opts), adapter=instance, guard=matching_guard) == 0
+    result = read_report(report)
+    assert result['counts'] == dict(added=25, existing=0, failed=0, pending=0)
+    assert result['wall_seconds'] > 0 and result['seconds_per_photo'] > 0
+    events = result['profile']['events']
+    starts = [e for e in events if e['phase'] == 'bridge_spawn_initialize']
+    assert len(starts) == (1 if fast else 3)
+    tools = [e for e in events if e['phase'] == 'tool_call']
+    assert [e['tool'] for e in tools] == (['import_photos_batch'] * 3 + ['get_photo_metadata'] if fast
+                                        else ['import_photos_batch', 'get_photo_metadata'] * 3)
+    assert all(e['elapsed_ms'] >= 0 for e in events)
+    imports = [e for e in tools if e['tool'] == 'import_photos_batch']
+    assert all(e['lua_timing']['clock'] == 'MOCK' for e in imports)
+    assert all(b['wall_ms'] >= 0 for b in result['batches'])
+    again = tmp_path / 'profile-rerun.json'
+    assert daily.main(arguments(folder, again, *opts), adapter=adapter(state), guard=matching_guard) == 0
+    assert read_report(again)['counts']['existing'] == 25
+
+
+def test_fast_process_death_leaves_unconfirmed_and_pending(daily, tmp_path):
+    folder = make_photos(tmp_path)
+    state, report = tmp_path / 'MOCK-state.sqlite', tmp_path / 'crash-fast.json'
+    assert daily.main(arguments(folder, report, '--execute', '--fast'), adapter=adapter(state, crash=True), guard=matching_guard) == 1
+    result = read_report(report)
+    assert result['counts'] == dict(added=0, existing=0, failed=20, pending=10)
+    assert len(catalog_rows(state)) == 14
+    resumed = tmp_path / 'resumed-fast.json'
+    assert daily.main(arguments(folder, resumed, '--execute', '--fast'), adapter=adapter(state), guard=matching_guard) == 0
+    assert read_report(resumed)['counts'] == dict(added=16, existing=14, failed=0, pending=0)

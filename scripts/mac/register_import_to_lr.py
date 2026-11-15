@@ -10,6 +10,7 @@ from pathlib import Path
 import shutil
 import stat
 import sys
+import time
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'src'))
@@ -48,6 +49,8 @@ def parser():
     p.add_argument('--include', choices=('raw', 'jpg', 'all'), default='raw')
     p.add_argument('--exclude-dir', action='append', default=[], help='追加排除的目录名（不区分大小写）')
     p.add_argument('--batch-size', type=batch_size, default=100)
+    p.add_argument('--profile', action='store_true', help='记录 Python / Lua 分层耗时')
+    p.add_argument('--fast', action='store_true', help='实验：整次复用会话，末尾按 100 张统一读回')
     mode = p.add_mutually_exclusive_group()
     mode.add_argument('--dry-run', action='store_true', help='只生成计划（默认），不连接 Lightroom')
     mode.add_argument('--execute', action='store_true', help='执行只添加登记')
@@ -77,7 +80,7 @@ def collect(folders, include, excluded):
         if folder.name.casefold() in excluded:
             continue
         for directory, dirs, names in os.walk(folder, followlinks=False, onerror=walk_error):
-            dirs[:] = sorted(name for name in dirs if name.casefold() not in excluded
+            dirs[:] = sorted(name for name in dirs if not name.startswith('.') and name.casefold() not in excluded
                              and not (Path(directory) / name).is_symlink())
             for name in sorted(names):
                 if name.startswith('.') or Path(name).suffix.lower().lstrip('.') not in extensions:
@@ -93,7 +96,7 @@ def collect(folders, include, excluded):
             for path, size in sorted(found.items())]
 
 
-def make_adapter(size):
+def make_adapter(size, *, profile=False):
     runtime = ROOT / '.lightroom-runtime/batch'
     index = runtime / 'node_modules/@mskalski/lightroom-mcp/dist/index.js'
     hint = ('缺少或无效的批量补丁桥；请先运行 scripts/mac/prepare_lightroom_batch.py '
@@ -102,7 +105,8 @@ def make_adapter(size):
         manifest = json.loads((runtime / 'cetacea-batch-runtime.json').read_text())
         if (manifest.get('tool') != 'import_photos_batch'
                 or manifest.get('upstream') != '@mskalski/lightroom-mcp@0.26.0'
-                or manifest.get('max_batch_size') != 200 or not index.is_file()):
+                or manifest.get('max_batch_size') != 200 or not index.is_file()
+                or (profile and manifest.get('profile_contract') != 1)):
             raise ValueError
     except (OSError, ValueError, AttributeError):
         raise RegistrationError(hint) from None
@@ -112,7 +116,7 @@ def make_adapter(size):
     # Stop on lost transport/reply. A new invocation consults the catalog again;
     # never activate, restart, or switch Lightroom, and never download via npx.
     return RealLightroomMcpAdapter(command=[node, str(index)], batch_size=size,
-                                   backoff_schedule=[], activate_hook=None)
+                                   backoff_schedule=[], activate_hook=None, profile=profile)
 
 
 def counts():
@@ -150,12 +154,18 @@ def run(args, stream, report, *, adapter=None, guard=None):
     if not args.execute:
         report['status'] = 'DRY_RUN'
         return 0
-    adapter = adapter if adapter is not None else make_adapter(args.batch_size)
+    adapter = adapter if adapter is not None else make_adapter(args.batch_size, profile=args.profile)
+    adapter.profile = args.profile
+    adapter.batch_size = args.batch_size
+    if args.profile:
+        report['profile']['events'] = adapter.profile_events
     report['marker'] = 'CETACEA-MOCK' if adapter.testing else 'CETACEA-LIGHTROOM'
     if not files:
         report['status'] = 'COMPLETED'
         return 0
     guard = guard if guard is not None else catalog_guard
+    if args.fast:
+        return run_fast(args, stream, report, files, adapter, guard)
     for batch in report['batches']:
         def check_catalog():
             record = guard(args.catalog, label=f"daily-batch-{batch['index']}")
@@ -169,7 +179,10 @@ def run(args, stream, report, *, adapter=None, guard=None):
         checkpoint(stream, report)
         # Outer batches provide durable progress and fail-fast behavior; the
         # adapter still runs its safety callback immediately before each write.
+        started = time.perf_counter()
         results = adapter.register(group, before_batch=check_catalog)
+        if args.profile:
+            batch['wall_ms'] = (time.perf_counter() - started) * 1000
         batch['counts'] = counts()
         rows = []
         for i, file in enumerate(group):
@@ -199,7 +212,47 @@ def run(args, stream, report, *, adapter=None, guard=None):
     return 0
 
 
+def run_fast(args, stream, report, files, adapter, guard):
+    def check_catalog():
+        index = min(len(adapter.fast_batches), len(report['batches'])) - 1
+        record = guard(args.catalog, label=f'fast-batch-{index + 1}-or-readback')
+        report['batches'][index]['catalog_guard'] = record
+        if record.get('matches_expected') is not True:
+            raise RegistrationError('Lightroom 未只打开指定 catalog；已停止，未读回路径不计成功')
+
+    def progress(record):
+        batch = report['batches'][record['index'] - 1]
+        batch['status'] = 'awaiting_readback'
+        if args.profile:
+            batch['wall_ms'] = record['wall_ms']
+        checkpoint(stream, report)
+
+    report['status'] = 'RUNNING'
+    results = adapter.register_fast(files, before_batch=check_catalog, on_batch=progress)
+    for batch in report['batches'][:len(adapter.fast_batches)]:
+        start = (batch['index'] - 1) * args.batch_size
+        group = files[start:start + batch['size']]
+        batch['counts'] = counts()
+        batch['results'] = []
+        for file, result in zip(group, results[start:start + batch['size']]):
+            good = (result.asset_id == file.asset_id and not result.error
+                    and result.status in ('added', 'existing') and result.photo_id == str(file.abs_path))
+            status = result.status if good else 'failed'
+            batch['counts'][status] += 1
+            batch['results'].append({'path': str(file.abs_path), 'status': status})
+        batch['status'] = 'incomplete' if batch['counts']['failed'] else 'completed'
+        if batch['counts']['failed']:
+            batch['catalog_state'] = 'unknown_for_failed_paths'
+    complete = (len(adapter.fast_batches) == len(report['batches'])
+                and all(b['status'] == 'completed' for b in report['batches']))
+    report['status'] = 'COMPLETED' if complete else 'INCOMPLETE'
+    if not complete:
+        report['error'] = '实验登记未全部确认；可能已部分写入。确认同一 catalog 后用新报告重跑。'
+    return 0 if complete else 1
+
+
 def main(argv=None, *, adapter=None, guard=None):
+    started = time.perf_counter()
     args = parser().parse_args(argv)
     folders = list(dict.fromkeys(absolute(path) for path in args.folder))
     target = absolute(args.report)
@@ -220,7 +273,10 @@ def main(argv=None, *, adapter=None, guard=None):
     report = dict(marker='CETACEA-MOCK' if getattr(adapter, 'testing', False) else 'CETACEA-PLAN',
                   status='PLANNING', mode='execute' if args.execute else 'dry-run',
                   catalog=args.catalog, folders=[str(folder) for folder in folders],
-                  include=args.include, batch_size=args.batch_size, total=0, counts=counts(), batches=[])
+                  include=args.include, batch_size=args.batch_size, total=0, counts=counts(), batches=[],
+                  registration_mode='fast' if args.fast else 'baseline')
+    if args.profile:
+        report['profile'] = dict(clock='time.perf_counter', events=[])
     with os.fdopen(fd, 'w', encoding='utf-8') as stream:
         try:
             code = run(args, stream, report, adapter=adapter, guard=guard)
@@ -233,6 +289,10 @@ def main(argv=None, *, adapter=None, guard=None):
                     batch['counts'] = {**counts(), 'failed': batch['size']}
                     batch['catalog_state'] = 'unknown_for_failed_paths'
             code = 1
+        report['wall_seconds'] = time.perf_counter() - started
+        report['seconds_per_photo'] = report['wall_seconds'] / report['total'] if report['total'] and args.execute else None
+        if args.profile:
+            report['profile']['total_ms'] = report['wall_seconds'] * 1000
         checkpoint(stream, report)
     c = report['counts']
     print(f"{'演练' if not args.execute else '登记'} {report['status']}：共 {report['total']} 张，"

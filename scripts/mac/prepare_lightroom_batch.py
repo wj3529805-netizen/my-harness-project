@@ -29,11 +29,61 @@ BATCH_CONTRACT = '''
         description: "Add 1-200 exact files in one bounded write transaction; existing paths skip. No copy, preset or export. Per-path added/existing/failed results; retry failed paths.",
         inputSchema: {
             type: "object", additionalProperties: false,
-            properties: { source_paths: {
+            properties: { profile: { type: "boolean", default: false }, source_paths: {
                 type: "array", minItems: 1, maxItems: 200, uniqueItems: true,
                 items: { type: "string", pattern: "^/", minLength: 2 },
             } },
             required: ["source_paths"],
+        },
+    },
+'''
+
+# Keep the original batch schema unchanged. Native import is a separate,
+# explicitly guarded operator prototype; never part of the Workbench MCP API.
+NATIVE_CONTRACT = '''
+    {
+        name: "native_add_folder",
+        toolset: "core", title: "CETACEA native import trigger",
+        annotations: { readOnlyHint: false, destructiveHint: true, openWorldHint: false },
+        luaHandler: "HandlerCetaceaBatch.nativeAddFolder",
+        description: "EXPERIMENTAL: import entire folder using previous LR settings. Caller MUST check Add/no presets/no rename/no backup/no DNG settings first. Returns trigger acknowledgement only.",
+        inputSchema: {
+            type: "object", additionalProperties: false,
+            properties: {
+                folder_path: { type: "string", pattern: "^/", minLength: 2 },
+                expected_files: { type: "array", minItems: 1, maxItems: 2000, uniqueItems: true,
+                    items: { type: "string", pattern: "^/", minLength: 2 } },
+            }, required: ["folder_path", "expected_files"],
+        },
+    },
+    {
+        name: "native_add_folder_ui",
+        toolset: "core", title: "CETACEA native import dialog",
+        annotations: { readOnlyHint: false, destructiveHint: true, openWorldHint: false },
+        luaHandler: "HandlerCetaceaBatch.nativeAddFolderUI",
+        description: "Open native Import dialog with folder selected; human checks settings and clicks Import. No completion claim.",
+        inputSchema: {
+            type: "object", additionalProperties: false,
+            properties: {
+                folder_path: { type: "string", pattern: "^/", minLength: 2 },
+                expected_files: { type: "array", minItems: 1, maxItems: 2000, uniqueItems: true,
+                    items: { type: "string", pattern: "^/", minLength: 2 } },
+            }, required: ["folder_path", "expected_files"],
+        },
+    },
+    {
+        name: "catalog_paths_present",
+        toolset: "core", title: "CETACEA catalog path presence",
+        annotations: { readOnlyHint: true, destructiveHint: false, openWorldHint: false },
+        luaHandler: "HandlerCetaceaBatch.catalogPathsPresent",
+        description: "Read exact-path membership outside write access. Optional folder_path scans catalog paths under that folder for extra imports.",
+        inputSchema: {
+            type: "object", additionalProperties: false,
+            properties: {
+                paths: { type: "array", minItems: 1, maxItems: 500, uniqueItems: true,
+                    items: { type: "string", pattern: "^/", minLength: 2 } },
+                folder_path: { type: "string", pattern: "^/", minLength: 2 },
+            }, required: ["paths"],
         },
     },
 '''
@@ -73,19 +123,25 @@ def prepare(source_node_modules, *, root=ROOT):
     relative = 'dist/tool-contracts.js'
     text = (package / relative).read_text()
     anchor = '    {\n        name: "import_photos",'
-    patched[relative] = replace_once(text, anchor, BATCH_CONTRACT + anchor)
+    patched[relative] = replace_once(text, anchor, BATCH_CONTRACT + NATIVE_CONTRACT + anchor)
     relative = 'dist/index.js'
     patched[relative] = replace_once((package / relative).read_text(),
         '    import_photos: LONG_RUNNING_TIMEOUT_MS,',
-        '    import_photos: LONG_RUNNING_TIMEOUT_MS,\n    import_photos_batch: LONG_RUNNING_TIMEOUT_MS,')
+        '    import_photos: LONG_RUNNING_TIMEOUT_MS,\n    import_photos_batch: LONG_RUNNING_TIMEOUT_MS,\n'
+        '    native_add_folder: LONG_RUNNING_TIMEOUT_MS,\n    native_add_folder_ui: LONG_RUNNING_TIMEOUT_MS,\n'
+        '    catalog_paths_present: LONG_RUNNING_TIMEOUT_MS,')
     relative = 'LightroomMCP.lrplugin/PluginInfoProvider.lua'
     text = (package / relative).read_text()
     text = replace_once(text, "local HandlerImport = require 'HandlerImport'",
         "local HandlerImport = require 'HandlerImport'\nlocal HandlerCetaceaBatch = require 'HandlerCetaceaBatch'")
     text = replace_once(text, '    import_photos = HandlerImport.importPhotos,',
-        '    import_photos = HandlerImport.importPhotos,\n    import_photos_batch = HandlerCetaceaBatch.importPhotosBatch,')
+        '    import_photos = HandlerImport.importPhotos,\n    import_photos_batch = HandlerCetaceaBatch.importPhotosBatch,\n'
+        '    native_add_folder = HandlerCetaceaBatch.nativeAddFolder,\n'
+        '    native_add_folder_ui = HandlerCetaceaBatch.nativeAddFolderUI,\n'
+        '    catalog_paths_present = HandlerCetaceaBatch.catalogPathsPresent,')
     patched[relative] = replace_once(text, 'export_photos = true, import_photos = true,',
-        'export_photos = true, import_photos = true, import_photos_batch = true,')
+        'export_photos = true, import_photos = true, import_photos_batch = true, '
+        'native_add_folder = true, native_add_folder_ui = true, catalog_paths_present = true,')
     relative = 'LightroomMCP.lrplugin/Info.lua'
     text = (package / relative).read_text()
     # Retain upstream identifier: operator must disable the original plugin
@@ -105,7 +161,8 @@ def prepare(source_node_modules, *, root=ROOT):
         'upstream': '@mskalski/lightroom-mcp@0.26.0',
         'upstream_sha256': PINNED_HASHES,
         'extension_sha256': hashlib.sha256((root / 'integrations/lightroom/HandlerCetaceaBatch.lua').read_bytes()).hexdigest(),
-        'tool': 'import_photos_batch', 'max_batch_size': 200,
+        'tool': 'import_photos_batch', 'max_batch_size': 200, 'profile_contract': 1,
+        'native_contract': 1,
     }, indent=2) + '\n')
     return {
         'command': ['/opt/homebrew/bin/node', str(staged_package / 'dist/index.js')],

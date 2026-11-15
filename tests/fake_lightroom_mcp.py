@@ -37,14 +37,44 @@ def open_mock_catalog(path):
 
 
 @server.tool()
+def native_add_folder(folder_path: str, expected_files: list[str]):
+    """MOCK immediate catalog state; not a native-engine simulation."""
+    assert 1 <= len(expected_files) <= 2000
+    with catalog_lock:
+        registered.update(expected_files)
+    return {'success': True, 'triggered': True, 'started_at': 1.0, 'marker': 'CETACEA-MOCK'}
+
+
+@server.tool()
+def native_add_folder_ui(folder_path: str, expected_files: list[str]):
+    return native_add_folder(folder_path, expected_files)
+
+
+@server.tool()
+def catalog_paths_present(paths: list[str], folder_path: str | None = None):
+    with catalog_lock:
+        assert 1 <= len(paths) <= 500
+        result = dict(success=True, present=[p for p in paths if p in registered],
+                      missing=[p for p in paths if p not in registered], marker='CETACEA-MOCK')
+        if folder_path:
+            result['folder_paths'] = sorted(p for p in registered if Path(p).is_relative_to(folder_path))
+        return result
+
+
+@server.tool()
 def import_photos(source_path: str):
     return {'success': True, 'imported': 1, 'complete': True, 'skipped': 0}
 
 
 @server.tool()
-def import_photos_batch(source_paths: list[str]):
+def import_photos_batch(source_paths: list[str], profile: bool = False):
     with catalog_lock:
-        return _import_photos_batch(source_paths)
+        result = _import_photos_batch(source_paths)
+        if profile:
+            result['timing'] = dict(clock='MOCK', total_ms=1.0, precheck_ms=0.1,
+                                    write_txn_ms=0.8, write_body_ms=0.7,
+                                    add_ms=[0.01] * len(source_paths))
+        return result
 
 
 def _import_photos_batch(source_paths):

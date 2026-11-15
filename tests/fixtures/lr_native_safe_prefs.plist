@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+  <key>AgImport_importBehavior</key><string>refInPlace</string>
+  <key>AgImport_crSettingsID</key><string>&lt;none&gt;</string>
+  <key>AgImport_metadataPresetID</key><string>&lt;none&gt;</string>
+  <key>AgImport_keywords</key><string></string>
+  <key>AgImport_renamingTokensOn</key><integer>0</integer>
+  <key>AgImport_Import_add_photos_to_collection</key><false/>
+  <key>AgImport_doCopyToBackupFolder</key><integer>0</integer>
+  <key>AgImport_generateDNGProxies</key><false/>
+  <key>AgImport_recursivelyScanFolders</key><integer>1</integer>
+  <key>AgImport_ignoreSuspectedDuplicates</key><integer>0</integer>
+  <key>AgImport_lastCopyBehavior</key><string>copyToLibrary</string>
+  <key>AgImport_previewBuildQuality</key><string>bthm</string>
+</dict></plist>
