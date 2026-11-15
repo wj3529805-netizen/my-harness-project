@@ -16,3 +16,7 @@
 `execute` 和 `execute_lightroom` 先重新核验审批记录，再重新计算 `plan_json` 的摘要；计划变化时拒绝并报告 `plan changed after approval`，实时配置与快照不一致时拒绝并报告 `preset/export settings changed after approval`。`photo_execute_import` 可恢复执行，跳过已完成阶段；`lightroom_*` 工具仍可用于单阶段恢复，`photo_retry_task` 可恢复 FAILED 任务而无需重新审批。即使任务已 COMPLETED，重新执行仍检查审批和快照；完成后改变配置会得到 `PERMISSION_DENIED`，而非直接无操作返回，这是可接受的当前行为。
 
 Linux 上的真实 DeepSeek 检查使用 `deepseek-flash`、thinking 关闭：1 个场景、两轮各 4 次真实请求（共 8 次，上限 12）。模型传了 `preset_id`、未传 `stages`，生成五阶段计划并等待审批；人工批准一次后，模型调用 `get_task`、`photo_execute_import`、`list_assets`、`verify_preview`，最终 COMPLETED、预览核验 OK、1 条审批记录、无 `PERMISSION_DENIED`。证据在 `evidence/fullplan/`。这只是非确定性模型的一次采样，Lightroom 为 **MOCK**，不构成可靠性或真实 Lightroom/macOS 验证。
+
+拍摄日期筛选：`photo_plan_import` 和 `photo_scan_source` 接受 `dates`、
+`time_from`、`time_to`，按配置时区在哈希前筛选，只接受登记来源 ID。
+日期与时间条件取交集，from 包含、to 不包含；详见 [日期筛选](CAPTURE_FILTER.md)。

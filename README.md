@@ -30,3 +30,47 @@ cetacea --home $H execute TASK_ID && cetacea --home $H report TASK_ID
 仓库源代码采用 [MIT 许可证](LICENSE)；许可范围见 [NOTICE](NOTICE)；样片独立适用 [samples/LICENSE.txt](samples/LICENSE.txt)。
 [Mac 实机路线图](docs/ROADMAP.md)。
 `docs/SPEC.md` 规格；`docs/REUSE_DECISION.md` 复用决策；`docs/ARCHITECTURE.md` 目录结构；`docs/THIRD_PARTY.md` 依赖/许可证/固定提交；`docs/STATUS.md` 状态矩阵；`docs/MACOS_HANDOFF.md` Mac 交接；[docs/KNOWN_RISKS.md](docs/KNOWN_RISKS.md) 风险；[docs/DATA_FLOW.md](docs/DATA_FLOW.md) 工具结果的数据流；[docs/FULLPLAN.md](docs/FULLPLAN.md) 完整计划与审批。
+
+## 按拍摄日期分单 / Filter by capture date and time
+
+同一来源可按每天生成独立计划，先筛选再哈希；来源目录始终只读。
+One card can produce separate daily plans; only matching files are hashed.
+以下为使用示例（不是自动执行命令）：
+
+```bash
+cetacea --home H source add card_z6 "/Volumes/NIKON Z6_3 /DCIM"
+cetacea --home H scan card_z6 --date 2026-11-14
+cetacea --home H plan ORDER_DAY1 PHOTOG card_z6 --date 2026-11-14 --stages ingest
+cetacea --home H plan ORDER_DAY2 PHOTOG card_z6 --date 2026-11-15 --stages ingest
+# 来源默认筛选；plan/scan 显式传条件时整体替换默认条件。
+cetacea --home H source add day1 /path/to/CARD_COPY --date 2026-11-14
+# 可重复日期；日期与时间范围取交集。from 包含，to 不包含。
+cetacea --home H scan card_z6 --date 2026-11-14 --date 2026-11-15
+cetacea --home H plan ORDER PHOTOG card_z6 --from 2026-11-14T18:00:00 --to 2026-11-15 --tz Asia/Shanghai --stages ingest
+```
+
+每个 `--date` 表示本地 `[00:00, 次日00:00)`；`--from`/`--to` 接受 ISO
+日期时间或 `YYYY-MM-DD`（午夜）。默认时区为 config.json 的
+`capture_timezone: "Asia/Shanghai"`，CLI 的 `--tz` 可覆盖。
+Dates are local calendar days; date lists and the half-open time range are ANDed.
+Explicit filters replace the source default. EXIF priority is DateTimeOriginal,
+then DateTimeDigitized only if Original is absent, then IFD0 DateTime only if both
+are absent. OffsetTimeOriginal is converted to the configured timezone. Naive
+camera times are assumed local. Unreadable EXIF uses a same-directory/same-stem
+photo's EXIF time for companions, otherwise file mtime (which may reflect copying).
+
+`scan` 返回同样的 `capture_filter` 汇总：匹配/排除数量、按相对父目录计数、
+时间来源、首末拍摄时间，以及匹配和排除文件合计最多 50 条 mtime 回退路径。
+`plan` 的匹配项含 `capture_time`、`capture_time_source`；排除文件只记计数
+（mtime 人工复核清单除外）。零匹配的 scan 可预览，零匹配的 plan 报错。
+无筛选时保留原有计划 JSON 和摘要。详见 [CLI/MCP 日期筛选](docs/CAPTURE_FILTER.md)。
+
+MCP（仅登记 ID，无时区或路径参数 / registered IDs only, config timezone）：
+
+```python
+photo_scan_source(source_id="card_z6", dates=["2026-11-14"])
+photo_plan_import(order_id="ORDER_DAY1", photographer_id="PHOTOG", source_id="card_z6",
+                  dates=["2026-11-14"], stages=["ingest"])
+photo_plan_import(order_id="ORDER", photographer_id="PHOTOG", source_id="card_z6",
+                  time_from="2026-11-14T18:00:00", time_to="2026-11-15", stages=["ingest"])
+```
